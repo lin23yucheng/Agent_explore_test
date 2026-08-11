@@ -1,0 +1,13 @@
+{
+  "name": "ai-freemind-to-cases",
+  "private": true,
+  "scripts": {
+    "test:ui": "playwright test",
+    "test:ui:headed": "playwright test --headed",
+    "report:ui": "playwright show-report reports/latest/playwright-report",
+    "test:workflow": "python -m unittest discover -s tests/unit -p test_*.py"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1"
+  }
+}

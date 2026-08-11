@@ -1,0 +1,3060 @@
+{
+  "version": 1,
+  "updatedAt": "2026-08-11T11:32:40+08:00",
+  "tests": {
+    "角色管理 - 查看admin角色编码、名称、描述和状态": {
+      "file": "tests/ui/roles.spec.js",
+      "caseIds": [
+        "CASE-000381"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T01:39:02.614Z"
+      }
+    },
+    "角色管理 - 查看算法工程师角色信息及权限描述": {
+      "file": "tests/ui/roles.spec.js",
+      "caseIds": [
+        "CASE-000382"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T01:39:02.614Z"
+      }
+    },
+    "角色管理 - 查看采集工程师角色信息及权限描述": {
+      "file": "tests/ui/roles.spec.js",
+      "caseIds": [
+        "CASE-000383"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T01:39:02.614Z"
+      }
+    },
+    "角色管理 - 查看标注工程师角色详情": {
+      "file": "tests/ui/roles.spec.js",
+      "caseIds": [
+        "CASE-000384"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T01:39:02.614Z"
+      }
+    },
+    "角色管理 - 查看质检工程师角色信息及权限描述": {
+      "file": "tests/ui/roles.spec.js",
+      "caseIds": [
+        "CASE-000385"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T01:39:02.614Z"
+      }
+    },
+    "角色管理 - 验证角色列表展示预设五种角色": {
+      "file": "tests/ui/roles.spec.js",
+      "caseIds": [
+        "CASE-000386"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T01:39:02.614Z"
+      }
+    },
+    "角色管理 - 验证列表页无新增角色入口": {
+      "file": "tests/ui/roles.spec.js",
+      "caseIds": [
+        "CASE-000387"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T01:39:02.614Z"
+      }
+    },
+    "角色管理 - 验证列表页无编辑角色入口": {
+      "file": "tests/ui/roles.spec.js",
+      "caseIds": [
+        "CASE-000388"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T01:39:02.614Z"
+      }
+    },
+    "角色管理 - 验证列表页无删除角色入口": {
+      "file": "tests/ui/roles.spec.js",
+      "caseIds": [
+        "CASE-000389"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T01:39:02.614Z"
+      }
+    },
+    "CASE-000300 用户管理 - 新建用户时角色下拉框显示全部预设角色": {
+      "file": "tests/ui/users.spec.js",
+      "caseIds": [
+        "CASE-000300"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "CASE-000301 用户管理 - 新建用户时角色下拉框必选校验": {
+      "file": "tests/ui/users.spec.js",
+      "caseIds": [
+        "CASE-000301"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "CASE-000312 用户管理 - 新建用户时初始密码默认值验证": {
+      "file": "tests/ui/users.spec.js",
+      "caseIds": [
+        "CASE-000312"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "CASE-000325 用户管理 - 新建用户时所有必填项为空提示请填写完整信息": {
+      "file": "tests/ui/users.spec.js",
+      "caseIds": [
+        "CASE-000325"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "CASE-000270 用户管理 - 模糊搜索关键字为空": {
+      "file": "tests/ui/users.spec.js",
+      "caseIds": [
+        "CASE-000270"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "CASE-000277 用户管理 - 搜索框为空时查询": {
+      "file": "tests/ui/users.spec.js",
+      "caseIds": [
+        "CASE-000277"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "CASE-000279 用户管理 - 重置后回到默认为空进行查询": {
+      "file": "tests/ui/users.spec.js",
+      "caseIds": [
+        "CASE-000279"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理查询与字段校验 › 查询-按账号模糊搜索": {
+      "file": "tests/ui/users.validation.spec.js",
+      "caseIds": [
+        "CASE-000267"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "用户管理查询与字段校验 › 查询-按姓名模糊搜索": {
+      "file": "tests/ui/users.validation.spec.js",
+      "caseIds": [
+        "CASE-000268"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "用户管理查询与字段校验 › 查询-账号和姓名组合模糊搜索": {
+      "file": "tests/ui/users.validation.spec.js",
+      "caseIds": [
+        "CASE-000273"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "用户管理查询与字段校验 › 查询-无匹配结果": {
+      "file": "tests/ui/users.validation.spec.js",
+      "caseIds": [
+        "CASE-000269"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "用户管理查询与字段校验 › 查询-输入空格": {
+      "file": "tests/ui/users.validation.spec.js",
+      "caseIds": [
+        "CASE-000278"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "用户管理查询与字段校验 › 新建用户弹框点击取消后关闭且不保存": {
+      "file": "tests/ui/users.validation.spec.js",
+      "caseIds": [
+        "CASE-000323"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "查询-按账号模糊搜索": {
+      "file": "tests/ui/users.search.spec.js",
+      "caseIds": [
+        "CASE-000267"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "查询-按姓名模糊搜索": {
+      "file": "tests/ui/users.search.spec.js",
+      "caseIds": [
+        "CASE-000268"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "查询-组合关键字整体匹配无结果": {
+      "file": "tests/ui/users.search.spec.js",
+      "caseIds": [
+        "CASE-000273"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "查询-无匹配结果": {
+      "file": "tests/ui/users.search.spec.js",
+      "caseIds": [
+        "CASE-000269"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "查询-关键字包含空格": {
+      "file": "tests/ui/users.search.spec.js",
+      "caseIds": [
+        "CASE-000278"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "新建用户取消不保存": {
+      "file": "tests/ui/users.search.spec.js",
+      "caseIds": [
+        "CASE-000323"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-账号仅支持英文字母、数字、下划线-正常输入": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000281"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-账号仅包含英文字母-正常输入": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000282"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-姓名输入中文、英文、数字组合-保存成功": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000285"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-姓名仅输入中文-保存成功": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000286"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-姓名仅输入英文字母-保存成功": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000287"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-姓名仅输入数字-保存成功": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000288"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-账号为空时提示必填": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000296"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户时姓名为空，提示必填": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000297"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-角色必选校验-未选择角色提示": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000298"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户时初始密码为空提示必填": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000299"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-保存-必填项校验-账号和姓名均为空": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000310"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户时初始密码默认显示为123456": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000315"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户弹框填写完整信息后点击取消不保存": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000316"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户时输入已存在账号提示“该账号已存在”": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000317"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户时账号唯一性校验-大小写不同视为不同账号": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000318"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 验证新建用户时初始密码字段已删除": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000319"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理扩展表单校验 › 验证用户列表创建时间展示格式为年月日时分秒": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000320"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:16:17.144Z"
+      }
+    },
+    "用户管理剩余用例 › 新建用户-账号仅包含下划线-正常输入": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000321"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 新建用户-账号仅包含数字-正常输入": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000322"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 新建用户后使用默认密码登录并修改为合法新密码": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000341"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 并发创建相同账号时仅一条成功且无重复数据": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000350"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 启用状态下用户正常登录": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000352"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 禁用用户后未登录用户登录提示账号错误": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000354"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 禁用账号后未登录状态登录提示账号或密码错误或已被禁用": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000356"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 禁用用户后已登录用户调用接口提示操作人不存在或已禁用": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000357"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 禁用已登录用户后调用接口提示操作人不存在或已禁用": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000358"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 编辑用户-姓名回显且可修改-边界长度验证": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000361"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 编辑用户角色后未登录，登录成功展示新角色对应模块": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000365"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 编辑用户角色后已登录用户不受影响，重新登录后展示新角色模块": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000366"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 编辑用户姓名后右上角显示更新为修改后的姓名": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000367"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 删除用户-未登录状态-确定删除-提示账号或密码错误": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000380"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 删除用户-已登录状态-接口校验-操作人不存在或已禁用提示": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000370"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 验证用户列表默认按创建时间倒序排列": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000372"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理剩余用例 › 验证创建时间相同的用户列表排序稳定性": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000373"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T03:12:14.073Z"
+      }
+    },
+    "用户管理 - 按账号搜索用户": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000271"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 按姓名搜索用户": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000272"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 按账号模糊搜索用户": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000274"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 按姓名模糊搜索用户": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000275"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 搜索无匹配结果": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000276"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 新建用户账号为空时提示必填 CASE-000280": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000280"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 新建用户账号为空时提示必填 CASE-000289": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000289"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 新增用户时账号必填校验 CASE-000336": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000336"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 新增用户时姓名为空校验 CASE-000343": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000343"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 账号边界或格式 CASE-000283": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000283"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 账号边界或格式 CASE-000284": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000284"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 账号边界或格式 CASE-000337": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000337"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 账号边界或格式 CASE-000338": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000338"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 账号边界或格式 CASE-000339": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000339"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 账号边界或格式 CASE-000340": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000340"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 新建用户选择角色 管理员": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000302"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 新建用户选择角色 算法工程师": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000303"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 新建用户选择角色 采集工程师": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000304"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 新建用户选择角色 标注工程师": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000306"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 新建用户选择角色 质检工程师": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000308"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 角色必选 CASE-000305": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000305"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 角色必选 CASE-000307": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000307"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 角色必选 CASE-000309": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000309"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 角色必选 CASE-000349": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000349"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 必填组合校验 CASE-000324": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000324"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 必填组合校验 CASE-000326": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000326"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 必填组合校验 CASE-000327": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000327"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 必填组合校验 CASE-000328": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000328"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 必填组合校验 CASE-000329": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000329"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 必填组合校验 CASE-000330": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000330"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 必填组合校验 CASE-000331": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000331"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 合法姓名创建 CASE-000342": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000342"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 合法姓名创建 CASE-000344": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000344"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 合法姓名创建 CASE-000346": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000346"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 角色下拉展示全部预设角色": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000347"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 选择任一角色成功创建": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000348"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 并发创建不同账号均成功": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000333"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 账号已存在提示": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000334"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 新建成功后列表显示顶部信息": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000335"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 创建时间展示年月日时分秒": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000355"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 删除用户确认后删除成功": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000375"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 姓名非法字符校验": {
+      "file": "tests/ui/users.remaining-cases.spec.js",
+      "caseIds": [
+        "CASE-000345"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T05:12:30.449Z"
+      }
+    },
+    "用户管理 - 新建用户姓名为空时提示必填": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000290"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 新建用户姓名为空时提交按钮不可用": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000291"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 新建用户姓名长度超限验证": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000294"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 新建用户姓名为空验证": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000295"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 新建用户初始密码必填项边界验证": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000311"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 新建用户初始密码默认值验证": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000313"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 初始密码明文显示切换验证": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000314"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 并发创建相同账号时仅一个成功": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000332"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 启用已禁用用户后该用户可正常登录": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000351"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 禁用已登录用户后该用户被登出": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000353"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 编辑弹框取消关闭不保存": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000359"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 编辑用户时清空必填项保存提示请填写完整信息": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000360"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 编辑用户时未选择角色保存提示请填写完整信息": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000362"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 重置密码二次确认后确定重置成功": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000368"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 重置密码后已登录用户保持登录状态": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000369"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 禁用账号后未登录用户登录提示": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000371"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 取消删除用户关闭弹窗": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000374"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 未登录状态下删除用户时提示账号或密码错误或账号已被禁用": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000377"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 删除用户后已登录用户点击菜单被登出": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000378"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 新建用户姓名长度边界值验证（最小值）": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000292"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 新建用户姓名长度边界值验证（最大值）": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000293"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 修改角色后未登录用户登录展示新角色权限模块": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000363"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 修改角色后已登录用户刷新页面展示新角色权限模块": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000364"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-07T09:10:51.240Z"
+      }
+    },
+    "用户管理 - 删除已被指派任务的账号时提示不允许删除": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000376"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T01:23:55.184Z"
+      }
+    },
+    "用户管理 - 删除已被指派任务的用户时校验任务指派下拉不展示该用户": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [],
+      "status": "retirement-candidate",
+      "source": "agent",
+      "lastRun": {
+        "status": "failed",
+        "executedAt": "2026-08-07T06:43:16.376Z"
+      }
+    },
+    "机器人构型配置 - 验证构型名称长度为1时创建成功": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000459"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:25:43.532Z"
+      }
+    },
+    "机器人构型配置 - 验证构型名称长度为32时创建成功": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000460"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:25:43.532Z"
+      }
+    },
+    "机器人构型配置 - 验证构型名称为空时创建失败": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000461"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:25:43.532Z"
+      }
+    },
+    "机器人构型配置 - 验证构型名称长度为33时创建失败": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000462"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:25:43.532Z"
+      }
+    },
+    "机器人构型配置 - 验证构型名称支持中英文字母数字下划线": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000463"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:25:43.532Z"
+      }
+    },
+    "机器人构型配置 - 验证构型名称含特殊字符被拒绝": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000464"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:25:43.532Z"
+      }
+    },
+    "机器人构型配置 - 验证构型名称含空格被拒绝": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000465"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:25:43.532Z"
+      }
+    },
+    "机器人构型配置 - 验证构型名称含中文和英文混合合法": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000466"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:25:43.532Z"
+      }
+    },
+    "机器人构型配置 - 新建机器人构型时机器人型号长度边界值1验证": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000467"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:26:56.662Z"
+      }
+    },
+    "机器人构型配置 - 新建机器人构型时机器人型号长度边界值32验证": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000468"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:26:56.662Z"
+      }
+    },
+    "机器人构型配置 - 新建机器人构型时机器人型号长度超长异常验证": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000469"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:26:56.662Z"
+      }
+    },
+    "机器人构型配置 - 新建机器人构型时机器人型号为空异常验证": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000470"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:26:56.662Z"
+      }
+    },
+    "机器人构型配置 - 新建机器人构型时机器人型号支持中英文字母数字下划线横线": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000471"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:26:56.662Z"
+      }
+    },
+    "机器人构型配置 - 新建机器人构型时机器人型号包含中文和英文数字": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000472"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:26:56.662Z"
+      }
+    },
+    "机器人构型配置 - 新建机器人构型时机器人型号包含非法字符被拒绝": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000473"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:26:56.662Z"
+      }
+    },
+    "机器人构型配置 - 新建机器人构型时机器人型号包含空格被拒绝": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000474"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:26:56.662Z"
+      }
+    },
+    "机器人构型配置 - 新建构型描述长度边界值验证": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000475"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:28:28.975Z"
+      }
+    },
+    "机器人构型配置 - 新建构型描述长度超限校验": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000476"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:28:28.975Z"
+      }
+    },
+    "机器人构型配置 - 上传非JSON格式配置文件时提示错误": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000477"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:29:25.123Z"
+      }
+    },
+    "机器人构型配置 - 上传JSON配置文件缺少robot_type字段时提示错误": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000478"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:29:25.123Z"
+      }
+    },
+    "机器人构型配置 - 上传合法JSON配置文件成功创建构型": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000479"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:29:25.123Z"
+      }
+    },
+    "机器人构型配置 - 新建弹框取消不保存": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000480"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:30:20.751Z"
+      }
+    },
+    "机器人构型配置 - 新建弹框关闭按钮取消不保存": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000481"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:30:20.751Z"
+      }
+    },
+    "机器人构型配置 - 新建时必填项为空校验": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000482"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:31:39.926Z"
+      }
+    },
+    "机器人构型配置 - 新建时仅填写构型名称校验": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000483"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:31:39.926Z"
+      }
+    },
+    "机器人构型配置 - 新建时仅填写机器人型号校验": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000484"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:31:39.926Z"
+      }
+    },
+    "机器人构型配置 - 新建时仅上传配置文件校验": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000485"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:31:39.926Z"
+      }
+    },
+    "机器人构型配置 - 新建时部分必填项为空校验": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000486"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:31:39.926Z"
+      }
+    },
+    "机器人构型配置 - 新建构型时名称重复提示已存在": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000487"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:32:43.242Z"
+      }
+    },
+    "机器人构型配置 - 新增时填写一致的构型名称在列表页正确显示": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000488"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:33:11.692Z"
+      }
+    },
+    "机器人构型配置 - 新增时填写一致的机器人型号后列表显示正确": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000489"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:26:56.662Z"
+      }
+    },
+    "机器人构型配置 - 列表页描述显示与新增填写一致": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000490"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:28:28.975Z"
+      }
+    },
+    "机器人构型配置 - 新增时上传的JSON文件名称可点击查看": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000491"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:29:25.123Z"
+      }
+    },
+    "机器人构型配置 - 列表页创建时间显示年月日时分": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000492"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:33:52.119Z"
+      }
+    },
+    "机器人构型配置 - 查看JSON文件内容": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000493"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:29:25.123Z"
+      }
+    },
+    "机器人构型配置 - 取消删除构型关闭弹框": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000494"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:35:17.721Z"
+      }
+    },
+    "机器人构型配置 - 删除已被任务使用的构型时提示不允许删除": {
+      "file": "tests/ui/robot-configs.spec.js",
+      "caseIds": [
+        "CASE-000495"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T02:36:12.104Z"
+      }
+    },
+    "数据分类管理 - 验证分类编码长度为1时创建成功": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000496"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类编码长度为32时创建成功": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000497"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类编码长度为0时创建失败": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000498"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类编码长度为33时创建失败": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000499"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:13:45.749Z"
+      }
+    },
+    "数据分类管理 - 验证分类编码仅支持英文字母数字下划线": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000500"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类编码包含中文字符时创建失败": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000501"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类编码包含特殊字符时创建失败": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000502"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类编码包含空格时创建失败": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000503"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类编码为空时创建失败": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000504"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类名称长度为1时创建成功": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000505"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类名称长度为32时创建成功": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000506"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类名称为空时创建失败": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000507"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类名称长度为0时创建失败": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000508"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类名称长度为33时创建失败": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000509"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:13:45.749Z"
+      }
+    },
+    "数据分类管理 - 验证分类名称支持中英文字母和数字": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000511"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类名称包含特殊字符时提示错误": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000512"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类名称包含空格时提示错误": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000513"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 新建分类弹框点击取消关闭且不保存": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000514"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 新建分类时分类编码为空提示必填": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000515"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 新建分类时分类名称为空提示必填": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000516"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 新建分类时输入已存在的分类编码提示分类编码已存在": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000517"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 新建分类时名称重复提示分类名称已存在": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000518"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 新增时填写一致的分类编码": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000519"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 新增时填写一致的分类名称": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000520"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 列表页创建时间显示年月日时分": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000521"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 编辑时分类编码置灰不可修改": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000522"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 编辑分类名称回显可修改": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000523"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 编辑分类名称长度为1时保存成功": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000524"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 编辑分类名称长度为32时保存成功": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000525"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 编辑分类名称为空时保存失败": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000526"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 编辑分类名称长度为33时保存失败": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000527"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:13:45.749Z"
+      }
+    },
+    "数据分类管理 - 编辑分类名称输入合法中英文数字": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000528"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 编辑分类名称输入非法字符被拒绝": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000529"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 编辑分类名称输入超长内容被拒绝": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000530"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 取消编辑关闭弹框不保存": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000531"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 编辑保存时分类名称为空提示必填": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000532"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 编辑分类时名称与已有分类重复提示分类名称已存在": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000533"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 取消删除分类时关闭确认弹框": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000534"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 删除已被任务引用的分类时提示不能删除": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000535"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:02:28.123Z"
+      }
+    },
+    "数据分类管理 - 验证分类名称超长时提示并禁止保存": {
+      "file": "tests/ui/data-categories.spec.js",
+      "caseIds": [
+        "CASE-000510"
+      ],
+      "status": "active",
+      "source": "agent",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T03:32:35.759Z"
+      }
+    }
+  },
+  "cases": {
+    "CASE-000381": [
+      "角色管理 - 查看admin角色编码、名称、描述和状态"
+    ],
+    "CASE-000382": [
+      "角色管理 - 查看算法工程师角色信息及权限描述"
+    ],
+    "CASE-000383": [
+      "角色管理 - 查看采集工程师角色信息及权限描述"
+    ],
+    "CASE-000384": [
+      "角色管理 - 查看标注工程师角色详情"
+    ],
+    "CASE-000385": [
+      "角色管理 - 查看质检工程师角色信息及权限描述"
+    ],
+    "CASE-000386": [
+      "角色管理 - 验证角色列表展示预设五种角色"
+    ],
+    "CASE-000387": [
+      "角色管理 - 验证列表页无新增角色入口"
+    ],
+    "CASE-000388": [
+      "角色管理 - 验证列表页无编辑角色入口"
+    ],
+    "CASE-000389": [
+      "角色管理 - 验证列表页无删除角色入口"
+    ],
+    "CASE-000300": [
+      "CASE-000300 用户管理 - 新建用户时角色下拉框显示全部预设角色"
+    ],
+    "CASE-000301": [
+      "CASE-000301 用户管理 - 新建用户时角色下拉框必选校验"
+    ],
+    "CASE-000312": [
+      "CASE-000312 用户管理 - 新建用户时初始密码默认值验证"
+    ],
+    "CASE-000325": [
+      "CASE-000325 用户管理 - 新建用户时所有必填项为空提示请填写完整信息"
+    ],
+    "CASE-000270": [
+      "CASE-000270 用户管理 - 模糊搜索关键字为空"
+    ],
+    "CASE-000277": [
+      "CASE-000277 用户管理 - 搜索框为空时查询"
+    ],
+    "CASE-000279": [
+      "CASE-000279 用户管理 - 重置后回到默认为空进行查询"
+    ],
+    "CASE-000267": [
+      "用户管理查询与字段校验 › 查询-按账号模糊搜索",
+      "查询-按账号模糊搜索"
+    ],
+    "CASE-000268": [
+      "用户管理查询与字段校验 › 查询-按姓名模糊搜索",
+      "查询-按姓名模糊搜索"
+    ],
+    "CASE-000273": [
+      "用户管理查询与字段校验 › 查询-账号和姓名组合模糊搜索",
+      "查询-组合关键字整体匹配无结果"
+    ],
+    "CASE-000269": [
+      "用户管理查询与字段校验 › 查询-无匹配结果",
+      "查询-无匹配结果"
+    ],
+    "CASE-000278": [
+      "用户管理查询与字段校验 › 查询-输入空格",
+      "查询-关键字包含空格"
+    ],
+    "CASE-000323": [
+      "用户管理查询与字段校验 › 新建用户弹框点击取消后关闭且不保存",
+      "新建用户取消不保存"
+    ],
+    "CASE-000281": [
+      "用户管理扩展表单校验 › 新建用户-账号仅支持英文字母、数字、下划线-正常输入"
+    ],
+    "CASE-000282": [
+      "用户管理扩展表单校验 › 新建用户-账号仅包含英文字母-正常输入"
+    ],
+    "CASE-000285": [
+      "用户管理扩展表单校验 › 新建用户-姓名输入中文、英文、数字组合-保存成功"
+    ],
+    "CASE-000286": [
+      "用户管理扩展表单校验 › 新建用户-姓名仅输入中文-保存成功"
+    ],
+    "CASE-000287": [
+      "用户管理扩展表单校验 › 新建用户-姓名仅输入英文字母-保存成功"
+    ],
+    "CASE-000288": [
+      "用户管理扩展表单校验 › 新建用户-姓名仅输入数字-保存成功"
+    ],
+    "CASE-000290": [
+      "用户管理 - 新建用户姓名为空时提示必填"
+    ],
+    "CASE-000291": [
+      "用户管理 - 新建用户姓名为空时提交按钮不可用"
+    ],
+    "CASE-000292": [
+      "用户管理 - 新建用户姓名长度边界值验证（最小值）"
+    ],
+    "CASE-000293": [
+      "用户管理 - 新建用户姓名长度边界值验证（最大值）"
+    ],
+    "CASE-000294": [
+      "用户管理 - 新建用户姓名长度超限验证"
+    ],
+    "CASE-000295": [
+      "用户管理 - 新建用户姓名为空验证"
+    ],
+    "CASE-000296": [
+      "用户管理扩展表单校验 › 新建用户-账号为空时提示必填"
+    ],
+    "CASE-000297": [
+      "用户管理扩展表单校验 › 新建用户时姓名为空，提示必填"
+    ],
+    "CASE-000298": [
+      "用户管理扩展表单校验 › 新建用户-角色必选校验-未选择角色提示"
+    ],
+    "CASE-000299": [
+      "用户管理扩展表单校验 › 新建用户时初始密码为空提示必填"
+    ],
+    "CASE-000310": [
+      "用户管理扩展表单校验 › 新建用户-保存-必填项校验-账号和姓名均为空"
+    ],
+    "CASE-000311": [
+      "用户管理 - 新建用户初始密码必填项边界验证"
+    ],
+    "CASE-000313": [
+      "用户管理 - 新建用户初始密码默认值验证"
+    ],
+    "CASE-000314": [
+      "用户管理 - 初始密码明文显示切换验证"
+    ],
+    "CASE-000315": [
+      "用户管理扩展表单校验 › 新建用户时初始密码默认显示为123456"
+    ],
+    "CASE-000316": [
+      "用户管理扩展表单校验 › 新建用户弹框填写完整信息后点击取消不保存"
+    ],
+    "CASE-000317": [
+      "用户管理扩展表单校验 › 新建用户时输入已存在账号提示“该账号已存在”"
+    ],
+    "CASE-000318": [
+      "用户管理扩展表单校验 › 新建用户时账号唯一性校验-大小写不同视为不同账号"
+    ],
+    "CASE-000319": [
+      "用户管理扩展表单校验 › 验证新建用户时初始密码字段已删除"
+    ],
+    "CASE-000320": [
+      "用户管理扩展表单校验 › 验证用户列表创建时间展示格式为年月日时分秒"
+    ],
+    "CASE-000321": [
+      "用户管理剩余用例 › 新建用户-账号仅包含下划线-正常输入"
+    ],
+    "CASE-000322": [
+      "用户管理剩余用例 › 新建用户-账号仅包含数字-正常输入"
+    ],
+    "CASE-000332": [
+      "用户管理 - 并发创建相同账号时仅一个成功"
+    ],
+    "CASE-000341": [
+      "用户管理剩余用例 › 新建用户后使用默认密码登录并修改为合法新密码"
+    ],
+    "CASE-000350": [
+      "用户管理剩余用例 › 并发创建相同账号时仅一条成功且无重复数据"
+    ],
+    "CASE-000351": [
+      "用户管理 - 启用已禁用用户后该用户可正常登录"
+    ],
+    "CASE-000352": [
+      "用户管理剩余用例 › 启用状态下用户正常登录"
+    ],
+    "CASE-000353": [
+      "用户管理 - 禁用已登录用户后该用户被登出"
+    ],
+    "CASE-000354": [
+      "用户管理剩余用例 › 禁用用户后未登录用户登录提示账号错误"
+    ],
+    "CASE-000356": [
+      "用户管理剩余用例 › 禁用账号后未登录状态登录提示账号或密码错误或已被禁用"
+    ],
+    "CASE-000357": [
+      "用户管理剩余用例 › 禁用用户后已登录用户调用接口提示操作人不存在或已禁用"
+    ],
+    "CASE-000358": [
+      "用户管理剩余用例 › 禁用已登录用户后调用接口提示操作人不存在或已禁用"
+    ],
+    "CASE-000359": [
+      "用户管理 - 编辑弹框取消关闭不保存"
+    ],
+    "CASE-000360": [
+      "用户管理 - 编辑用户时清空必填项保存提示请填写完整信息"
+    ],
+    "CASE-000361": [
+      "用户管理剩余用例 › 编辑用户-姓名回显且可修改-边界长度验证"
+    ],
+    "CASE-000362": [
+      "用户管理 - 编辑用户时未选择角色保存提示请填写完整信息"
+    ],
+    "CASE-000363": [
+      "用户管理 - 修改角色后未登录用户登录展示新角色权限模块"
+    ],
+    "CASE-000364": [
+      "用户管理 - 修改角色后已登录用户刷新页面展示新角色权限模块"
+    ],
+    "CASE-000365": [
+      "用户管理剩余用例 › 编辑用户角色后未登录，登录成功展示新角色对应模块"
+    ],
+    "CASE-000366": [
+      "用户管理剩余用例 › 编辑用户角色后已登录用户不受影响，重新登录后展示新角色模块"
+    ],
+    "CASE-000367": [
+      "用户管理剩余用例 › 编辑用户姓名后右上角显示更新为修改后的姓名"
+    ],
+    "CASE-000368": [
+      "用户管理 - 重置密码二次确认后确定重置成功"
+    ],
+    "CASE-000369": [
+      "用户管理 - 重置密码后已登录用户保持登录状态"
+    ],
+    "CASE-000374": [
+      "用户管理 - 取消删除用户关闭弹窗"
+    ],
+    "CASE-000376": [
+      "用户管理 - 删除已被指派任务的账号时提示不允许删除"
+    ],
+    "CASE-000377": [
+      "用户管理 - 未登录状态下删除用户时提示账号或密码错误或账号已被禁用"
+    ],
+    "CASE-000378": [
+      "用户管理 - 删除用户后已登录用户点击菜单被登出"
+    ],
+    "CASE-000379": [
+      "用户管理 - 删除已被指派任务的用户时校验任务指派下拉不展示该用户"
+    ],
+    "CASE-000380": [
+      "用户管理剩余用例 › 删除用户-未登录状态-确定删除-提示账号或密码错误"
+    ],
+    "CASE-000370": [
+      "用户管理剩余用例 › 删除用户-已登录状态-接口校验-操作人不存在或已禁用提示"
+    ],
+    "CASE-000371": [
+      "用户管理 - 禁用账号后未登录用户登录提示"
+    ],
+    "CASE-000372": [
+      "用户管理剩余用例 › 验证用户列表默认按创建时间倒序排列"
+    ],
+    "CASE-000373": [
+      "用户管理剩余用例 › 验证创建时间相同的用户列表排序稳定性"
+    ],
+    "CASE-000271": [
+      "用户管理 - 按账号搜索用户"
+    ],
+    "CASE-000272": [
+      "用户管理 - 按姓名搜索用户"
+    ],
+    "CASE-000274": [
+      "用户管理 - 按账号模糊搜索用户"
+    ],
+    "CASE-000275": [
+      "用户管理 - 按姓名模糊搜索用户"
+    ],
+    "CASE-000276": [
+      "用户管理 - 搜索无匹配结果"
+    ],
+    "CASE-000280": [
+      "用户管理 - 新建用户账号为空时提示必填 CASE-000280"
+    ],
+    "CASE-000289": [
+      "用户管理 - 新建用户账号为空时提示必填 CASE-000289"
+    ],
+    "CASE-000336": [
+      "用户管理 - 新增用户时账号必填校验 CASE-000336"
+    ],
+    "CASE-000343": [
+      "用户管理 - 新增用户时姓名为空校验 CASE-000343"
+    ],
+    "CASE-000283": [
+      "用户管理 - 账号边界或格式 CASE-000283"
+    ],
+    "CASE-000284": [
+      "用户管理 - 账号边界或格式 CASE-000284"
+    ],
+    "CASE-000337": [
+      "用户管理 - 账号边界或格式 CASE-000337"
+    ],
+    "CASE-000338": [
+      "用户管理 - 账号边界或格式 CASE-000338"
+    ],
+    "CASE-000339": [
+      "用户管理 - 账号边界或格式 CASE-000339"
+    ],
+    "CASE-000340": [
+      "用户管理 - 账号边界或格式 CASE-000340"
+    ],
+    "CASE-000302": [
+      "用户管理 - 新建用户选择角色 管理员"
+    ],
+    "CASE-000303": [
+      "用户管理 - 新建用户选择角色 算法工程师"
+    ],
+    "CASE-000304": [
+      "用户管理 - 新建用户选择角色 采集工程师"
+    ],
+    "CASE-000306": [
+      "用户管理 - 新建用户选择角色 标注工程师"
+    ],
+    "CASE-000308": [
+      "用户管理 - 新建用户选择角色 质检工程师"
+    ],
+    "CASE-000305": [
+      "用户管理 - 角色必选 CASE-000305"
+    ],
+    "CASE-000307": [
+      "用户管理 - 角色必选 CASE-000307"
+    ],
+    "CASE-000309": [
+      "用户管理 - 角色必选 CASE-000309"
+    ],
+    "CASE-000349": [
+      "用户管理 - 角色必选 CASE-000349"
+    ],
+    "CASE-000324": [
+      "用户管理 - 必填组合校验 CASE-000324"
+    ],
+    "CASE-000326": [
+      "用户管理 - 必填组合校验 CASE-000326"
+    ],
+    "CASE-000327": [
+      "用户管理 - 必填组合校验 CASE-000327"
+    ],
+    "CASE-000328": [
+      "用户管理 - 必填组合校验 CASE-000328"
+    ],
+    "CASE-000329": [
+      "用户管理 - 必填组合校验 CASE-000329"
+    ],
+    "CASE-000330": [
+      "用户管理 - 必填组合校验 CASE-000330"
+    ],
+    "CASE-000331": [
+      "用户管理 - 必填组合校验 CASE-000331"
+    ],
+    "CASE-000342": [
+      "用户管理 - 合法姓名创建 CASE-000342"
+    ],
+    "CASE-000344": [
+      "用户管理 - 合法姓名创建 CASE-000344"
+    ],
+    "CASE-000346": [
+      "用户管理 - 合法姓名创建 CASE-000346"
+    ],
+    "CASE-000347": [
+      "用户管理 - 角色下拉展示全部预设角色"
+    ],
+    "CASE-000348": [
+      "用户管理 - 选择任一角色成功创建"
+    ],
+    "CASE-000333": [
+      "用户管理 - 并发创建不同账号均成功"
+    ],
+    "CASE-000334": [
+      "用户管理 - 账号已存在提示"
+    ],
+    "CASE-000335": [
+      "用户管理 - 新建成功后列表显示顶部信息"
+    ],
+    "CASE-000355": [
+      "用户管理 - 创建时间展示年月日时分秒"
+    ],
+    "CASE-000375": [
+      "用户管理 - 删除用户确认后删除成功"
+    ],
+    "CASE-000345": [
+      "用户管理 - 姓名非法字符校验"
+    ],
+    "CASE-000459": [
+      "机器人构型配置 - 验证构型名称长度为1时创建成功"
+    ],
+    "CASE-000460": [
+      "机器人构型配置 - 验证构型名称长度为32时创建成功"
+    ],
+    "CASE-000461": [
+      "机器人构型配置 - 验证构型名称为空时创建失败"
+    ],
+    "CASE-000462": [
+      "机器人构型配置 - 验证构型名称长度为33时创建失败"
+    ],
+    "CASE-000463": [
+      "机器人构型配置 - 验证构型名称支持中英文字母数字下划线"
+    ],
+    "CASE-000464": [
+      "机器人构型配置 - 验证构型名称含特殊字符被拒绝"
+    ],
+    "CASE-000465": [
+      "机器人构型配置 - 验证构型名称含空格被拒绝"
+    ],
+    "CASE-000466": [
+      "机器人构型配置 - 验证构型名称含中文和英文混合合法"
+    ],
+    "CASE-000467": [
+      "机器人构型配置 - 新建机器人构型时机器人型号长度边界值1验证"
+    ],
+    "CASE-000468": [
+      "机器人构型配置 - 新建机器人构型时机器人型号长度边界值32验证"
+    ],
+    "CASE-000469": [
+      "机器人构型配置 - 新建机器人构型时机器人型号长度超长异常验证"
+    ],
+    "CASE-000470": [
+      "机器人构型配置 - 新建机器人构型时机器人型号为空异常验证"
+    ],
+    "CASE-000471": [
+      "机器人构型配置 - 新建机器人构型时机器人型号支持中英文字母数字下划线横线"
+    ],
+    "CASE-000472": [
+      "机器人构型配置 - 新建机器人构型时机器人型号包含中文和英文数字"
+    ],
+    "CASE-000473": [
+      "机器人构型配置 - 新建机器人构型时机器人型号包含非法字符被拒绝"
+    ],
+    "CASE-000474": [
+      "机器人构型配置 - 新建机器人构型时机器人型号包含空格被拒绝"
+    ],
+    "CASE-000475": [
+      "机器人构型配置 - 新建构型描述长度边界值验证"
+    ],
+    "CASE-000476": [
+      "机器人构型配置 - 新建构型描述长度超限校验"
+    ],
+    "CASE-000477": [
+      "机器人构型配置 - 上传非JSON格式配置文件时提示错误"
+    ],
+    "CASE-000478": [
+      "机器人构型配置 - 上传JSON配置文件缺少robot_type字段时提示错误"
+    ],
+    "CASE-000479": [
+      "机器人构型配置 - 上传合法JSON配置文件成功创建构型"
+    ],
+    "CASE-000480": [
+      "机器人构型配置 - 新建弹框取消不保存"
+    ],
+    "CASE-000481": [
+      "机器人构型配置 - 新建弹框关闭按钮取消不保存"
+    ],
+    "CASE-000482": [
+      "机器人构型配置 - 新建时必填项为空校验"
+    ],
+    "CASE-000483": [
+      "机器人构型配置 - 新建时仅填写构型名称校验"
+    ],
+    "CASE-000484": [
+      "机器人构型配置 - 新建时仅填写机器人型号校验"
+    ],
+    "CASE-000485": [
+      "机器人构型配置 - 新建时仅上传配置文件校验"
+    ],
+    "CASE-000486": [
+      "机器人构型配置 - 新建时部分必填项为空校验"
+    ],
+    "CASE-000487": [
+      "机器人构型配置 - 新建构型时名称重复提示已存在"
+    ],
+    "CASE-000488": [
+      "机器人构型配置 - 新增时填写一致的构型名称在列表页正确显示"
+    ],
+    "CASE-000489": [
+      "机器人构型配置 - 新增时填写一致的机器人型号后列表显示正确"
+    ],
+    "CASE-000490": [
+      "机器人构型配置 - 列表页描述显示与新增填写一致"
+    ],
+    "CASE-000491": [
+      "机器人构型配置 - 新增时上传的JSON文件名称可点击查看"
+    ],
+    "CASE-000492": [
+      "机器人构型配置 - 列表页创建时间显示年月日时分"
+    ],
+    "CASE-000493": [
+      "机器人构型配置 - 查看JSON文件内容"
+    ],
+    "CASE-000494": [
+      "机器人构型配置 - 取消删除构型关闭弹框"
+    ],
+    "CASE-000495": [
+      "机器人构型配置 - 删除已被任务使用的构型时提示不允许删除"
+    ],
+    "CASE-000496": [
+      "数据分类管理 - 验证分类编码长度为1时创建成功"
+    ],
+    "CASE-000497": [
+      "数据分类管理 - 验证分类编码长度为32时创建成功"
+    ],
+    "CASE-000498": [
+      "数据分类管理 - 验证分类编码长度为0时创建失败"
+    ],
+    "CASE-000499": [
+      "数据分类管理 - 验证分类编码长度为33时创建失败"
+    ],
+    "CASE-000500": [
+      "数据分类管理 - 验证分类编码仅支持英文字母数字下划线"
+    ],
+    "CASE-000501": [
+      "数据分类管理 - 验证分类编码包含中文字符时创建失败"
+    ],
+    "CASE-000502": [
+      "数据分类管理 - 验证分类编码包含特殊字符时创建失败"
+    ],
+    "CASE-000503": [
+      "数据分类管理 - 验证分类编码包含空格时创建失败"
+    ],
+    "CASE-000504": [
+      "数据分类管理 - 验证分类编码为空时创建失败"
+    ],
+    "CASE-000505": [
+      "数据分类管理 - 验证分类名称长度为1时创建成功"
+    ],
+    "CASE-000506": [
+      "数据分类管理 - 验证分类名称长度为32时创建成功"
+    ],
+    "CASE-000507": [
+      "数据分类管理 - 验证分类名称为空时创建失败"
+    ],
+    "CASE-000508": [
+      "数据分类管理 - 验证分类名称长度为0时创建失败"
+    ],
+    "CASE-000509": [
+      "数据分类管理 - 验证分类名称长度为33时创建失败"
+    ],
+    "CASE-000510": [
+      "数据分类管理 - 验证分类名称超长时提示并禁止保存"
+    ],
+    "CASE-000511": [
+      "数据分类管理 - 验证分类名称支持中英文字母和数字"
+    ],
+    "CASE-000512": [
+      "数据分类管理 - 验证分类名称包含特殊字符时提示错误"
+    ],
+    "CASE-000513": [
+      "数据分类管理 - 验证分类名称包含空格时提示错误"
+    ],
+    "CASE-000514": [
+      "数据分类管理 - 新建分类弹框点击取消关闭且不保存"
+    ],
+    "CASE-000515": [
+      "数据分类管理 - 新建分类时分类编码为空提示必填"
+    ],
+    "CASE-000516": [
+      "数据分类管理 - 新建分类时分类名称为空提示必填"
+    ],
+    "CASE-000517": [
+      "数据分类管理 - 新建分类时输入已存在的分类编码提示分类编码已存在"
+    ],
+    "CASE-000518": [
+      "数据分类管理 - 新建分类时名称重复提示分类名称已存在"
+    ],
+    "CASE-000519": [
+      "数据分类管理 - 新增时填写一致的分类编码"
+    ],
+    "CASE-000520": [
+      "数据分类管理 - 新增时填写一致的分类名称"
+    ],
+    "CASE-000521": [
+      "数据分类管理 - 列表页创建时间显示年月日时分"
+    ],
+    "CASE-000522": [
+      "数据分类管理 - 编辑时分类编码置灰不可修改"
+    ],
+    "CASE-000523": [
+      "数据分类管理 - 编辑分类名称回显可修改"
+    ],
+    "CASE-000524": [
+      "数据分类管理 - 编辑分类名称长度为1时保存成功"
+    ],
+    "CASE-000525": [
+      "数据分类管理 - 编辑分类名称长度为32时保存成功"
+    ],
+    "CASE-000526": [
+      "数据分类管理 - 编辑分类名称为空时保存失败"
+    ],
+    "CASE-000527": [
+      "数据分类管理 - 编辑分类名称长度为33时保存失败"
+    ],
+    "CASE-000528": [
+      "数据分类管理 - 编辑分类名称输入合法中英文数字"
+    ],
+    "CASE-000529": [
+      "数据分类管理 - 编辑分类名称输入非法字符被拒绝"
+    ],
+    "CASE-000530": [
+      "数据分类管理 - 编辑分类名称输入超长内容被拒绝"
+    ],
+    "CASE-000531": [
+      "数据分类管理 - 取消编辑关闭弹框不保存"
+    ],
+    "CASE-000532": [
+      "数据分类管理 - 编辑保存时分类名称为空提示必填"
+    ],
+    "CASE-000533": [
+      "数据分类管理 - 编辑分类时名称与已有分类重复提示分类名称已存在"
+    ],
+    "CASE-000534": [
+      "数据分类管理 - 取消删除分类时关闭确认弹框"
+    ],
+    "CASE-000535": [
+      "数据分类管理 - 删除已被任务引用的分类时提示不能删除"
+    ]
+  }
+}

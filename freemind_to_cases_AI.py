@@ -1,3 +1,4 @@
+import argparse
 import sys
 import xml.etree.ElementTree as ET
 import csv
@@ -16,7 +17,7 @@ load_dotenv()  # 加载环境变量
 
 # ===== LLM 配置 =====
 INCLUDE_PARENT = False  # 仅提取叶子节点
-FREEMIND_FILE = "AI测试用例.mm"
+FREEMIND_FILE = "VLA数据任务平台-V1.0.mm"
 DEFAULT_PROVIDER = "deepseek"
 SUPPORTED_PROVIDERS = {"deepseek", "zhipu", "github", "openai_compatible"}
 
@@ -42,9 +43,25 @@ LLM_CONTEXT_WARNING_CHARS = int(os.getenv("LLM_CONTEXT_WARNING_CHARS", "150000")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
+
+class ChineseArgumentParser(argparse.ArgumentParser):
+    """将argparse自动生成的终端帮助标题转换为中文。"""
+
+    def format_help(self):
+        help_text = super().format_help()
+        replacements = {
+            "usage:": "用法：",
+            "options:": "可选参数：",
+            "positional arguments:": "位置参数：",
+            "show this help message and exit": "显示帮助信息并退出",
+        }
+        for source, target in replacements.items():
+            help_text = help_text.replace(source, target)
+        return help_text
+
 FULL_CASE_SYSTEM_PROMPT = """你是专业测试工程师，严格遵守约束：
 1. 仅允许基于提供的【测试点原文】生成测试用例，绝对不能新增测试点不存在的业务规则、校验逻辑、功能限制；禁止脑补任何未写明的隐性需求。
-   测试点原文包含【项目业务摘要】、【当前模块摘要】和【当前焦点测试点】。前两者只用于理解项目术语、上下文和已明确的关联约束；当前焦点测试点决定本次用例要验证什么。
+   生成前必须先综合理解【项目业务摘要】、【当前模块摘要】及整份测试点形成的业务关系，识别角色、状态、数据流和跨模块前置约束；不能把当前焦点测试点当成孤立标题处理。前两者只用于理解原文中已明确的术语、上下文和关联约束；当前焦点测试点决定本次用例要验证什么。
    当前焦点测试点中明确的每项约束必须在输出用例的标题、前置条件、操作步骤或预期结果中得到体现；若拆分多条用例，则这些用例合起来必须覆盖全部焦点约束。
 2. 输出固定结构，仅返回JSON，不要额外解释、前言、markdown格式。
 返回格式必须是以下 JSON 对象，cases 必须是数组，即使仅生成一条用例也不能省略外层对象或数组：
@@ -52,6 +69,7 @@ FULL_CASE_SYSTEM_PROMPT = """你是专业测试工程师，严格遵守约束：
   \"cases\": [
     {
       \"case_title\": \"精炼标准用例标题\",
+      \"module_name\": \"从当前测试点层级中识别出的业务模块名称\",
       \"precondition\": \"预置/前置条件\",
       \"operation_steps\": \"分步清晰的操作步骤\",
       \"expected_result\": \"明确可校验的预期结果\",
@@ -63,6 +81,7 @@ FULL_CASE_SYSTEM_PROMPT = """你是专业测试工程师，严格遵守约束：
 4. 区分正向、边界、异常场景；测试数据贴合测试点约束；
 5. 如果单个测试点可以拆分多条独立场景，在 cases 数组中输出多条用例；
 6. 语言简洁，适配导入测试管理平台。
+   module_name 必须从当前焦点测试点的层级路径中选择真正的业务模块名称。模块可能位于第二层、第三层或更深层，不能固定按层级位置判断；根节点、具体功能、动作、字段或测试条件不是模块。括号中的封伟、林禹成、中婷、徐锴、黄楠是测试人员标记，不是模块名称，应忽略。case_title 必须以 module_name 开头，格式为“模块名称 - 业务测试目标”。同一业务目标下可以连续完成的操作应合并为一条用例，只有前置条件、数据或预期结果彼此独立时才拆分多条用例。
 7. 每条用例必须给出 priority，且只能是字符串 \"1\"、\"2\"、\"3\" 或 \"4\"。结合当前焦点测试点、所在模块和已明确的全图上下文判断：
    - 1：核心主链路阻断、明显安全风险、数据丢失/错误或系统不可用风险；
    - 2：重要或高频功能、主要异常处理与关键业务规则；
@@ -87,6 +106,8 @@ module_summaries 必须包含下方【模块路径】中的每个原始键。没
 {{project_test_points}}"""
 
 cases_format = {
+    "源测试点ID": "",
+    "迭代版本": "",
     "所属模块": "",
     "用例标题": "",
     "前置条件": "",
@@ -99,9 +120,10 @@ cases_format = {
 }
 
 # LLM 的英文键仅用于内部解析；导出保持原有测试管理平台中文字段。
-FULL_CASE_FIELDS = ["case_title", "precondition", "operation_steps", "expected_result"]
+FULL_CASE_FIELDS = ["case_title", "module_name", "precondition", "operation_steps", "expected_result"]
 VALID_PRIORITIES = {"1", "2", "3", "4"}
 DEFAULT_PRIORITY = "2"
+TESTER_NAMES = {"封伟", "林禹成", "中婷", "徐锴", "黄楠"}
 # 导出列仅保留原始字段，避免与 LLM 内部字段形成重复列。
 EXPORT_FIELDS = list(cases_format.keys())
 
@@ -465,7 +487,11 @@ def _normalise_full_case_response(content, with_diagnostics=False):
         else:
             errors.append(f"第 {index} 项{alignment_error}")
 
-    if valid_cases:
+    # 一个焦点测试点可能被拆成多个场景；只接受整批都有效的响应，
+    # 避免某个场景格式错误时静默丢失业务覆盖。
+    if errors:
+        result = ([], "；".join(errors))
+    elif valid_cases:
         result = (valid_cases, "")
     else:
         result = ([], "；".join(errors) or "模型响应不包含有效用例")
@@ -511,6 +537,45 @@ def get_summary_module_key(case_title):
     """从“根节点 - 顶层业务模块 - ...”路径中取得顶层业务模块名称。"""
     parts = [part.strip() for part in re.split(r'\s*[-－]\s*', case_title) if part.strip()]
     return parts[1] if len(parts) >= 2 else ""
+
+
+def ensure_module_prefix(case_title, source_path, module_name=""):
+    """确保标题使用模型识别且来自原始路径的业务模块名称。"""
+    def clean_tester_annotation(value):
+        text = str(value or "").strip()
+        for name in TESTER_NAMES:
+            text = re.sub(rf"\s*[（(]{re.escape(name)}[）)]", "", text)
+        return text.strip()
+
+    title = clean_tester_annotation(case_title)
+    source_parts = [
+        clean_tester_annotation(part)
+        for part in re.split(r"\s*[-－]\s*", source_path)
+        if part.strip()
+    ]
+    valid_modules = source_parts[1:-1] if len(source_parts) >= 3 else source_parts[1:2]
+    valid_modules = [part for part in valid_modules if not re.fullmatch(r"[Vv]?\d+(?:\.\d+)+", part)]
+    module_name = clean_tester_annotation(module_name)
+    if module_name not in valid_modules:
+        module_name = valid_modules[0] if valid_modules else ""
+    if not title or not module_name:
+        return title
+
+    # 版本号属于发布元数据，不属于业务模块；清理模型可能带出的版本前缀。
+    title_parts = [part.strip() for part in re.split(r"\s*[-－]\s*", title) if part.strip()]
+    # 只保留一个模块前缀，清理模型重复复述模块的情况。
+    while len(title_parts) >= 2 and title_parts[0] == module_name and title_parts[1] == module_name:
+        title_parts.pop(1)
+    title = " - ".join(title_parts) if title_parts else title
+    while title_parts and re.fullmatch(r"[Vv]?\d+(?:\.\d+)+", title_parts[0]):
+        title_parts.pop(0)
+    title = " - ".join(title_parts) if title_parts else title
+
+    # 已有模块前缀时保留模型生成的其余标题；否则用稳定分隔符补齐。
+    title_parts = [part.strip() for part in re.split(r"\s*[-－]\s*", title) if part.strip()]
+    if title_parts and title_parts[0] == module_name:
+        return " - ".join(title_parts)
+    return f"{module_name} - {title}"
 
 
 def _normalise_project_summary(content, module_paths):
@@ -928,7 +993,7 @@ def _restore_failed_cases(csv_file, breakpoint_file):
 
 
 # ===== 主处理函数（修复断点文件处理逻辑） =====
-def freemind_to_cases(freemind_file, csv_file):
+def freemind_to_cases(freemind_file, csv_file, iteration_version=""):
     try:
         tree = ET.parse(freemind_file)
     except IOError:
@@ -936,7 +1001,7 @@ def freemind_to_cases(freemind_file, csv_file):
         return
 
     root = tree.getroot()
-    case_titles = []
+    case_points = []
 
     # 仅在最后一个层次（叶子节点）创建用例标题
     def parse_node(node, parent_text=None):
@@ -945,7 +1010,10 @@ def freemind_to_cases(freemind_file, csv_file):
             full_topic = f"{parent_text} - {topic}" if parent_text else topic
             # 仅当该节点没有子节点（即叶子节点）时，才添加到用例标题列表
             if len(node) == 0:  # 检查节点是否有子节点，无则为叶子节点
-                case_titles.append(full_topic.strip())
+                source_node_id = node.attrib.get("ID") or hashlib.sha256(
+                    full_topic.strip().encode("utf-8")
+                ).hexdigest()[:32]
+                case_points.append({"path": full_topic.strip(), "source_node_id": source_node_id})
             for child in node:
                 parse_node(child, full_topic)
         else:
@@ -954,8 +1022,12 @@ def freemind_to_cases(freemind_file, csv_file):
 
     parse_node(root)
 
-    # 过滤父节点
-    case_titles = [t for t in case_titles if t.count("-") >= 1]
+    # 过滤没有业务层级的根节点；半角和全角横线都视为层级分隔符。
+    case_points = [
+        point for point in case_points
+        if len([part for part in re.split(r"\s*[-－]\s*", point["path"]) if part.strip()]) >= 2
+    ]
+    case_titles = [point["path"] for point in case_points]
 
     # 复用原有叶子路径结果生成全图上下文；不修改 XML 读取和树遍历核心逻辑。
     project_test_point_context = build_project_test_point_context(case_titles)
@@ -963,11 +1035,15 @@ def freemind_to_cases(freemind_file, csv_file):
         logger.info("已构造完整思维导图测试点上下文：%s 条叶子测试点，%s 字符",
                     len(case_titles), len(project_test_point_context))
 
-    # 创建文件或为旧文件补齐完整用例字段，并恢复旧版失败占位用例。
+    # 完整运行始终重建目标文件；只有存在断点时才继续追加未完成项。
+    breakpoint_file = csv_file + ".breakpoint"
+    if not os.path.exists(breakpoint_file) and os.path.exists(csv_file):
+        os.remove(csv_file)
+
+    # 创建文件或为中断文件补齐完整用例字段，并恢复旧版失败占位用例。
     _ensure_export_header(csv_file)
 
     # 检查断点文件
-    breakpoint_file = csv_file + ".breakpoint"
     _restore_failed_cases(csv_file, breakpoint_file)
     processed_titles = set()
 
@@ -1042,21 +1118,33 @@ def freemind_to_cases(freemind_file, csv_file):
                 logger.warning("本次未生成用例，不写入 CSV 或断点；下次将从该用例继续：%s", data)
                 continue
             if not enable_llm_generate_full_case:
-                generated_cases = [{
-                    "case_title": title,
-                    "precondition": "",
-                    "operation_steps": "",
-                    "expected_result": "",
-                    "priority": DEFAULT_PRIORITY,
-                }]
+                raise RuntimeError(
+                    "已禁用完整用例生成；为避免导出空步骤/空预期用例，"
+                    "请启用 ENABLE_LLM_GENERATE_FULL_CASE"
+                )
 
             # 数组响应按独立场景拆分为多行，旧字段同步写入以保持导入兼容。
             with open(csv_file, "a", newline="", encoding="utf-8-sig") as f:
                 writer = csv.DictWriter(f, fieldnames=EXPORT_FIELDS, extrasaction="ignore")
                 for generated_case in generated_cases:
                     temp = copy.deepcopy(cases_format)
-                    temp["用例标题"] = generated_case["case_title"]
-                    temp["所属模块"] = module
+                    temp["源测试点ID"] = case_points[i]["source_node_id"]
+                    temp["迭代版本"] = iteration_version
+                    temp["用例标题"] = ensure_module_prefix(
+                        generated_case["case_title"], data, generated_case.get("module_name", "")
+                    )
+                    source_parts = [part.strip() for part in re.split(r"\s*[-－]\s*", data) if part.strip()]
+                    valid_modules = source_parts[1:-1] if len(source_parts) >= 3 else source_parts[1:2]
+                    valid_modules = [
+                        re.sub(r"\s*[（(](封伟|林禹成|中婷|徐锴|黄楠)[）)]", "", part).strip()
+                        for part in valid_modules
+                        if not re.fullmatch(r"[Vv]?\d+(?:\.\d+)+", part)
+                    ]
+                    generated_module = re.sub(
+                        r"\s*[（(](封伟|林禹成|中婷|徐锴|黄楠)[）)]", "",
+                        str(generated_case.get("module_name", ""))
+                    ).strip()
+                    temp["所属模块"] = generated_module if generated_module in valid_modules else (valid_modules[0] if valid_modules else module)
                     temp["优先级"] = normalise_priority(generated_case.get("priority"))
                     temp["前置条件"] = generated_case["precondition"]
                     temp["步骤"] = generated_case["operation_steps"]
@@ -1090,12 +1178,20 @@ def freemind_to_cases(freemind_file, csv_file):
 
 # ===== 程序入口 =====
 if __name__ == "__main__":
-    input_path = f"./FreeMindFiles/{FREEMIND_FILE}"
-    # 与旧标题模式结果分文件导出，避免已有断点跳过曾按旧模式处理的节点。
+    parser = ChineseArgumentParser(description="根据FreeMind测试点文件生成迭代测试用例。")
+    parser.add_argument("--input", default=f"./FreeMindFiles/{FREEMIND_FILE}")
+    parser.add_argument("--output")
+    parser.add_argument("--version")
+    args = parser.parse_args()
+
+    input_path = args.input
+    input_stem = os.path.splitext(os.path.basename(input_path))[0]
+    iteration_version = args.version or input_stem
     output_suffix = "_full_cases" if enable_llm_generate_full_case else ""
-    output_path = f"./ExcelFiles/{FREEMIND_FILE.split('.')[0]}{output_suffix}.csv"
+    output_path = args.output or f"./cases/iterations/{input_stem}{output_suffix}.csv"
 
     print(f"开始处理文件: {input_path}")
+    print(f"输出用例文件: {output_path}")
     print(f"标题优化开关: {use_llm_optimize_title}")
     print(f"完整用例生成开关: {enable_llm_generate_full_case}")
     if enable_llm_generate_full_case:
@@ -1107,4 +1203,4 @@ if __name__ == "__main__":
                   f"用例生成: {workflow_models['generation_model']}")
         except ValueError as e:
             print(f"⚠️ {e}；完整用例生成可能失败")
-    freemind_to_cases(input_path, output_path)
+    freemind_to_cases(input_path, output_path, iteration_version=iteration_version)
