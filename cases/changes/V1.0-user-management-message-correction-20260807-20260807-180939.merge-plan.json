@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "status": "applied",
+  "createdAt": "2026-08-07T18:09:39+08:00",
+  "sourceCsv": "C:\\Users\\admin\\PycharmProjects\\AI_freemind_to_cases\\cases\\iterations\\V1.0-user-management-message-correction-20260807.csv",
+  "iterationVersion": "V1.0-user-management-message-correction-20260807",
+  "rules": {
+    "incrementalInput": true,
+    "absenceNeverMeansRetirement": true,
+    "agentMustReviewCandidates": true
+  },
+  "items": [
+    {
+      "inputRow": 1,
+      "action": "modify",
+      "targetCaseId": "CASE-000376",
+      "retireCaseIds": [],
+      "reason": "根据FAT实际接口提示修订用例预期文案；删除保护行为不变，仅将“该账号”更正为“该用户已被分配任务”。",
+      "confidence": "exact",
+      "case": {
+        "用例ID": "CASE-000376",
+        "状态": "有效",
+        "首次版本": "V1.0",
+        "最后变更版本": "V1.0",
+        "源测试点ID": "9d7c9151fdbbd5fedb471ecdb0642b21",
+        "迭代版本": "V1.0-user-management-message-correction-20260807",
+        "所属模块": "用户管理",
+        "用例标题": "用户管理 - 删除已被指派任务的账号时提示不允许删除",
+        "前置条件": "存在一个已启用且具有采集工程师角色的用户A，该用户已被指派为某任务的采集人；当前登录用户具有删除权限",
+        "步骤": "1. 进入用户管理列表页，找到用户A；\n2. 点击用户A所在行的“删除”按钮；\n3. 在弹出的二次确认对话框中点击“确定”按钮；\n4. 观察页面提示信息。",
+        "预期": "1. 列表页正常显示，用户A可见；\n2. 弹出二次确认对话框，提示“确定删除 [用户A姓名] 吗？”；\n3. 点击确定后，系统不执行删除操作；\n4. 页面提示“该用户已被分配任务，不允许删除”，用户A仍存在于列表中。",
+        "关键词": "1",
+        "优先级": "2",
+        "用例类型": "功能测试",
+        "适用阶段": "功能测试阶段"
+      },
+      "candidates": []
+    }
+  ],
+  "impactedRegressionCaseIds": [],
+  "uncertain": [],
+  "appliedAt": "2026-08-07T18:10:39+08:00",
+  "changedCaseIds": [
+    "CASE-000376"
+  ],
+  "retiredCaseIds": []
+}

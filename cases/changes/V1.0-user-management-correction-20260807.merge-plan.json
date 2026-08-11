@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "status": "applied",
+  "createdAt": "2026-08-07T16:23:16+08:00",
+  "sourceCsv": "C:\\Users\\admin\\PycharmProjects\\AI_freemind_to_cases\\cases\\iterations\\V1.0-user-management-correction-20260807.csv",
+  "iterationVersion": "V1.0-user-management-correction-20260807",
+  "rules": {
+    "incrementalInput": true,
+    "absenceNeverMeansRetirement": true,
+    "agentMustReviewCandidates": true
+  },
+  "items": [
+    {
+      "inputRow": 1,
+      "action": "unchanged",
+      "targetCaseId": "CASE-000376",
+      "retireCaseIds": [
+        "CASE-000379"
+      ],
+      "reason": "用户确认该用例有问题，删除后不应再验证任务指派下拉；保留 CASE-000376 验证已指派用户禁止删除。",
+      "confidence": "exact",
+      "case": {
+        "源测试点ID": "1f9501a847b6753eabde0604e073478f",
+        "迭代版本": "VLA数据任务平台-V1.0",
+        "所属模块": "用户管理",
+        "用例标题": "用户管理 - 删除已被指派任务的用户时校验任务指派下拉不展示该用户",
+        "前置条件": "存在一个已创建的任务，且该任务已指派给某个用户（该用户具有对应角色且状态为启用）；当前登录用户拥有用户管理删除权限",
+        "步骤": "1. 进入用户管理列表页，找到该已被指派任务的用户；\n2. 点击该用户对应的【删除】按钮；\n3. 在二次确认弹窗中点击【确定】；\n4. 进入任务管理，打开该任务的详情或编辑页面，查看采集人、标注人、质检人的指派下拉列表；\n5. 在指派下拉列表中搜索或查找该用户的姓名（账号）。",
+        "预期": "1. 用户管理列表页正常显示该用户；\n2. 弹出二次确认提示“确定删除 [姓名] 吗？”；\n3. 系统提示删除失败，因为该用户已被指派任务，不允许删除；\n4. 任务详情或编辑页面正常打开；\n5. 指派下拉列表中不展示该用户的姓名（账号）。",
+        "关键词": "1",
+        "优先级": "1",
+        "用例类型": "功能测试",
+        "适用阶段": "功能测试阶段"
+      },
+      "candidates": []
+    }
+  ],
+  "impactedRegressionCaseIds": [],
+  "uncertain": [],
+  "appliedAt": "2026-08-07T16:25:13+08:00",
+  "changedCaseIds": [],
+  "retiredCaseIds": [
+    "CASE-000379"
+  ]
+}
