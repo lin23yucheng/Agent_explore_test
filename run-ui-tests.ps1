@@ -106,7 +106,9 @@ if ($Full) {
 if (-not (Test-Path -LiteralPath $batchResultsFile)) {
     throw '本批Playwright未生成结果文件，禁止复用上一批结果。'
 }
-& $pythonExecutable .\scripts\build_case_report.py --source $SourceCsv --report-dir $reportsRoot --history 'reports/history/case-results.json'
+# SourceCsv scopes this batch only. The canonical CSV report must always be
+# rebuilt from the complete, currently active case set.
+& $pythonExecutable .\scripts\build_case_report.py --source 'cases/current.csv' --report-dir $reportsRoot --history 'reports/history/case-results.json'
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 $manifest = [ordered]@{

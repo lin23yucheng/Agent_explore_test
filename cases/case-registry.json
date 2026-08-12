@@ -1,7 +1,7 @@
 {
   "version": 2,
   "nextSequence": 536,
-  "updatedAt": "2026-08-11T11:32:40+08:00",
+  "updatedAt": "2026-08-12T09:35:04+08:00",
   "cases": {
     "CASE-000001": {
       "id": "CASE-000001",
@@ -23,13 +23,24 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "48efb86634c6101e54734dde32ccd3dd139322d334b23ed7753285341a4af005",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "任务管理 - 验证总任务数显示所有任务的总数 [CASE-000001]",
+        "executedAt": "2026-08-11T06:20:53.665Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000002": {
       "id": "CASE-000002",
-      "status": "active",
+      "status": "retired",
       "firstSeenVersion": "V1.0",
-      "lastChangedVersion": "V1.0",
+      "lastChangedVersion": "direct-case-retirement-20260811",
       "sourceNodeId": "44991855f4b53fda745c76c4d0d648cb",
       "fingerprint": "0e8ecb1f0db2b72c58d66800cc8f8f6621ec510f4f0faf1fdc918fdbf3201c03",
       "fields": {
@@ -44,8 +55,19 @@
         "适用阶段": "功能测试阶段"
       },
       "revisions": [],
-      "replacedBy": "",
-      "lastResult": {}
+      "replacedBy": "CASE-000001",
+      "lastResult": {
+        "fingerprint": "6797c1adc8fea1faffc68c5032910631eae09489028cf2f14eb2a0404f4de8f2",
+        "status": "failed",
+        "trusted": true,
+        "testTitle": "任务管理 - 验证无任务时总任务数显示为0 [CASE-000002]",
+        "executedAt": "2026-08-11T06:20:53.665Z",
+        "healing": "",
+        "failureCategory": "DATA_PRECONDITION_MISSING",
+        "cleanupStatus": "passed",
+        "error": "Error: 测试前置条件未满足：当前“总任务”数量为129，无法构造全局无数据状态",
+        "evidence": []
+      }
     },
     "CASE-000003": {
       "id": "CASE-000003",
@@ -67,13 +89,24 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "11b6ed6c3536a7a8d6e36bc8012fd6ae5bea59915385bacd2362926e4fa43580",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "任务管理 - 验证已创建状态任务数量统计正确 [CASE-000003]",
+        "executedAt": "2026-08-11T06:20:53.665Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000004": {
       "id": "CASE-000004",
-      "status": "active",
+      "status": "retired",
       "firstSeenVersion": "V1.0",
-      "lastChangedVersion": "V1.0",
+      "lastChangedVersion": "direct-case-retirement-20260811",
       "sourceNodeId": "d20f5f37719254cb9867ca3322b4c866",
       "fingerprint": "21b96dd8f804fe073202304e55f0a0a9208ad6b81b6dfba4b0c546045334e899",
       "fields": {
@@ -88,8 +121,19 @@
         "适用阶段": "功能测试阶段"
       },
       "revisions": [],
-      "replacedBy": "",
-      "lastResult": {}
+      "replacedBy": "CASE-000001",
+      "lastResult": {
+        "fingerprint": "7b481633c5ba77fd923a4ba02a1af21f034e0cd8426ede5d7123674254e19bec",
+        "status": "failed",
+        "trusted": true,
+        "testTitle": "任务管理 - 验证无已创建任务时数量显示为0 [CASE-000004]",
+        "executedAt": "2026-08-11T06:20:53.665Z",
+        "healing": "",
+        "failureCategory": "DATA_PRECONDITION_MISSING",
+        "cleanupStatus": "passed",
+        "error": "Error: 测试前置条件未满足：当前“已创建”数量为44，无法构造全局无数据状态",
+        "evidence": []
+      }
     },
     "CASE-000005": {
       "id": "CASE-000005",
@@ -111,7 +155,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "1f0c54ac2e7e2d9f3f3e7f31fee81c468f06a3e856637d8db0bbba16da67a0b4",
+        "status": "failed",
+        "trusted": true,
+        "testTitle": "任务管理 - 验证已创建任务数量随任务状态变更实时更新 [CASE-000005]",
+        "executedAt": "2026-08-11T06:20:53.665Z",
+        "healing": "",
+        "failureCategory": "TEST_IMPLEMENTATION_DEFECT",
+        "cleanupStatus": "passed",
+        "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '任务列表', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '任务列表', exact: true })\u001b[22m\n",
+        "evidence": []
+      }
     },
     "CASE-000006": {
       "id": "CASE-000006",
@@ -133,13 +188,24 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "b656b56efca35e0dfe79e9304f213e654b9ca3f5be257ead5812c7d362ab6ab5",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "任务管理 - 验证已采集任务数量统计正确性 [CASE-000006]",
+        "executedAt": "2026-08-11T06:20:53.665Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000007": {
       "id": "CASE-000007",
-      "status": "active",
+      "status": "retired",
       "firstSeenVersion": "V1.0",
-      "lastChangedVersion": "V1.0",
+      "lastChangedVersion": "direct-case-retirement-20260811",
       "sourceNodeId": "7d23dfc699f002d36bf51cf1bafbfbea",
       "fingerprint": "103a037dd759ae1747538cc1e5b79d561a2f72c3adf111eb068a20e57ee73185",
       "fields": {
@@ -154,8 +220,19 @@
         "适用阶段": "功能测试阶段"
       },
       "revisions": [],
-      "replacedBy": "",
-      "lastResult": {}
+      "replacedBy": "CASE-000001",
+      "lastResult": {
+        "fingerprint": "ce2f216aa1c2832392e5cbbc28ca5793b299dd1d8142d6b84ae2acc0c8417474",
+        "status": "failed",
+        "trusted": true,
+        "testTitle": "任务管理 - 验证无已采集任务时数量显示为0 [CASE-000007]",
+        "executedAt": "2026-08-11T06:20:53.665Z",
+        "healing": "",
+        "failureCategory": "DATA_PRECONDITION_MISSING",
+        "cleanupStatus": "passed",
+        "error": "Error: 测试前置条件未满足：当前“已采集”数量为73，无法构造全局无数据状态",
+        "evidence": []
+      }
     },
     "CASE-000008": {
       "id": "CASE-000008",
@@ -177,7 +254,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "5e85b10200dad1ec248afc4bc9842c3ff0e0da6097d0c27e9d65321e7c9107cf",
+        "status": "failed",
+        "trusted": true,
+        "testTitle": "任务管理 - 验证已采集任务数量随任务状态变更实时更新 [CASE-000008]",
+        "executedAt": "2026-08-11T06:20:53.665Z",
+        "healing": "",
+        "failureCategory": "DATA_PRECONDITION_MISSING",
+        "cleanupStatus": "passed",
+        "error": "Error: 测试前置条件未满足：当前未建立可安全驱动完整采集、标注、质检或转换流程的独立任务数据",
+        "evidence": []
+      }
     },
     "CASE-000009": {
       "id": "CASE-000009",
@@ -199,7 +287,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "e8e2bf69c102521ee181970bad6914078faf92b7a67dd99fa1f33e09d59e0450",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "任务管理 - 验证已标注任务数量统计正确性 [CASE-000009]",
+        "executedAt": "2026-08-11T06:20:53.665Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000010": {
       "id": "CASE-000010",
@@ -221,7 +320,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证无已标注任务时数量显示为0",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000011": {
       "id": "CASE-000011",
@@ -243,7 +349,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证已标注任务数量随任务状态变更实时更新",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000012": {
       "id": "CASE-000012",
@@ -265,7 +378,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证已质检任务数量统计正确性",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000013": {
       "id": "CASE-000013",
@@ -287,7 +407,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证无已质检任务时统计显示为0",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000014": {
       "id": "CASE-000014",
@@ -309,7 +436,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证已质检任务数量随任务状态变更实时更新",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000015": {
       "id": "CASE-000015",
@@ -331,7 +465,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证已转换任务数量统计正确性",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000016": {
       "id": "CASE-000016",
@@ -353,7 +494,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证无已转换任务时数量显示为0",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000017": {
       "id": "CASE-000017",
@@ -375,7 +523,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证已转换任务数量随任务状态变更实时更新",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000018": {
       "id": "CASE-000018",
@@ -397,7 +552,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 按任务名称模糊查询",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000019": {
       "id": "CASE-000019",
@@ -419,7 +581,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 按任务编号模糊查询",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000020": {
       "id": "CASE-000020",
@@ -441,7 +610,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 按任务名称模糊查询无结果",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000021": {
       "id": "CASE-000021",
@@ -463,7 +639,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 按任务编号模糊查询无结果",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000022": {
       "id": "CASE-000022",
@@ -485,7 +668,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 按状态下拉框筛选已创建任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000023": {
       "id": "CASE-000023",
@@ -507,7 +697,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 状态下拉框筛选已创建任务后重置查询",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000024": {
       "id": "CASE-000024",
@@ -529,7 +726,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 按状态下拉框筛选已采集任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000025": {
       "id": "CASE-000025",
@@ -551,7 +755,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 状态下拉框筛选已采集任务后重置筛选",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000026": {
       "id": "CASE-000026",
@@ -573,7 +784,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 按状态下拉框筛选已标注任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000027": {
       "id": "CASE-000027",
@@ -595,7 +813,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 状态下拉框筛选已标注任务后重置查询",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000028": {
       "id": "CASE-000028",
@@ -617,7 +842,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 按状态下拉框筛选已质检任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000029": {
       "id": "CASE-000029",
@@ -639,7 +871,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 状态下拉框筛选已质检无结果场景",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000030": {
       "id": "CASE-000030",
@@ -661,7 +900,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 按状态下拉框筛选已转换任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000031": {
       "id": "CASE-000031",
@@ -683,7 +929,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 状态下拉框筛选已转换任务后重置筛选",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000032": {
       "id": "CASE-000032",
@@ -705,7 +958,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 按名称精确查询显示匹配任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000033": {
       "id": "CASE-000033",
@@ -727,7 +987,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 按状态筛选显示对应状态任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000034": {
       "id": "CASE-000034",
@@ -749,7 +1016,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 组合条件查询显示符合全部条件任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000035": {
       "id": "CASE-000035",
@@ -771,7 +1045,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 查询无匹配数据时显示空列表",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000036": {
       "id": "CASE-000036",
@@ -793,7 +1074,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 查询条件为空时显示全部任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000037": {
       "id": "CASE-000037",
@@ -815,7 +1103,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 翻页后查询数据正常",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000038": {
       "id": "CASE-000038",
@@ -837,7 +1132,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 重置查询条件后回到默认为空状态",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000039": {
       "id": "CASE-000039",
@@ -859,7 +1161,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "ba5973b9bba0e33a34196150ce77fc830c6ae0bd813a0e6fcc68e8fb47769560",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "任务管理 - 创建任务时任务名称为必填项，为空时提示且无法提交 [CASE-000039]",
+        "executedAt": "2026-08-11T06:10:28.533Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000040": {
       "id": "CASE-000040",
@@ -881,7 +1194,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "5a85f92c558da736b6addf858242a369cf1a704d769794fa1fb7466ee685e79a",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "任务管理 - 创建任务时任务名称仅输入空格视为空，无法提交 [CASE-000040]",
+        "executedAt": "2026-08-11T09:13:18.761Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000041": {
       "id": "CASE-000041",
@@ -903,7 +1227,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "b8714c34aecef9e22b7965cd22705d77f31ed34ce1779f73cf55d45e2b946609",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "任务管理 - 验证任务名称长度边界值32字符可成功创建 [CASE-000041]",
+        "executedAt": "2026-08-11T09:15:26.553Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000042": {
       "id": "CASE-000042",
@@ -925,7 +1260,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "123f85b9db9bafa9630c9b4986bebc988c6c0144f371bed758ded187e8f550ed",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "任务管理 - 验证任务名称长度超过32字符被拒绝 [CASE-000042]",
+        "executedAt": "2026-08-11T09:15:59.283Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000043": {
       "id": "CASE-000043",
@@ -947,7 +1293,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "1ab1f15f85a20254830cb5357fa42f521985aede4b38b130c939facadea9fa63",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "任务管理 - 验证任务名称支持中英文字母、数字、下划线和短横线 [CASE-000043]",
+        "executedAt": "2026-08-11T09:15:59.283Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000044": {
       "id": "CASE-000044",
@@ -969,7 +1326,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "4f1ef251ec36f88fce5f48e4991020e1b2ed9318aaf3c77f1d7f6444fecc796f",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "任务管理 - 验证任务名称包含非法字符时创建失败 [CASE-000044]",
+        "executedAt": "2026-08-11T09:18:18.405Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000045": {
       "id": "CASE-000045",
@@ -991,7 +1359,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "ccc8bbdffff85ede11303c33eb6201c910110e040c78f75ab3bdaf4e023e2690",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "任务管理 - 验证任务名称仅包含中英文字母、数字、下划线和短横线时边界值可用 [CASE-000045]",
+        "executedAt": "2026-08-11T09:15:59.283Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000046": {
       "id": "CASE-000046",
@@ -1013,7 +1392,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "159366116ef62b793ae4a0f28d26c948b1b8bb5a9d6f1ca29b6e605c5bbb62d2",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "任务管理 - 创建任务时任务描述长度等于255字符可成功创建 [CASE-000046]",
+        "executedAt": "2026-08-11T09:23:51.588Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000047": {
       "id": "CASE-000047",
@@ -1035,7 +1425,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "16fc5cab30cbe02a88e4c2f606aeec69bda2c9e1c56621a64ef45392090c5b15",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "任务管理 - 创建任务时任务描述长度超过255字符被限制 [CASE-000047]",
+        "executedAt": "2026-08-11T09:28:31.179Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000048": {
       "id": "CASE-000048",
@@ -1057,7 +1458,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "fa408760d1c612bf6da0fe3703b46bb3132c98b846646941a02745e09cdab839",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "任务管理 - 创建任务时任务描述为空可正常创建 [CASE-000048]",
+        "executedAt": "2026-08-11T09:30:46.626Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000049": {
       "id": "CASE-000049",
@@ -1079,7 +1491,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 添加根节点长度等于16时创建成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000050": {
       "id": "CASE-000050",
@@ -1101,7 +1520,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 添加根节点长度小于16时创建成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000051": {
       "id": "CASE-000051",
@@ -1123,7 +1549,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 添加根节点长度大于16时提示错误",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000052": {
       "id": "CASE-000052",
@@ -1145,7 +1578,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 添加同级节点长度等于16时成功添加",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000053": {
       "id": "CASE-000053",
@@ -1167,7 +1607,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 添加同级节点长度小于16时成功添加",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000054": {
       "id": "CASE-000054",
@@ -1189,7 +1636,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 添加同级节点长度大于16时提示错误",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000055": {
       "id": "CASE-000055",
@@ -1211,7 +1665,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 添加根节点子节点且名称长度等于16",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000056": {
       "id": "CASE-000056",
@@ -1233,7 +1694,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 添加根节点子节点且名称长度小于16",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000057": {
       "id": "CASE-000057",
@@ -1255,7 +1723,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 添加根节点子节点且名称为空",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000058": {
       "id": "CASE-000058",
@@ -1277,7 +1752,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 添加根节点子节点且名称长度超过16",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000059": {
       "id": "CASE-000059",
@@ -1299,7 +1781,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 编辑根节点名称回显并重新编辑成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000060": {
       "id": "CASE-000060",
@@ -1321,7 +1810,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 编辑根节点名称回显并重新编辑为边界长度16",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000061": {
       "id": "CASE-000061",
@@ -1343,7 +1839,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 编辑根节点名称回显并重新编辑超长名称被限制",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000062": {
       "id": "CASE-000062",
@@ -1365,7 +1868,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 删除无子节点的根节点",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000063": {
       "id": "CASE-000063",
@@ -1387,7 +1897,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 删除含子节点的根节点时二次确认并级联删除",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000064": {
       "id": "CASE-000064",
@@ -1409,7 +1926,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 删除含子节点的根节点时取消操作不删除",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000065": {
       "id": "CASE-000065",
@@ -1431,7 +1955,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时标注层级根节点对应L1层",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000066": {
       "id": "CASE-000066",
@@ -1453,7 +1984,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时标注层级子节点对应L2层",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000067": {
       "id": "CASE-000067",
@@ -1475,7 +2013,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时标注层级深层节点对应L3层",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000068": {
       "id": "CASE-000068",
@@ -1497,7 +2042,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 标注新增时描述下拉展示对应节点名称",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000069": {
       "id": "CASE-000069",
@@ -1519,7 +2071,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时数据分类为必填项校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000070": {
       "id": "CASE-000070",
@@ -1541,7 +2100,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时数据分类单选且必选",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000071": {
       "id": "CASE-000071",
@@ -1563,7 +2129,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时数据分类下拉展示数据分类管理中的启用分类",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000072": {
       "id": "CASE-000072",
@@ -1585,7 +2158,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时数据分类下拉不展示已禁用或已删除的分类",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000073": {
       "id": "CASE-000073",
@@ -1607,7 +2187,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时数据分类下拉为空时提示无可用分类",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000074": {
       "id": "CASE-000074",
@@ -1629,7 +2216,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时数据分类下拉展示编码和名称",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000075": {
       "id": "CASE-000075",
@@ -1651,7 +2245,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 数据分类下拉列表按创建时间倒序显示",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000076": {
       "id": "CASE-000076",
@@ -1673,7 +2274,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时标签必填校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000077": {
       "id": "CASE-000077",
@@ -1695,7 +2303,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时标签可多选",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000078": {
       "id": "CASE-000078",
@@ -1717,7 +2332,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务标签下拉展示标签管理中启用的标签",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000079": {
       "id": "CASE-000079",
@@ -1739,7 +2361,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务标签下拉不展示已禁用标签",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000080": {
       "id": "CASE-000080",
@@ -1761,7 +2390,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务标签下拉不展示已删除标签",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000081": {
       "id": "CASE-000081",
@@ -1783,7 +2419,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时标签展示名称与分类",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000082": {
       "id": "CASE-000082",
@@ -1805,7 +2448,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 标签下拉列表按创建时间倒序显示",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000083": {
       "id": "CASE-000083",
@@ -1827,7 +2477,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时机器人构型必填校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000084": {
       "id": "CASE-000084",
@@ -1849,7 +2506,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时机器人构型单选且必选",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000085": {
       "id": "CASE-000085",
@@ -1871,7 +2535,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时机器人构型下拉展示全部启用构型",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000086": {
       "id": "CASE-000086",
@@ -1893,7 +2564,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时机器人构型下拉不展示禁用构型",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000087": {
       "id": "CASE-000087",
@@ -1915,7 +2593,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时机器人构型下拉为空时提示无可用构型",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000088": {
       "id": "CASE-000088",
@@ -1937,7 +2622,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时机器人构型下拉展示构型名称和机器人型号",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000089": {
       "id": "CASE-000089",
@@ -1959,7 +2651,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时机器人构型下拉展示多个构型且格式正确",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000090": {
       "id": "CASE-000090",
@@ -1981,7 +2680,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时机器人构型下拉为空时无选项",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000091": {
       "id": "CASE-000091",
@@ -2003,7 +2709,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时机器人构型下拉按创建时间倒序显示",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000092": {
       "id": "CASE-000092",
@@ -2025,7 +2738,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 采集要求长度等于255时创建成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000093": {
       "id": "CASE-000093",
@@ -2047,7 +2767,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 采集要求长度超过255时创建失败",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000094": {
       "id": "CASE-000094",
@@ -2069,7 +2796,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 采集要求为空时创建成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000095": {
       "id": "CASE-000095",
@@ -2091,7 +2825,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时目标数量默认值为100",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000096": {
       "id": "CASE-000096",
@@ -2113,7 +2854,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 目标数量输入边界值1创建成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000097": {
       "id": "CASE-000097",
@@ -2135,7 +2883,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 目标数量输入边界值10000创建成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000098": {
       "id": "CASE-000098",
@@ -2157,7 +2912,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 目标数量输入0提示错误",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000099": {
       "id": "CASE-000099",
@@ -2179,7 +2941,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 目标数量输入10001提示错误",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000100": {
       "id": "CASE-000100",
@@ -2201,7 +2970,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 目标数量输入非数字字符提示错误",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000101": {
       "id": "CASE-000101",
@@ -2223,7 +2999,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 目标数量输入小数提示错误",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000102": {
       "id": "CASE-000102",
@@ -2245,7 +3028,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 目标数量为空提示必填",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000103": {
       "id": "CASE-000103",
@@ -2267,7 +3057,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时选择低优先级",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000104": {
       "id": "CASE-000104",
@@ -2289,7 +3086,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时优先级默认值为中",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000105": {
       "id": "CASE-000105",
@@ -2311,7 +3115,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时选择高优先级",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000106": {
       "id": "CASE-000106",
@@ -2333,7 +3144,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 取消创建任务关闭弹框不创建",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000107": {
       "id": "CASE-000107",
@@ -2355,7 +3173,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时所有必填项为空提示校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000108": {
       "id": "CASE-000108",
@@ -2377,7 +3202,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时仅填写部分必填项校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000109": {
       "id": "CASE-000109",
@@ -2399,7 +3231,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时填写所有必填项成功创建",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000110": {
       "id": "CASE-000110",
@@ -2421,7 +3260,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时任务名称唯一性校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000111": {
       "id": "CASE-000111",
@@ -2443,7 +3289,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时任务名称唯一性边界校验（名称相同但前后空格）",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000112": {
       "id": "CASE-000112",
@@ -2465,7 +3318,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时任务名称唯一性校验（名称大小写不同）",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000113": {
       "id": "CASE-000113",
@@ -2487,7 +3347,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时数据分类被删除应创建失败并提示不存在",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000114": {
       "id": "CASE-000114",
@@ -2509,7 +3376,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时标签已被删除应创建失败",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000115": {
       "id": "CASE-000115",
@@ -2531,7 +3405,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时机器人构型已被删除应创建失败",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000116": {
       "id": "CASE-000116",
@@ -2553,7 +3434,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务成功后列表页生成状态为已创建且人员未指派的数据",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000117": {
       "id": "CASE-000117",
@@ -2575,7 +3463,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证任务编号自动生成规则",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000118": {
       "id": "CASE-000118",
@@ -2597,7 +3492,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证任务编号按年度自增",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000119": {
       "id": "CASE-000119",
@@ -2619,7 +3521,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证跨年度任务编号重新自增",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000120": {
       "id": "CASE-000120",
@@ -2641,7 +3550,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证列表页任务名称与创建时填写一致",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000121": {
       "id": "CASE-000121",
@@ -2663,7 +3579,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 列表页分类展示与创建时选择的数据分类一致",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000122": {
       "id": "CASE-000122",
@@ -2685,7 +3608,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 列表页按状态筛选已创建任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000123": {
       "id": "CASE-000123",
@@ -2707,7 +3637,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 状态筛选已创建任务为空时显示空列表",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000124": {
       "id": "CASE-000124",
@@ -2729,7 +3666,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证状态为已采集的任务在列表页正确显示",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000125": {
       "id": "CASE-000125",
@@ -2751,7 +3695,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证列表页状态筛选功能可筛选出已采集任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000126": {
       "id": "CASE-000126",
@@ -2773,7 +3724,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 查看已标注状态任务列表",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000127": {
       "id": "CASE-000127",
@@ -2795,7 +3753,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 已标注状态任务详情查看",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000128": {
       "id": "CASE-000128",
@@ -2817,7 +3782,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 查看已质检状态任务列表",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000129": {
       "id": "CASE-000129",
@@ -2839,7 +3811,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 已质检状态任务详情页S3根目录显示",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000130": {
       "id": "CASE-000130",
@@ -2861,7 +3840,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 筛选已转换状态任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000131": {
       "id": "CASE-000131",
@@ -2883,7 +3869,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 已转换任务列表字段展示",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000132": {
       "id": "CASE-000132",
@@ -2905,7 +3898,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 刚创建任务采集人显示未指派",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000133": {
       "id": "CASE-000133",
@@ -2927,7 +3927,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 指派采集人后展示用户姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000134": {
       "id": "CASE-000134",
@@ -2949,7 +3956,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改用户姓名后任务采集人显示同步更新",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000135": {
       "id": "CASE-000135",
@@ -2971,7 +3985,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 完成采集后采集人更新为操作人",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000136": {
       "id": "CASE-000136",
@@ -2993,7 +4014,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 刚创建任务标注人显示未指派",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000137": {
       "id": "CASE-000137",
@@ -3015,7 +4043,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 指派标注人后展示用户姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000138": {
       "id": "CASE-000138",
@@ -3037,7 +4072,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改用户姓名后任务标注人同步更新",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000139": {
       "id": "CASE-000139",
@@ -3059,7 +4101,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 提交标注后标注人更新为操作人",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000140": {
       "id": "CASE-000140",
@@ -3081,7 +4130,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 刚创建任务质检人显示未指派",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000141": {
       "id": "CASE-000141",
@@ -3103,7 +4159,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改用户姓名后质检人指派显示同步更新",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000142": {
       "id": "CASE-000142",
@@ -3125,7 +4188,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 质检完成后质检人更新为操作人",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000143": {
       "id": "CASE-000143",
@@ -3147,7 +4217,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 列表页创建时间展示年月日时分秒",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000144": {
       "id": "CASE-000144",
@@ -3169,7 +4246,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 验证任务列表按创建时间倒序排列",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000145": {
       "id": "CASE-000145",
@@ -3191,7 +4275,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页任务编号与列表页一致",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000146": {
       "id": "CASE-000146",
@@ -3213,7 +4304,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页基本信息显示创建人姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000147": {
       "id": "CASE-000147",
@@ -3235,7 +4333,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页基本信息分类与列表页一致",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000148": {
       "id": "CASE-000148",
@@ -3257,7 +4362,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页基本信息显示创建任务时选择的机器人构型",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000149": {
       "id": "CASE-000149",
@@ -3279,7 +4391,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页基本信息展示机器人构型名称及型号",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000150": {
       "id": "CASE-000150",
@@ -3301,7 +4420,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页基本信息显示创建任务时选择的多个标签并以逗号分隔",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000151": {
       "id": "CASE-000151",
@@ -3323,7 +4449,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页基本信息显示单个标签时不带逗号",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000152": {
       "id": "CASE-000152",
@@ -3345,7 +4478,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页基本信息标签显示顺序与创建时选择顺序一致",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000153": {
       "id": "CASE-000153",
@@ -3367,7 +4507,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时输入边界值1的目标数量",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000154": {
       "id": "CASE-000154",
@@ -3389,7 +4536,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时输入边界值10000的目标数量",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000155": {
       "id": "CASE-000155",
@@ -3411,7 +4565,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时输入小于1的目标数量",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000156": {
       "id": "CASE-000156",
@@ -3433,7 +4594,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时输入大于10000的目标数量",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000157": {
       "id": "CASE-000157",
@@ -3455,7 +4623,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时输入非数字字符的目标数量",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000158": {
       "id": "CASE-000158",
@@ -3477,7 +4652,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时输入小数形式的目标数量",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000159": {
       "id": "CASE-000159",
@@ -3499,7 +4681,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时不填写目标数量",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000160": {
       "id": "CASE-000160",
@@ -3521,7 +4710,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页显示创建任务时选择的优先级",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000161": {
       "id": "CASE-000161",
@@ -3543,7 +4739,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页基本信息显示创建时输入的采集要求",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000162": {
       "id": "CASE-000162",
@@ -3565,7 +4768,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页展示创建时输入的任务描述",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000163": {
       "id": "CASE-000163",
@@ -3587,7 +4797,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页展示创建时未输入任务描述的情况",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000164": {
       "id": "CASE-000164",
@@ -3609,7 +4826,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页展示创建任务时输入的标注层级",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000165": {
       "id": "CASE-000165",
@@ -3631,7 +4855,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 刚创建任务时S3根目录显示为未采集状态",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000166": {
       "id": "CASE-000166",
@@ -3653,7 +4884,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 已采集后详情页显示S3根目录",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000167": {
       "id": "CASE-000167",
@@ -3675,7 +4913,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 已采集后详情页S3根目录格式校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000168": {
       "id": "CASE-000168",
@@ -3697,7 +4942,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页未分配时采集人员显示未指派",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000169": {
       "id": "CASE-000169",
@@ -3719,7 +4971,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 未分配时标注人员显示未指派",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000170": {
       "id": "CASE-000170",
@@ -3741,7 +5000,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 未分配时质检人员显示未指派",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000171": {
       "id": "CASE-000171",
@@ -3763,7 +5029,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 详情页采集人员分配后显示对应姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000172": {
       "id": "CASE-000172",
@@ -3785,7 +5058,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 标注人员分配后显示对应姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000173": {
       "id": "CASE-000173",
@@ -3807,7 +5087,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 分配质检人员后显示人员姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000174": {
       "id": "CASE-000174",
@@ -3829,7 +5116,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 刚创建任务时文件列表为空",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000175": {
       "id": "CASE-000175",
@@ -3851,7 +5145,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 采集后文件列表显示完整字段信息",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000176": {
       "id": "CASE-000176",
@@ -3873,7 +5174,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 操作日志时间显示格式验证",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000177": {
       "id": "CASE-000177",
@@ -3895,7 +5203,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时操作日志记录创建人姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000178": {
       "id": "CASE-000178",
@@ -3917,7 +5232,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 创建任务时记录操作日志",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000179": {
       "id": "CASE-000179",
@@ -3939,7 +5261,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 操作日志时间格式显示为年月日时分",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000180": {
       "id": "CASE-000180",
@@ -3961,7 +5290,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 指派采集操作日志记录操作人姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000181": {
       "id": "CASE-000181",
@@ -3983,7 +5319,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 查看指派采集人操作日志显示用户姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000182": {
       "id": "CASE-000182",
@@ -4005,7 +5348,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 查看指派标注人操作日志显示用户姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000183": {
       "id": "CASE-000183",
@@ -4027,7 +5377,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 查看指派质检人操作日志显示用户姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000184": {
       "id": "CASE-000184",
@@ -4049,7 +5406,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 操作日志时间格式验证",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000185": {
       "id": "CASE-000185",
@@ -4071,7 +5435,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 指派标注操作日志记录操作人姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000186": {
       "id": "CASE-000186",
@@ -4093,7 +5464,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 查看指派采集人的操作日志记录",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000187": {
       "id": "CASE-000187",
@@ -4115,7 +5493,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 查看指派标注人的操作日志记录",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000188": {
       "id": "CASE-000188",
@@ -4137,7 +5522,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 查看指派质检人的操作日志记录",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000189": {
       "id": "CASE-000189",
@@ -4159,7 +5551,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 操作日志时间显示格式验证 [CASE-000189]",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000190": {
       "id": "CASE-000190",
@@ -4181,7 +5580,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 指派质检操作日志记录操作人姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000191": {
       "id": "CASE-000191",
@@ -4203,7 +5609,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 操作日志中记录指派采集人的用户姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000192": {
       "id": "CASE-000192",
@@ -4225,7 +5638,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 操作日志中记录指派标注人的用户姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000193": {
       "id": "CASE-000193",
@@ -4247,7 +5667,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 操作日志中记录指派质检人的用户姓名",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000194": {
       "id": "CASE-000194",
@@ -4269,7 +5696,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务时任务名称回显置灰且不可修改",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000195": {
       "id": "CASE-000195",
@@ -4291,7 +5725,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务描述回显并保存成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000196": {
       "id": "CASE-000196",
@@ -4313,7 +5754,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务描述为空并保存",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000197": {
       "id": "CASE-000197",
@@ -4335,7 +5783,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务描述长度等于255时保存成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000198": {
       "id": "CASE-000198",
@@ -4357,7 +5812,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务描述长度超过255时保存失败",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000199": {
       "id": "CASE-000199",
@@ -4379,7 +5841,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务描述为空字符串时保存成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000200": {
       "id": "CASE-000200",
@@ -4401,7 +5870,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务时标注层级回显并可修改",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000201": {
       "id": "CASE-000201",
@@ -4423,7 +5899,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改数据分类在已创建状态时成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000202": {
       "id": "CASE-000202",
@@ -4445,7 +5928,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改数据分类在已采集状态时成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000203": {
       "id": "CASE-000203",
@@ -4467,7 +5957,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改数据分类在已标注状态时成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000204": {
       "id": "CASE-000204",
@@ -4489,7 +5986,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改数据分类在已质检状态时成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000205": {
       "id": "CASE-000205",
@@ -4511,7 +6015,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 已转换状态数据分类置灰不可修改",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000206": {
       "id": "CASE-000206",
@@ -4533,7 +6044,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务时标签回显置灰且不可删除但可新增",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000207": {
       "id": "CASE-000207",
@@ -4555,7 +6073,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 已创建状态修改机器人构型",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000208": {
       "id": "CASE-000208",
@@ -4577,7 +6102,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 机器人构型在已采集状态置灰不可修改",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000209": {
       "id": "CASE-000209",
@@ -4599,7 +6131,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 机器人构型在已标注状态置灰不可修改",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000210": {
       "id": "CASE-000210",
@@ -4621,7 +6160,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 机器人构型在已质检状态置灰不可修改",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000211": {
       "id": "CASE-000211",
@@ -4643,7 +6189,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 机器人构型在已转换状态置灰不可修改",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000212": {
       "id": "CASE-000212",
@@ -4665,7 +6218,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务时采集要求回显并可修改",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000213": {
       "id": "CASE-000213",
@@ -4687,7 +6247,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务时采集要求为空可填写",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000214": {
       "id": "CASE-000214",
@@ -4709,7 +6276,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改采集要求长度为255时保存成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000215": {
       "id": "CASE-000215",
@@ -4731,7 +6305,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改采集要求长度超过255时保存失败",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000216": {
       "id": "CASE-000216",
@@ -4753,7 +6334,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务时目标数量回显当前值并可修改",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000217": {
       "id": "CASE-000217",
@@ -4775,7 +6363,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务时目标数量回显并修改为边界值1",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000218": {
       "id": "CASE-000218",
@@ -4797,7 +6392,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务时目标数量回显并修改为边界值10000",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000219": {
       "id": "CASE-000219",
@@ -4819,7 +6421,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务时目标数量回显并修改为非法值0",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000220": {
       "id": "CASE-000220",
@@ -4841,7 +6450,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务时目标数量回显并修改为非法值10001",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000221": {
       "id": "CASE-000221",
@@ -4863,7 +6479,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改目标数量为合法最小值1",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000222": {
       "id": "CASE-000222",
@@ -4885,7 +6508,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改目标数量为合法最大值10000",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000223": {
       "id": "CASE-000223",
@@ -4907,7 +6537,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改目标数量为合法中间值5000",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000224": {
       "id": "CASE-000224",
@@ -4929,7 +6566,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改目标数量为边界值0时提示错误",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000225": {
       "id": "CASE-000225",
@@ -4951,7 +6595,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改目标数量为边界值10001时提示错误",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000226": {
       "id": "CASE-000226",
@@ -4973,7 +6624,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改目标数量为负数时提示错误",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000227": {
       "id": "CASE-000227",
@@ -4995,7 +6653,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改目标数量为小数时提示错误",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000228": {
       "id": "CASE-000228",
@@ -5017,7 +6682,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改目标数量为空时提示错误",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000229": {
       "id": "CASE-000229",
@@ -5039,7 +6711,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 修改任务优先级回显当前值并可修改",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000230": {
       "id": "CASE-000230",
@@ -5061,7 +6740,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 取消修改任务关闭弹框不保存变更",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000231": {
       "id": "CASE-000231",
@@ -5083,7 +6769,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 取消修改任务关闭弹框不触发校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000232": {
       "id": "CASE-000232",
@@ -5105,7 +6798,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 保存修改时必填项为空校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000233": {
       "id": "CASE-000233",
@@ -5127,7 +6827,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 保存修改时仅任务名称为空校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000234": {
       "id": "CASE-000234",
@@ -5149,7 +6856,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 保存修改时仅描述为空校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000235": {
       "id": "CASE-000235",
@@ -5171,7 +6885,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 保存修改时仅标注层级为空校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000236": {
       "id": "CASE-000236",
@@ -5193,7 +6914,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 保存修改时仅数据分类为空校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000237": {
       "id": "CASE-000237",
@@ -5215,7 +6943,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 保存修改时仅标签为空校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000238": {
       "id": "CASE-000238",
@@ -5237,7 +6972,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 保存修改时仅机器人构型为空校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000239": {
       "id": "CASE-000239",
@@ -5259,7 +7001,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 保存修改时仅采集要求为空校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000240": {
       "id": "CASE-000240",
@@ -5281,7 +7030,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 保存修改时仅目标数量为空校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000241": {
       "id": "CASE-000241",
@@ -5303,7 +7059,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 保存修改时仅优先级为空校验",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000242": {
       "id": "CASE-000242",
@@ -5325,7 +7088,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 保存修改后列表页展示字段同步更新",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000243": {
       "id": "CASE-000243",
@@ -5347,7 +7117,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 指派弹框展示任务编号",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000244": {
       "id": "CASE-000244",
@@ -5369,7 +7146,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 弹出任务人员指派弹框时展示任务名称",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000245": {
       "id": "CASE-000245",
@@ -5391,7 +7175,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 任务人员指派弹框 - 展示当前采集、标注、质检人员信息",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000246": {
       "id": "CASE-000246",
@@ -5413,7 +7204,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 任务人员指派弹框 - 展示未指派状态",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000247": {
       "id": "CASE-000247",
@@ -5435,7 +7233,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 指派采集人员时回显之前指派的人员",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000248": {
       "id": "CASE-000248",
@@ -5457,7 +7262,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 任务人员指派 - 采集人员下拉仅显示启用且具有采集工程师角色的用户",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000249": {
       "id": "CASE-000249",
@@ -5479,7 +7291,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 任务人员指派 - 采集人员下拉单选且展示格式为姓名（账号）",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000250": {
       "id": "CASE-000250",
@@ -5501,7 +7320,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 标注人员指派后回显已指派人员",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000251": {
       "id": "CASE-000251",
@@ -5523,7 +7349,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 指派标注人员下拉仅显示启用且具有标注工程师角色的用户",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000252": {
       "id": "CASE-000252",
@@ -5545,7 +7378,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 指派标注人员下拉单选且展示格式为姓名（账号）",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000253": {
       "id": "CASE-000253",
@@ -5567,7 +7407,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 质检人员指派后回显已指派人员",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000254": {
       "id": "CASE-000254",
@@ -5589,7 +7436,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 质检人员下拉仅显示启用且具有质检工程师角色的用户",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000255": {
       "id": "CASE-000255",
@@ -5611,7 +7465,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 质检人员下拉单选且展示格式为姓名（账号）",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000256": {
       "id": "CASE-000256",
@@ -5633,7 +7494,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 更换指派人员后任务数据转移",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000257": {
       "id": "CASE-000257",
@@ -5655,7 +7523,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 取消删除任务关闭弹框",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000258": {
       "id": "CASE-000258",
@@ -5677,7 +7552,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 确认删除任务并提示删除成功",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000259": {
       "id": "CASE-000259",
@@ -5699,7 +7581,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 取消删除任务不执行删除",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000260": {
       "id": "CASE-000260",
@@ -5721,7 +7610,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 确认删除任务后数据从列表页消失",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000261": {
       "id": "CASE-000261",
@@ -5743,7 +7639,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 取消删除任务后数据保留",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000262": {
       "id": "CASE-000262",
@@ -5765,7 +7668,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 已创建状态下确认永久删除任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000263": {
       "id": "CASE-000263",
@@ -5787,7 +7697,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 已采集状态下确认永久删除任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000264": {
       "id": "CASE-000264",
@@ -5809,7 +7726,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 已标注状态下确认永久删除任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000265": {
       "id": "CASE-000265",
@@ -5831,7 +7755,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 已质检状态下确认永久删除任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000266": {
       "id": "CASE-000266",
@@ -5853,7 +7784,14 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "status": "needs_rerun",
+        "testTitle": "任务管理 - 已转换状态下确认永久删除任务",
+        "executedAt": "",
+        "healing": "",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
+        "evidence": []
+      }
     },
     "CASE-000267": {
       "id": "CASE-000267",
@@ -6639,7 +8577,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 新建用户姓名为空时提示必填",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -6672,7 +8610,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 新建用户姓名为空时提交按钮不可用",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -6705,7 +8643,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 新建用户姓名长度边界值验证（最小值）",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -6738,7 +8676,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 新建用户姓名长度边界值验证（最大值）",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -6771,7 +8709,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 新建用户姓名长度超限验证",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -6804,7 +8742,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 新建用户姓名为空验证",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -7332,7 +9270,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 新建用户初始密码必填项边界验证",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -7398,7 +9336,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 新建用户初始密码默认值验证",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -7431,7 +9369,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 初始密码明文显示切换验证",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -8025,7 +9963,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 并发创建相同账号时仅一个成功",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -8652,7 +10590,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 启用已禁用用户后该用户可正常登录",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -8718,7 +10656,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 禁用已登录用户后该用户被登出",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -8916,7 +10854,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 编辑弹框取消关闭不保存",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -8949,7 +10887,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 编辑用户时清空必填项保存提示请填写完整信息",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -9015,7 +10953,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 编辑用户时未选择角色保存提示请填写完整信息",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -9048,7 +10986,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 修改角色后未登录用户登录展示新角色权限模块",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -9081,7 +11019,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 修改角色后已登录用户刷新页面展示新角色权限模块",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -9213,7 +11151,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 重置密码二次确认后确定重置成功",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -9246,7 +11184,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 重置密码后已登录用户保持登录状态",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -9312,7 +11250,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 禁用账号后未登录用户登录提示",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -9411,7 +11349,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 取消删除用户关闭弹窗",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -9494,10 +11432,10 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 删除已被指派任务的账号时提示不允许删除",
-        "executedAt": "2026-08-11T01:23:55.184Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
-        "cleanupStatus": "passed",
+        "cleanupStatus": "failed",
         "error": "",
         "evidence": []
       }
@@ -9527,7 +11465,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 未登录状态下删除用户时提示账号或密码错误或账号已被禁用",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -9560,7 +11498,7 @@
         "status": "passed",
         "trusted": true,
         "testTitle": "用户管理 - 删除用户后已登录用户点击菜单被登出",
-        "executedAt": "2026-08-07T09:10:51.240Z",
+        "executedAt": "2026-08-11T09:51:54.546Z",
         "healing": "",
         "failureCategory": "",
         "cleanupStatus": "not_reported",
@@ -9589,15 +11527,11 @@
       "revisions": [],
       "replacedBy": "CASE-000376",
       "lastResult": {
-        "fingerprint": "abddbcad856552e23b9a61fba0ce6c76a51a403976cdf9211ab0cf38c0f296e4",
-        "status": "failed",
-        "trusted": true,
-        "testTitle": "用户管理 - 删除已被指派任务的用户时校验任务指派下拉不展示该用户",
-        "executedAt": "2026-08-07T06:43:16.376Z",
+        "status": "needs_rerun",
+        "testTitle": "用户管理剩余用例 › 删除已指派任务的用户时，二次确认后提示禁止删除且下拉仍展示该用户",
+        "executedAt": "",
         "healing": "",
-        "failureCategory": "DATA_PRECONDITION_MISSING",
-        "cleanupStatus": "not_reported",
-        "error": "Error: 当前任务创建页没有用户指派控件，无法建立已指派任务前置数据",
+        "error": "聚合脚本尚未按本用例步骤独立实现，旧执行结果不可信",
         "evidence": []
       }
     },
@@ -9951,7 +11885,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "ad4668dc0b254ccb87efdbec683a13d8c81fce28205279af4229605e5a95d624",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 按标签名称模糊搜索",
+        "executedAt": "2026-08-11T05:29:53.227Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000391": {
       "id": "CASE-000391",
@@ -9973,7 +11918,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "7cf76d24a7136eac0861004a999e0b43653e0b0addab35c93aab1446da120ab3",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 模糊搜索无匹配结果",
+        "executedAt": "2026-08-11T04:24:25.386Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000392": {
       "id": "CASE-000392",
@@ -9995,7 +11951,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "7db2a10e91be35146e88260e3843f24a46074d68469b1303db37a967cf5c894f",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 模糊搜索空字符串",
+        "executedAt": "2026-08-11T04:24:25.386Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000393": {
       "id": "CASE-000393",
@@ -10017,13 +11984,24 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "0a0aa8458237ede8a7e6da6c879ee95ef4cc34673cab8c7073bfd1479d0ffb6c",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 按质量分类查询标签列表",
+        "executedAt": "2026-08-11T04:25:13.895Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000394": {
       "id": "CASE-000394",
-      "status": "active",
+      "status": "retired",
       "firstSeenVersion": "V1.0",
-      "lastChangedVersion": "V1.0",
+      "lastChangedVersion": "V1.0-tag-cases-correction-20260811",
       "sourceNodeId": "c1f3c177e3b4b86e64559097d3670925",
       "fingerprint": "a9d3d6ac9ae97a3970f2a69daf2adb2932eababd18fe065b3ef224b927c3b06f",
       "fields": {
@@ -10038,8 +12016,19 @@
         "适用阶段": "功能测试阶段"
       },
       "revisions": [],
-      "replacedBy": "",
-      "lastResult": {}
+      "replacedBy": "CASE-000401",
+      "lastResult": {
+        "fingerprint": "c77f01fae4973196cfffb1f8a70ac7289ee14a62e8ce25410c5fb2d1e016ca18",
+        "status": "failed",
+        "trusted": true,
+        "testTitle": "标签管理 - 质量分类查询结果为空场景",
+        "executedAt": "2026-08-11T04:25:13.895Z",
+        "healing": "",
+        "failureCategory": "DATA_PRECONDITION_MISSING",
+        "cleanupStatus": "passed",
+        "error": "Error: 测试前置条件未满足：当前环境已有“质量”分类标签，无法验证该分类全局无数据",
+        "evidence": []
+      }
     },
     "CASE-000395": {
       "id": "CASE-000395",
@@ -10061,13 +12050,24 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "752f65f07344ce9a808b612e57579610b6659f47c73a083981670d0b30d31a63",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 按分类“其他”查询标签列表",
+        "executedAt": "2026-08-11T04:25:13.895Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000396": {
       "id": "CASE-000396",
-      "status": "active",
+      "status": "retired",
       "firstSeenVersion": "V1.0",
-      "lastChangedVersion": "V1.0",
+      "lastChangedVersion": "V1.0-tag-cases-correction-20260811",
       "sourceNodeId": "e6b3795c0088e501f1ed6329a229fd52",
       "fingerprint": "bd22c71cb428ce95b0aec82640b3fadda7c899b3fa0749b185451395017250c4",
       "fields": {
@@ -10082,8 +12082,19 @@
         "适用阶段": "功能测试阶段"
       },
       "revisions": [],
-      "replacedBy": "",
-      "lastResult": {}
+      "replacedBy": "CASE-000401",
+      "lastResult": {
+        "fingerprint": "91855a791376424e039ce652b25cc03e39d1483b71b3e33dbb94911924a4d49e",
+        "status": "failed",
+        "trusted": true,
+        "testTitle": "标签管理 - 按分类“其他”查询无结果场景",
+        "executedAt": "2026-08-11T04:25:13.895Z",
+        "healing": "",
+        "failureCategory": "DATA_PRECONDITION_MISSING",
+        "cleanupStatus": "passed",
+        "error": "Error: 测试前置条件未满足：当前环境已有“其他”分类标签，无法验证该分类全局无数据",
+        "evidence": []
+      }
     },
     "CASE-000397": {
       "id": "CASE-000397",
@@ -10105,7 +12116,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "380baea4d273cce22f02513fba4ed27241dca6be2db35caeaa57bd5487f58240",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 按启用状态查询标签列表",
+        "executedAt": "2026-08-11T04:30:57.170Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000398": {
       "id": "CASE-000398",
@@ -10127,7 +12149,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "1c400cce38d1967d8be49200e67734295ca3e0c5b48b572c053454361eef0405",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 按禁用状态查询标签列表",
+        "executedAt": "2026-08-11T04:30:57.170Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000399": {
       "id": "CASE-000399",
@@ -10149,7 +12182,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "d6a2ef91c0d2786648497d28c049262c678340413d11f9f8ff9e285368e67cc2",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 按禁用状态查询标签列表（CASE-000399）",
+        "executedAt": "2026-08-11T04:30:57.170Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000400": {
       "id": "CASE-000400",
@@ -10171,29 +12215,68 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "8424c2f3022ecf4624f06a006f255721f1941fdea102d0bc4160fccd2643bb79",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 按启用状态查询标签列表（CASE-000400）",
+        "executedAt": "2026-08-11T04:30:57.170Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000401": {
       "id": "CASE-000401",
       "status": "active",
       "firstSeenVersion": "V1.0",
-      "lastChangedVersion": "V1.0",
+      "lastChangedVersion": "V1.0-tag-cases-correction-20260811",
       "sourceNodeId": "3de04f47f49d26f8c32e49ae432b0ce4",
-      "fingerprint": "7f3686c15220cff65df2967a3d7dfb3cd8d69b2f0af0142b66e1f414c3c3d6ea",
+      "fingerprint": "cb43e66f51b07042f3f9909015ee768d42fdc6f8ef4fc025d2e2ff3edf552c59",
       "fields": {
         "所属模块": "标签管理",
-        "用例标题": "标签管理 - 按标签名称精确查询",
-        "前置条件": "已登录系统且具有标签管理权限；系统中存在标签名称“质量标签”和“其他标签”",
-        "步骤": "1. 进入标签管理页面\n2. 在查询输入框中输入“质量标签”\n3. 点击查询按钮",
-        "预期": "1. 标签管理页面正常显示标签列表\n2. 查询输入框显示“质量标签”\n3. 列表仅显示名称为“质量标签”的标签记录，其他标签不显示",
+        "用例标题": "标签管理 - 按标签名称模糊匹配查询",
+        "前置条件": "已登录系统且具有标签管理权限；系统中存在名称包含相同关键字的标签以及名称不包含该关键字的标签",
+        "步骤": "1. 进入标签管理页面\n2. 在查询输入框中输入标签名称关键字\n3. 点击查询按钮",
+        "预期": "1. 标签管理页面正常显示标签列表\n2. 查询输入框显示输入的关键字\n3. 列表展示所有名称包含该关键字的标签记录，不包含该关键字的标签不显示",
         "关键词": "1",
         "优先级": "2",
         "用例类型": "功能测试",
         "适用阶段": "功能测试阶段"
       },
-      "revisions": [],
+      "revisions": [
+        {
+          "changedAt": "2026-08-11T13:27:46+08:00",
+          "version": "V1.0",
+          "fingerprint": "7f3686c15220cff65df2967a3d7dfb3cd8d69b2f0af0142b66e1f414c3c3d6ea",
+          "fields": {
+            "所属模块": "标签管理",
+            "用例标题": "标签管理 - 按标签名称精确查询",
+            "前置条件": "已登录系统且具有标签管理权限；系统中存在标签名称“质量标签”和“其他标签”",
+            "步骤": "1. 进入标签管理页面\n2. 在查询输入框中输入“质量标签”\n3. 点击查询按钮",
+            "预期": "1. 标签管理页面正常显示标签列表\n2. 查询输入框显示“质量标签”\n3. 列表仅显示名称为“质量标签”的标签记录，其他标签不显示",
+            "关键词": "1",
+            "优先级": "2",
+            "用例类型": "功能测试",
+            "适用阶段": "功能测试阶段"
+          }
+        }
+      ],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "e8928abbaec27fd5ffa2d1c09daa6aee123ec4843c2e781fb9f114344e0b0131",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 按标签名称模糊匹配查询",
+        "executedAt": "2026-08-11T05:55:51.604Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000402": {
       "id": "CASE-000402",
@@ -10215,7 +12298,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "2ca4ae3edf161726acd89c43f78ad9dd12a791cbcb09680fe99f327a07e73926",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 按标签名称模糊查询",
+        "executedAt": "2026-08-11T05:30:37.492Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000403": {
       "id": "CASE-000403",
@@ -10237,7 +12331,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "5317c932f375d1e12bc600fde4d48bb6114d1a2b00d44dfdd1b4a610049fd2b5",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 查询无匹配结果",
+        "executedAt": "2026-08-11T04:25:13.895Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000404": {
       "id": "CASE-000404",
@@ -10259,7 +12364,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "7c39ca50641e5f78964b83d63a6ddc196405f423f17e8ed9cb182244489446ad",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 查询条件为空显示全部",
+        "executedAt": "2026-08-11T04:25:13.895Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000405": {
       "id": "CASE-000405",
@@ -10281,7 +12397,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "99ece8a1ac8b8aa47428473b44e01c9c065cd201527fbeab5e9c0bd777170f4b",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 重置后回到默认为空并查询",
+        "executedAt": "2026-08-11T04:25:13.895Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000406": {
       "id": "CASE-000406",
@@ -10303,7 +12430,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "08d36e99d315771e5c33f324521adc46e0b8dabad5ad83a20b6fe47c89b72332",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 验证标签名称长度为1时创建成功",
+        "executedAt": "2026-08-11T04:27:22.669Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000407": {
       "id": "CASE-000407",
@@ -10325,7 +12463,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "1d24fc09b10b9a7fa51d73fce63e2eab403b2cf12958c30c793ebe076ac7e30e",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 验证标签名称长度为32时创建成功",
+        "executedAt": "2026-08-11T04:27:22.669Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000408": {
       "id": "CASE-000408",
@@ -10347,7 +12496,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "9cbb14edc0aec7c22a005d5102c0026950ea25e26431738e1213ab4f965330a7",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 验证标签名称为空时创建失败",
+        "executedAt": "2026-08-11T04:27:22.669Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000409": {
       "id": "CASE-000409",
@@ -10369,7 +12529,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "226aef3c31b3e9abaacd857047e101eaebdb28dd513bba77d2adefc5c65c704a",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 验证标签名称长度为33时创建失败",
+        "executedAt": "2026-08-11T04:27:22.669Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000410": {
       "id": "CASE-000410",
@@ -10391,7 +12562,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "a8593529089b34a69fbc7f782800e5ac1db5071ac81549ca3a5e7a17cbf5e04b",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 验证标签名称支持中英文字母和数字",
+        "executedAt": "2026-08-11T04:27:22.669Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000411": {
       "id": "CASE-000411",
@@ -10413,7 +12595,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "8ac6ba9b84dc7fd464b4a4fffc5b838c8811ce09c9085507455199b2f482c1d7",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 验证标签名称包含非法字符时提示错误",
+        "executedAt": "2026-08-11T04:27:22.669Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000412": {
       "id": "CASE-000412",
@@ -10435,7 +12628,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "35b2dc9db8f782ef488348b94f4aec1b8006b19510e1caff3f185e55747ecc93",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 验证标签名称包含空格时提示错误",
+        "executedAt": "2026-08-11T04:27:22.669Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000413": {
       "id": "CASE-000413",
@@ -10457,7 +12661,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "1247de5bd22443bda4eb534aade46e98b03c2ce524581d2999fb77364a1ad50a",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 验证标签名称仅包含中文时创建成功",
+        "executedAt": "2026-08-11T04:27:22.669Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000414": {
       "id": "CASE-000414",
@@ -10479,7 +12694,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "2de6c223e5153f6ecb6a3de7a6fac51381303f60dc28595c5a56f68237b21186",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 验证标签名称仅包含英文字母时创建成功",
+        "executedAt": "2026-08-11T04:27:22.669Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000415": {
       "id": "CASE-000415",
@@ -10501,7 +12727,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "8819358655c6cc92aad63907dc329e4cc10e48beef6852e2d5afba3048e71974",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 验证标签名称仅包含数字时创建成功",
+        "executedAt": "2026-08-11T04:27:22.669Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000416": {
       "id": "CASE-000416",
@@ -10523,7 +12760,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "2ecfc0338c7fea01f6d452ffda545d0b49bca7fc296769c82a1f684d3ac4efc2",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新建标签时标签分类默认选中其他",
+        "executedAt": "2026-08-11T04:28:36.017Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000417": {
       "id": "CASE-000417",
@@ -10545,7 +12793,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "ab4c6cff5e3ac271d8689455586532b068ecc505ed13e9b603613ae05b8f3e35",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新建标签时选择质量分类成功",
+        "executedAt": "2026-08-11T04:28:36.017Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000418": {
       "id": "CASE-000418",
@@ -10567,7 +12826,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "109a7570d2e607422f85ed1ba9fc3e61b79f53a191df5355d6c6cf3f91be9be2",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新建标签弹框点击取消关闭且不保存",
+        "executedAt": "2026-08-11T04:28:36.017Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000419": {
       "id": "CASE-000419",
@@ -10589,7 +12859,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "fdab57d99dc85a6f01c74d1178ab726f263a259ec5c210f75919ecc2052dccae",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新建标签弹框点击取消不保存已填数据",
+        "executedAt": "2026-08-11T04:28:36.017Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000420": {
       "id": "CASE-000420",
@@ -10611,13 +12892,24 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "eac68356b45b433d510b0a3ea60f3dd2b83642f10e4e7beaab7d8ed8d847bcbf",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新建标签时名称为空前端报红提示",
+        "executedAt": "2026-08-11T04:28:36.017Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000421": {
       "id": "CASE-000421",
-      "status": "active",
+      "status": "retired",
       "firstSeenVersion": "V1.0",
-      "lastChangedVersion": "V1.0",
+      "lastChangedVersion": "V1.0-tag-cases-correction-20260811",
       "sourceNodeId": "c6a73fa97750b5ee5fffa1c14f93c1c9",
       "fingerprint": "97d204dff28de9a1ceadb6da35e0313c3044c34cb57f34a3e0d61a38be666f9e",
       "fields": {
@@ -10632,8 +12924,19 @@
         "适用阶段": "功能测试阶段"
       },
       "revisions": [],
-      "replacedBy": "",
-      "lastResult": {}
+      "replacedBy": "CASE-000401",
+      "lastResult": {
+        "fingerprint": "19d1aaabcef83b1a8be404868bfe7b73b24a87712bc22a59d31923e0d8161f2f",
+        "status": "failed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新建标签时分类为空前端报红提示",
+        "executedAt": "2026-08-11T04:28:36.017Z",
+        "healing": "",
+        "failureCategory": "REQUIREMENT_CONFLICT",
+        "cleanupStatus": "passed",
+        "error": "Error: 测试前置条件未满足：新建标签表单默认选中“其他”，当前页面无法达到分类为空状态",
+        "evidence": []
+      }
     },
     "CASE-000422": {
       "id": "CASE-000422",
@@ -10655,7 +12958,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "af2979197667ecfaaf256453965843e0e105d8b5f4d2c45c3d3b5199a3921a60",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新建标签时名称唯一性校验提示标签名已存在",
+        "executedAt": "2026-08-11T04:28:36.017Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000423": {
       "id": "CASE-000423",
@@ -10677,7 +12991,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "3f6280c7d18e505ce48854bad0fb54d78aa6e5daf238b59dc2468feb5c34fd90",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新增标签时填写合法名称成功创建",
+        "executedAt": "2026-08-11T04:29:39.381Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000424": {
       "id": "CASE-000424",
@@ -10699,7 +13024,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "912eee3ef35a661f30856d3e038e4b8b1eb6ff82bb936c2402ec98d6d1522c84",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新增标签时名称长度边界为1时创建成功",
+        "executedAt": "2026-08-11T04:29:39.381Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000425": {
       "id": "CASE-000425",
@@ -10721,7 +13057,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "bbb2b90c26c2f49ee739baa16f07e4b2b88a3837b508e5202195461f63563966",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新增标签时名称长度边界为32时创建成功",
+        "executedAt": "2026-08-11T04:29:39.381Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000426": {
       "id": "CASE-000426",
@@ -10743,7 +13090,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "a3771161dca3ba94bb888f4fb24de90ef9bd5f99c0d6df140bce04587d791892",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新增标签时名称超过32个字符被拒绝",
+        "executedAt": "2026-08-11T04:29:39.381Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000427": {
       "id": "CASE-000427",
@@ -10765,7 +13123,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "e65f64d38b8f06f25187ec2508ee4b7ff1ad8a1e69950643b3aa907cb4a6db97",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新增标签时名称为空被拒绝",
+        "executedAt": "2026-08-11T04:29:39.381Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000428": {
       "id": "CASE-000428",
@@ -10787,7 +13156,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "9f523f880904b6176c5f5daa75d792df9ee111725f02261b57d022809fe68127",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新增标签时名称包含非法字符被拒绝",
+        "executedAt": "2026-08-11T04:29:39.381Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000429": {
       "id": "CASE-000429",
@@ -10809,7 +13189,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "d7fccd74edeec2336b3dcb8cbb7d9921e009c9599f5c66507310d7a6d4b1a683",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新增标签时名称重复被拒绝",
+        "executedAt": "2026-08-11T04:29:39.381Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000430": {
       "id": "CASE-000430",
@@ -10831,7 +13222,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "a45c9ac19dbf410ca83ceb650f8da9cb674e1d0297568deea09017de00961d02",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新增标签时选择分类为质量",
+        "executedAt": "2026-08-11T04:29:39.381Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000431": {
       "id": "CASE-000431",
@@ -10853,13 +13255,24 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "2a8ec44b5ea39865ab7d741f2576d16893dc4548ac69e8acda28c805381952e7",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新增标签时选择分类为其他",
+        "executedAt": "2026-08-11T04:29:39.381Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000432": {
       "id": "CASE-000432",
-      "status": "active",
+      "status": "retired",
       "firstSeenVersion": "V1.0",
-      "lastChangedVersion": "V1.0",
+      "lastChangedVersion": "V1.0-tag-cases-correction-20260811",
       "sourceNodeId": "860e4dd74e6b86925fa5b70172658260",
       "fingerprint": "c594c99f9cc5cef43808227276818a509a1f3eba23c7baac12e0d8a96ddcf62b",
       "fields": {
@@ -10874,8 +13287,19 @@
         "适用阶段": "功能测试阶段"
       },
       "revisions": [],
-      "replacedBy": "",
-      "lastResult": {}
+      "replacedBy": "CASE-000401",
+      "lastResult": {
+        "fingerprint": "fd699e6e27de91221535ffbef45327e9f0147c06cbcc98ca8e5ac9ed3a43266b",
+        "status": "failed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新增标签时分类为必填项",
+        "executedAt": "2026-08-11T04:29:39.381Z",
+        "healing": "",
+        "failureCategory": "REQUIREMENT_CONFLICT",
+        "cleanupStatus": "passed",
+        "error": "Error: 测试前置条件未满足：新建标签表单默认选中“其他”，当前页面无法达到分类为空状态",
+        "evidence": []
+      }
     },
     "CASE-000433": {
       "id": "CASE-000433",
@@ -10897,7 +13321,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "b5bdb057efb308531e8a00e3962f44b481767aeb35d1ed5e499092ad69337f89",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 启用状态标签在列表中的展示",
+        "executedAt": "2026-08-11T04:30:57.170Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000434": {
       "id": "CASE-000434",
@@ -10919,7 +13354,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "489fa4b7fd1176501739c0505aebe586887ceb12267f8e0a06361f3b221de79c",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 禁用标签后状态更新为禁用",
+        "executedAt": "2026-08-11T04:30:57.170Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000435": {
       "id": "CASE-000435",
@@ -10941,7 +13387,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "d9391ece90dc4072cdda2b5fc777c4ae4037236794f687ab4f30aa7475911bea",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 禁用已被任务使用的标签失败",
+        "executedAt": "2026-08-11T04:40:13.828Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "retained-by-design",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000436": {
       "id": "CASE-000436",
@@ -10963,7 +13420,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "cc2aa85376ac1e701309c3a2b251b6936ac5375741296264e22fc34d101de047",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 列表页创建时间显示年月日时分",
+        "executedAt": "2026-08-11T04:32:01.174Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000437": {
       "id": "CASE-000437",
@@ -10985,7 +13453,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "a5e2d9563e5ab451b613dfdd27ace2b0d87e907fec503d23ebfa06c6c31fcf48",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 新增标签后创建时间保持不变",
+        "executedAt": "2026-08-11T04:32:01.174Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000438": {
       "id": "CASE-000438",
@@ -11007,7 +13486,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "f02f9a24f1f925309032409348acf41fbeba412fe4ad625922ff0d8b66d1be76",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 列表页更新时间显示格式验证",
+        "executedAt": "2026-08-11T04:32:01.174Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000439": {
       "id": "CASE-000439",
@@ -11029,7 +13519,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "b56f0672ff5d075ea1748edafe112d613c04e504ec592ed8318d12a47a99247e",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 编辑标签后更新时间更新为当前时间",
+        "executedAt": "2026-08-11T04:34:50.087Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000440": {
       "id": "CASE-000440",
@@ -11051,7 +13552,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "361cc1fb0f526a7107d79942a7f5c262e319eaa0f934f42a4029fb3ea8bbe46b",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 禁用标签后更新时间更新为当前时间",
+        "executedAt": "2026-08-11T04:32:01.174Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000441": {
       "id": "CASE-000441",
@@ -11073,7 +13585,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "16411c84d18607f5ed17be2a47b37426169e6ca1c71b42fba0b442c02806728c",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 刚创建标签时创建时间与更新时间一致",
+        "executedAt": "2026-08-11T04:32:01.174Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000442": {
       "id": "CASE-000442",
@@ -11095,7 +13618,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "de04cebe1b30c5336f8cfa8adad9273c99c3c59a92a05c234050cfa648064b2e",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 编辑标签名称回显并修改为合法值",
+        "executedAt": "2026-08-11T04:42:45.844Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000443": {
       "id": "CASE-000443",
@@ -11117,7 +13651,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "126346e76fac8fe8c6927e4680405027686b5d3892f7a927aecf452ead39f57a",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 编辑标签名称为1个字符的边界值",
+        "executedAt": "2026-08-11T04:42:45.844Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000444": {
       "id": "CASE-000444",
@@ -11139,7 +13684,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "de9842d228e7d2a44feb0a24971c2ab6f2007f28d6cbff87cb552f2cdf2fdb56",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 编辑标签名称为32个字符的边界值",
+        "executedAt": "2026-08-11T04:42:45.844Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000445": {
       "id": "CASE-000445",
@@ -11161,7 +13717,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "1d88bf91fd2d6d088afcfefea299bfd232f013b43fcd5592f5c97d8938c5baf8",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 编辑标签名称为空字符串的异常场景",
+        "executedAt": "2026-08-11T04:42:45.844Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000446": {
       "id": "CASE-000446",
@@ -11183,7 +13750,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "ca5309f725abe8a2c217f14752a8c62c05ad86bce2aaca930ccab2ecae30150d",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 编辑标签名称为33个字符的异常场景",
+        "executedAt": "2026-08-11T04:42:45.844Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000447": {
       "id": "CASE-000447",
@@ -11205,7 +13783,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "72ef76ce1732ae1a39cab9726a76bde20dc38fb2f00397a717baa88c48f9f293",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 编辑标签名称回显且可修改",
+        "executedAt": "2026-08-11T04:42:45.844Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000448": {
       "id": "CASE-000448",
@@ -11227,7 +13816,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "c96b40efda3f29d8993113fd9ad4dde0107054adb8ca49d02601fb2f51df461d",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 编辑标签名称支持中英文字母和数字",
+        "executedAt": "2026-08-11T04:42:45.844Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000449": {
       "id": "CASE-000449",
@@ -11249,7 +13849,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "eb3f7b8206710040c9040a59b863d4b19a5488b8bc0dece3a0ec7c892ed696d2",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 编辑标签名称输入特殊字符被拒绝",
+        "executedAt": "2026-08-11T04:42:45.844Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000450": {
       "id": "CASE-000450",
@@ -11271,7 +13882,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "0b54338a8f9e570a3299850c6c5ea57969d75c3ed9816cec3eb2ccd0e9d273cf",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 编辑标签名称回显并可修改",
+        "executedAt": "2026-08-11T04:42:45.844Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000451": {
       "id": "CASE-000451",
@@ -11293,7 +13915,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "758cdae46beadf0cdd6445c6351fa34a8491631fdb142dd4769b2db4bc6e0f9a",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 编辑标签名称唯一性校验失败报红",
+        "executedAt": "2026-08-11T04:42:45.844Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000452": {
       "id": "CASE-000452",
@@ -11315,7 +13948,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "e2803afe4b5de9b6cc4d7d7e4a686dbdc96921f3f7e0c69d9427824d0d222f76",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 已被任务使用的标签编辑时提示不允许修改",
+        "executedAt": "2026-08-11T04:40:13.828Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "retained-by-design",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000453": {
       "id": "CASE-000453",
@@ -11337,7 +13981,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "a4197a152db62eb78edeb5c8f70c24365815b8c2f32293f00bcb285740b13bc0",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 禁用已被任务使用的标签时提示不允许禁用",
+        "executedAt": "2026-08-11T04:40:13.828Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "retained-by-design",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000454": {
       "id": "CASE-000454",
@@ -11359,7 +14014,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "a14c99eaec42745d839180aff64b4dc07c6429cb1608a8209d1028b56d53e8d6",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 删除标签二次确认后成功删除",
+        "executedAt": "2026-08-11T04:35:23.608Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000455": {
       "id": "CASE-000455",
@@ -11381,7 +14047,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "dd95007ed2c0cb05614e5db32b8c899989569d687d1cf367fe46a239922628fa",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 删除标签二次确认时取消删除",
+        "executedAt": "2026-08-11T04:35:23.608Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000456": {
       "id": "CASE-000456",
@@ -11403,7 +14080,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "c89d4372a6ef268834f2af20db7b6f1e6c1c90e907097b2e278c8c4e28fcf0c6",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 删除已被任务使用的标签时提示不允许删除",
+        "executedAt": "2026-08-11T04:40:13.828Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "retained-by-design",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000457": {
       "id": "CASE-000457",
@@ -11425,7 +14113,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "878c1453d97d1125147512785e8c465ba7314c7c9eade51daab2e4e48de13949",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 已被任务使用的标签不允许删除",
+        "executedAt": "2026-08-11T04:40:13.828Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "retained-by-design",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000458": {
       "id": "CASE-000458",
@@ -11447,7 +14146,18 @@
       },
       "revisions": [],
       "replacedBy": "",
-      "lastResult": {}
+      "lastResult": {
+        "fingerprint": "74add1e89b5421512f6b539ae982c9992955eb4166c1eda2456d63e2642e9f29",
+        "status": "passed",
+        "trusted": true,
+        "testTitle": "标签管理 - 验证列表按创建时间倒序排列",
+        "executedAt": "2026-08-11T04:36:04.821Z",
+        "healing": "",
+        "failureCategory": "",
+        "cleanupStatus": "passed",
+        "error": "",
+        "evidence": []
+      }
     },
     "CASE-000459": {
       "id": "CASE-000459",

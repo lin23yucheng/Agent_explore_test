@@ -182,6 +182,13 @@ async function removeTask(page, taskName) {
   const dialog = page.getByRole('dialog').last();
   await dialog.getByRole('button', { name: '永久删除', exact: true }).click();
   await expect(taskRow).toBeHidden();
+  // 任务删除接口异步完成后，重新加载并再次查询，确认后端引用已解除。
+  await page.waitForTimeout(1000);
+  await page.reload();
+  const refreshedSearch = page.getByPlaceholder('搜索任务名称/编号');
+  await refreshedSearch.fill(taskName);
+  await page.getByRole('button', { name: '查询', exact: true }).click();
+  await expect(page.locator('tbody tr').filter({ hasText: taskName })).toHaveCount(0);
 }
 
 CASE('CASE-000290', '用户管理 - 新建用户姓名为空时提示必填', async ({ page }) => {
@@ -359,7 +366,7 @@ CASE('CASE-000369', '用户管理 - 重置密码后已登录用户保持登录�
   let session;
   try { await create(page, value, '重置会话'); session = await loginContext(browser, value); await focusUser(page, value); const userRow = row(page, value); await userRow.getByRole('button', { name: '重置密码', exact: true }).click(); await page.getByRole('dialog').last().getByRole('button', { name: /确认|确定/ }).click(); await session.page.reload(); await expect(session.page).not.toHaveURL(/\/login$/); }
   finally { if (session) await session.context.close(); await remove(page, value); }
-});
+}, { annotation: { type: 'failure-category', description: 'PRODUCT_DEFECT' } });
 
 CASE('CASE-000371', '用户管理 - 禁用账号后未登录用户登录提示', async ({ page, browser }) => {
   const value = account('disable-login');
@@ -396,7 +403,19 @@ CASE('CASE-000376', '用户管理 - 删除已被指派任务的账号时提示�
     try {
       await removeTask(page, taskName);
       await openUsers(page);
-      await remove(page, accountValue);
+      let removed = false;
+      for (let attempt = 0; attempt < 5 && !removed; attempt += 1) {
+        try {
+          await remove(page, accountValue);
+          removed = true;
+        } catch (error) {
+          if (attempt === 4) throw error;
+          await page.waitForTimeout(2000);
+          await page.reload();
+          await expect(page.getByRole('button', { name: '新建用户', exact: true })).toBeVisible();
+          await focusUser(page, accountValue);
+        }
+      }
     } catch (error) {
       cleanupStatus = 'failed';
       console.error(`CASE-000376 cleanup failed: ${error.message}`);

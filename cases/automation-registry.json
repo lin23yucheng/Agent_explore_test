@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-11T11:32:40+08:00",
+  "updatedAt": "2026-08-12T09:35:27+08:00",
   "tests": {
     "角色管理 - 查看admin角色编码、名称、描述和状态": {
       "file": "tests/ui/roles.spec.js",
@@ -1232,10 +1232,10 @@
         "CASE-000290"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 新建用户姓名为空时提交按钮不可用": {
@@ -1244,10 +1244,10 @@
         "CASE-000291"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 新建用户姓名长度超限验证": {
@@ -1256,10 +1256,10 @@
         "CASE-000294"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 新建用户姓名为空验证": {
@@ -1268,10 +1268,10 @@
         "CASE-000295"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 新建用户初始密码必填项边界验证": {
@@ -1280,10 +1280,10 @@
         "CASE-000311"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 新建用户初始密码默认值验证": {
@@ -1292,10 +1292,10 @@
         "CASE-000313"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 初始密码明文显示切换验证": {
@@ -1304,10 +1304,10 @@
         "CASE-000314"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 并发创建相同账号时仅一个成功": {
@@ -1316,10 +1316,10 @@
         "CASE-000332"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 启用已禁用用户后该用户可正常登录": {
@@ -1328,10 +1328,10 @@
         "CASE-000351"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 禁用已登录用户后该用户被登出": {
@@ -1340,10 +1340,10 @@
         "CASE-000353"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 编辑弹框取消关闭不保存": {
@@ -1352,10 +1352,10 @@
         "CASE-000359"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 编辑用户时清空必填项保存提示请填写完整信息": {
@@ -1364,10 +1364,10 @@
         "CASE-000360"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 编辑用户时未选择角色保存提示请填写完整信息": {
@@ -1376,10 +1376,10 @@
         "CASE-000362"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 重置密码二次确认后确定重置成功": {
@@ -1388,10 +1388,10 @@
         "CASE-000368"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 重置密码后已登录用户保持登录状态": {
@@ -1400,10 +1400,10 @@
         "CASE-000369"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 禁用账号后未登录用户登录提示": {
@@ -1412,10 +1412,10 @@
         "CASE-000371"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 取消删除用户关闭弹窗": {
@@ -1424,10 +1424,10 @@
         "CASE-000374"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 未登录状态下删除用户时提示账号或密码错误或账号已被禁用": {
@@ -1436,10 +1436,10 @@
         "CASE-000377"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 删除用户后已登录用户点击菜单被登出": {
@@ -1448,34 +1448,10 @@
         "CASE-000378"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
-      }
-    },
-    "用户管理 - 新建用户姓名长度边界值验证（最小值）": {
-      "file": "tests/ui/users.failed-rerun.spec.js",
-      "caseIds": [
-        "CASE-000292"
-      ],
-      "status": "active",
-      "source": "agent",
-      "lastRun": {
-        "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
-      }
-    },
-    "用户管理 - 新建用户姓名长度边界值验证（最大值）": {
-      "file": "tests/ui/users.failed-rerun.spec.js",
-      "caseIds": [
-        "CASE-000293"
-      ],
-      "status": "active",
-      "source": "agent",
-      "lastRun": {
-        "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 修改角色后未登录用户登录展示新角色权限模块": {
@@ -1484,10 +1460,10 @@
         "CASE-000363"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 修改角色后已登录用户刷新页面展示新角色权限模块": {
@@ -1496,10 +1472,10 @@
         "CASE-000364"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-07T09:10:51.240Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "用户管理 - 删除已被指派任务的账号时提示不允许删除": {
@@ -1508,20 +1484,10 @@
         "CASE-000376"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
-        "executedAt": "2026-08-11T01:23:55.184Z"
-      }
-    },
-    "用户管理 - 删除已被指派任务的用户时校验任务指派下拉不展示该用户": {
-      "file": "tests/ui/users.failed-rerun.spec.js",
-      "caseIds": [],
-      "status": "retirement-candidate",
-      "source": "agent",
-      "lastRun": {
-        "status": "failed",
-        "executedAt": "2026-08-07T06:43:16.376Z"
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     },
     "机器人构型配置 - 验证构型名称长度为1时创建成功": {
@@ -1530,7 +1496,7 @@
         "CASE-000459"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:25:43.532Z"
@@ -1542,7 +1508,7 @@
         "CASE-000460"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:25:43.532Z"
@@ -1554,7 +1520,7 @@
         "CASE-000461"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:25:43.532Z"
@@ -1566,7 +1532,7 @@
         "CASE-000462"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:25:43.532Z"
@@ -1578,7 +1544,7 @@
         "CASE-000463"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:25:43.532Z"
@@ -1590,7 +1556,7 @@
         "CASE-000464"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:25:43.532Z"
@@ -1602,7 +1568,7 @@
         "CASE-000465"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:25:43.532Z"
@@ -1614,7 +1580,7 @@
         "CASE-000466"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:25:43.532Z"
@@ -1626,7 +1592,7 @@
         "CASE-000467"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:26:56.662Z"
@@ -1638,7 +1604,7 @@
         "CASE-000468"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:26:56.662Z"
@@ -1650,7 +1616,7 @@
         "CASE-000469"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:26:56.662Z"
@@ -1662,7 +1628,7 @@
         "CASE-000470"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:26:56.662Z"
@@ -1674,7 +1640,7 @@
         "CASE-000471"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:26:56.662Z"
@@ -1686,7 +1652,7 @@
         "CASE-000472"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:26:56.662Z"
@@ -1698,7 +1664,7 @@
         "CASE-000473"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:26:56.662Z"
@@ -1710,7 +1676,7 @@
         "CASE-000474"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:26:56.662Z"
@@ -1722,7 +1688,7 @@
         "CASE-000475"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:28:28.975Z"
@@ -1734,7 +1700,7 @@
         "CASE-000476"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:28:28.975Z"
@@ -1746,7 +1712,7 @@
         "CASE-000477"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:29:25.123Z"
@@ -1758,7 +1724,7 @@
         "CASE-000478"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:29:25.123Z"
@@ -1770,7 +1736,7 @@
         "CASE-000479"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:29:25.123Z"
@@ -1782,7 +1748,7 @@
         "CASE-000480"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:30:20.751Z"
@@ -1794,7 +1760,7 @@
         "CASE-000481"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:30:20.751Z"
@@ -1806,7 +1772,7 @@
         "CASE-000482"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:31:39.926Z"
@@ -1818,7 +1784,7 @@
         "CASE-000483"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:31:39.926Z"
@@ -1830,7 +1796,7 @@
         "CASE-000484"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:31:39.926Z"
@@ -1842,7 +1808,7 @@
         "CASE-000485"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:31:39.926Z"
@@ -1854,7 +1820,7 @@
         "CASE-000486"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:31:39.926Z"
@@ -1866,7 +1832,7 @@
         "CASE-000487"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:32:43.242Z"
@@ -1878,7 +1844,7 @@
         "CASE-000488"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:33:11.692Z"
@@ -1890,7 +1856,7 @@
         "CASE-000489"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:26:56.662Z"
@@ -1902,7 +1868,7 @@
         "CASE-000490"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:28:28.975Z"
@@ -1914,7 +1880,7 @@
         "CASE-000491"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:29:25.123Z"
@@ -1926,7 +1892,7 @@
         "CASE-000492"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:33:52.119Z"
@@ -1938,7 +1904,7 @@
         "CASE-000493"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:29:25.123Z"
@@ -1950,7 +1916,7 @@
         "CASE-000494"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:35:17.721Z"
@@ -1962,7 +1928,7 @@
         "CASE-000495"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T02:36:12.104Z"
@@ -1974,7 +1940,7 @@
         "CASE-000496"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -1986,7 +1952,7 @@
         "CASE-000497"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -1998,7 +1964,7 @@
         "CASE-000498"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2010,7 +1976,7 @@
         "CASE-000499"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:13:45.749Z"
@@ -2022,7 +1988,7 @@
         "CASE-000500"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2034,7 +2000,7 @@
         "CASE-000501"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2046,7 +2012,7 @@
         "CASE-000502"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2058,7 +2024,7 @@
         "CASE-000503"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2070,7 +2036,7 @@
         "CASE-000504"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2082,7 +2048,7 @@
         "CASE-000505"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2094,7 +2060,7 @@
         "CASE-000506"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2106,7 +2072,7 @@
         "CASE-000507"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2118,7 +2084,7 @@
         "CASE-000508"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2130,7 +2096,7 @@
         "CASE-000509"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:13:45.749Z"
@@ -2142,7 +2108,7 @@
         "CASE-000511"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2154,7 +2120,7 @@
         "CASE-000512"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2166,7 +2132,7 @@
         "CASE-000513"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2178,7 +2144,7 @@
         "CASE-000514"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2190,7 +2156,7 @@
         "CASE-000515"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2202,7 +2168,7 @@
         "CASE-000516"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2214,7 +2180,7 @@
         "CASE-000517"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2226,7 +2192,7 @@
         "CASE-000518"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2238,7 +2204,7 @@
         "CASE-000519"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2250,7 +2216,7 @@
         "CASE-000520"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2262,7 +2228,7 @@
         "CASE-000521"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2274,7 +2240,7 @@
         "CASE-000522"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2286,7 +2252,7 @@
         "CASE-000523"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2298,7 +2264,7 @@
         "CASE-000524"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2310,7 +2276,7 @@
         "CASE-000525"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2322,7 +2288,7 @@
         "CASE-000526"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2334,7 +2300,7 @@
         "CASE-000527"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:13:45.749Z"
@@ -2346,7 +2312,7 @@
         "CASE-000528"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2358,7 +2324,7 @@
         "CASE-000529"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2370,7 +2336,7 @@
         "CASE-000530"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2382,7 +2348,7 @@
         "CASE-000531"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2394,7 +2360,7 @@
         "CASE-000532"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2406,7 +2372,7 @@
         "CASE-000533"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2418,7 +2384,7 @@
         "CASE-000534"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2430,7 +2396,7 @@
         "CASE-000535"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:02:28.123Z"
@@ -2442,10 +2408,3278 @@
         "CASE-000510"
       ],
       "status": "active",
-      "source": "agent",
+      "source": "Playwright用例注解",
       "lastRun": {
         "status": "passed",
         "executedAt": "2026-08-11T03:32:35.759Z"
+      }
+    },
+    "标签管理 - 按标签名称模糊搜索": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000390"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T05:29:53.227Z"
+      }
+    },
+    "标签管理 - 按标签名称模糊查询": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000402"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T05:30:37.492Z"
+      }
+    },
+    "标签管理 - 模糊搜索无匹配结果": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000391"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:24:25.386Z"
+      }
+    },
+    "标签管理 - 模糊搜索空字符串": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000392"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:24:25.386Z"
+      }
+    },
+    "标签管理 - 按质量分类查询标签列表": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000393"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:25:13.895Z"
+      }
+    },
+    "标签管理 - 按分类“其他”查询标签列表": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000395"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:25:13.895Z"
+      }
+    },
+    "标签管理 - 按启用状态查询标签列表": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000397"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:30:57.170Z"
+      }
+    },
+    "标签管理 - 按禁用状态查询标签列表": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000398"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:30:57.170Z"
+      }
+    },
+    "标签管理 - 按禁用状态查询标签列表（CASE-000399）": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000399"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:30:57.170Z"
+      }
+    },
+    "标签管理 - 按启用状态查询标签列表（CASE-000400）": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000400"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:30:57.170Z"
+      }
+    },
+    "标签管理 - 查询无匹配结果": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000403"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:25:13.895Z"
+      }
+    },
+    "标签管理 - 查询条件为空显示全部": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000404"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:25:13.895Z"
+      }
+    },
+    "标签管理 - 重置后回到默认为空并查询": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000405"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:25:13.895Z"
+      }
+    },
+    "标签管理 - 验证标签名称长度为1时创建成功": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000406"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:27:22.669Z"
+      }
+    },
+    "标签管理 - 验证标签名称长度为32时创建成功": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000407"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:27:22.669Z"
+      }
+    },
+    "标签管理 - 验证标签名称支持中英文字母和数字": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000410"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:27:22.669Z"
+      }
+    },
+    "标签管理 - 验证标签名称仅包含中文时创建成功": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000413"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:27:22.669Z"
+      }
+    },
+    "标签管理 - 验证标签名称仅包含英文字母时创建成功": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000414"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:27:22.669Z"
+      }
+    },
+    "标签管理 - 验证标签名称仅包含数字时创建成功": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000415"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:27:22.669Z"
+      }
+    },
+    "标签管理 - 验证标签名称为空时创建失败": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000408"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:27:22.669Z"
+      }
+    },
+    "标签管理 - 新建标签时名称为空前端报红提示": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000420"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:28:36.017Z"
+      }
+    },
+    "标签管理 - 新增标签时名称为空被拒绝": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000427"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:29:39.381Z"
+      }
+    },
+    "标签管理 - 验证标签名称长度为33时创建失败": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000409"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:27:22.669Z"
+      }
+    },
+    "标签管理 - 新增标签时名称超过32个字符被拒绝": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000426"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:29:39.381Z"
+      }
+    },
+    "标签管理 - 验证标签名称包含非法字符时提示错误": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000411"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:27:22.669Z"
+      }
+    },
+    "标签管理 - 验证标签名称包含空格时提示错误": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000412"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:27:22.669Z"
+      }
+    },
+    "标签管理 - 新增标签时名称包含非法字符被拒绝": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000428"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:29:39.381Z"
+      }
+    },
+    "标签管理 - 新建标签时标签分类默认选中其他": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000416"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:28:36.017Z"
+      }
+    },
+    "标签管理 - 新建标签时选择质量分类成功": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000417"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:28:36.017Z"
+      }
+    },
+    "标签管理 - 新建标签弹框点击取消关闭且不保存": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000418"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:28:36.017Z"
+      }
+    },
+    "标签管理 - 新建标签弹框点击取消不保存已填数据": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000419"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:28:36.017Z"
+      }
+    },
+    "标签管理 - 新增标签时选择分类为质量": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000430"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:29:39.381Z"
+      }
+    },
+    "标签管理 - 新增标签时选择分类为其他": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000431"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:29:39.381Z"
+      }
+    },
+    "标签管理 - 新建标签时名称唯一性校验提示标签名已存在": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000422"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:28:36.017Z"
+      }
+    },
+    "标签管理 - 新增标签时名称重复被拒绝": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000429"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:29:39.381Z"
+      }
+    },
+    "标签管理 - 新增标签时填写合法名称成功创建": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000423"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:29:39.381Z"
+      }
+    },
+    "标签管理 - 新增标签时名称长度边界为1时创建成功": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000424"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:29:39.381Z"
+      }
+    },
+    "标签管理 - 新增标签时名称长度边界为32时创建成功": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000425"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:29:39.381Z"
+      }
+    },
+    "标签管理 - 启用状态标签在列表中的展示": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000433"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:30:57.170Z"
+      }
+    },
+    "标签管理 - 禁用标签后状态更新为禁用": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000434"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:30:57.170Z"
+      }
+    },
+    "标签管理 - 列表页创建时间显示年月日时分": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000436"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:32:01.174Z"
+      }
+    },
+    "标签管理 - 新增标签后创建时间保持不变": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000437"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:32:01.174Z"
+      }
+    },
+    "标签管理 - 列表页更新时间显示格式验证": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000438"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:32:01.174Z"
+      }
+    },
+    "标签管理 - 编辑标签后更新时间更新为当前时间": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000439"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:34:50.087Z"
+      }
+    },
+    "标签管理 - 禁用标签后更新时间更新为当前时间": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000440"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:32:01.174Z"
+      }
+    },
+    "标签管理 - 刚创建标签时创建时间与更新时间一致": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000441"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:32:01.174Z"
+      }
+    },
+    "标签管理 - 编辑标签名称回显并修改为合法值": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000442"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:42:45.844Z"
+      }
+    },
+    "标签管理 - 编辑标签名称回显且可修改": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000447"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:42:45.844Z"
+      }
+    },
+    "标签管理 - 编辑标签名称支持中英文字母和数字": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000448"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:42:45.844Z"
+      }
+    },
+    "标签管理 - 编辑标签名称回显并可修改": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000450"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:42:45.844Z"
+      }
+    },
+    "标签管理 - 编辑标签名称为1个字符的边界值": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000443"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:42:45.844Z"
+      }
+    },
+    "标签管理 - 编辑标签名称为32个字符的边界值": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000444"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:42:45.844Z"
+      }
+    },
+    "标签管理 - 编辑标签名称为空字符串的异常场景": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000445"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:42:45.844Z"
+      }
+    },
+    "标签管理 - 编辑标签名称为33个字符的异常场景": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000446"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:42:45.844Z"
+      }
+    },
+    "标签管理 - 编辑标签名称输入特殊字符被拒绝": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000449"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:42:45.844Z"
+      }
+    },
+    "标签管理 - 编辑标签名称唯一性校验失败报红": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000451"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:42:45.844Z"
+      }
+    },
+    "标签管理 - 删除标签二次确认后成功删除": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000454"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:35:23.608Z"
+      }
+    },
+    "标签管理 - 删除标签二次确认时取消删除": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000455"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:35:23.608Z"
+      }
+    },
+    "标签管理 - 验证列表按创建时间倒序排列": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000458"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:36:04.821Z"
+      }
+    },
+    "标签管理 - 禁用已被任务使用的标签失败": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000435"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:40:13.828Z"
+      }
+    },
+    "标签管理 - 已被任务使用的标签编辑时提示不允许修改": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000452"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:40:13.828Z"
+      }
+    },
+    "标签管理 - 禁用已被任务使用的标签时提示不允许禁用": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000453"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:40:13.828Z"
+      }
+    },
+    "标签管理 - 删除已被任务使用的标签时提示不允许删除": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000456"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:40:13.828Z"
+      }
+    },
+    "标签管理 - 已被任务使用的标签不允许删除": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000457"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T04:40:13.828Z"
+      }
+    },
+    "用户管理剩余用例 › 删除已指派任务的用户时，二次确认后提示禁止删除且下拉仍展示该用户": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000379"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "标签管理 - 按标签名称模糊匹配查询": {
+      "file": "tests/ui/tags.spec.js",
+      "caseIds": [
+        "CASE-000401"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T05:55:51.604Z"
+      }
+    },
+    "任务管理 - 操作日志时间显示格式验证 [CASE-000189]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000189"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时任务名称为必填项，为空时提示且无法提交 [CASE-000039]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000039"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T06:10:28.533Z"
+      }
+    },
+    "任务管理 - 验证总任务数显示所有任务的总数 [CASE-000001]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000001"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T06:20:53.665Z"
+      }
+    },
+    "任务管理 - 验证已创建状态任务数量统计正确 [CASE-000003]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000003"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T06:20:53.665Z"
+      }
+    },
+    "任务管理 - 验证已创建任务数量随任务状态变更实时更新 [CASE-000005]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000005"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "failed",
+        "executedAt": "2026-08-11T06:20:53.665Z"
+      }
+    },
+    "任务管理 - 验证已采集任务数量统计正确性 [CASE-000006]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000006"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T06:20:53.665Z"
+      }
+    },
+    "任务管理 - 验证已采集任务数量随任务状态变更实时更新 [CASE-000008]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000008"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "failed",
+        "executedAt": "2026-08-11T06:20:53.665Z"
+      }
+    },
+    "任务管理 - 验证已标注任务数量统计正确性 [CASE-000009]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000009"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T06:20:53.665Z"
+      }
+    },
+    "任务管理 - 创建任务时任务名称仅输入空格视为空，无法提交 [CASE-000040]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000040"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:13:18.761Z"
+      }
+    },
+    "任务管理 - 验证任务名称长度边界值32字符可成功创建 [CASE-000041]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000041"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:15:26.553Z"
+      }
+    },
+    "任务管理 - 验证任务名称长度超过32字符被拒绝 [CASE-000042]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000042"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:15:59.283Z"
+      }
+    },
+    "任务管理 - 验证任务名称支持中英文字母、数字、下划线和短横线 [CASE-000043]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000043"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:15:59.283Z"
+      }
+    },
+    "任务管理 - 验证任务名称仅包含中英文字母、数字、下划线和短横线时边界值可用 [CASE-000045]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000045"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:15:59.283Z"
+      }
+    },
+    "任务管理 - 验证任务名称包含非法字符时创建失败 [CASE-000044]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000044"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:18:18.405Z"
+      }
+    },
+    "任务管理 - 创建任务时任务描述长度等于255字符可成功创建 [CASE-000046]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000046"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:23:51.588Z"
+      }
+    },
+    "任务管理 - 创建任务时任务描述长度超过255字符被限制 [CASE-000047]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000047"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:28:31.179Z"
+      }
+    },
+    "任务管理 - 创建任务时任务描述为空可正常创建 [CASE-000048]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000048"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:30:46.626Z"
+      }
+    },
+    "用户管理 - 新建用户姓名长度边界值验证（最小值）": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000292"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理 - 新建用户姓名长度边界值验证（最大值）": {
+      "file": "tests/ui/users.failed-rerun.spec.js",
+      "caseIds": [
+        "CASE-000293"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "任务管理 - 验证无已标注任务时数量显示为0 [CASE-000010]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000010"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 验证已标注任务数量随任务状态变更实时更新 [CASE-000011]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000011"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 验证已质检任务数量统计正确性 [CASE-000012]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000012"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 验证无已质检任务时统计显示为0 [CASE-000013]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000013"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 验证已质检任务数量随任务状态变更实时更新 [CASE-000014]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000014"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 验证已转换任务数量统计正确性 [CASE-000015]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000015"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 验证无已转换任务时数量显示为0 [CASE-000016]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000016"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 验证已转换任务数量随任务状态变更实时更新 [CASE-000017]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000017"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 按任务名称模糊查询 [CASE-000018]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000018"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 按任务编号模糊查询 [CASE-000019]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000019"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 按任务名称模糊查询无结果 [CASE-000020]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000020"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 按任务编号模糊查询无结果 [CASE-000021]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000021"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 按状态下拉框筛选已创建任务 [CASE-000022]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000022"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 状态下拉框筛选已创建任务后重置查询 [CASE-000023]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000023"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 按状态下拉框筛选已采集任务 [CASE-000024]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000024"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 状态下拉框筛选已采集任务后重置筛选 [CASE-000025]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000025"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 按状态下拉框筛选已标注任务 [CASE-000026]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000026"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 状态下拉框筛选已标注任务后重置查询 [CASE-000027]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000027"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 按状态下拉框筛选已质检任务 [CASE-000028]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000028"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 状态下拉框筛选已质检无结果场景 [CASE-000029]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000029"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 按状态下拉框筛选已转换任务 [CASE-000030]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000030"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 状态下拉框筛选已转换任务后重置筛选 [CASE-000031]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000031"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 按名称精确查询显示匹配任务 [CASE-000032]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000032"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 按状态筛选显示对应状态任务 [CASE-000033]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000033"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 组合条件查询显示符合全部条件任务 [CASE-000034]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000034"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 查询无匹配数据时显示空列表 [CASE-000035]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000035"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 查询条件为空时显示全部任务 [CASE-000036]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000036"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 翻页后查询数据正常 [CASE-000037]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000037"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 重置查询条件后回到默认为空状态 [CASE-000038]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000038"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 添加根节点长度等于16时创建成功 [CASE-000049]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000049"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 添加根节点长度小于16时创建成功 [CASE-000050]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000050"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 添加根节点长度大于16时提示错误 [CASE-000051]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000051"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 添加同级节点长度等于16时成功添加 [CASE-000052]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000052"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 添加同级节点长度小于16时成功添加 [CASE-000053]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000053"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 添加同级节点长度大于16时提示错误 [CASE-000054]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000054"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 添加根节点子节点且名称长度等于16 [CASE-000055]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000055"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 添加根节点子节点且名称长度小于16 [CASE-000056]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000056"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 添加根节点子节点且名称为空 [CASE-000057]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000057"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 添加根节点子节点且名称长度超过16 [CASE-000058]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000058"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 编辑根节点名称回显并重新编辑成功 [CASE-000059]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000059"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 编辑根节点名称回显并重新编辑为边界长度16 [CASE-000060]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000060"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 编辑根节点名称回显并重新编辑超长名称被限制 [CASE-000061]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000061"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 删除无子节点的根节点 [CASE-000062]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000062"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 删除含子节点的根节点时二次确认并级联删除 [CASE-000063]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000063"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 删除含子节点的根节点时取消操作不删除 [CASE-000064]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000064"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时标注层级根节点对应L1层 [CASE-000065]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000065"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时标注层级子节点对应L2层 [CASE-000066]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000066"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时标注层级深层节点对应L3层 [CASE-000067]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000067"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 标注新增时描述下拉展示对应节点名称 [CASE-000068]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000068"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时数据分类为必填项校验 [CASE-000069]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000069"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时数据分类单选且必选 [CASE-000070]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000070"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时数据分类下拉展示数据分类管理中的启用分类 [CASE-000071]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000071"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时数据分类下拉不展示已禁用或已删除的分类 [CASE-000072]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000072"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时数据分类下拉为空时提示无可用分类 [CASE-000073]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000073"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时数据分类下拉展示编码和名称 [CASE-000074]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000074"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 数据分类下拉列表按创建时间倒序显示 [CASE-000075]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000075"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时标签必填校验 [CASE-000076]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000076"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时标签可多选 [CASE-000077]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000077"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务标签下拉展示标签管理中启用的标签 [CASE-000078]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000078"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务标签下拉不展示已禁用标签 [CASE-000079]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000079"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务标签下拉不展示已删除标签 [CASE-000080]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000080"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时标签展示名称与分类 [CASE-000081]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000081"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 标签下拉列表按创建时间倒序显示 [CASE-000082]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000082"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时机器人构型必填校验 [CASE-000083]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000083"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时机器人构型单选且必选 [CASE-000084]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000084"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时机器人构型下拉展示全部启用构型 [CASE-000085]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000085"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时机器人构型下拉不展示禁用构型 [CASE-000086]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000086"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时机器人构型下拉为空时提示无可用构型 [CASE-000087]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000087"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时机器人构型下拉展示构型名称和机器人型号 [CASE-000088]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000088"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时机器人构型下拉展示多个构型且格式正确 [CASE-000089]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000089"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时机器人构型下拉为空时无选项 [CASE-000090]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000090"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时机器人构型下拉按创建时间倒序显示 [CASE-000091]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000091"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 采集要求长度等于255时创建成功 [CASE-000092]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000092"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 采集要求长度超过255时创建失败 [CASE-000093]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000093"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 采集要求为空时创建成功 [CASE-000094]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000094"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时目标数量默认值为100 [CASE-000095]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000095"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 目标数量输入边界值1创建成功 [CASE-000096]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000096"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 目标数量输入边界值10000创建成功 [CASE-000097]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000097"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 目标数量输入0提示错误 [CASE-000098]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000098"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 目标数量输入10001提示错误 [CASE-000099]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000099"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 目标数量输入非数字字符提示错误 [CASE-000100]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000100"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 目标数量输入小数提示错误 [CASE-000101]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000101"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 目标数量为空提示必填 [CASE-000102]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000102"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时选择低优先级 [CASE-000103]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000103"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时优先级默认值为中 [CASE-000104]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000104"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时选择高优先级 [CASE-000105]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000105"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 取消创建任务关闭弹框不创建 [CASE-000106]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000106"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时所有必填项为空提示校验 [CASE-000107]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000107"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时仅填写部分必填项校验 [CASE-000108]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000108"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时填写所有必填项成功创建 [CASE-000109]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000109"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时任务名称唯一性校验 [CASE-000110]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000110"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时任务名称唯一性边界校验（名称相同但前后空格） [CASE-000111]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000111"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时任务名称唯一性校验（名称大小写不同） [CASE-000112]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000112"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时数据分类被删除应创建失败并提示不存在 [CASE-000113]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000113"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时标签已被删除应创建失败 [CASE-000114]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000114"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时机器人构型已被删除应创建失败 [CASE-000115]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000115"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务成功后列表页生成状态为已创建且人员未指派的数据 [CASE-000116]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000116"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 验证任务编号自动生成规则 [CASE-000117]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000117"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 验证任务编号按年度自增 [CASE-000118]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000118"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 验证跨年度任务编号重新自增 [CASE-000119]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000119"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 验证列表页任务名称与创建时填写一致 [CASE-000120]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000120"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 列表页分类展示与创建时选择的数据分类一致 [CASE-000121]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000121"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 列表页按状态筛选已创建任务 [CASE-000122]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000122"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 状态筛选已创建任务为空时显示空列表 [CASE-000123]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000123"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 验证状态为已采集的任务在列表页正确显示 [CASE-000124]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000124"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 验证列表页状态筛选功能可筛选出已采集任务 [CASE-000125]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000125"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 查看已标注状态任务列表 [CASE-000126]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000126"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 已标注状态任务详情查看 [CASE-000127]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000127"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 查看已质检状态任务列表 [CASE-000128]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000128"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 已质检状态任务详情页S3根目录显示 [CASE-000129]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000129"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 筛选已转换状态任务 [CASE-000130]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000130"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 已转换任务列表字段展示 [CASE-000131]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000131"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 刚创建任务采集人显示未指派 [CASE-000132]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000132"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 指派采集人后展示用户姓名 [CASE-000133]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000133"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改用户姓名后任务采集人显示同步更新 [CASE-000134]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000134"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 完成采集后采集人更新为操作人 [CASE-000135]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000135"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 刚创建任务标注人显示未指派 [CASE-000136]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000136"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 指派标注人后展示用户姓名 [CASE-000137]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000137"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改用户姓名后任务标注人同步更新 [CASE-000138]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000138"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 提交标注后标注人更新为操作人 [CASE-000139]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000139"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 刚创建任务质检人显示未指派 [CASE-000140]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000140"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改用户姓名后质检人指派显示同步更新 [CASE-000141]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000141"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 质检完成后质检人更新为操作人 [CASE-000142]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000142"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 列表页创建时间展示年月日时分秒 [CASE-000143]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000143"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 验证任务列表按创建时间倒序排列 [CASE-000144]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000144"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页任务编号与列表页一致 [CASE-000145]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000145"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页基本信息显示创建人姓名 [CASE-000146]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000146"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页基本信息分类与列表页一致 [CASE-000147]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000147"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页基本信息显示创建任务时选择的机器人构型 [CASE-000148]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000148"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页基本信息展示机器人构型名称及型号 [CASE-000149]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000149"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页基本信息显示创建任务时选择的多个标签并以逗号分隔 [CASE-000150]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000150"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页基本信息显示单个标签时不带逗号 [CASE-000151]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000151"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页基本信息标签显示顺序与创建时选择顺序一致 [CASE-000152]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000152"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时输入边界值1的目标数量 [CASE-000153]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000153"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时输入边界值10000的目标数量 [CASE-000154]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000154"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时输入小于1的目标数量 [CASE-000155]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000155"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时输入大于10000的目标数量 [CASE-000156]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000156"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时输入非数字字符的目标数量 [CASE-000157]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000157"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时输入小数形式的目标数量 [CASE-000158]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000158"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时不填写目标数量 [CASE-000159]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000159"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页显示创建任务时选择的优先级 [CASE-000160]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000160"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页基本信息显示创建时输入的采集要求 [CASE-000161]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000161"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页展示创建时输入的任务描述 [CASE-000162]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000162"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页展示创建时未输入任务描述的情况 [CASE-000163]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000163"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页展示创建任务时输入的标注层级 [CASE-000164]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000164"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 刚创建任务时S3根目录显示为未采集状态 [CASE-000165]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000165"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 已采集后详情页显示S3根目录 [CASE-000166]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000166"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 已采集后详情页S3根目录格式校验 [CASE-000167]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000167"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页未分配时采集人员显示未指派 [CASE-000168]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000168"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 未分配时标注人员显示未指派 [CASE-000169]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000169"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 未分配时质检人员显示未指派 [CASE-000170]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000170"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 详情页采集人员分配后显示对应姓名 [CASE-000171]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000171"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 标注人员分配后显示对应姓名 [CASE-000172]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000172"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 分配质检人员后显示人员姓名 [CASE-000173]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000173"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 刚创建任务时文件列表为空 [CASE-000174]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000174"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 采集后文件列表显示完整字段信息 [CASE-000175]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000175"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 操作日志时间显示格式验证 [CASE-000176]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000176"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时操作日志记录创建人姓名 [CASE-000177]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000177"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 创建任务时记录操作日志 [CASE-000178]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000178"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 操作日志时间格式显示为年月日时分 [CASE-000179]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000179"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 指派采集操作日志记录操作人姓名 [CASE-000180]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000180"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 查看指派采集人操作日志显示用户姓名 [CASE-000181]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000181"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 查看指派标注人操作日志显示用户姓名 [CASE-000182]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000182"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 查看指派质检人操作日志显示用户姓名 [CASE-000183]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000183"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 操作日志时间格式验证 [CASE-000184]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000184"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 指派标注操作日志记录操作人姓名 [CASE-000185]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000185"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 查看指派采集人的操作日志记录 [CASE-000186]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000186"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 查看指派标注人的操作日志记录 [CASE-000187]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000187"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 查看指派质检人的操作日志记录 [CASE-000188]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000188"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 指派质检操作日志记录操作人姓名 [CASE-000190]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000190"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 操作日志中记录指派采集人的用户姓名 [CASE-000191]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000191"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 操作日志中记录指派标注人的用户姓名 [CASE-000192]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000192"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 操作日志中记录指派质检人的用户姓名 [CASE-000193]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000193"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务时任务名称回显置灰且不可修改 [CASE-000194]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000194"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务描述回显并保存成功 [CASE-000195]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000195"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务描述为空并保存 [CASE-000196]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000196"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务描述长度等于255时保存成功 [CASE-000197]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000197"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务描述长度超过255时保存失败 [CASE-000198]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000198"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务描述为空字符串时保存成功 [CASE-000199]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000199"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务时标注层级回显并可修改 [CASE-000200]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000200"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改数据分类在已创建状态时成功 [CASE-000201]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000201"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改数据分类在已采集状态时成功 [CASE-000202]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000202"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改数据分类在已标注状态时成功 [CASE-000203]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000203"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改数据分类在已质检状态时成功 [CASE-000204]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000204"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 已转换状态数据分类置灰不可修改 [CASE-000205]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000205"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务时标签回显置灰且不可删除但可新增 [CASE-000206]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000206"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 已创建状态修改机器人构型 [CASE-000207]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000207"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 机器人构型在已采集状态置灰不可修改 [CASE-000208]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000208"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 机器人构型在已标注状态置灰不可修改 [CASE-000209]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000209"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 机器人构型在已质检状态置灰不可修改 [CASE-000210]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000210"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 机器人构型在已转换状态置灰不可修改 [CASE-000211]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000211"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务时采集要求回显并可修改 [CASE-000212]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000212"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务时采集要求为空可填写 [CASE-000213]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000213"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改采集要求长度为255时保存成功 [CASE-000214]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000214"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改采集要求长度超过255时保存失败 [CASE-000215]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000215"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务时目标数量回显当前值并可修改 [CASE-000216]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000216"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务时目标数量回显并修改为边界值1 [CASE-000217]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000217"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务时目标数量回显并修改为边界值10000 [CASE-000218]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000218"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务时目标数量回显并修改为非法值0 [CASE-000219]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000219"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务时目标数量回显并修改为非法值10001 [CASE-000220]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000220"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改目标数量为合法最小值1 [CASE-000221]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000221"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改目标数量为合法最大值10000 [CASE-000222]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000222"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改目标数量为合法中间值5000 [CASE-000223]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000223"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改目标数量为边界值0时提示错误 [CASE-000224]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000224"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改目标数量为边界值10001时提示错误 [CASE-000225]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000225"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改目标数量为负数时提示错误 [CASE-000226]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000226"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改目标数量为小数时提示错误 [CASE-000227]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000227"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改目标数量为空时提示错误 [CASE-000228]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000228"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 修改任务优先级回显当前值并可修改 [CASE-000229]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000229"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 取消修改任务关闭弹框不保存变更 [CASE-000230]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000230"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 取消修改任务关闭弹框不触发校验 [CASE-000231]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000231"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 保存修改时必填项为空校验 [CASE-000232]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000232"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 保存修改时仅任务名称为空校验 [CASE-000233]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000233"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 保存修改时仅描述为空校验 [CASE-000234]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000234"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 保存修改时仅标注层级为空校验 [CASE-000235]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000235"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 保存修改时仅数据分类为空校验 [CASE-000236]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000236"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 保存修改时仅标签为空校验 [CASE-000237]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000237"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 保存修改时仅机器人构型为空校验 [CASE-000238]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000238"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 保存修改时仅采集要求为空校验 [CASE-000239]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000239"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 保存修改时仅目标数量为空校验 [CASE-000240]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000240"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 保存修改时仅优先级为空校验 [CASE-000241]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000241"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 保存修改后列表页展示字段同步更新 [CASE-000242]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000242"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 指派弹框展示任务编号 [CASE-000243]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000243"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 弹出任务人员指派弹框时展示任务名称 [CASE-000244]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000244"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 任务人员指派弹框 - 展示当前采集、标注、质检人员信息 [CASE-000245]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000245"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 任务人员指派弹框 - 展示未指派状态 [CASE-000246]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000246"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 指派采集人员时回显之前指派的人员 [CASE-000247]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000247"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 任务人员指派 - 采集人员下拉仅显示启用且具有采集工程师角色的用户 [CASE-000248]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000248"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 任务人员指派 - 采集人员下拉单选且展示格式为姓名（账号） [CASE-000249]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000249"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 标注人员指派后回显已指派人员 [CASE-000250]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000250"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 指派标注人员下拉仅显示启用且具有标注工程师角色的用户 [CASE-000251]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000251"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 指派标注人员下拉单选且展示格式为姓名（账号） [CASE-000252]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000252"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 质检人员指派后回显已指派人员 [CASE-000253]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000253"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 质检人员下拉仅显示启用且具有质检工程师角色的用户 [CASE-000254]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000254"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 质检人员下拉单选且展示格式为姓名（账号） [CASE-000255]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000255"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 更换指派人员后任务数据转移 [CASE-000256]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000256"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 取消删除任务关闭弹框 [CASE-000257]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000257"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 确认删除任务并提示删除成功 [CASE-000258]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000258"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 取消删除任务不执行删除 [CASE-000259]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000259"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 确认删除任务后数据从列表页消失 [CASE-000260]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000260"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 取消删除任务后数据保留 [CASE-000261]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000261"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 已创建状态下确认永久删除任务 [CASE-000262]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000262"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 已采集状态下确认永久删除任务 [CASE-000263]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000263"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 已标注状态下确认永久删除任务 [CASE-000264]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000264"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 已质检状态下确认永久删除任务 [CASE-000265]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000265"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "任务管理 - 已转换状态下确认永久删除任务 [CASE-000266]": {
+      "file": "tests/ui/tasks.spec.js",
+      "caseIds": [
+        "CASE-000266"
+      ],
+      "status": "stale",
+      "source": "Playwright用例注解"
+    },
+    "用户管理扩展表单校验 › 新建用户-账号长度为2个字符（边界最小值-1）": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000290"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-账号长度为33个字符（边界最大值+1）": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000291"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-账号包含非法字符-提示错误": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000292"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-账号包含中文字符-提示错误": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000293"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-账号包含空格-提示错误": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000294"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-账号包含连字符-提示错误": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000295"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-姓名长度超上限17字符校验": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000311"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-姓名包含特殊字符-保存失败": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000313"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理扩展表单校验 › 新建用户-姓名包含空格-保存失败": {
+      "file": "tests/ui/users.extended.spec.js",
+      "caseIds": [
+        "CASE-000314"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 新建用户初始密码为123456且可修改为合法新密码": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000332"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 新建用户时账号唯一性校验-账号前后空格处理": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000351"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 启用状态下用户可被指派任务": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000353"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 禁用用户后指派下拉列表不展示该用户": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000359"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 禁用用户后指派下拉不展示该用户": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000360"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 编辑用户-姓名回显且可修改-异常超长验证": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000362"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 编辑用户时姓名为空保存校验": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000363"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 编辑用户时角色未选择保存校验": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000364"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 编辑用户姓名后，已指派任务中的人员姓名同步更新": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000368"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 重置密码弹窗点击取消后关闭弹窗且不重置密码": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000369"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 重置密码-二次确认-确定重置-密码重置为123456": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000374"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 重置密码-二次确认-确定重置-已登录用户不受影响": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000376"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 删除已指派任务的用户-二次确认后提示不允许删除": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000377"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 删除已被指派任务的账号时提示不允许删除": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000378"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
+      }
+    },
+    "用户管理剩余用例 › 删除未被指派任务的用户后，下拉列表不再展示该用户": {
+      "file": "tests/ui/users.remaining.spec.js",
+      "caseIds": [
+        "CASE-000371"
+      ],
+      "status": "active",
+      "source": "Playwright用例注解",
+      "lastRun": {
+        "status": "passed",
+        "executedAt": "2026-08-11T09:51:54.546Z"
       }
     }
   },
@@ -2540,24 +5774,6 @@
     "CASE-000288": [
       "用户管理扩展表单校验 › 新建用户-姓名仅输入数字-保存成功"
     ],
-    "CASE-000290": [
-      "用户管理 - 新建用户姓名为空时提示必填"
-    ],
-    "CASE-000291": [
-      "用户管理 - 新建用户姓名为空时提交按钮不可用"
-    ],
-    "CASE-000292": [
-      "用户管理 - 新建用户姓名长度边界值验证（最小值）"
-    ],
-    "CASE-000293": [
-      "用户管理 - 新建用户姓名长度边界值验证（最大值）"
-    ],
-    "CASE-000294": [
-      "用户管理 - 新建用户姓名长度超限验证"
-    ],
-    "CASE-000295": [
-      "用户管理 - 新建用户姓名为空验证"
-    ],
     "CASE-000296": [
       "用户管理扩展表单校验 › 新建用户-账号为空时提示必填"
     ],
@@ -2572,15 +5788,6 @@
     ],
     "CASE-000310": [
       "用户管理扩展表单校验 › 新建用户-保存-必填项校验-账号和姓名均为空"
-    ],
-    "CASE-000311": [
-      "用户管理 - 新建用户初始密码必填项边界验证"
-    ],
-    "CASE-000313": [
-      "用户管理 - 新建用户初始密码默认值验证"
-    ],
-    "CASE-000314": [
-      "用户管理 - 初始密码明文显示切换验证"
     ],
     "CASE-000315": [
       "用户管理扩展表单校验 › 新建用户时初始密码默认显示为123456"
@@ -2606,23 +5813,14 @@
     "CASE-000322": [
       "用户管理剩余用例 › 新建用户-账号仅包含数字-正常输入"
     ],
-    "CASE-000332": [
-      "用户管理 - 并发创建相同账号时仅一个成功"
-    ],
     "CASE-000341": [
       "用户管理剩余用例 › 新建用户后使用默认密码登录并修改为合法新密码"
     ],
     "CASE-000350": [
       "用户管理剩余用例 › 并发创建相同账号时仅一条成功且无重复数据"
     ],
-    "CASE-000351": [
-      "用户管理 - 启用已禁用用户后该用户可正常登录"
-    ],
     "CASE-000352": [
       "用户管理剩余用例 › 启用状态下用户正常登录"
-    ],
-    "CASE-000353": [
-      "用户管理 - 禁用已登录用户后该用户被登出"
     ],
     "CASE-000354": [
       "用户管理剩余用例 › 禁用用户后未登录用户登录提示账号错误"
@@ -2636,23 +5834,8 @@
     "CASE-000358": [
       "用户管理剩余用例 › 禁用已登录用户后调用接口提示操作人不存在或已禁用"
     ],
-    "CASE-000359": [
-      "用户管理 - 编辑弹框取消关闭不保存"
-    ],
-    "CASE-000360": [
-      "用户管理 - 编辑用户时清空必填项保存提示请填写完整信息"
-    ],
     "CASE-000361": [
       "用户管理剩余用例 › 编辑用户-姓名回显且可修改-边界长度验证"
-    ],
-    "CASE-000362": [
-      "用户管理 - 编辑用户时未选择角色保存提示请填写完整信息"
-    ],
-    "CASE-000363": [
-      "用户管理 - 修改角色后未登录用户登录展示新角色权限模块"
-    ],
-    "CASE-000364": [
-      "用户管理 - 修改角色后已登录用户刷新页面展示新角色权限模块"
     ],
     "CASE-000365": [
       "用户管理剩余用例 › 编辑用户角色后未登录，登录成功展示新角色对应模块"
@@ -2663,35 +5846,11 @@
     "CASE-000367": [
       "用户管理剩余用例 › 编辑用户姓名后右上角显示更新为修改后的姓名"
     ],
-    "CASE-000368": [
-      "用户管理 - 重置密码二次确认后确定重置成功"
-    ],
-    "CASE-000369": [
-      "用户管理 - 重置密码后已登录用户保持登录状态"
-    ],
-    "CASE-000374": [
-      "用户管理 - 取消删除用户关闭弹窗"
-    ],
-    "CASE-000376": [
-      "用户管理 - 删除已被指派任务的账号时提示不允许删除"
-    ],
-    "CASE-000377": [
-      "用户管理 - 未登录状态下删除用户时提示账号或密码错误或账号已被禁用"
-    ],
-    "CASE-000378": [
-      "用户管理 - 删除用户后已登录用户点击菜单被登出"
-    ],
-    "CASE-000379": [
-      "用户管理 - 删除已被指派任务的用户时校验任务指派下拉不展示该用户"
-    ],
     "CASE-000380": [
       "用户管理剩余用例 › 删除用户-未登录状态-确定删除-提示账号或密码错误"
     ],
     "CASE-000370": [
       "用户管理剩余用例 › 删除用户-已登录状态-接口校验-操作人不存在或已禁用提示"
-    ],
-    "CASE-000371": [
-      "用户管理 - 禁用账号后未登录用户登录提示"
     ],
     "CASE-000372": [
       "用户管理剩余用例 › 验证用户列表默认按创建时间倒序排列"
@@ -2824,6 +5983,94 @@
     ],
     "CASE-000345": [
       "用户管理 - 姓名非法字符校验"
+    ],
+    "CASE-000290": [
+      "用户管理 - 新建用户姓名为空时提示必填",
+      "用户管理扩展表单校验 › 新建用户-账号长度为2个字符（边界最小值-1）"
+    ],
+    "CASE-000291": [
+      "用户管理 - 新建用户姓名为空时提交按钮不可用",
+      "用户管理扩展表单校验 › 新建用户-账号长度为33个字符（边界最大值+1）"
+    ],
+    "CASE-000294": [
+      "用户管理 - 新建用户姓名长度超限验证",
+      "用户管理扩展表单校验 › 新建用户-账号包含空格-提示错误"
+    ],
+    "CASE-000295": [
+      "用户管理 - 新建用户姓名为空验证",
+      "用户管理扩展表单校验 › 新建用户-账号包含连字符-提示错误"
+    ],
+    "CASE-000311": [
+      "用户管理 - 新建用户初始密码必填项边界验证",
+      "用户管理扩展表单校验 › 新建用户-姓名长度超上限17字符校验"
+    ],
+    "CASE-000313": [
+      "用户管理 - 新建用户初始密码默认值验证",
+      "用户管理扩展表单校验 › 新建用户-姓名包含特殊字符-保存失败"
+    ],
+    "CASE-000314": [
+      "用户管理 - 初始密码明文显示切换验证",
+      "用户管理扩展表单校验 › 新建用户-姓名包含空格-保存失败"
+    ],
+    "CASE-000332": [
+      "用户管理 - 并发创建相同账号时仅一个成功",
+      "用户管理剩余用例 › 新建用户初始密码为123456且可修改为合法新密码"
+    ],
+    "CASE-000351": [
+      "用户管理 - 启用已禁用用户后该用户可正常登录",
+      "用户管理剩余用例 › 新建用户时账号唯一性校验-账号前后空格处理"
+    ],
+    "CASE-000353": [
+      "用户管理 - 禁用已登录用户后该用户被登出",
+      "用户管理剩余用例 › 启用状态下用户可被指派任务"
+    ],
+    "CASE-000359": [
+      "用户管理 - 编辑弹框取消关闭不保存",
+      "用户管理剩余用例 › 禁用用户后指派下拉列表不展示该用户"
+    ],
+    "CASE-000360": [
+      "用户管理 - 编辑用户时清空必填项保存提示请填写完整信息",
+      "用户管理剩余用例 › 禁用用户后指派下拉不展示该用户"
+    ],
+    "CASE-000362": [
+      "用户管理 - 编辑用户时未选择角色保存提示请填写完整信息",
+      "用户管理剩余用例 › 编辑用户-姓名回显且可修改-异常超长验证"
+    ],
+    "CASE-000368": [
+      "用户管理 - 重置密码二次确认后确定重置成功",
+      "用户管理剩余用例 › 编辑用户姓名后，已指派任务中的人员姓名同步更新"
+    ],
+    "CASE-000369": [
+      "用户管理 - 重置密码后已登录用户保持登录状态",
+      "用户管理剩余用例 › 重置密码弹窗点击取消后关闭弹窗且不重置密码"
+    ],
+    "CASE-000371": [
+      "用户管理 - 禁用账号后未登录用户登录提示",
+      "用户管理剩余用例 › 删除未被指派任务的用户后，下拉列表不再展示该用户"
+    ],
+    "CASE-000374": [
+      "用户管理 - 取消删除用户关闭弹窗",
+      "用户管理剩余用例 › 重置密码-二次确认-确定重置-密码重置为123456"
+    ],
+    "CASE-000377": [
+      "用户管理 - 未登录状态下删除用户时提示账号或密码错误或账号已被禁用",
+      "用户管理剩余用例 › 删除已指派任务的用户-二次确认后提示不允许删除"
+    ],
+    "CASE-000378": [
+      "用户管理 - 删除用户后已登录用户点击菜单被登出",
+      "用户管理剩余用例 › 删除已被指派任务的账号时提示不允许删除"
+    ],
+    "CASE-000363": [
+      "用户管理 - 修改角色后未登录用户登录展示新角色权限模块",
+      "用户管理剩余用例 › 编辑用户时姓名为空保存校验"
+    ],
+    "CASE-000364": [
+      "用户管理 - 修改角色后已登录用户刷新页面展示新角色权限模块",
+      "用户管理剩余用例 › 编辑用户时角色未选择保存校验"
+    ],
+    "CASE-000376": [
+      "用户管理 - 删除已被指派任务的账号时提示不允许删除",
+      "用户管理剩余用例 › 重置密码-二次确认-确定重置-已登录用户不受影响"
     ],
     "CASE-000459": [
       "机器人构型配置 - 验证构型名称长度为1时创建成功"
@@ -2978,9 +6225,6 @@
     "CASE-000509": [
       "数据分类管理 - 验证分类名称长度为33时创建失败"
     ],
-    "CASE-000510": [
-      "数据分类管理 - 验证分类名称超长时提示并禁止保存"
-    ],
     "CASE-000511": [
       "数据分类管理 - 验证分类名称支持中英文字母和数字"
     ],
@@ -3055,6 +6299,1004 @@
     ],
     "CASE-000535": [
       "数据分类管理 - 删除已被任务引用的分类时提示不能删除"
+    ],
+    "CASE-000510": [
+      "数据分类管理 - 验证分类名称超长时提示并禁止保存"
+    ],
+    "CASE-000390": [
+      "标签管理 - 按标签名称模糊搜索"
+    ],
+    "CASE-000402": [
+      "标签管理 - 按标签名称模糊查询"
+    ],
+    "CASE-000391": [
+      "标签管理 - 模糊搜索无匹配结果"
+    ],
+    "CASE-000392": [
+      "标签管理 - 模糊搜索空字符串"
+    ],
+    "CASE-000393": [
+      "标签管理 - 按质量分类查询标签列表"
+    ],
+    "CASE-000395": [
+      "标签管理 - 按分类“其他”查询标签列表"
+    ],
+    "CASE-000397": [
+      "标签管理 - 按启用状态查询标签列表"
+    ],
+    "CASE-000398": [
+      "标签管理 - 按禁用状态查询标签列表"
+    ],
+    "CASE-000399": [
+      "标签管理 - 按禁用状态查询标签列表（CASE-000399）"
+    ],
+    "CASE-000400": [
+      "标签管理 - 按启用状态查询标签列表（CASE-000400）"
+    ],
+    "CASE-000403": [
+      "标签管理 - 查询无匹配结果"
+    ],
+    "CASE-000404": [
+      "标签管理 - 查询条件为空显示全部"
+    ],
+    "CASE-000405": [
+      "标签管理 - 重置后回到默认为空并查询"
+    ],
+    "CASE-000406": [
+      "标签管理 - 验证标签名称长度为1时创建成功"
+    ],
+    "CASE-000407": [
+      "标签管理 - 验证标签名称长度为32时创建成功"
+    ],
+    "CASE-000410": [
+      "标签管理 - 验证标签名称支持中英文字母和数字"
+    ],
+    "CASE-000413": [
+      "标签管理 - 验证标签名称仅包含中文时创建成功"
+    ],
+    "CASE-000414": [
+      "标签管理 - 验证标签名称仅包含英文字母时创建成功"
+    ],
+    "CASE-000415": [
+      "标签管理 - 验证标签名称仅包含数字时创建成功"
+    ],
+    "CASE-000408": [
+      "标签管理 - 验证标签名称为空时创建失败"
+    ],
+    "CASE-000420": [
+      "标签管理 - 新建标签时名称为空前端报红提示"
+    ],
+    "CASE-000427": [
+      "标签管理 - 新增标签时名称为空被拒绝"
+    ],
+    "CASE-000409": [
+      "标签管理 - 验证标签名称长度为33时创建失败"
+    ],
+    "CASE-000426": [
+      "标签管理 - 新增标签时名称超过32个字符被拒绝"
+    ],
+    "CASE-000411": [
+      "标签管理 - 验证标签名称包含非法字符时提示错误"
+    ],
+    "CASE-000412": [
+      "标签管理 - 验证标签名称包含空格时提示错误"
+    ],
+    "CASE-000428": [
+      "标签管理 - 新增标签时名称包含非法字符被拒绝"
+    ],
+    "CASE-000416": [
+      "标签管理 - 新建标签时标签分类默认选中其他"
+    ],
+    "CASE-000417": [
+      "标签管理 - 新建标签时选择质量分类成功"
+    ],
+    "CASE-000418": [
+      "标签管理 - 新建标签弹框点击取消关闭且不保存"
+    ],
+    "CASE-000419": [
+      "标签管理 - 新建标签弹框点击取消不保存已填数据"
+    ],
+    "CASE-000430": [
+      "标签管理 - 新增标签时选择分类为质量"
+    ],
+    "CASE-000431": [
+      "标签管理 - 新增标签时选择分类为其他"
+    ],
+    "CASE-000422": [
+      "标签管理 - 新建标签时名称唯一性校验提示标签名已存在"
+    ],
+    "CASE-000429": [
+      "标签管理 - 新增标签时名称重复被拒绝"
+    ],
+    "CASE-000423": [
+      "标签管理 - 新增标签时填写合法名称成功创建"
+    ],
+    "CASE-000424": [
+      "标签管理 - 新增标签时名称长度边界为1时创建成功"
+    ],
+    "CASE-000425": [
+      "标签管理 - 新增标签时名称长度边界为32时创建成功"
+    ],
+    "CASE-000433": [
+      "标签管理 - 启用状态标签在列表中的展示"
+    ],
+    "CASE-000434": [
+      "标签管理 - 禁用标签后状态更新为禁用"
+    ],
+    "CASE-000436": [
+      "标签管理 - 列表页创建时间显示年月日时分"
+    ],
+    "CASE-000437": [
+      "标签管理 - 新增标签后创建时间保持不变"
+    ],
+    "CASE-000438": [
+      "标签管理 - 列表页更新时间显示格式验证"
+    ],
+    "CASE-000439": [
+      "标签管理 - 编辑标签后更新时间更新为当前时间"
+    ],
+    "CASE-000440": [
+      "标签管理 - 禁用标签后更新时间更新为当前时间"
+    ],
+    "CASE-000441": [
+      "标签管理 - 刚创建标签时创建时间与更新时间一致"
+    ],
+    "CASE-000442": [
+      "标签管理 - 编辑标签名称回显并修改为合法值"
+    ],
+    "CASE-000447": [
+      "标签管理 - 编辑标签名称回显且可修改"
+    ],
+    "CASE-000448": [
+      "标签管理 - 编辑标签名称支持中英文字母和数字"
+    ],
+    "CASE-000450": [
+      "标签管理 - 编辑标签名称回显并可修改"
+    ],
+    "CASE-000443": [
+      "标签管理 - 编辑标签名称为1个字符的边界值"
+    ],
+    "CASE-000444": [
+      "标签管理 - 编辑标签名称为32个字符的边界值"
+    ],
+    "CASE-000445": [
+      "标签管理 - 编辑标签名称为空字符串的异常场景"
+    ],
+    "CASE-000446": [
+      "标签管理 - 编辑标签名称为33个字符的异常场景"
+    ],
+    "CASE-000449": [
+      "标签管理 - 编辑标签名称输入特殊字符被拒绝"
+    ],
+    "CASE-000451": [
+      "标签管理 - 编辑标签名称唯一性校验失败报红"
+    ],
+    "CASE-000454": [
+      "标签管理 - 删除标签二次确认后成功删除"
+    ],
+    "CASE-000455": [
+      "标签管理 - 删除标签二次确认时取消删除"
+    ],
+    "CASE-000458": [
+      "标签管理 - 验证列表按创建时间倒序排列"
+    ],
+    "CASE-000435": [
+      "标签管理 - 禁用已被任务使用的标签失败"
+    ],
+    "CASE-000452": [
+      "标签管理 - 已被任务使用的标签编辑时提示不允许修改"
+    ],
+    "CASE-000453": [
+      "标签管理 - 禁用已被任务使用的标签时提示不允许禁用"
+    ],
+    "CASE-000456": [
+      "标签管理 - 删除已被任务使用的标签时提示不允许删除"
+    ],
+    "CASE-000457": [
+      "标签管理 - 已被任务使用的标签不允许删除"
+    ],
+    "CASE-000379": [
+      "用户管理剩余用例 › 删除已指派任务的用户时，二次确认后提示禁止删除且下拉仍展示该用户"
+    ],
+    "CASE-000401": [
+      "标签管理 - 按标签名称模糊匹配查询"
+    ],
+    "CASE-000189": [
+      "任务管理 - 操作日志时间显示格式验证 [CASE-000189]"
+    ],
+    "CASE-000039": [
+      "任务管理 - 创建任务时任务名称为必填项，为空时提示且无法提交 [CASE-000039]"
+    ],
+    "CASE-000001": [
+      "任务管理 - 验证总任务数显示所有任务的总数 [CASE-000001]"
+    ],
+    "CASE-000003": [
+      "任务管理 - 验证已创建状态任务数量统计正确 [CASE-000003]"
+    ],
+    "CASE-000005": [
+      "任务管理 - 验证已创建任务数量随任务状态变更实时更新 [CASE-000005]"
+    ],
+    "CASE-000006": [
+      "任务管理 - 验证已采集任务数量统计正确性 [CASE-000006]"
+    ],
+    "CASE-000008": [
+      "任务管理 - 验证已采集任务数量随任务状态变更实时更新 [CASE-000008]"
+    ],
+    "CASE-000009": [
+      "任务管理 - 验证已标注任务数量统计正确性 [CASE-000009]"
+    ],
+    "CASE-000040": [
+      "任务管理 - 创建任务时任务名称仅输入空格视为空，无法提交 [CASE-000040]"
+    ],
+    "CASE-000041": [
+      "任务管理 - 验证任务名称长度边界值32字符可成功创建 [CASE-000041]"
+    ],
+    "CASE-000042": [
+      "任务管理 - 验证任务名称长度超过32字符被拒绝 [CASE-000042]"
+    ],
+    "CASE-000043": [
+      "任务管理 - 验证任务名称支持中英文字母、数字、下划线和短横线 [CASE-000043]"
+    ],
+    "CASE-000045": [
+      "任务管理 - 验证任务名称仅包含中英文字母、数字、下划线和短横线时边界值可用 [CASE-000045]"
+    ],
+    "CASE-000044": [
+      "任务管理 - 验证任务名称包含非法字符时创建失败 [CASE-000044]"
+    ],
+    "CASE-000046": [
+      "任务管理 - 创建任务时任务描述长度等于255字符可成功创建 [CASE-000046]"
+    ],
+    "CASE-000047": [
+      "任务管理 - 创建任务时任务描述长度超过255字符被限制 [CASE-000047]"
+    ],
+    "CASE-000048": [
+      "任务管理 - 创建任务时任务描述为空可正常创建 [CASE-000048]"
+    ],
+    "CASE-000292": [
+      "用户管理 - 新建用户姓名长度边界值验证（最小值）",
+      "用户管理扩展表单校验 › 新建用户-账号包含非法字符-提示错误"
+    ],
+    "CASE-000293": [
+      "用户管理 - 新建用户姓名长度边界值验证（最大值）",
+      "用户管理扩展表单校验 › 新建用户-账号包含中文字符-提示错误"
+    ],
+    "CASE-000010": [
+      "任务管理 - 验证无已标注任务时数量显示为0 [CASE-000010]"
+    ],
+    "CASE-000011": [
+      "任务管理 - 验证已标注任务数量随任务状态变更实时更新 [CASE-000011]"
+    ],
+    "CASE-000012": [
+      "任务管理 - 验证已质检任务数量统计正确性 [CASE-000012]"
+    ],
+    "CASE-000013": [
+      "任务管理 - 验证无已质检任务时统计显示为0 [CASE-000013]"
+    ],
+    "CASE-000014": [
+      "任务管理 - 验证已质检任务数量随任务状态变更实时更新 [CASE-000014]"
+    ],
+    "CASE-000015": [
+      "任务管理 - 验证已转换任务数量统计正确性 [CASE-000015]"
+    ],
+    "CASE-000016": [
+      "任务管理 - 验证无已转换任务时数量显示为0 [CASE-000016]"
+    ],
+    "CASE-000017": [
+      "任务管理 - 验证已转换任务数量随任务状态变更实时更新 [CASE-000017]"
+    ],
+    "CASE-000018": [
+      "任务管理 - 按任务名称模糊查询 [CASE-000018]"
+    ],
+    "CASE-000019": [
+      "任务管理 - 按任务编号模糊查询 [CASE-000019]"
+    ],
+    "CASE-000020": [
+      "任务管理 - 按任务名称模糊查询无结果 [CASE-000020]"
+    ],
+    "CASE-000021": [
+      "任务管理 - 按任务编号模糊查询无结果 [CASE-000021]"
+    ],
+    "CASE-000022": [
+      "任务管理 - 按状态下拉框筛选已创建任务 [CASE-000022]"
+    ],
+    "CASE-000023": [
+      "任务管理 - 状态下拉框筛选已创建任务后重置查询 [CASE-000023]"
+    ],
+    "CASE-000024": [
+      "任务管理 - 按状态下拉框筛选已采集任务 [CASE-000024]"
+    ],
+    "CASE-000025": [
+      "任务管理 - 状态下拉框筛选已采集任务后重置筛选 [CASE-000025]"
+    ],
+    "CASE-000026": [
+      "任务管理 - 按状态下拉框筛选已标注任务 [CASE-000026]"
+    ],
+    "CASE-000027": [
+      "任务管理 - 状态下拉框筛选已标注任务后重置查询 [CASE-000027]"
+    ],
+    "CASE-000028": [
+      "任务管理 - 按状态下拉框筛选已质检任务 [CASE-000028]"
+    ],
+    "CASE-000029": [
+      "任务管理 - 状态下拉框筛选已质检无结果场景 [CASE-000029]"
+    ],
+    "CASE-000030": [
+      "任务管理 - 按状态下拉框筛选已转换任务 [CASE-000030]"
+    ],
+    "CASE-000031": [
+      "任务管理 - 状态下拉框筛选已转换任务后重置筛选 [CASE-000031]"
+    ],
+    "CASE-000032": [
+      "任务管理 - 按名称精确查询显示匹配任务 [CASE-000032]"
+    ],
+    "CASE-000033": [
+      "任务管理 - 按状态筛选显示对应状态任务 [CASE-000033]"
+    ],
+    "CASE-000034": [
+      "任务管理 - 组合条件查询显示符合全部条件任务 [CASE-000034]"
+    ],
+    "CASE-000035": [
+      "任务管理 - 查询无匹配数据时显示空列表 [CASE-000035]"
+    ],
+    "CASE-000036": [
+      "任务管理 - 查询条件为空时显示全部任务 [CASE-000036]"
+    ],
+    "CASE-000037": [
+      "任务管理 - 翻页后查询数据正常 [CASE-000037]"
+    ],
+    "CASE-000038": [
+      "任务管理 - 重置查询条件后回到默认为空状态 [CASE-000038]"
+    ],
+    "CASE-000049": [
+      "任务管理 - 添加根节点长度等于16时创建成功 [CASE-000049]"
+    ],
+    "CASE-000050": [
+      "任务管理 - 添加根节点长度小于16时创建成功 [CASE-000050]"
+    ],
+    "CASE-000051": [
+      "任务管理 - 添加根节点长度大于16时提示错误 [CASE-000051]"
+    ],
+    "CASE-000052": [
+      "任务管理 - 添加同级节点长度等于16时成功添加 [CASE-000052]"
+    ],
+    "CASE-000053": [
+      "任务管理 - 添加同级节点长度小于16时成功添加 [CASE-000053]"
+    ],
+    "CASE-000054": [
+      "任务管理 - 添加同级节点长度大于16时提示错误 [CASE-000054]"
+    ],
+    "CASE-000055": [
+      "任务管理 - 添加根节点子节点且名称长度等于16 [CASE-000055]"
+    ],
+    "CASE-000056": [
+      "任务管理 - 添加根节点子节点且名称长度小于16 [CASE-000056]"
+    ],
+    "CASE-000057": [
+      "任务管理 - 添加根节点子节点且名称为空 [CASE-000057]"
+    ],
+    "CASE-000058": [
+      "任务管理 - 添加根节点子节点且名称长度超过16 [CASE-000058]"
+    ],
+    "CASE-000059": [
+      "任务管理 - 编辑根节点名称回显并重新编辑成功 [CASE-000059]"
+    ],
+    "CASE-000060": [
+      "任务管理 - 编辑根节点名称回显并重新编辑为边界长度16 [CASE-000060]"
+    ],
+    "CASE-000061": [
+      "任务管理 - 编辑根节点名称回显并重新编辑超长名称被限制 [CASE-000061]"
+    ],
+    "CASE-000062": [
+      "任务管理 - 删除无子节点的根节点 [CASE-000062]"
+    ],
+    "CASE-000063": [
+      "任务管理 - 删除含子节点的根节点时二次确认并级联删除 [CASE-000063]"
+    ],
+    "CASE-000064": [
+      "任务管理 - 删除含子节点的根节点时取消操作不删除 [CASE-000064]"
+    ],
+    "CASE-000065": [
+      "任务管理 - 创建任务时标注层级根节点对应L1层 [CASE-000065]"
+    ],
+    "CASE-000066": [
+      "任务管理 - 创建任务时标注层级子节点对应L2层 [CASE-000066]"
+    ],
+    "CASE-000067": [
+      "任务管理 - 创建任务时标注层级深层节点对应L3层 [CASE-000067]"
+    ],
+    "CASE-000068": [
+      "任务管理 - 标注新增时描述下拉展示对应节点名称 [CASE-000068]"
+    ],
+    "CASE-000069": [
+      "任务管理 - 创建任务时数据分类为必填项校验 [CASE-000069]"
+    ],
+    "CASE-000070": [
+      "任务管理 - 创建任务时数据分类单选且必选 [CASE-000070]"
+    ],
+    "CASE-000071": [
+      "任务管理 - 创建任务时数据分类下拉展示数据分类管理中的启用分类 [CASE-000071]"
+    ],
+    "CASE-000072": [
+      "任务管理 - 创建任务时数据分类下拉不展示已禁用或已删除的分类 [CASE-000072]"
+    ],
+    "CASE-000073": [
+      "任务管理 - 创建任务时数据分类下拉为空时提示无可用分类 [CASE-000073]"
+    ],
+    "CASE-000074": [
+      "任务管理 - 创建任务时数据分类下拉展示编码和名称 [CASE-000074]"
+    ],
+    "CASE-000075": [
+      "任务管理 - 数据分类下拉列表按创建时间倒序显示 [CASE-000075]"
+    ],
+    "CASE-000076": [
+      "任务管理 - 创建任务时标签必填校验 [CASE-000076]"
+    ],
+    "CASE-000077": [
+      "任务管理 - 创建任务时标签可多选 [CASE-000077]"
+    ],
+    "CASE-000078": [
+      "任务管理 - 创建任务标签下拉展示标签管理中启用的标签 [CASE-000078]"
+    ],
+    "CASE-000079": [
+      "任务管理 - 创建任务标签下拉不展示已禁用标签 [CASE-000079]"
+    ],
+    "CASE-000080": [
+      "任务管理 - 创建任务标签下拉不展示已删除标签 [CASE-000080]"
+    ],
+    "CASE-000081": [
+      "任务管理 - 创建任务时标签展示名称与分类 [CASE-000081]"
+    ],
+    "CASE-000082": [
+      "任务管理 - 标签下拉列表按创建时间倒序显示 [CASE-000082]"
+    ],
+    "CASE-000083": [
+      "任务管理 - 创建任务时机器人构型必填校验 [CASE-000083]"
+    ],
+    "CASE-000084": [
+      "任务管理 - 创建任务时机器人构型单选且必选 [CASE-000084]"
+    ],
+    "CASE-000085": [
+      "任务管理 - 创建任务时机器人构型下拉展示全部启用构型 [CASE-000085]"
+    ],
+    "CASE-000086": [
+      "任务管理 - 创建任务时机器人构型下拉不展示禁用构型 [CASE-000086]"
+    ],
+    "CASE-000087": [
+      "任务管理 - 创建任务时机器人构型下拉为空时提示无可用构型 [CASE-000087]"
+    ],
+    "CASE-000088": [
+      "任务管理 - 创建任务时机器人构型下拉展示构型名称和机器人型号 [CASE-000088]"
+    ],
+    "CASE-000089": [
+      "任务管理 - 创建任务时机器人构型下拉展示多个构型且格式正确 [CASE-000089]"
+    ],
+    "CASE-000090": [
+      "任务管理 - 创建任务时机器人构型下拉为空时无选项 [CASE-000090]"
+    ],
+    "CASE-000091": [
+      "任务管理 - 创建任务时机器人构型下拉按创建时间倒序显示 [CASE-000091]"
+    ],
+    "CASE-000092": [
+      "任务管理 - 采集要求长度等于255时创建成功 [CASE-000092]"
+    ],
+    "CASE-000093": [
+      "任务管理 - 采集要求长度超过255时创建失败 [CASE-000093]"
+    ],
+    "CASE-000094": [
+      "任务管理 - 采集要求为空时创建成功 [CASE-000094]"
+    ],
+    "CASE-000095": [
+      "任务管理 - 创建任务时目标数量默认值为100 [CASE-000095]"
+    ],
+    "CASE-000096": [
+      "任务管理 - 目标数量输入边界值1创建成功 [CASE-000096]"
+    ],
+    "CASE-000097": [
+      "任务管理 - 目标数量输入边界值10000创建成功 [CASE-000097]"
+    ],
+    "CASE-000098": [
+      "任务管理 - 目标数量输入0提示错误 [CASE-000098]"
+    ],
+    "CASE-000099": [
+      "任务管理 - 目标数量输入10001提示错误 [CASE-000099]"
+    ],
+    "CASE-000100": [
+      "任务管理 - 目标数量输入非数字字符提示错误 [CASE-000100]"
+    ],
+    "CASE-000101": [
+      "任务管理 - 目标数量输入小数提示错误 [CASE-000101]"
+    ],
+    "CASE-000102": [
+      "任务管理 - 目标数量为空提示必填 [CASE-000102]"
+    ],
+    "CASE-000103": [
+      "任务管理 - 创建任务时选择低优先级 [CASE-000103]"
+    ],
+    "CASE-000104": [
+      "任务管理 - 创建任务时优先级默认值为中 [CASE-000104]"
+    ],
+    "CASE-000105": [
+      "任务管理 - 创建任务时选择高优先级 [CASE-000105]"
+    ],
+    "CASE-000106": [
+      "任务管理 - 取消创建任务关闭弹框不创建 [CASE-000106]"
+    ],
+    "CASE-000107": [
+      "任务管理 - 创建任务时所有必填项为空提示校验 [CASE-000107]"
+    ],
+    "CASE-000108": [
+      "任务管理 - 创建任务时仅填写部分必填项校验 [CASE-000108]"
+    ],
+    "CASE-000109": [
+      "任务管理 - 创建任务时填写所有必填项成功创建 [CASE-000109]"
+    ],
+    "CASE-000110": [
+      "任务管理 - 创建任务时任务名称唯一性校验 [CASE-000110]"
+    ],
+    "CASE-000111": [
+      "任务管理 - 创建任务时任务名称唯一性边界校验（名称相同但前后空格） [CASE-000111]"
+    ],
+    "CASE-000112": [
+      "任务管理 - 创建任务时任务名称唯一性校验（名称大小写不同） [CASE-000112]"
+    ],
+    "CASE-000113": [
+      "任务管理 - 创建任务时数据分类被删除应创建失败并提示不存在 [CASE-000113]"
+    ],
+    "CASE-000114": [
+      "任务管理 - 创建任务时标签已被删除应创建失败 [CASE-000114]"
+    ],
+    "CASE-000115": [
+      "任务管理 - 创建任务时机器人构型已被删除应创建失败 [CASE-000115]"
+    ],
+    "CASE-000116": [
+      "任务管理 - 创建任务成功后列表页生成状态为已创建且人员未指派的数据 [CASE-000116]"
+    ],
+    "CASE-000117": [
+      "任务管理 - 验证任务编号自动生成规则 [CASE-000117]"
+    ],
+    "CASE-000118": [
+      "任务管理 - 验证任务编号按年度自增 [CASE-000118]"
+    ],
+    "CASE-000119": [
+      "任务管理 - 验证跨年度任务编号重新自增 [CASE-000119]"
+    ],
+    "CASE-000120": [
+      "任务管理 - 验证列表页任务名称与创建时填写一致 [CASE-000120]"
+    ],
+    "CASE-000121": [
+      "任务管理 - 列表页分类展示与创建时选择的数据分类一致 [CASE-000121]"
+    ],
+    "CASE-000122": [
+      "任务管理 - 列表页按状态筛选已创建任务 [CASE-000122]"
+    ],
+    "CASE-000123": [
+      "任务管理 - 状态筛选已创建任务为空时显示空列表 [CASE-000123]"
+    ],
+    "CASE-000124": [
+      "任务管理 - 验证状态为已采集的任务在列表页正确显示 [CASE-000124]"
+    ],
+    "CASE-000125": [
+      "任务管理 - 验证列表页状态筛选功能可筛选出已采集任务 [CASE-000125]"
+    ],
+    "CASE-000126": [
+      "任务管理 - 查看已标注状态任务列表 [CASE-000126]"
+    ],
+    "CASE-000127": [
+      "任务管理 - 已标注状态任务详情查看 [CASE-000127]"
+    ],
+    "CASE-000128": [
+      "任务管理 - 查看已质检状态任务列表 [CASE-000128]"
+    ],
+    "CASE-000129": [
+      "任务管理 - 已质检状态任务详情页S3根目录显示 [CASE-000129]"
+    ],
+    "CASE-000130": [
+      "任务管理 - 筛选已转换状态任务 [CASE-000130]"
+    ],
+    "CASE-000131": [
+      "任务管理 - 已转换任务列表字段展示 [CASE-000131]"
+    ],
+    "CASE-000132": [
+      "任务管理 - 刚创建任务采集人显示未指派 [CASE-000132]"
+    ],
+    "CASE-000133": [
+      "任务管理 - 指派采集人后展示用户姓名 [CASE-000133]"
+    ],
+    "CASE-000134": [
+      "任务管理 - 修改用户姓名后任务采集人显示同步更新 [CASE-000134]"
+    ],
+    "CASE-000135": [
+      "任务管理 - 完成采集后采集人更新为操作人 [CASE-000135]"
+    ],
+    "CASE-000136": [
+      "任务管理 - 刚创建任务标注人显示未指派 [CASE-000136]"
+    ],
+    "CASE-000137": [
+      "任务管理 - 指派标注人后展示用户姓名 [CASE-000137]"
+    ],
+    "CASE-000138": [
+      "任务管理 - 修改用户姓名后任务标注人同步更新 [CASE-000138]"
+    ],
+    "CASE-000139": [
+      "任务管理 - 提交标注后标注人更新为操作人 [CASE-000139]"
+    ],
+    "CASE-000140": [
+      "任务管理 - 刚创建任务质检人显示未指派 [CASE-000140]"
+    ],
+    "CASE-000141": [
+      "任务管理 - 修改用户姓名后质检人指派显示同步更新 [CASE-000141]"
+    ],
+    "CASE-000142": [
+      "任务管理 - 质检完成后质检人更新为操作人 [CASE-000142]"
+    ],
+    "CASE-000143": [
+      "任务管理 - 列表页创建时间展示年月日时分秒 [CASE-000143]"
+    ],
+    "CASE-000144": [
+      "任务管理 - 验证任务列表按创建时间倒序排列 [CASE-000144]"
+    ],
+    "CASE-000145": [
+      "任务管理 - 详情页任务编号与列表页一致 [CASE-000145]"
+    ],
+    "CASE-000146": [
+      "任务管理 - 详情页基本信息显示创建人姓名 [CASE-000146]"
+    ],
+    "CASE-000147": [
+      "任务管理 - 详情页基本信息分类与列表页一致 [CASE-000147]"
+    ],
+    "CASE-000148": [
+      "任务管理 - 详情页基本信息显示创建任务时选择的机器人构型 [CASE-000148]"
+    ],
+    "CASE-000149": [
+      "任务管理 - 详情页基本信息展示机器人构型名称及型号 [CASE-000149]"
+    ],
+    "CASE-000150": [
+      "任务管理 - 详情页基本信息显示创建任务时选择的多个标签并以逗号分隔 [CASE-000150]"
+    ],
+    "CASE-000151": [
+      "任务管理 - 详情页基本信息显示单个标签时不带逗号 [CASE-000151]"
+    ],
+    "CASE-000152": [
+      "任务管理 - 详情页基本信息标签显示顺序与创建时选择顺序一致 [CASE-000152]"
+    ],
+    "CASE-000153": [
+      "任务管理 - 创建任务时输入边界值1的目标数量 [CASE-000153]"
+    ],
+    "CASE-000154": [
+      "任务管理 - 创建任务时输入边界值10000的目标数量 [CASE-000154]"
+    ],
+    "CASE-000155": [
+      "任务管理 - 创建任务时输入小于1的目标数量 [CASE-000155]"
+    ],
+    "CASE-000156": [
+      "任务管理 - 创建任务时输入大于10000的目标数量 [CASE-000156]"
+    ],
+    "CASE-000157": [
+      "任务管理 - 创建任务时输入非数字字符的目标数量 [CASE-000157]"
+    ],
+    "CASE-000158": [
+      "任务管理 - 创建任务时输入小数形式的目标数量 [CASE-000158]"
+    ],
+    "CASE-000159": [
+      "任务管理 - 创建任务时不填写目标数量 [CASE-000159]"
+    ],
+    "CASE-000160": [
+      "任务管理 - 详情页显示创建任务时选择的优先级 [CASE-000160]"
+    ],
+    "CASE-000161": [
+      "任务管理 - 详情页基本信息显示创建时输入的采集要求 [CASE-000161]"
+    ],
+    "CASE-000162": [
+      "任务管理 - 详情页展示创建时输入的任务描述 [CASE-000162]"
+    ],
+    "CASE-000163": [
+      "任务管理 - 详情页展示创建时未输入任务描述的情况 [CASE-000163]"
+    ],
+    "CASE-000164": [
+      "任务管理 - 详情页展示创建任务时输入的标注层级 [CASE-000164]"
+    ],
+    "CASE-000165": [
+      "任务管理 - 刚创建任务时S3根目录显示为未采集状态 [CASE-000165]"
+    ],
+    "CASE-000166": [
+      "任务管理 - 已采集后详情页显示S3根目录 [CASE-000166]"
+    ],
+    "CASE-000167": [
+      "任务管理 - 已采集后详情页S3根目录格式校验 [CASE-000167]"
+    ],
+    "CASE-000168": [
+      "任务管理 - 详情页未分配时采集人员显示未指派 [CASE-000168]"
+    ],
+    "CASE-000169": [
+      "任务管理 - 未分配时标注人员显示未指派 [CASE-000169]"
+    ],
+    "CASE-000170": [
+      "任务管理 - 未分配时质检人员显示未指派 [CASE-000170]"
+    ],
+    "CASE-000171": [
+      "任务管理 - 详情页采集人员分配后显示对应姓名 [CASE-000171]"
+    ],
+    "CASE-000172": [
+      "任务管理 - 标注人员分配后显示对应姓名 [CASE-000172]"
+    ],
+    "CASE-000173": [
+      "任务管理 - 分配质检人员后显示人员姓名 [CASE-000173]"
+    ],
+    "CASE-000174": [
+      "任务管理 - 刚创建任务时文件列表为空 [CASE-000174]"
+    ],
+    "CASE-000175": [
+      "任务管理 - 采集后文件列表显示完整字段信息 [CASE-000175]"
+    ],
+    "CASE-000176": [
+      "任务管理 - 操作日志时间显示格式验证 [CASE-000176]"
+    ],
+    "CASE-000177": [
+      "任务管理 - 创建任务时操作日志记录创建人姓名 [CASE-000177]"
+    ],
+    "CASE-000178": [
+      "任务管理 - 创建任务时记录操作日志 [CASE-000178]"
+    ],
+    "CASE-000179": [
+      "任务管理 - 操作日志时间格式显示为年月日时分 [CASE-000179]"
+    ],
+    "CASE-000180": [
+      "任务管理 - 指派采集操作日志记录操作人姓名 [CASE-000180]"
+    ],
+    "CASE-000181": [
+      "任务管理 - 查看指派采集人操作日志显示用户姓名 [CASE-000181]"
+    ],
+    "CASE-000182": [
+      "任务管理 - 查看指派标注人操作日志显示用户姓名 [CASE-000182]"
+    ],
+    "CASE-000183": [
+      "任务管理 - 查看指派质检人操作日志显示用户姓名 [CASE-000183]"
+    ],
+    "CASE-000184": [
+      "任务管理 - 操作日志时间格式验证 [CASE-000184]"
+    ],
+    "CASE-000185": [
+      "任务管理 - 指派标注操作日志记录操作人姓名 [CASE-000185]"
+    ],
+    "CASE-000186": [
+      "任务管理 - 查看指派采集人的操作日志记录 [CASE-000186]"
+    ],
+    "CASE-000187": [
+      "任务管理 - 查看指派标注人的操作日志记录 [CASE-000187]"
+    ],
+    "CASE-000188": [
+      "任务管理 - 查看指派质检人的操作日志记录 [CASE-000188]"
+    ],
+    "CASE-000190": [
+      "任务管理 - 指派质检操作日志记录操作人姓名 [CASE-000190]"
+    ],
+    "CASE-000191": [
+      "任务管理 - 操作日志中记录指派采集人的用户姓名 [CASE-000191]"
+    ],
+    "CASE-000192": [
+      "任务管理 - 操作日志中记录指派标注人的用户姓名 [CASE-000192]"
+    ],
+    "CASE-000193": [
+      "任务管理 - 操作日志中记录指派质检人的用户姓名 [CASE-000193]"
+    ],
+    "CASE-000194": [
+      "任务管理 - 修改任务时任务名称回显置灰且不可修改 [CASE-000194]"
+    ],
+    "CASE-000195": [
+      "任务管理 - 修改任务描述回显并保存成功 [CASE-000195]"
+    ],
+    "CASE-000196": [
+      "任务管理 - 修改任务描述为空并保存 [CASE-000196]"
+    ],
+    "CASE-000197": [
+      "任务管理 - 修改任务描述长度等于255时保存成功 [CASE-000197]"
+    ],
+    "CASE-000198": [
+      "任务管理 - 修改任务描述长度超过255时保存失败 [CASE-000198]"
+    ],
+    "CASE-000199": [
+      "任务管理 - 修改任务描述为空字符串时保存成功 [CASE-000199]"
+    ],
+    "CASE-000200": [
+      "任务管理 - 修改任务时标注层级回显并可修改 [CASE-000200]"
+    ],
+    "CASE-000201": [
+      "任务管理 - 修改数据分类在已创建状态时成功 [CASE-000201]"
+    ],
+    "CASE-000202": [
+      "任务管理 - 修改数据分类在已采集状态时成功 [CASE-000202]"
+    ],
+    "CASE-000203": [
+      "任务管理 - 修改数据分类在已标注状态时成功 [CASE-000203]"
+    ],
+    "CASE-000204": [
+      "任务管理 - 修改数据分类在已质检状态时成功 [CASE-000204]"
+    ],
+    "CASE-000205": [
+      "任务管理 - 已转换状态数据分类置灰不可修改 [CASE-000205]"
+    ],
+    "CASE-000206": [
+      "任务管理 - 修改任务时标签回显置灰且不可删除但可新增 [CASE-000206]"
+    ],
+    "CASE-000207": [
+      "任务管理 - 已创建状态修改机器人构型 [CASE-000207]"
+    ],
+    "CASE-000208": [
+      "任务管理 - 机器人构型在已采集状态置灰不可修改 [CASE-000208]"
+    ],
+    "CASE-000209": [
+      "任务管理 - 机器人构型在已标注状态置灰不可修改 [CASE-000209]"
+    ],
+    "CASE-000210": [
+      "任务管理 - 机器人构型在已质检状态置灰不可修改 [CASE-000210]"
+    ],
+    "CASE-000211": [
+      "任务管理 - 机器人构型在已转换状态置灰不可修改 [CASE-000211]"
+    ],
+    "CASE-000212": [
+      "任务管理 - 修改任务时采集要求回显并可修改 [CASE-000212]"
+    ],
+    "CASE-000213": [
+      "任务管理 - 修改任务时采集要求为空可填写 [CASE-000213]"
+    ],
+    "CASE-000214": [
+      "任务管理 - 修改采集要求长度为255时保存成功 [CASE-000214]"
+    ],
+    "CASE-000215": [
+      "任务管理 - 修改采集要求长度超过255时保存失败 [CASE-000215]"
+    ],
+    "CASE-000216": [
+      "任务管理 - 修改任务时目标数量回显当前值并可修改 [CASE-000216]"
+    ],
+    "CASE-000217": [
+      "任务管理 - 修改任务时目标数量回显并修改为边界值1 [CASE-000217]"
+    ],
+    "CASE-000218": [
+      "任务管理 - 修改任务时目标数量回显并修改为边界值10000 [CASE-000218]"
+    ],
+    "CASE-000219": [
+      "任务管理 - 修改任务时目标数量回显并修改为非法值0 [CASE-000219]"
+    ],
+    "CASE-000220": [
+      "任务管理 - 修改任务时目标数量回显并修改为非法值10001 [CASE-000220]"
+    ],
+    "CASE-000221": [
+      "任务管理 - 修改目标数量为合法最小值1 [CASE-000221]"
+    ],
+    "CASE-000222": [
+      "任务管理 - 修改目标数量为合法最大值10000 [CASE-000222]"
+    ],
+    "CASE-000223": [
+      "任务管理 - 修改目标数量为合法中间值5000 [CASE-000223]"
+    ],
+    "CASE-000224": [
+      "任务管理 - 修改目标数量为边界值0时提示错误 [CASE-000224]"
+    ],
+    "CASE-000225": [
+      "任务管理 - 修改目标数量为边界值10001时提示错误 [CASE-000225]"
+    ],
+    "CASE-000226": [
+      "任务管理 - 修改目标数量为负数时提示错误 [CASE-000226]"
+    ],
+    "CASE-000227": [
+      "任务管理 - 修改目标数量为小数时提示错误 [CASE-000227]"
+    ],
+    "CASE-000228": [
+      "任务管理 - 修改目标数量为空时提示错误 [CASE-000228]"
+    ],
+    "CASE-000229": [
+      "任务管理 - 修改任务优先级回显当前值并可修改 [CASE-000229]"
+    ],
+    "CASE-000230": [
+      "任务管理 - 取消修改任务关闭弹框不保存变更 [CASE-000230]"
+    ],
+    "CASE-000231": [
+      "任务管理 - 取消修改任务关闭弹框不触发校验 [CASE-000231]"
+    ],
+    "CASE-000232": [
+      "任务管理 - 保存修改时必填项为空校验 [CASE-000232]"
+    ],
+    "CASE-000233": [
+      "任务管理 - 保存修改时仅任务名称为空校验 [CASE-000233]"
+    ],
+    "CASE-000234": [
+      "任务管理 - 保存修改时仅描述为空校验 [CASE-000234]"
+    ],
+    "CASE-000235": [
+      "任务管理 - 保存修改时仅标注层级为空校验 [CASE-000235]"
+    ],
+    "CASE-000236": [
+      "任务管理 - 保存修改时仅数据分类为空校验 [CASE-000236]"
+    ],
+    "CASE-000237": [
+      "任务管理 - 保存修改时仅标签为空校验 [CASE-000237]"
+    ],
+    "CASE-000238": [
+      "任务管理 - 保存修改时仅机器人构型为空校验 [CASE-000238]"
+    ],
+    "CASE-000239": [
+      "任务管理 - 保存修改时仅采集要求为空校验 [CASE-000239]"
+    ],
+    "CASE-000240": [
+      "任务管理 - 保存修改时仅目标数量为空校验 [CASE-000240]"
+    ],
+    "CASE-000241": [
+      "任务管理 - 保存修改时仅优先级为空校验 [CASE-000241]"
+    ],
+    "CASE-000242": [
+      "任务管理 - 保存修改后列表页展示字段同步更新 [CASE-000242]"
+    ],
+    "CASE-000243": [
+      "任务管理 - 指派弹框展示任务编号 [CASE-000243]"
+    ],
+    "CASE-000244": [
+      "任务管理 - 弹出任务人员指派弹框时展示任务名称 [CASE-000244]"
+    ],
+    "CASE-000245": [
+      "任务管理 - 任务人员指派弹框 - 展示当前采集、标注、质检人员信息 [CASE-000245]"
+    ],
+    "CASE-000246": [
+      "任务管理 - 任务人员指派弹框 - 展示未指派状态 [CASE-000246]"
+    ],
+    "CASE-000247": [
+      "任务管理 - 指派采集人员时回显之前指派的人员 [CASE-000247]"
+    ],
+    "CASE-000248": [
+      "任务管理 - 任务人员指派 - 采集人员下拉仅显示启用且具有采集工程师角色的用户 [CASE-000248]"
+    ],
+    "CASE-000249": [
+      "任务管理 - 任务人员指派 - 采集人员下拉单选且展示格式为姓名（账号） [CASE-000249]"
+    ],
+    "CASE-000250": [
+      "任务管理 - 标注人员指派后回显已指派人员 [CASE-000250]"
+    ],
+    "CASE-000251": [
+      "任务管理 - 指派标注人员下拉仅显示启用且具有标注工程师角色的用户 [CASE-000251]"
+    ],
+    "CASE-000252": [
+      "任务管理 - 指派标注人员下拉单选且展示格式为姓名（账号） [CASE-000252]"
+    ],
+    "CASE-000253": [
+      "任务管理 - 质检人员指派后回显已指派人员 [CASE-000253]"
+    ],
+    "CASE-000254": [
+      "任务管理 - 质检人员下拉仅显示启用且具有质检工程师角色的用户 [CASE-000254]"
+    ],
+    "CASE-000255": [
+      "任务管理 - 质检人员下拉单选且展示格式为姓名（账号） [CASE-000255]"
+    ],
+    "CASE-000256": [
+      "任务管理 - 更换指派人员后任务数据转移 [CASE-000256]"
+    ],
+    "CASE-000257": [
+      "任务管理 - 取消删除任务关闭弹框 [CASE-000257]"
+    ],
+    "CASE-000258": [
+      "任务管理 - 确认删除任务并提示删除成功 [CASE-000258]"
+    ],
+    "CASE-000259": [
+      "任务管理 - 取消删除任务不执行删除 [CASE-000259]"
+    ],
+    "CASE-000260": [
+      "任务管理 - 确认删除任务后数据从列表页消失 [CASE-000260]"
+    ],
+    "CASE-000261": [
+      "任务管理 - 取消删除任务后数据保留 [CASE-000261]"
+    ],
+    "CASE-000262": [
+      "任务管理 - 已创建状态下确认永久删除任务 [CASE-000262]"
+    ],
+    "CASE-000263": [
+      "任务管理 - 已采集状态下确认永久删除任务 [CASE-000263]"
+    ],
+    "CASE-000264": [
+      "任务管理 - 已标注状态下确认永久删除任务 [CASE-000264]"
+    ],
+    "CASE-000265": [
+      "任务管理 - 已质检状态下确认永久删除任务 [CASE-000265]"
+    ],
+    "CASE-000266": [
+      "任务管理 - 已转换状态下确认永久删除任务 [CASE-000266]"
     ]
   }
 }

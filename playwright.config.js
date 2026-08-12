@@ -3,9 +3,9 @@ const { defineConfig } = require('@playwright/test');
 module.exports = defineConfig({
   testDir: './tests/ui',
   timeout: 90_000,
-  workers: 1,
+  workers: process.env.PLAYWRIGHT_WORKERS ? Number(process.env.PLAYWRIGHT_WORKERS) : 1,
   expect: { timeout: 10_000 },
-  fullyParallel: false,
+  fullyParallel: !!process.env.PLAYWRIGHT_WORKERS,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: [
