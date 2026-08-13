@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000385",
+  "caseRevision": 1,
+  "contractHash": "2d1a50486e472c4dd434b02d992d745ee40347a2c97bf13e92b73c80bd375b80",
+  "testTitle": "角色管理 - 查看质检工程师角色信息及权限描述",
+  "file": "tests/ui/specs/roles.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "loginAndOpenRoles使用admin登录并打开角色管理菜单",
+      "evidence": "断言角色管理菜单可见，证明当前账号具有查看权限"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "loginAndOpenRoles点击角色管理并等待列表URL与表头",
+      "evidence": "断言URL及角色编码、角色名称、描述、状态四列表头"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "assertRole按qc_engineer编码过滤角色行",
+      "evidence": "断言qc_engineer目标行可见"
+    },
+    {
+      "contractItemId": "S3",
+      "implementation": "assertRole检查目标行名称、描述和状态",
+      "evidence": "三个独立toContainText断言验证质检工程师、完整权限描述和启用状态"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "loginAndOpenRoles断言列表URL、角色编码/名称/描述/状态表头",
+      "evidence": "四列表头按顺序可见且五个预设角色行均存在"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "roleRow(page, 'qc_engineer')精确筛选目标行",
+      "evidence": "目标行toBeVisible通过"
+    },
+    {
+      "contractItemId": "A3",
+      "implementation": "ROLE_EXPECTATIONS.qc_engineer提供名称和描述，assertRole校验状态",
+      "evidence": "目标行包含“质检工程师”、“工作台、我的质检权限”并匹配启用状态"
+    }
+  ],
+  "notes": "2026-08-12按当前契约直接执行并审核；无数据写入，无需清理。"
+}

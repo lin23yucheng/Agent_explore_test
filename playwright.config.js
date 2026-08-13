@@ -2,6 +2,7 @@ const { defineConfig } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './tests/ui',
+  testMatch: ['specs/**/*.spec.js'],
   timeout: 90_000,
   workers: process.env.PLAYWRIGHT_WORKERS ? Number(process.env.PLAYWRIGHT_WORKERS) : 1,
   expect: { timeout: 10_000 },

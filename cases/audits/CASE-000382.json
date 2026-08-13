@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000382",
+  "caseRevision": 1,
+  "contractHash": "721199164280b4d5dd92c15bd7a3a3d69395060800e60d202a597188edbef069",
+  "testTitle": "角色管理 - 查看算法工程师角色信息及权限描述",
+  "file": "tests/ui/specs/roles.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "loginAndOpenRoles使用admin登录并打开角色管理菜单",
+      "evidence": "断言角色管理菜单可见，证明当前账号具有查看权限"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "loginAndOpenRoles点击角色管理并等待列表URL与表头",
+      "evidence": "断言URL及角色编码、角色名称、描述、状态四列表头"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "assertRole按algorithm_engineer编码过滤角色行",
+      "evidence": "断言algorithm_engineer目标行可见"
+    },
+    {
+      "contractItemId": "S3",
+      "implementation": "assertRole检查目标行名称、描述和状态",
+      "evidence": "三个独立toContainText断言验证算法工程师、完整权限描述和启用状态"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "loginAndOpenRoles校验四列表头并遍历ROLE_EXPECTATIONS的五个编码",
+      "evidence": "五个预设角色行均执行toBeVisible"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "roleRow(page, 'algorithm_engineer')精确筛选目标行",
+      "evidence": "目标行toBeVisible通过"
+    },
+    {
+      "contractItemId": "A3",
+      "implementation": "ROLE_EXPECTATIONS.algorithm_engineer提供名称与完整权限描述，assertRole校验状态",
+      "evidence": "目标行包含“算法工程师”、“工作台、任务管理、数据转换、数据可视化权限”并匹配启用状态"
+    }
+  ],
+  "notes": "2026-08-12按当前契约直接执行并审核；无数据写入，无需清理。"
+}

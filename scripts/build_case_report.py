@@ -19,6 +19,7 @@ EVIDENCE_ROOT = ROOT / 'reports' / 'latest' / 'test-results'
 EVIDENCE_RETENTION_BATCHES = 1
 AUTOMATION_REGISTRY = ROOT / 'cases' / 'automation-registry.json'
 CASE_REGISTRY = ROOT / 'cases' / 'case-registry.json'
+RUN_PLAN = None
 
 RESULT_HEADERS = [
     '自动化状态', '执行结果', '失败分类', '清理状态',
@@ -56,6 +57,11 @@ def case_fingerprint(row, source_headers):
     payload = {header: row.get(header, '') for header in source_headers}
     encoded = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')
     return hashlib.sha256(encoded).hexdigest()
+
+
+def file_hash(path):
+    path = Path(path)
+    return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else ''
 
 
 def case_key(row):
@@ -199,12 +205,13 @@ def cleanup_evidence(history, keep_recent_batches=EVIDENCE_RETENTION_BATCHES):
             '清理失效路径数': removed_paths}
 
 
-def merge_batch(history, source_rows, source_headers, mappings, automation=None):
+def merge_batch(history, source_rows, source_headers, mappings, automation=None,
+                run_plan=None, case_registry=None):
     if not BATCH_RESULTS.exists():
         raise SystemExit(f'未找到本批 Playwright 结果: {BATCH_RESULTS}')
     with BATCH_RESULTS.open('r', encoding='utf-8') as handle:
         raw_results = json.load(handle)
-    validate_batch_results(raw_results, automation or {})
+    validate_batch_results(raw_results, automation or {}, run_plan, case_registry or {})
     batch_results = {item['title']: item for item in raw_results}
     execution_time = now_iso()
     batch_results = archive_batch_results(batch_results, execution_time)
@@ -216,6 +223,9 @@ def merge_batch(history, source_rows, source_headers, mappings, automation=None)
                 'executedAt': result.get('executedAt', execution_time),
             }
     case_to_test = build_case_to_test(source_rows, mappings, batch_results, automation)
+    planned_bindings = {
+        item.get('caseId'): item for item in (run_plan or {}).get('bindings', [])
+    }
     updated_case_ids = []
     for source_row in source_rows:
         case_title = source_row['用例标题']
@@ -228,6 +238,12 @@ def merge_batch(history, source_rows, source_headers, mappings, automation=None)
             'status': 'passed' if result.get('status') == 'passed' else 'failed',
             'trusted': True,
             'testTitle': test_title,
+            'caseRevision': planned_bindings.get(source_row.get('用例ID'), {}).get(
+                'caseRevision', source_row.get('用例Revision', '')),
+            'contractHash': planned_bindings.get(source_row.get('用例ID'), {}).get(
+                'contractHash', source_row.get('执行契约哈希', '')),
+            'implementationHash': planned_bindings.get(source_row.get('用例ID'), {}).get(
+                'implementationHash', ''),
             'executedAt': result.get('executedAt', execution_time),
             'healing': '; '.join(item.get('body', '') for item in result.get('attachments', [])
                                 if item.get('name') == 'ai-healing.json' and item.get('body')),
@@ -241,11 +257,15 @@ def merge_batch(history, source_rows, source_headers, mappings, automation=None)
     return set(updated_case_ids)
 
 
-def validate_batch_results(raw_results, automation):
+def validate_batch_results(raw_results, automation, run_plan=None, case_registry=None):
     """拒绝任何无法证明为独立、已登记用例的Playwright结果。"""
     seen_case_ids = set()
     invalid = []
     tests = automation.get('tests', {})
+    planned_ids = set((run_plan or {}).get('caseIds', []))
+    planned_bindings = {
+        item.get('caseId'): item for item in (run_plan or {}).get('bindings', [])
+    }
     for result in raw_results:
         title = result.get('title', '')
         case_ids = list(dict.fromkeys(result.get('caseIds', [])))
@@ -267,12 +287,31 @@ def validate_batch_results(raw_results, automation):
             reason = '测试尚未按用例步骤独立实现'
         elif case_ids[0] in seen_case_ids:
             reason = '同一批次中CASE-ID被多个结果重复回写'
+        elif planned_ids and case_ids[0] not in planned_ids:
+            reason = '结果CASE-ID不在本批运行计划中'
+        elif planned_ids:
+            binding = planned_bindings.get(case_ids[0], {})
+            case = (case_registry or {}).get('cases', {}).get(case_ids[0], {})
+            if case.get('status') != 'active':
+                reason = '运行时用例已不是有效状态'
+            elif binding.get('testTitle') != title:
+                reason = '测试标题与运行计划绑定不一致'
+            elif int(binding.get('caseRevision', 0)) != int(case.get('revision', 0)):
+                reason = '用例revision在计划生成后发生变化'
+            elif binding.get('contractHash') != case.get('contractHash'):
+                reason = '执行契约在计划生成后发生变化'
+            elif binding.get('implementationHash') != file_hash(ROOT / binding.get('file', '')):
+                reason = '脚本在计划生成后发生变化'
         if reason:
             invalid.append(f'{title or "<无标题>"}：{reason}')
         else:
             seen_case_ids.add(case_ids[0])
     if invalid:
         raise SystemExit('拒绝合并不可信Playwright结果：' + '；'.join(invalid[:10]))
+    if planned_ids:
+        missing = sorted(planned_ids - seen_case_ids)
+        if missing:
+            raise SystemExit('拒绝合并不完整批次，以下计划用例没有结果：' + ', '.join(missing))
 
 
 def sync_case_registry(history, registry_path, automation=None):
@@ -284,7 +323,7 @@ def sync_case_registry(history, registry_path, automation=None):
     automation = automation or {}
     for case_id, case in registry.get('cases', {}).items():
         result = history.get('cases', {}).get(case_id)
-        active_title = active_test_for_case(automation, case_id) if automation else ''
+        active_title = active_test_for_case(automation, case_id, registry) if automation else ''
         if result is not None and (not automation or (
                 active_title and result.get('testTitle') == active_title
                 and result.get('trusted', True))):
@@ -352,11 +391,28 @@ def humanize_failure(error, category=''):
     return text.replace('Error:', '').strip()[:1000]
 
 
-def active_test_for_case(automation, case_id):
+def active_test_for_case(automation, case_id, case_registry=None):
     titles = automation.get('cases', {}).get(case_id, [])
     active = [title for title in titles
               if automation.get('tests', {}).get(title, {}).get('status') == 'active']
+    if case_registry is not None:
+        case = case_registry.get('cases', {}).get(case_id, {})
+        active = [title for title in active
+                  if automation_binding_valid(automation['tests'][title], case)]
     return active[0] if len(active) == 1 else ''
+
+
+def automation_binding_valid(entry, case):
+    spec_file = entry.get('file', '')
+    return bool(
+        case
+        and case.get('status') == 'active'
+        and int(entry.get('caseRevision', 0)) == int(case.get('revision', 0))
+        and entry.get('contractHash') == case.get('contractHash')
+        and entry.get('implementationHash') == file_hash(ROOT / spec_file)
+        and entry.get('auditFile')
+        and (ROOT / entry['auditFile']).is_file()
+    )
 
 
 def stale_automation_reason(automation, case_id):
@@ -369,7 +425,8 @@ def stale_automation_reason(automation, case_id):
     return '自动化映射已失效，旧执行结果不可信，需修正脚本后重新执行。'
 
 
-def render_reports(history, source_rows, source_headers, batch_case_ids, automation=None):
+def render_reports(history, source_rows, source_headers, batch_case_ids, automation=None,
+                   case_registry=None):
     cumulative_rows = []
     batch_rows = []
     passed = failed = stale = 0
@@ -380,7 +437,8 @@ def render_reports(history, source_rows, source_headers, batch_case_ids, automat
         # 第一版历史数据只使用标题作为键。优先使用包含模块的键，避免不同模块下
         # 的同名用例互相覆盖，同时兼容已有历史数据。
         entry = history['cases'].get(case_key(source_row)) or history['cases'].get(title)
-        expected_test = active_test_for_case(automation or {}, base['用例ID'])
+        expected_test = active_test_for_case(
+            automation or {}, base['用例ID'], case_registry if automation else None)
         mapping_unready = bool(automation) and not expected_test
         mapping_changed = expected_test and entry and entry.get('testTitle') != expected_test
         if (entry and entry.get('trusted', True)
@@ -446,6 +504,7 @@ def main():
                         help='稳定用例ID与Playwright测试的映射注册表。')
     parser.add_argument('--case-registry', default=str(CASE_REGISTRY),
                         help='需要回写最新执行结果的用例生命周期注册表。')
+    parser.add_argument('--run-plan', help='本批精确CASE-ID运行计划。')
     parser.add_argument('--evidence-retention-batches', type=int,
                         default=EVIDENCE_RETENTION_BATCHES,
                         help='保留策略标识；当前批次附件统一保存在reports/latest。')
@@ -473,19 +532,30 @@ def main():
     if automation_path.exists():
         with automation_path.open('r', encoding='utf-8') as handle:
             automation = json.load(handle)
+    case_registry_path = Path(args.case_registry)
+    case_registry = {}
+    if case_registry_path.exists():
+        with case_registry_path.open('r', encoding='utf-8') as handle:
+            case_registry = json.load(handle)
+    run_plan = None
+    if args.run_plan:
+        with Path(args.run_plan).resolve().open('r', encoding='utf-8') as handle:
+            run_plan = json.load(handle)
     history = load_history()
     migrated = bootstrap_existing_report(history, source_headers)
     batch_titles = set()
     if not args.bootstrap_only and not args.refresh_only:
-        batch_titles = merge_batch(history, source_rows, source_headers, mappings, automation)
+        batch_titles = merge_batch(history, source_rows, source_headers, mappings, automation,
+                                   run_plan, case_registry)
         if automation_path.exists():
             automation['updatedAt'] = now_iso()
             automation_path.write_text(json.dumps(automation, ensure_ascii=False, indent=2), encoding='utf-8')
     cleanup_summary = cleanup_evidence(history, args.evidence_retention_batches)
     if cleanup_summary['删除批次数'] or cleanup_summary['清理失效路径数']:
         save_history(history)
-    summary, batch_summary = render_reports(history, source_rows, source_headers, batch_titles, automation)
-    synced = sync_case_registry(history, Path(args.case_registry), automation)
+    summary, batch_summary = render_reports(history, source_rows, source_headers, batch_titles,
+                                            automation, case_registry)
+    synced = sync_case_registry(history, case_registry_path, automation)
     summary_text = {
         '源用例数': summary['source_case_count'],
         '已执行用例数': summary['executed_case_count'],

@@ -8,6 +8,10 @@ class CaseResultReporter {
     const now = new Date();
     this.executedAt = now.toISOString();
     this.runId = process.env.TEST_RUN_ID || now.toISOString().replace(/[:.]/g, '-');
+    this.allowedCaseIds = new Set(
+      (process.env.ALLOWED_CASE_IDS || '').split(',').map((value) => value.trim()).filter(Boolean),
+    );
+    this.expectedBindings = parseBindings(process.env.EXPECTED_CASE_BINDINGS);
   }
 
   onBegin(_config, suite) {
@@ -28,6 +32,19 @@ class CaseResultReporter {
       const titles = sharedDerived.slice(0, 10)
         .map((test) => test.titlePath().filter(Boolean).join(' › '));
       throw new Error(`发现${sharedDerived.length}个由聚合脚本机械拆分、尚未逐用例实现的测试，禁止生成正式结果：${titles.join('；')}`);
+    }
+    if (this.allowedCaseIds.size > 0 && process.env.FORMAL_UI_RUN === 'true') {
+      const outsidePlan = suite.allTests().filter((test) => {
+        const caseId = test.annotations.find(
+          (annotation) => annotation.type === 'case' && annotation.description,
+        )?.description;
+        return !caseId || !this.allowedCaseIds.has(caseId);
+      });
+      if (outsidePlan.length > 0) {
+        const titles = outsidePlan.slice(0, 10)
+          .map((test) => test.titlePath().filter(Boolean).join(' › '));
+        throw new Error(`正式批次包含运行计划外测试：${titles.join('；')}`);
+      }
     }
   }
 
@@ -69,6 +86,37 @@ class CaseResultReporter {
   onEnd() {
     fs.mkdirSync(path.dirname(this.outputFile), { recursive: true });
     fs.writeFileSync(this.outputFile, JSON.stringify(this.results, null, 2), 'utf8');
+    if (this.allowedCaseIds.size > 0) {
+      const seen = new Set(this.results.flatMap((result) => result.caseIds));
+      const missing = [...this.allowedCaseIds].filter((caseId) => !seen.has(caseId));
+      const unexpected = [...seen].filter((caseId) => !this.allowedCaseIds.has(caseId));
+      if (missing.length > 0 || unexpected.length > 0) {
+        throw new Error(
+          `运行计划结果不完整：未执行=${missing.join(',') || '无'}；计划外=${unexpected.join(',') || '无'}`,
+        );
+      }
+      const bindingErrors = this.results.flatMap((result) => result.caseIds.map((caseId) => {
+        const expected = this.expectedBindings.get(caseId);
+        if (!expected) return `${caseId}缺少预期绑定`;
+        if (expected.testTitle !== result.title) {
+          return `${caseId}实际测试标题与运行计划不一致`;
+        }
+        return '';
+      })).filter(Boolean);
+      if (bindingErrors.length > 0) {
+        throw new Error(`运行计划绑定校验失败：${bindingErrors.join('；')}`);
+      }
+    }
+  }
+}
+
+function parseBindings(value) {
+  if (!value) return new Map();
+  try {
+    const bindings = JSON.parse(value);
+    return new Map(bindings.map((binding) => [binding.caseId, binding]));
+  } catch (_error) {
+    throw new Error('EXPECTED_CASE_BINDINGS不是有效JSON');
   }
 }
 

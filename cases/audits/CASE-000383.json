@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000383",
+  "caseRevision": 1,
+  "contractHash": "85a976f3559347aa71d1f79d041022bb2f465578a8465f450a902f26ca847aa0",
+  "testTitle": "角色管理 - 查看采集工程师角色信息及权限描述",
+  "file": "tests/ui/specs/roles.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "loginAndOpenRoles使用admin登录并打开角色管理菜单",
+      "evidence": "断言角色管理菜单可见，证明当前账号具有查看权限"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "loginAndOpenRoles点击角色管理并等待列表URL与表头",
+      "evidence": "断言URL及角色编码、角色名称、描述、状态四列表头"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "assertRole按collection_engineer编码过滤角色行",
+      "evidence": "断言collection_engineer目标行可见"
+    },
+    {
+      "contractItemId": "S3",
+      "implementation": "assertRole检查目标行名称、描述和状态",
+      "evidence": "三个独立toContainText断言验证采集工程师、完整权限描述和启用状态"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "loginAndOpenRoles校验列表URL、表头及五个预设角色行",
+      "evidence": "列表结构和五个角色行均通过可见性断言"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "roleRow(page, 'collection_engineer')精确筛选目标行",
+      "evidence": "目标行toBeVisible通过"
+    },
+    {
+      "contractItemId": "A3",
+      "implementation": "ROLE_EXPECTATIONS.collection_engineer提供名称和描述，assertRole校验状态",
+      "evidence": "目标行包含“采集工程师”、“工作台、我的采集权限”并匹配启用状态"
+    }
+  ],
+  "notes": "2026-08-12按当前契约直接执行并审核；无数据写入，无需清理。"
+}

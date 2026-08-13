@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000492",
+  "caseRevision": 1,
+  "contractHash": "2b816c3636190a51edbb704b274993023fabccd0eec40141b5687002ebc6a83b",
+  "testTitle": "机器人构型配置 - 列表页创建时间显示年月日时分",
+  "file": "tests/ui/specs/robot-configs.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "openConfigs调用共享login登录admin账号，并点击机器人构型配置菜单等待新建构型按钮",
+      "evidence": "登录后断言机器人构型配置页“新建构型”按钮可见，证明账号与模块前置成立"
+    },
+    {
+      "contractItemId": "P2",
+      "implementation": "openConfigs调用共享login登录admin账号，并点击机器人构型配置菜单等待新建构型按钮",
+      "evidence": "登录后断言机器人构型配置页“新建构型”按钮可见，证明账号与模块前置成立"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "row(page, name)按首列精确名称定位目标列表行",
+      "evidence": "按唯一名称精确定位目标行并断言可见/不存在及字段文本"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "读取创建后目标行第5列并校验时间格式",
+      "evidence": "按唯一名称精确定位目标行并断言可见/不存在及字段文本"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "row(page, name)按首列精确名称定位目标列表行",
+      "evidence": "按唯一名称精确定位目标行并断言可见/不存在及字段文本"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "读取创建后目标行第5列并校验时间格式",
+      "evidence": "对目标列表行或内容对话框执行可见性及文本断言"
+    }
+  ],
+  "notes": "2026-08-12逐条探索并完整复跑。36条通过；CASE-000482因首错误字段未自动聚焦稳定失败并标注PRODUCT_DEFECT。所有测试数据使用AI前缀并在finally清理。"
+}

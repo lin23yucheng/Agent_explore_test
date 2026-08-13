@@ -2,6 +2,7 @@ param(
     [string]$Username = 'admin',
     [string]$Password,
     [string]$SourceCsv = 'cases/current.csv',
+    [string]$RunPlan = '',
     [string[]]$TestFiles = @(),
     [string]$Grep = '',
     [switch]$Full,
@@ -21,8 +22,8 @@ $pythonExecutable = if (Test-Path '.\venv\Scripts\python.exe') {
 }
 
 $sessionSensitiveFiles = @(
-    'tests/ui/roles.spec.js',
-    'tests/ui/users.spec.js'
+    'tests/ui/specs/roles.spec.js',
+    'tests/ui/specs/users.spec.js'
 )
 $reportsRoot = 'reports'
 $latestRoot = Join-Path $reportsRoot 'latest'
@@ -30,31 +31,50 @@ $batchResultsFile = Join-Path $latestRoot 'playwright-results.json'
 $runId = (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssfffZ')
 $startedAt = (Get-Date).ToUniversalTime().ToString('o')
 
-if ($Full -and $TestFiles.Count -gt 0) {
-    throw '不能同时使用 -Full 和 -TestFiles。'
+if ($Full -and ($TestFiles.Count -gt 0 -or -not [string]::IsNullOrWhiteSpace($RunPlan))) {
+    throw '不能同时使用 -Full、-RunPlan 和 -TestFiles。'
 }
 if ($Full) {
     & $pythonExecutable .\scripts\testflow.py validate-automation $SourceCsv
     if ($LASTEXITCODE -ne 0) {
         throw '完整回归前检查未通过，请先修复用例与自动化映射。'
     }
-    $fullRegressionFiles = @(& $pythonExecutable .\scripts\testflow.py list-specs)
+    $fullPlanPath = Join-Path 'cases\runs' ("full-" + $runId + ".json")
+    & $pythonExecutable .\scripts\testflow.py make-run-plan $SourceCsv --output $fullPlanPath
     if ($LASTEXITCODE -ne 0) {
-        throw '无法从自动化注册表读取完整回归脚本。'
+        throw '无法生成完整回归运行计划。'
     }
-    if ($fullRegressionFiles.Count -eq 0) {
-        throw '自动化注册表中没有有效脚本，请先探索用例并登记脚本映射。'
-    }
-    $sessionSensitiveFiles = $sessionSensitiveFiles | Where-Object { $_ -in $fullRegressionFiles }
-    $adminParallelFiles = $fullRegressionFiles | Where-Object { $_ -notin $sessionSensitiveFiles }
+    $RunPlan = $fullPlanPath
+    $runPlanPayload = Get-Content -LiteralPath $RunPlan -Raw | ConvertFrom-Json
+    $allowedCaseIds = @($runPlanPayload.caseIds)
+    $expectedBindings = @($runPlanPayload.bindings)
+    $selectedFiles = @($runPlanPayload.testFiles)
+    $Grep = '(?:' + ((@($runPlanPayload.testTitles) | ForEach-Object { [regex]::Escape($_) }) -join '|') + ')$'
     $runKind = '完整回归'
+} elseif (-not [string]::IsNullOrWhiteSpace($RunPlan)) {
+    if (-not (Test-Path -LiteralPath $RunPlan)) {
+        throw "运行计划不存在: $RunPlan"
+    }
+    $runPlanPayload = Get-Content -LiteralPath $RunPlan -Raw | ConvertFrom-Json
+    if ($runPlanPayload.status -ne 'ready') {
+        throw '运行计划状态不是ready。'
+    }
+    $allowedCaseIds = @($runPlanPayload.caseIds)
+    $expectedBindings = @($runPlanPayload.bindings)
+    $selectedFiles = @($runPlanPayload.testFiles)
+    if ($allowedCaseIds.Count -eq 0 -or $selectedFiles.Count -eq 0) {
+        throw '运行计划没有可执行的CASE-ID或脚本文件。'
+    }
+    $planGrep = '(?:' + ((@($runPlanPayload.testTitles) | ForEach-Object { [regex]::Escape($_) }) -join '|') + ')$'
+    if (-not [string]::IsNullOrWhiteSpace($Grep)) {
+        throw '使用 -RunPlan 时不能另外指定 -Grep。'
+    }
+    $Grep = $planGrep
+    $runKind = '精确CASE-ID增量批次'
 } elseif ($TestFiles.Count -gt 0) {
-    # Accept both PowerShell arrays and comma-separated file lists passed through
-    # -File so a module can execute several registered specs in one batch.
-    $selectedFiles = @($TestFiles | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
-    $runKind = '增量批次'
+    throw '正式执行不再接受按文件选择范围。请先使用 testflow.py make-run-plan 生成精确CASE-ID运行计划，再传入 -RunPlan。'
 } else {
-    throw '请使用 -TestFiles 指定本批脚本；只有明确需要全量回归时才使用 -Full。'
+    throw '请使用 -RunPlan 指定精确CASE-ID批次；只有明确需要全量回归时才使用 -Full。'
 }
 
 if ([string]::IsNullOrWhiteSpace($Password)) {
@@ -74,6 +94,9 @@ $env:TEST_RUN_ID = $runId
 $env:PLAYWRIGHT_HTML_DIR = (Join-Path $latestRoot 'playwright-report')
 $env:PLAYWRIGHT_OUTPUT_DIR = (Join-Path $latestRoot 'test-results')
 $env:CASE_RESULTS_FILE = $batchResultsFile
+$env:ALLOWED_CASE_IDS = ($allowedCaseIds -join ',')
+$env:EXPECTED_CASE_BINDINGS = ($expectedBindings | ConvertTo-Json -Depth 8 -Compress)
+$env:RUN_PLAN_FILE = $RunPlan
 
 # A batch is self-contained. Never let an older report or attachment participate
 # in the current result merge.
@@ -84,7 +107,6 @@ New-Item -ItemType Directory -Path $latestRoot -Force | Out-Null
 
 Write-Output ("执行类型: " + $runKind)
 if ($Full) {
-    $selectedFiles = $fullRegressionFiles
     $runKind = '完整回归（单批）'
     $playwrightArguments = @('playwright', 'test') + $selectedFiles + @('--workers=1')
     if (-not [string]::IsNullOrWhiteSpace($Grep)) {
@@ -108,7 +130,11 @@ if (-not (Test-Path -LiteralPath $batchResultsFile)) {
 }
 # SourceCsv scopes this batch only. The canonical CSV report must always be
 # rebuilt from the complete, currently active case set.
-& $pythonExecutable .\scripts\build_case_report.py --source 'cases/current.csv' --report-dir $reportsRoot --history 'reports/history/case-results.json'
+$reportArguments = @('.\scripts\build_case_report.py', '--source', 'cases/current.csv', '--report-dir', $reportsRoot, '--history', 'reports/history/case-results.json')
+if (-not [string]::IsNullOrWhiteSpace($RunPlan)) {
+    $reportArguments += @('--run-plan', $RunPlan)
+}
+& $pythonExecutable @reportArguments
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 $manifest = [ordered]@{
@@ -117,6 +143,8 @@ $manifest = [ordered]@{
     finishedAt = (Get-Date).ToUniversalTime().ToString('o')
     runKind = $runKind
     sourceCsv = (Resolve-Path -LiteralPath $SourceCsv).Path
+    runPlan = $(if ([string]::IsNullOrWhiteSpace($RunPlan)) { '' } else { (Resolve-Path -LiteralPath $RunPlan).Path })
+    plannedCaseIds = @($allowedCaseIds)
     testFiles = @($selectedFiles)
     playwrightExitCode = $playwrightExitCode
     reportRoot = (Resolve-Path -LiteralPath $latestRoot).Path

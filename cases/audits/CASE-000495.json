@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000495",
+  "caseRevision": 1,
+  "contractHash": "a18ac79fee61c448d76d0c84c72f81c433bc1b956d86827db7287ca3ebcb276b",
+  "testTitle": "机器人构型配置 - 删除已被任务使用的构型时提示不允许删除",
+  "file": "tests/ui/specs/robot-configs.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "openConfigs调用共享login登录admin账号，并点击机器人构型配置菜单等待新建构型按钮",
+      "evidence": "登录后断言机器人构型配置页“新建构型”按钮可见，证明账号与模块前置成立"
+    },
+    {
+      "contractItemId": "P2",
+      "implementation": "openConfigs调用共享login登录admin账号，并点击机器人构型配置菜单等待新建构型按钮",
+      "evidence": "登录后断言机器人构型配置页“新建构型”按钮可见，证明账号与模块前置成立"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "row(page, name)按首列精确名称定位目标列表行",
+      "evidence": "系统基准构型“天机”目标行可见；确认删除后出现“构型已被任务使用，不允许删除”，且原行仍可见"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "在精确名称目标行点击删除并处理确认/取消对话框",
+      "evidence": "系统基准构型“天机”目标行可见；确认删除后出现“构型已被任务使用，不允许删除”，且原行仍可见"
+    },
+    {
+      "contractItemId": "S3",
+      "implementation": "点击form.save或确认对话框按钮提交当前操作",
+      "evidence": "系统基准构型“天机”目标行可见；确认删除后出现“构型已被任务使用，不允许删除”，且原行仍可见"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "row(page, name)按首列精确名称定位目标列表行",
+      "evidence": "系统基准构型“天机”目标行可见；确认删除后出现“构型已被任务使用，不允许删除”，且原行仍可见"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "通过form.name填写或读取构型名称输入框的实际值",
+      "evidence": "系统基准构型“天机”目标行可见；确认删除后出现“构型已被任务使用，不允许删除”，且原行仍可见"
+    },
+    {
+      "contractItemId": "A3",
+      "implementation": "在精确名称目标行点击删除并处理确认/取消对话框",
+      "evidence": "系统基准构型“天机”目标行可见；确认删除后出现“构型已被任务使用，不允许删除”，且原行仍可见"
+    }
+  ],
+  "notes": "2026-08-12逐条探索并完整复跑。36条通过；CASE-000482因首错误字段未自动聚焦稳定失败并标注PRODUCT_DEFECT。所有测试数据使用AI前缀并在finally清理。"
+}

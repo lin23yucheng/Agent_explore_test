@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000381",
+  "caseRevision": 1,
+  "contractHash": "105be0cfc3896dfdf65788177416a46f17fd6c83bf03d9d5160291f6ac7a04b5",
+  "testTitle": "角色管理 - 查看admin角色编码、名称、描述和状态",
+  "file": "tests/ui/specs/roles.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "loginAndOpenRoles: 使用admin凭据登录并打开角色管理菜单",
+      "evidence": "登录按钮操作后断言角色管理菜单可见，证明账号具有模块访问权限"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "loginAndOpenRoles: 点击角色管理菜单进入列表页",
+      "evidence": "断言URL匹配role/角色并显示角色编码、角色名称、描述、状态四列表头"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "assertRole通过roleRow(page, 'admin')定位admin角色行",
+      "evidence": "断言admin角色行可见"
+    },
+    {
+      "contractItemId": "S3",
+      "implementation": "assertRole读取admin角色行并与ROLE_EXPECTATIONS.admin.name比较",
+      "evidence": "断言该行包含角色名称“管理员”"
+    },
+    {
+      "contractItemId": "S4",
+      "implementation": "assertRole读取admin角色行并与ROLE_EXPECTATIONS.admin.description比较",
+      "evidence": "断言该行包含描述“所有权限”"
+    },
+    {
+      "contractItemId": "S5",
+      "implementation": "assertRole读取admin角色行的状态文本",
+      "evidence": "断言该行状态匹配启用/正常/active"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "loginAndOpenRoles校验角色列表基础结构和全部五个预设角色行",
+      "evidence": "断言四列表头以及admin等五个角色行均可见"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "roleRow按角色编码admin过滤表格行",
+      "evidence": "断言过滤后的目标行可见，且行内包含admin文本"
+    },
+    {
+      "contractItemId": "A3",
+      "implementation": "ROLE_EXPECTATIONS声明admin名称为管理员，assertRole对目标行断言",
+      "evidence": "toContainText('管理员')通过"
+    },
+    {
+      "contractItemId": "A4",
+      "implementation": "ROLE_EXPECTATIONS声明admin描述为所有权限，assertRole对目标行断言",
+      "evidence": "toContainText('所有权限')通过"
+    },
+    {
+      "contractItemId": "A5",
+      "implementation": "assertRole对admin目标行执行启用状态正则断言",
+      "evidence": "toContainText(/启用|正常|active/i)通过"
+    }
+  ],
+  "notes": "2026-08-12按当前契约直接执行并审核；无数据写入，无需清理。"
+}

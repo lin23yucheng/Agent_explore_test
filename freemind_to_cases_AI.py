@@ -1179,7 +1179,7 @@ def freemind_to_cases(freemind_file, csv_file, iteration_version=""):
 # ===== 程序入口 =====
 if __name__ == "__main__":
     parser = ChineseArgumentParser(description="根据FreeMind测试点文件生成迭代测试用例。")
-    parser.add_argument("--input", default=f"./FreeMindFiles/{FREEMIND_FILE}")
+    parser.add_argument("--input", default=f"./inputs/freemind/{FREEMIND_FILE}")
     parser.add_argument("--output")
     parser.add_argument("--version")
     args = parser.parse_args()

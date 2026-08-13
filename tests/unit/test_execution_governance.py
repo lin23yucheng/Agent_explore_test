@@ -1,0 +1,230 @@
+import importlib.util
+import io
+import json
+import tempfile
+import unittest
+from contextlib import redirect_stdout
+from pathlib import Path
+
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def load_module(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+class ExecutionGovernanceTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.testflow = load_module(
+            "testflow_under_test", REPO_ROOT / "scripts" / "testflow.py")
+        self.report = load_module(
+            "case_report_under_test", REPO_ROOT / "scripts" / "build_case_report.py")
+        self.configure_testflow_paths()
+        self.report.ROOT = self.root
+        (self.root / "tests" / "ui" / "specs").mkdir(parents=True)
+
+    def tearDown(self):
+        self.temp.cleanup()
+
+    def configure_testflow_paths(self):
+        cases = self.root / "cases"
+        cases.mkdir(parents=True)
+        values = {
+            "ROOT": self.root,
+            "CASES_ROOT": cases,
+            "CURRENT": cases / "current.csv",
+            "CASE_REGISTRY": cases / "case-registry.json",
+            "AUTOMATION_REGISTRY": cases / "automation-registry.json",
+            "CHANGES_ROOT": cases / "changes",
+            "RUNS_ROOT": cases / "runs",
+            "LEGACY_SOURCE": self.root / "missing.csv",
+            "LEGACY_MAPPINGS": self.root / "missing-mappings.json",
+            "LEGACY_HISTORY": self.root / "missing-history.json",
+        }
+        for name, value in values.items():
+            setattr(self.testflow, name, value)
+
+    def make_case(self, case_id="CASE-000001"):
+        registry = self.testflow.empty_registry()
+        registry["nextSequence"] = 2
+        row = {
+            "所属模块": "用户管理",
+            "用例标题": "创建用户",
+            "前置条件": "已登录；存在管理员账号",
+            "步骤": "1. 打开用户页面\n2. 输入账号\n3. 点击保存",
+            "预期": "1. 弹框关闭\n2. 列表显示新用户",
+        }
+        case = self.testflow.make_case(registry, row, "V1.0", case_id=case_id)
+        registry["cases"][case_id] = case
+        self.testflow.write_json(self.testflow.CASE_REGISTRY, registry)
+        self.testflow.write_json(
+            self.testflow.AUTOMATION_REGISTRY,
+            {"version": 2, "updatedAt": "", "tests": {}, "cases": {}},
+        )
+        return registry, case
+
+    def complete_audit(self, case, title, spec_file):
+        contract = self.testflow.execution_contract(case)
+        audit = {
+            "schemaVersion": 1,
+            "caseId": case["id"],
+            "caseRevision": case["revision"],
+            "contractHash": contract["contractHash"],
+            "testTitle": title,
+            "file": spec_file,
+            "coverage": [
+                {
+                    "contractItemId": item_id,
+                    "implementation": f"test body covers {item_id}",
+                    "evidence": f"assertion or trace for {item_id}",
+                }
+                for item_id in contract["completionGate"]["requiredCoverageIds"]
+            ],
+        }
+        path = self.root / "cases" / "audits" / f"{case['id']}.json"
+        self.testflow.write_json(path, audit)
+        return path
+
+    def register_case(self, case, title="创建用户"):
+        spec_file = "tests/ui/specs/users.spec.js"
+        spec_path = self.root / spec_file
+        spec_path.write_text("test('创建用户', async () => {});\n", encoding="utf-8")
+        audit = self.complete_audit(case, title, spec_file)
+        with redirect_stdout(io.StringIO()):
+            self.testflow.register_automation(title, spec_file, [case["id"]], audit)
+        return spec_path
+
+    def test_modify_increments_revision_and_invalidates_automation(self):
+        registry, case = self.make_case()
+        self.register_case(case)
+        changed_row = dict(case["fields"])
+        changed_row["预期"] = "1. 弹框关闭\n2. 列表和详情均显示新用户"
+        plan = {
+            "status": "reviewed",
+            "iterationVersion": "V2.0",
+            "uncertain": [],
+            "items": [{
+                "action": "modify",
+                "targetCaseId": case["id"],
+                "retireCaseIds": [],
+                "case": changed_row,
+            }],
+        }
+        plan_path = self.root / "cases" / "changes" / "modify.json"
+        self.testflow.write_json(plan_path, plan)
+
+        with redirect_stdout(io.StringIO()):
+            self.testflow.apply_plan(plan_path)
+
+        updated = self.testflow.load_json(self.testflow.CASE_REGISTRY, {})["cases"][case["id"]]
+        automation = self.testflow.load_json(self.testflow.AUTOMATION_REGISTRY, {})
+        self.assertEqual(updated["revision"], 2)
+        self.assertEqual(len(updated["revisions"]), 1)
+        self.assertNotEqual(updated["contractHash"], case["contractHash"])
+        self.assertEqual(automation["tests"]["创建用户"]["status"], "stale")
+
+    def test_incomplete_audit_cannot_register_as_active(self):
+        _, case = self.make_case()
+        spec_file = "tests/ui/specs/users.spec.js"
+        (self.root / spec_file).write_text("test('创建用户', async () => {});\n", encoding="utf-8")
+        audit = self.complete_audit(case, "创建用户", spec_file)
+        payload = json.loads(audit.read_text(encoding="utf-8"))
+        payload["coverage"].pop()
+        self.testflow.write_json(audit, payload)
+
+        with self.assertRaisesRegex(SystemExit, "缺少覆盖项"):
+            self.testflow.register_automation("创建用户", spec_file, [case["id"]], audit)
+
+    def test_script_change_invalidates_binding_and_blocks_run_plan(self):
+        _, case = self.make_case()
+        spec_path = self.register_case(case)
+        source = self.root / "cases" / "iteration.csv"
+        self.testflow.export_current(
+            self.testflow.load_json(self.testflow.CASE_REGISTRY, {}), source)
+        spec_path.write_text("test('创建用户', async () => { throw new Error(); });\n",
+                             encoding="utf-8")
+
+        scope = self.testflow.resolve_scope(source, emit=False)
+
+        self.assertIn(case["id"], scope["staleCaseIds"])
+        self.assertIn("脚本文件已变化", scope["bindingIssues"][case["id"]]["创建用户"])
+        with self.assertRaisesRegex(SystemExit, "自动化失效"):
+            self.testflow.make_run_plan(source)
+
+    def test_complete_audit_can_create_exact_run_plan(self):
+        _, case = self.make_case()
+        self.register_case(case)
+        source = self.root / "cases" / "iteration.csv"
+        self.testflow.export_current(
+            self.testflow.load_json(self.testflow.CASE_REGISTRY, {}), source)
+        output = self.root / "cases" / "runs" / "run.json"
+
+        with redirect_stdout(io.StringIO()):
+            plan = self.testflow.make_run_plan(source, output=output)
+
+        self.assertEqual(plan["caseIds"], [case["id"]])
+        self.assertEqual(plan["testTitles"], ["创建用户"])
+        self.assertEqual(plan["bindings"][0]["caseRevision"], 1)
+        self.assertEqual(plan["bindings"][0]["contractHash"], case["contractHash"])
+        self.assertTrue(plan["bindings"][0]["implementationHash"])
+
+    def test_explicit_retire_does_not_create_replacement_case(self):
+        registry, case = self.make_case()
+        self.register_case(case)
+        plan = {
+            "status": "reviewed",
+            "iterationVersion": "V2.0",
+            "uncertain": [],
+            "items": [{
+                "action": "retire",
+                "targetCaseId": case["id"],
+                "retireCaseIds": [],
+                "reason": "功能已明确删除",
+                "case": {},
+            }],
+        }
+        plan_path = self.root / "cases" / "changes" / "retire.json"
+        self.testflow.write_json(plan_path, plan)
+
+        with redirect_stdout(io.StringIO()):
+            self.testflow.apply_plan(plan_path)
+
+        updated = self.testflow.load_json(self.testflow.CASE_REGISTRY, {})
+        automation = self.testflow.load_json(self.testflow.AUTOMATION_REGISTRY, {})
+        self.assertEqual(len(updated["cases"]), len(registry["cases"]))
+        self.assertEqual(updated["cases"][case["id"]]["status"], "retired")
+        self.assertEqual(updated["cases"][case["id"]]["replacedBy"], "")
+        self.assertEqual(automation["tests"]["创建用户"]["status"],
+                         "retirement-candidate")
+
+    def test_report_rejects_missing_planned_case_result(self):
+        _, case = self.make_case()
+        self.register_case(case)
+        automation = self.testflow.load_json(self.testflow.AUTOMATION_REGISTRY, {})
+        entry = automation["tests"]["创建用户"]
+        run_plan = {
+            "caseIds": [case["id"], "CASE-000002"],
+            "bindings": [{
+                "caseId": case["id"],
+                "caseRevision": case["revision"],
+                "contractHash": case["contractHash"],
+                "testTitle": "创建用户",
+                "file": entry["file"],
+                "implementationHash": entry["implementationHash"],
+            }],
+        }
+        raw_results = [{"title": "创建用户", "caseIds": [case["id"]], "status": "passed"}]
+        registry = self.testflow.load_json(self.testflow.CASE_REGISTRY, {})
+
+        with self.assertRaisesRegex(SystemExit, "没有结果"):
+            self.report.validate_batch_results(raw_results, automation, run_plan, registry)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000462",
+  "caseRevision": 1,
+  "contractHash": "64d3b1b3212e3cdb8f1aab952b267dd8e52283a0748be29e982ed4a0586acc40",
+  "testTitle": "机器人构型配置 - 验证构型名称长度为33时创建失败",
+  "file": "tests/ui/specs/robot-configs.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "openConfigs调用共享login登录admin账号，并点击机器人构型配置菜单等待新建构型按钮",
+      "evidence": "登录后断言机器人构型配置页“新建构型”按钮可见，证明账号与模块前置成立"
+    },
+    {
+      "contractItemId": "P2",
+      "implementation": "openConfigs调用共享login登录admin账号，并点击机器人构型配置菜单等待新建构型按钮",
+      "evidence": "登录后断言机器人构型配置页“新建构型”按钮可见，证明账号与模块前置成立"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "openCreate点击新建构型按钮并等待表单可见",
+      "evidence": "对应测试包含可观察的对话框、控件实际值、错误消息或最终列表状态断言；创建数据在finally中删除并确认不存在"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "通过form.name填写或读取构型名称输入框的实际值",
+      "evidence": "先读取inputValue实际值并断言最终长度边界，再验证提交后的列表结果或阻止结果"
+    },
+    {
+      "contractItemId": "S3",
+      "implementation": "对应CASE-ID测试体按契约顺序执行该业务操作，公共操作封装于openConfigs/openCreate/fill/create",
+      "evidence": "对应测试包含可观察的对话框、控件实际值、错误消息或最终列表状态断言；创建数据在finally中删除并确认不存在"
+    },
+    {
+      "contractItemId": "S4",
+      "implementation": "点击form.save提交，并检查对话框状态及目标列表行",
+      "evidence": "对应测试包含可观察的对话框、控件实际值、错误消息或最终列表状态断言；创建数据在finally中删除并确认不存在"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "openCreate点击新建构型并定位“新建机器人构型”对话框",
+      "evidence": "对应测试包含可观察的对话框、控件实际值、错误消息或最终列表状态断言；创建数据在finally中删除并确认不存在"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "对应CASE-ID测试体按契约顺序执行该业务操作，公共操作封装于openConfigs/openCreate/fill/create",
+      "evidence": "断言表单错误或.el-message包含契约要求的业务字段/格式/重复/引用提示"
+    },
+    {
+      "contractItemId": "A3",
+      "implementation": "对应CASE-ID测试体按契约顺序执行该业务操作，公共操作封装于openConfigs/openCreate/fill/create",
+      "evidence": "对应测试包含可观察的对话框、控件实际值、错误消息或最终列表状态断言；创建数据在finally中删除并确认不存在"
+    },
+    {
+      "contractItemId": "A4",
+      "implementation": "通过form.name填写或读取构型名称输入框的实际值",
+      "evidence": "提交后对话框保持可见、目标列表行数量为0，并出现对应校验消息"
+    }
+  ],
+  "notes": "2026-08-12逐条探索并完整复跑。36条通过；CASE-000482因首错误字段未自动聚焦稳定失败并标注PRODUCT_DEFECT。所有测试数据使用AI前缀并在finally清理。"
+}

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000493",
+  "caseRevision": 1,
+  "contractHash": "7739804ec58254175e70555b0b896af0275b7a7181db7285f7823363be299700",
+  "testTitle": "机器人构型配置 - 查看JSON文件内容",
+  "file": "tests/ui/specs/robot-configs.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "create准备含已知robot_type的独立构型；在精确目标行点击“查看”，校验并关闭配置文件内容弹窗，finally删除数据",
+      "evidence": "登录后断言机器人构型配置页“新建构型”按钮可见，证明账号与模块前置成立"
+    },
+    {
+      "contractItemId": "P2",
+      "implementation": "create准备含已知robot_type的独立构型；在精确目标行点击“查看”，校验并关闭配置文件内容弹窗，finally删除数据",
+      "evidence": "登录后断言机器人构型配置页“新建构型”按钮可见，证明账号与模块前置成立"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "create准备含已知robot_type的独立构型；在精确目标行点击“查看”，校验并关闭配置文件内容弹窗，finally删除数据",
+      "evidence": "精确名称目标行的“查看”按钮打开配置文件内容弹窗；弹窗包含preview_robot，关闭后finally删除目标行并确认不存在"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "create准备含已知robot_type的独立构型；在精确目标行点击“查看”，校验并关闭配置文件内容弹窗，finally删除数据",
+      "evidence": "精确名称目标行的“查看”按钮打开配置文件内容弹窗；弹窗包含preview_robot，关闭后finally删除目标行并确认不存在"
+    },
+    {
+      "contractItemId": "S3",
+      "implementation": "create准备含已知robot_type的独立构型；在精确目标行点击“查看”，校验并关闭配置文件内容弹窗，finally删除数据",
+      "evidence": "精确名称目标行的“查看”按钮打开配置文件内容弹窗；弹窗包含preview_robot，关闭后finally删除目标行并确认不存在"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "create准备含已知robot_type的独立构型；在精确目标行点击“查看”，校验并关闭配置文件内容弹窗，finally删除数据",
+      "evidence": "精确名称目标行的“查看”按钮打开配置文件内容弹窗；弹窗包含preview_robot，关闭后finally删除目标行并确认不存在"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "create准备含已知robot_type的独立构型；在精确目标行点击“查看”，校验并关闭配置文件内容弹窗，finally删除数据",
+      "evidence": "精确名称目标行的“查看”按钮打开配置文件内容弹窗；弹窗包含preview_robot，关闭后finally删除目标行并确认不存在"
+    },
+    {
+      "contractItemId": "A3",
+      "implementation": "create准备含已知robot_type的独立构型；在精确目标行点击“查看”，校验并关闭配置文件内容弹窗，finally删除数据",
+      "evidence": "精确名称目标行的“查看”按钮打开配置文件内容弹窗；弹窗包含preview_robot，关闭后finally删除目标行并确认不存在"
+    }
+  ],
+  "notes": "2026-08-12逐条探索并完整复跑。36条通过；CASE-000482因首错误字段未自动聚焦稳定失败并标注PRODUCT_DEFECT。所有测试数据使用AI前缀并在finally清理。"
+}

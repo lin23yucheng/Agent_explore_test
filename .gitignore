@@ -12,4 +12,8 @@ node_modules/
 /test-history/
 /reports/*
 !/reports/README.md
+/cases/runs/*
+!/cases/runs/.gitkeep
+/cases/contracts/*
+!/cases/contracts/.gitkeep
 
