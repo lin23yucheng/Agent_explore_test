@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000437",
+  "caseRevision": 1,
+  "contractHash": "9600e3607677e1d94307c5bbcfa0dac0090a71160b71391a6ba82987141fb131",
+  "testTitle": "标签管理 - 新增标签后创建时间保持不变",
+  "file": "tests/ui/specs/tags.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "标签管理 - 新增标签后创建时间保持不变通过openTags进入标签列表，并使用create生成唯一页面测试数据或用tagRow定位目标行，满足前置条件。",
+      "evidence": "2026-08-13探索批次“标签管理 - 新增标签后创建时间保持不变”通过；登录、模块就绪及所需页面测试数据的可见性检查均成功。"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "标签管理 - 新增标签后创建时间保持不变调用openTags直达/admin/scene-tags，并切换为100条/页后等待列表加载完成。",
+      "evidence": "2026-08-13探索批次“标签管理 - 新增标签后创建时间保持不变”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "标签管理 - 新增标签后创建时间保持不变调用openTags直达/admin/scene-tags，并切换为100条/页后等待列表加载完成。",
+      "evidence": "2026-08-13探索批次“标签管理 - 新增标签后创建时间保持不变”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "S3",
+      "implementation": "标签管理 - 新增标签后创建时间保持不变读取目标标签行、状态/分类/时间列及页面消息，执行契约要求的观察。",
+      "evidence": "2026-08-13探索批次“标签管理 - 新增标签后创建时间保持不变”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "标签管理 - 新增标签后创建时间保持不变调用openTags直达/admin/scene-tags，并切换为100条/页后等待列表加载完成。",
+      "evidence": "读取目标行创建/更新时间列，断言YYYY-MM-DD HH:mm格式、前后一致/更新关系或全列表倒序。"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "标签管理 - 新增标签后创建时间保持不变调用openTags直达/admin/scene-tags，并切换为100条/页后等待列表加载完成。",
+      "evidence": "2026-08-13探索批次“标签管理 - 新增标签后创建时间保持不变”通过，与该预期对应的Playwright expect断言已执行成功。"
+    },
+    {
+      "contractItemId": "A3",
+      "implementation": "标签管理 - 新增标签后创建时间保持不变在对应CASE测试体中通过页面完成步骤“该标签的创建时间与刷新前记录的时间一致，未发生变化。”。",
+      "evidence": "读取目标行创建/更新时间列，断言YYYY-MM-DD HH:mm格式、前后一致/更新关系或全列表倒序。"
+    }
+  ],
+  "notes": "2026-08-13按当前执行契约完成页面探索和脚本逐项审核；标签管理65条探索批次全部通过。测试数据创建与清理均走页面，AI前缀数据在finally中删除并复查；任务引用基准标签“训练”保留。"
+}

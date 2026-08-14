@@ -1,12 +1,16 @@
 const { defineConfig } = require('@playwright/test');
+const path = require('path');
 
 module.exports = defineConfig({
   testDir: './tests/ui',
   testMatch: ['specs/**/*.spec.js'],
   timeout: 90_000,
-  workers: process.env.PLAYWRIGHT_WORKERS ? Number(process.env.PLAYWRIGHT_WORKERS) : 1,
+  globalSetup: require.resolve('./tests/ui/global-setup.js'),
+  workers: process.env.PLAYWRIGHT_WORKERS ? Number(process.env.PLAYWRIGHT_WORKERS) : 2,
   expect: { timeout: 10_000 },
-  fullyParallel: !!process.env.PLAYWRIGHT_WORKERS,
+  // Spec files may run in parallel, while tests in the same business module
+  // stay ordered to avoid collisions on global uniqueness constraints.
+  fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: [
@@ -21,6 +25,7 @@ module.exports = defineConfig({
   ],
   outputDir: process.env.PLAYWRIGHT_OUTPUT_DIR || 'reports/latest/test-results',
   use: {
+    storageState: path.resolve('.auth', 'storage.json'),
     baseURL: process.env.UI_BASE_URL || 'https://fat-vla-web.svfactory.com:8443',
     ignoreHTTPSErrors: true,
     screenshot: 'only-on-failure',

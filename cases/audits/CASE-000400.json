@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000400",
+  "caseRevision": 1,
+  "contractHash": "c1b58d60a0b4f8cdbbcdaf12def93b8b4a3d211b513c8d7044989be60f7b001b",
+  "testTitle": "标签管理 - 按启用状态查询标签列表（CASE-000400）",
+  "file": "tests/ui/specs/tags.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "标签管理 - 按启用状态查询标签列表（CASE-000400）通过全局UI登录态和openTags直达标签管理，页面“新建标签”按钮可见后开始执行。",
+      "evidence": "2026-08-13探索批次“标签管理 - 按启用状态查询标签列表（CASE-000400）”通过；登录、模块就绪及所需页面测试数据的可见性检查均成功。"
+    },
+    {
+      "contractItemId": "P2",
+      "implementation": "标签管理 - 按启用状态查询标签列表（CASE-000400）通过openTags进入标签列表，并使用create生成唯一页面测试数据或用tagRow定位目标行，满足前置条件。",
+      "evidence": "2026-08-13探索批次“标签管理 - 按启用状态查询标签列表（CASE-000400）”通过；登录、模块就绪及所需页面测试数据的可见性检查均成功。"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "标签管理 - 按启用状态查询标签列表（CASE-000400）调用openTags直达/admin/scene-tags，并切换为100条/页后等待列表加载完成。",
+      "evidence": "2026-08-13探索批次“标签管理 - 按启用状态查询标签列表（CASE-000400）”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "标签管理 - 按启用状态查询标签列表（CASE-000400）在对应CASE测试体中通过页面完成步骤“点击状态筛选下拉框”。",
+      "evidence": "2026-08-13探索批次“标签管理 - 按启用状态查询标签列表（CASE-000400）”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "S3",
+      "implementation": "标签管理 - 按启用状态查询标签列表（CASE-000400）在目标tagRow点击“启用”并确认，随后读取状态列验证最终状态。",
+      "evidence": "2026-08-13探索批次“标签管理 - 按启用状态查询标签列表（CASE-000400）”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "S4",
+      "implementation": "标签管理 - 按启用状态查询标签列表（CASE-000400）点击“查询”并由waitForList等待可见数据行或“暂无数据”状态稳定。",
+      "evidence": "2026-08-13探索批次“标签管理 - 按启用状态查询标签列表（CASE-000400）”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "标签管理 - 按启用状态查询标签列表（CASE-000400）在对应CASE测试体中通过页面完成步骤“标签管理页面正常显示”。",
+      "evidence": "openTags的就绪标记“新建标签”按钮可见，列表为可见数据行或明确空状态。"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "标签管理 - 按启用状态查询标签列表（CASE-000400）在目标tagRow点击“禁用”，按页面确认流程提交并观察最终状态或拦截提示。",
+      "evidence": "断言目标行状态列td.nth(2)为契约状态；受任务引用场景同时断言状态未改变。"
+    },
+    {
+      "contractItemId": "A3",
+      "implementation": "标签管理 - 按启用状态查询标签列表（CASE-000400）在目标tagRow点击“启用”并确认，随后读取状态列验证最终状态。",
+      "evidence": "断言目标行状态列td.nth(2)为契约状态；受任务引用场景同时断言状态未改变。"
+    },
+    {
+      "contractItemId": "A4",
+      "implementation": "标签管理 - 按启用状态查询标签列表（CASE-000400）在目标tagRow点击“禁用”，按页面确认流程提交并观察最终状态或拦截提示。",
+      "evidence": "断言目标行状态列td.nth(2)为契约状态；受任务引用场景同时断言状态未改变。"
+    }
+  ],
+  "notes": "2026-08-13按当前执行契约完成页面探索和脚本逐项审核；标签管理65条探索批次全部通过。测试数据创建与清理均走页面，AI前缀数据在finally中删除并复查；任务引用基准标签“训练”保留。"
+}

@@ -1,36 +1,36 @@
 {
   "schemaVersion": 1,
   "caseId": "CASE-000482",
-  "caseRevision": 1,
-  "contractHash": "d065ba9d3384223ea661f7eb08e75df6e8ecdfbd0d09b7548d909a0f94b80ded",
+  "caseRevision": 2,
+  "contractHash": "c7df41d79dc983639bb1dbe6b799582158327de4253c6e8f11500993a3b3f13d",
   "testTitle": "机器人构型配置 - 新建时必填项为空校验",
   "file": "tests/ui/specs/robot-configs.spec.js",
   "coverage": [
     {
       "contractItemId": "P1",
-      "implementation": "openConfigs调用共享login登录admin账号，并点击机器人构型配置菜单等待新建构型按钮",
-      "evidence": "登录后断言机器人构型配置页“新建构型”按钮可见，证明账号与模块前置成立"
+      "implementation": "openConfigs复用admin页面登录态并直达机器人构型配置页；openCreate点击“新建构型”并等待新建对话框可见。",
+      "evidence": "2026-08-13修订后探索执行通过；“新建构型”按钮和“新建机器人构型”对话框均可见。"
     },
     {
       "contractItemId": "S1",
-      "implementation": "openCreate点击新建构型并定位“新建机器人构型”对话框",
-      "evidence": "对应测试包含可观察的对话框、控件实际值、错误消息或最终列表状态断言；创建数据在finally中删除并确认不存在"
+      "implementation": "openCreate打开新建对话框后不调用fill，构型名称、机器人型号和配置文件保持为空。",
+      "evidence": "测试从空表单直接进入保存校验，未向三个必填控件写入任何数据。"
     },
     {
       "contractItemId": "S2",
-      "implementation": "点击form.save提交，并检查对话框状态及目标列表行",
-      "evidence": "对应测试包含可观察的对话框、控件实际值、错误消息或最终列表状态断言；创建数据在finally中删除并确认不存在"
+      "implementation": "expectRequiredFieldErrors依次点击form.save，并在每次提交后检查对话框、提示和列表状态。",
+      "evidence": "保存按钮可点击；每次点击后对话框仍可见，测试继续完成三项必填校验。"
     },
     {
       "contractItemId": "A1",
-      "implementation": "点击form.save提交，并检查对话框状态及目标列表行",
-      "evidence": "对应测试包含可观察的对话框、控件实际值、错误消息或最终列表状态断言；创建数据在finally中删除并确认不存在"
+      "implementation": "每次点击保存后断言form.dialog可见，并用row(page, values.name || \"\")验证列表未生成目标记录。",
+      "evidence": "2026-08-13探索执行中保存未关闭弹框，目标列表行数量始终为0，系统未提交新构型。"
     },
     {
       "contractItemId": "A2",
-      "implementation": "通过form.name填写或读取构型名称输入框的实际值",
-      "evidence": "expect.soft(form.name).toBeFocused稳定失败；页面提示请输入构型名称但焦点未进入名称输入框，分类PRODUCT_DEFECT"
+      "implementation": "expectRequiredFieldErrors按构型名称、机器人型号、配置文件顺序验证.el-message必填提示；验证一项后仅补齐该项以触发下一项。",
+      "evidence": "页面依次显示“请输入构型名称”、机器人型号必填提示和配置文件必填提示；弹框保持打开且列表无新增记录。"
     }
   ],
-  "notes": "2026-08-12逐条探索并完整复跑。36条通过；CASE-000482因首错误字段未自动聚焦稳定失败并标注PRODUCT_DEFECT。所有测试数据使用AI前缀并在finally清理。"
+  "notes": "2026-08-13用户明确修订验收标准：必填校验存在且不创建记录即可，首错误字段自动聚焦不再作为业务预期。按revision 2重新探索执行通过；无测试数据创建。"
 }

@@ -8,13 +8,13 @@
   "coverage": [
     {
       "contractItemId": "P1",
-      "implementation": "openConfigs调用共享login登录admin账号，并点击机器人构型配置菜单等待新建构型按钮",
-      "evidence": "登录后断言机器人构型配置页“新建构型”按钮可见，证明账号与模块前置成立"
+      "implementation": "openConfigs复用admin登录态，优先直达机器人构型页面并等待新建构型按钮",
+      "evidence": "复用登录态后断言机器人构型配置页“新建构型”按钮可见，证明账号与模块前置成立"
     },
     {
       "contractItemId": "P2",
-      "implementation": "openConfigs调用共享login登录admin账号，并点击机器人构型配置菜单等待新建构型按钮",
-      "evidence": "登录后断言机器人构型配置页“新建构型”按钮可见，证明账号与模块前置成立"
+      "implementation": "openConfigs复用admin登录态，优先直达机器人构型页面并等待新建构型按钮",
+      "evidence": "复用登录态后断言机器人构型配置页“新建构型”按钮可见，证明账号与模块前置成立"
     },
     {
       "contractItemId": "S1",
@@ -57,5 +57,5 @@
       "evidence": "提交后对话框仍可见且目标名称列表行数量为0"
     }
   ],
-  "notes": "2026-08-12逐条探索并完整复跑。36条通过；CASE-000482因首错误字段未自动聚焦稳定失败并标注PRODUCT_DEFECT。所有测试数据使用AI前缀并在finally清理。"
+  "notes": "2026-08-12逐条探索并完整复跑。36条通过；CASE-000482因首错误字段未自动聚焦稳定失败并标注PRODUCT_DEFECT。所有测试数据使用AI前缀并在finally清理。 2026-08-13执行性能优化：复用UI登录态并优先直达模块URL；业务数据准备和清理仍全部通过页面完成。 2026-08-13脚本差异复核：本次仅删除CASE-000482专用的首字段焦点断言和错误分类，当前用例的页面步骤、数据、断言及清理逻辑均未变化；重新绑定当前实现哈希。"
 }

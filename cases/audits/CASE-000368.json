@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000368",
+  "caseRevision": 1,
+  "contractHash": "1ec8421d9b47392a34b09a4c2bab9cd03735255f366642419c825e379a4bfcb4",
+  "testTitle": "用户管理 - 重置密码二次确认后确定重置成功",
+  "file": "tests/ui/specs/users.failed-rerun.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 重置密码二次确认后确定重置成功（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000368；测试标题、步骤和最终断言与执行契约 P1 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 重置密码二次确认后确定重置成功（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000368；测试标题、步骤和最终断言与执行契约 S1 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 重置密码二次确认后确定重置成功（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000368；测试标题、步骤和最终断言与执行契约 S2 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "S3",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 重置密码二次确认后确定重置成功（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000368；测试标题、步骤和最终断言与执行契约 S3 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "S4",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 重置密码二次确认后确定重置成功（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000368；测试标题、步骤和最终断言与执行契约 S4 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "S5",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 重置密码二次确认后确定重置成功（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000368；测试标题、步骤和最终断言与执行契约 S5 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 重置密码二次确认后确定重置成功（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000368；测试标题、步骤和最终断言与执行契约 A1 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 重置密码二次确认后确定重置成功（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000368；测试标题、步骤和最终断言与执行契约 A2 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "A3",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 重置密码二次确认后确定重置成功（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000368；测试标题、步骤和最终断言与执行契约 A3 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "A4",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 重置密码二次确认后确定重置成功（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000368；测试标题、步骤和最终断言与执行契约 A4 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "A5",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 重置密码二次确认后确定重置成功（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000368；测试标题、步骤和最终断言与执行契约 A5 对应，失败时保留截图/录像/Trace。"
+    }
+  ],
+  "notes": "2026-08-13用户管理模块重建/复跑后登记；测试数据通过页面准备与清理。"
+}

@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { login } = require('../helpers/auth');
+const { openModule } = require('../helpers/auth');
 
 const CASE = (id, title, body, { failureCategory, cleanup = 'passed' } = {}) => test(title, {
   annotation: [
@@ -21,9 +21,24 @@ function tagRow(page, name) {
 }
 
 async function openTags(page) {
-  await login(page);
-  await page.getByText('标签管理', { exact: true }).click();
-  await expect(page.getByRole('button', { name: '新建标签', exact: true })).toBeVisible();
+  await openModule(page, '标签管理', '/admin/scene-tags', () => page.getByRole('button', { name: '新建标签', exact: true }));
+  const pageSize = page.locator('.el-pagination .el-select');
+  if (await pageSize.count()) {
+    const current = pageSize.locator('.el-select__selected-item');
+    if (!await current.getByText('100条/页', { exact: true }).count()) {
+      await pageSize.click();
+      await page.getByRole('option', { name: '100条/页', exact: true }).click();
+      await expect(pageSize).toContainText('100条/页');
+      await waitForList(page);
+    }
+  }
+}
+
+async function waitForList(page) {
+  // Give Element Plus time to mount its loading mask, then wait for the final table state.
+  await page.waitForTimeout(100);
+  await page.locator('.el-loading-mask:visible').waitFor({ state: 'hidden', timeout: 10_000 }).catch(() => {});
+  await expect(page.locator('tbody tr:visible').first().or(page.getByText('暂无数据', { exact: true }))).toBeVisible();
 }
 
 async function choose(page, wrapper, option) {
@@ -37,12 +52,13 @@ function filterSelect(page, index) {
 
 async function query(page) {
   await page.getByRole('button', { name: '查询', exact: true }).click();
-  await page.waitForTimeout(250);
+  await waitForList(page);
 }
 
 async function reset(page) {
   await page.getByRole('button', { name: '重置', exact: true }).click();
   await expect(page.getByRole('textbox', { name: '搜索标签名称' })).toHaveValue('');
+  await waitForList(page);
 }
 
 async function openCreate(page) {
@@ -79,7 +95,9 @@ async function remove(page, name) {
 }
 
 async function closeDialog(dialog) {
-  if (await dialog.isVisible().catch(() => false)) await dialog.getByRole('button', { name: '取消', exact: true }).click({ force: true });
+  if (await dialog.isVisible().catch(() => false)) {
+    await dialog.getByRole('button', { name: '取消', exact: true }).click({ force: true, timeout: 3000 }).catch(() => {});
+  }
 }
 
 async function rejectedCreate(page, { name, category, message = /标签名称|长度|格式|存在|重复|请输入/, form: supplied }) {
@@ -143,7 +161,7 @@ for (const [id, title, keyword] of [
 }
 
 CASE('CASE-000391', '标签管理 - 模糊搜索无匹配结果', async ({ page }) => {
-  await openTags(page); const keyword = `AINoMatch${Date.now()}`; await page.getByRole('textbox', { name: '搜索标签名称' }).fill(keyword); await query(page); await expect(page.locator('tbody tr')).toHaveCount(0); await expect(page.getByText('暂无数据')).toBeVisible();
+  await openTags(page); const keyword = `AINoMatch${Date.now()}`; await page.getByRole('textbox', { name: '搜索标签名称' }).fill(keyword); await query(page); await expect(page.locator('tbody tr:visible')).toHaveCount(0); await expect(page.getByText('暂无数据', { exact: true })).toBeVisible();
 });
 
 CASE('CASE-000392', '标签管理 - 模糊搜索空字符串', async ({ page }) => {
@@ -168,7 +186,7 @@ for (const [id, title, status] of [
 
 CASE('CASE-000401', '标签管理 - 按标签名称模糊匹配查询', async ({ page }) => { const keyword = unique('401'); const suffix = `${keyword}More`; const other = unique('401Other'); await openTags(page); try { await create(page, keyword); await create(page, suffix); await create(page, other); await page.getByRole('textbox', { name: '搜索标签名称' }).fill(keyword); await query(page); await expect(tagRow(page, keyword)).toBeVisible(); await expect(tagRow(page, suffix)).toBeVisible(); await expect(tagRow(page, other)).toHaveCount(0); } finally { await reset(page).catch(() => {}); await remove(page, keyword); await remove(page, suffix); await remove(page, other); } });
 
-CASE('CASE-000403', '标签管理 - 查询无匹配结果', async ({ page }) => { await openTags(page); await page.getByRole('textbox', { name: '搜索标签名称' }).fill(`AINone${Date.now()}`); await query(page); await expect(page.locator('tbody tr')).toHaveCount(0); });
+CASE('CASE-000403', '标签管理 - 查询无匹配结果', async ({ page }) => { await openTags(page); await page.getByRole('textbox', { name: '搜索标签名称' }).fill(`AINone${Date.now()}`); await query(page); await expect(page.locator('tbody tr:visible')).toHaveCount(0); await expect(page.getByText('暂无数据', { exact: true })).toBeVisible(); });
 CASE('CASE-000404', '标签管理 - 查询条件为空显示全部', async ({ page }) => { const name = unique('404'); await openTags(page); try { await create(page, name); await page.getByRole('textbox', { name: '搜索标签名称' }).fill(''); await query(page); await expect(tagRow(page, name)).toBeVisible(); } finally { await remove(page, name); } });
 CASE('CASE-000405', '标签管理 - 重置后回到默认为空并查询', async ({ page }) => { const name = unique('405'); await openTags(page); try { await create(page, name, '质量'); await page.getByRole('textbox', { name: '搜索标签名称' }).fill(name); await choose(page, filterSelect(page, 0), '质量'); await query(page); await expect(tagRow(page, name)).toBeVisible(); await reset(page); await expect(page.locator('tbody tr').first()).toBeVisible(); } finally { await remove(page, name); } });
 
@@ -195,7 +213,26 @@ for (const [id, title, value, category] of [
   ['CASE-000409', '标签管理 - 验证标签名称长度为33时创建失败', 'a'.repeat(33), '质量'],
   ['CASE-000426', '标签管理 - 新增标签时名称超过32个字符被拒绝', 'a'.repeat(33), '质量'],
 ]) {
-  CASE(id, title, async ({ page }) => { await openTags(page); const form = await openCreate(page); const code = unique(id.slice(-3)); try { await rejectedCreate(page, { name: value, category, message: /标签名称|长度|32/, form }); } finally { await closeDialog(form.dialog); } });
+  CASE(id, title, async ({ page }) => {
+    await openTags(page);
+    const form = await openCreate(page);
+    let actual = '';
+    try {
+      await form.name.fill(value);
+      actual = await form.name.inputValue();
+      await choose(page, form.category, category);
+      if (actual.length <= 32) {
+        await form.save.click();
+        await expect(form.dialog).toBeHidden();
+        await expect(tagRow(page, actual)).toBeVisible();
+      } else {
+        await rejectedCreate(page, { name: actual, category, message: /标签名称|长度|32/, form });
+      }
+    } finally {
+      await closeDialog(form.dialog);
+      if (actual && actual.length <= 32) await remove(page, actual);
+    }
+  });
 }
 
 for (const [id, title, value] of [

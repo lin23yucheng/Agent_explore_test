@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { login } = require('../helpers/auth');
+const { openModule } = require('../helpers/auth');
 
 const CASE = (id, title, body, { failureCategory } = {}) => test(title, {
   annotation: [
@@ -23,11 +23,7 @@ function nameRow(page, name) {
 }
 
 async function openCategories(page) {
-  await login(page);
-  await page.getByText('数据分类管理', { exact: true }).click();
-  // The module view does not consistently expose a heading; wait for its
-  // first actionable control after navigation instead.
-  await expect(page.getByRole('button', { name: '新建分类', exact: true })).toBeVisible();
+  await openModule(page, '数据分类管理', '/admin/data-categories', () => page.getByRole('button', { name: '新建分类', exact: true }));
   const pageSize = page.locator('.el-pagination .el-select');
   if (await pageSize.count()) {
     const current = pageSize.locator('.el-select__selected-item');

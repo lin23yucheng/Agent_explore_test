@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000405",
+  "caseRevision": 1,
+  "contractHash": "b0317a950579b22781f99d5c198b3e20d6b005118a4712f78cfe6ddfe2c23b61",
+  "testTitle": "标签管理 - 重置后回到默认为空并查询",
+  "file": "tests/ui/specs/tags.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "标签管理 - 重置后回到默认为空并查询通过openTags进入标签列表，并使用create生成唯一页面测试数据或用tagRow定位目标行，满足前置条件。",
+      "evidence": "2026-08-13探索批次“标签管理 - 重置后回到默认为空并查询”通过；登录、模块就绪及所需页面测试数据的可见性检查均成功。"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "标签管理 - 重置后回到默认为空并查询使用标签名称输入框fill写入契约数据，并在输入限制场景读取inputValue按控件最终值判定。",
+      "evidence": "2026-08-13探索批次“标签管理 - 重置后回到默认为空并查询”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "标签管理 - 重置后回到默认为空并查询点击“重置”，断言名称输入框清空并等待列表恢复。",
+      "evidence": "2026-08-13探索批次“标签管理 - 重置后回到默认为空并查询”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "S3",
+      "implementation": "标签管理 - 重置后回到默认为空并查询使用标签名称输入框fill写入契约数据，并在输入限制场景读取inputValue按控件最终值判定。",
+      "evidence": "2026-08-13探索批次“标签管理 - 重置后回到默认为空并查询”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "标签管理 - 重置后回到默认为空并查询点击“查询”并由waitForList等待可见数据行或“暂无数据”状态稳定。",
+      "evidence": "2026-08-13探索批次“标签管理 - 重置后回到默认为空并查询”通过，与该预期对应的Playwright expect断言已执行成功。"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "标签管理 - 重置后回到默认为空并查询点击“查询”并由waitForList等待可见数据行或“暂无数据”状态稳定。",
+      "evidence": "使用tagRow按标签名称精确定位，断言命中行可见，并对非命中行执行数量为0的排除断言。"
+    },
+    {
+      "contractItemId": "A3",
+      "implementation": "标签管理 - 重置后回到默认为空并查询点击“查询”并由waitForList等待可见数据行或“暂无数据”状态稳定。",
+      "evidence": "2026-08-13探索批次“标签管理 - 重置后回到默认为空并查询”通过，与该预期对应的Playwright expect断言已执行成功。"
+    }
+  ],
+  "notes": "2026-08-13按当前执行契约完成页面探索和脚本逐项审核；标签管理65条探索批次全部通过。测试数据创建与清理均走页面，AI前缀数据在finally中删除并复查；任务引用基准标签“训练”保留。"
+}

@@ -794,11 +794,16 @@ def discover_automation():
             (ambiguous if len(case_ids) > 1 else unmatched).append(test_title)
             continue
         full_title = test_title
+        previous = automation.get("tests", {}).get(full_title, {})
         automation["tests"][full_title] = {
             "file": f"tests/ui/{spec_name.replace(chr(92), '/')}",
             "caseIds": case_ids,
-            "status": "stale",
-            "source": "按标题重新发现，等待本次执行验证",
+            "status": previous.get("status", "stale"),
+            "source": previous.get("source", "按标题重新发现，等待本次执行验证"),
+            **({key: previous[key] for key in (
+                "caseRevision", "contractHash", "implementationHash",
+                "auditFile", "auditedAt", "staleReason") if previous.get(key)}),
+            **({"lastRun": previous["lastRun"]} if previous.get("lastRun") else {}),
         }
         for case_id in case_ids:
             automation["cases"].setdefault(case_id, [])
@@ -821,7 +826,6 @@ def sync_annotations():
     automation = load_json(AUTOMATION_REGISTRY,
                            {"version": 1, "updatedAt": "", "tests": {}, "cases": {}})
     previous_tests = dict(automation.get("tests", {}))
-    previous_cases = {case_id: list(titles) for case_id, titles in automation.get("cases", {}).items()}
     completed = subprocess.run(
         ["npx.cmd", "playwright", "test", "--list", "--reporter=json"],
         cwd=ROOT,
@@ -857,11 +861,6 @@ def sync_annotations():
             test_title = " › ".join([*current_parents, spec.get("title", "")])
             seen_titles.add(test_title)
             previous = previous_tests.get(test_title, {})
-            if not previous and len(case_ids) == 1:
-                candidates = [previous_tests.get(value, {})
-                              for value in previous_cases.get(case_ids[0], [])]
-                previous = next((entry for entry in candidates
-                                 if entry.get("status") == "active"), {})
             for old_case_id in previous.get("caseIds", []):
                 automation["cases"][old_case_id] = [
                     value for value in automation["cases"].get(old_case_id, []) if value != test_title
@@ -892,6 +891,16 @@ def sync_annotations():
     for suite in payload.get("suites", []):
         visit(suite, [])
     removed = prune_automation_entries(automation, seen_titles)
+    duplicate_cases = {
+        case_id: titles for case_id, titles in automation.get("cases", {}).items()
+        if len(titles) > 1
+    }
+    if duplicate_cases:
+        details = "；".join(
+            f"{case_id}: {' | '.join(titles)}"
+            for case_id, titles in sorted(duplicate_cases.items())
+        )
+        raise SystemExit(f"注解同步发现CASE-ID重复映射，拒绝写入注册表：{details}")
     automation["updatedAt"] = now_iso()
     write_json(AUTOMATION_REGISTRY, automation)
     print(json.dumps({

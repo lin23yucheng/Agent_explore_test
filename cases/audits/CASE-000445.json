@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000445",
+  "caseRevision": 1,
+  "contractHash": "f79d53ff4c1dba0da39b7a47fd55702fe9194bf181f6ac0e9a221969d03c3a37",
+  "testTitle": "标签管理 - 编辑标签名称为空字符串的异常场景",
+  "file": "tests/ui/specs/tags.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "标签管理 - 编辑标签名称为空字符串的异常场景通过全局UI登录态和openTags直达标签管理，页面“新建标签”按钮可见后开始执行。",
+      "evidence": "2026-08-13探索批次“标签管理 - 编辑标签名称为空字符串的异常场景”通过；登录、模块就绪及所需页面测试数据的可见性检查均成功。"
+    },
+    {
+      "contractItemId": "P2",
+      "implementation": "标签管理 - 编辑标签名称为空字符串的异常场景通过openTags进入标签列表，并使用create生成唯一页面测试数据或用tagRow定位目标行，满足前置条件。",
+      "evidence": "2026-08-13探索批次“标签管理 - 编辑标签名称为空字符串的异常场景”通过；登录、模块就绪及所需页面测试数据的可见性检查均成功。"
+    },
+    {
+      "contractItemId": "P3",
+      "implementation": "标签管理 - 编辑标签名称为空字符串的异常场景通过tagRow(page, '训练')定位页面中的任务引用基准标签，并在操作前断言其存在和启用状态。",
+      "evidence": "2026-08-13探索批次中tagRow('训练')数量为1且状态列为“启用”；该基准数据按retained-by-design保留。"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "标签管理 - 编辑标签名称为空字符串的异常场景调用openTags直达/admin/scene-tags，并切换为100条/页后等待列表加载完成。",
+      "evidence": "2026-08-13探索批次“标签管理 - 编辑标签名称为空字符串的异常场景”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "标签管理 - 编辑标签名称为空字符串的异常场景在目标tagRow点击“编辑”，核对回显后修改名称并保存。",
+      "evidence": "2026-08-13探索批次“标签管理 - 编辑标签名称为空字符串的异常场景”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "S3",
+      "implementation": "标签管理 - 编辑标签名称为空字符串的异常场景使用标签名称输入框fill写入契约数据，并在输入限制场景读取inputValue按控件最终值判定。",
+      "evidence": "2026-08-13探索批次“标签管理 - 编辑标签名称为空字符串的异常场景”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "S4",
+      "implementation": "标签管理 - 编辑标签名称为空字符串的异常场景点击对话框“保存”，根据场景验证弹框关闭并落表，或保持打开并显示校验反馈。",
+      "evidence": "2026-08-13探索批次“标签管理 - 编辑标签名称为空字符串的异常场景”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "标签管理 - 编辑标签名称为空字符串的异常场景调用openTags直达/admin/scene-tags，并切换为100条/页后等待列表加载完成。",
+      "evidence": "使用tagRow按标签名称精确定位，断言命中行可见，并对非命中行执行数量为0的排除断言。"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "标签管理 - 编辑标签名称为空字符串的异常场景使用标签名称输入框fill写入契约数据，并在输入限制场景读取inputValue按控件最终值判定。",
+      "evidence": "断言编辑对话框可见且名称输入框回显原值，fill后实际输入值可读取。"
+    },
+    {
+      "contractItemId": "A3",
+      "implementation": "标签管理 - 编辑标签名称为空字符串的异常场景使用标签名称输入框fill写入契约数据，并在输入限制场景读取inputValue按控件最终值判定。",
+      "evidence": "通过inputValue读取控件最终生效值；非法字符过滤或32字符截断按最终值和提交结果判定。"
+    },
+    {
+      "contractItemId": "A4",
+      "implementation": "标签管理 - 编辑标签名称为空字符串的异常场景点击对话框“保存”，根据场景验证弹框关闭并落表，或保持打开并显示校验反馈。",
+      "evidence": "断言表单错误或.el-message匹配契约原因，并验证弹框保持打开、原行保留或目标状态未生效。"
+    }
+  ],
+  "notes": "2026-08-13按当前执行契约完成页面探索和脚本逐项审核；标签管理65条探索批次全部通过。测试数据创建与清理均走页面，AI前缀数据在finally中删除并复查；任务引用基准标签“训练”保留。"
+}

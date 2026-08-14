@@ -147,20 +147,38 @@ Agent审核计划中的新增、修改、替代、明确退役、不确定项和
 - `ENVIRONMENT_BLOCKED`：服务、网络、登录、浏览器或环境不可用。
 - `PRODUCT_DEFECT`：系统最终行为违反明确预期。
 - `TEST_IMPLEMENTATION_DEFECT`：脚本步骤、数据或断言不正确。
+- `UNKNOWN`：普通断言差异或页面变化尚未完成人工/LLM归因，不得直接按脚本缺陷自愈。
 - `CASE_DESCRIPTION_AMBIGUOUS`：用例描述无法唯一判断。
 - `REQUIREMENT_CONFLICT`：用例、需求与产品规则冲突。
 - `CLEANUP_FAILED`：功能结果已明确，但测试数据未清理。
 
-功能状态与清理状态分开记录。测试创建的数据必须使用运行ID/CASE-ID唯一前缀，创建后立即登记，并在`finally`或`afterEach`中逆序清理。被引用数据应先解除引用、换绑到安全基准数据或恢复原状态，再删除。系统明确禁止删除的基准数据可以保留，但必须记录`retained-by-design`及原因。清理后必须再次查询确认。
+功能状态与清理状态分开记录。正式测试必须报告`passed`、`not-applicable`或`retained-by-design`清理状态；`not_reported`禁止回写，`failed`会保留业务执行结果但使正式批次失败。测试创建的数据必须使用运行ID/CASE-ID唯一前缀，创建后立即登记，并在`finally`或`afterEach`中逆序清理。被引用数据应先解除引用、换绑到安全基准数据或恢复原状态，再删除。系统明确禁止删除的基准数据可以保留，但必须记录`retained-by-design`及原因。清理后必须再次查询确认。
+
+计划内用例不得使用`skip`跳过。环境、数据或需求问题必须执行到明确失败分类并写入本批结果。Playwright重试只保留最后一次尝试，不能将同一CASE-ID的多个尝试重复回写。
 
 ## 5. 报告
 
 所有正式执行必须通过`run-ui-tests.ps1`。脚本会先清空`reports/latest`，确保本批原始结果不复用旧文件。普通失败不会阻止后续用例执行。完整回归使用`-Full`时也会先为`cases/current.csv`生成精确运行计划。
 
 - `reports/latest/playwright-report/index.html`：本批可视化报告。
-- `reports/execution_report.csv`：唯一 CSV 报告，包含当前全量有效用例及其最近可信状态（未执行、通过或未通过）。每次执行会原地更新。
+- `reports/execution_report.csv`：唯一 CSV 报告，包含当前全量有效用例及其最近可信状态（未执行、通过或未通过）。最后执行结果只有该CASE-ID重新执行时才更新；用例revision、脚本或审计失效只更新“自动化状态”，不得抹掉历史通过/失败。
 - `reports/latest/test-results/`：本批失败截图、录像、Trace和错误上下文。
+- `reports/history/evidence/<runId>/`：持久化历史证据；下一批清空`reports/latest`前，已合并结果的附件必须已经归档到这里。
 - `reports/latest/run-manifest.json`：本批输入和执行清单。
 - `reports/history/case-results.json`：按稳定CASE-ID保存的最近可信历史。
 
 探测脚本和清理脚本是辅助工具，不得进入正式回归。正式批次结束前必须保证范围内每条用例均为通过、产品缺陷、环境阻塞、需求不明确或其他明确分类，且清理状态已记录。
+
+## 6. 执行性能
+
+- 正式批次启动时通过页面登录一次并生成临时 `storageState`，普通用例复用该登录态。验证登录、登出、禁用、删除会话等用例仍按用例步骤建立独立会话。
+- 模块脚本优先直接进入模块URL；路由不可用时回退到菜单导航。公共模块初始化不得在同一用例中重复执行。
+- 默认使用2个worker。用户管理、角色管理等共享会话或共享数据敏感脚本自动降为单worker；确定数据完全隔离后才提高并行度。
+- 探索执行与正式回归分开。探测脚本不进入正式运行计划，正式回归不重复已完成的探索动作。
+- 上一正式批次存在失败时，可以使用 `-FailedOnly` 生成只包含失败CASE-ID的新运行计划并正式复跑：
+
+```powershell
+.\run-ui-tests.ps1 -SourceCsv '<本批CSV>' -RunPlan '<上一批运行计划>' -FailedOnly -Password '<密码>'
+```
+
+- 测试数据准备和清理必须继续通过页面操作完成，不得直接调用业务API。允许复用登录态、直达页面和并行执行，但不能绕过页面来制造或删除业务数据。

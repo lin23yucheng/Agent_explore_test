@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000359",
+  "caseRevision": 1,
+  "contractHash": "6f1a2dcffc3307e8f203059c3d00e1a3579c180c27f256b5e5083c067371538d",
+  "testTitle": "用户管理 - 编辑弹框取消关闭不保存",
+  "file": "tests/ui/specs/users.failed-rerun.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 编辑弹框取消关闭不保存（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000359；测试标题、步骤和最终断言与执行契约 P1 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 编辑弹框取消关闭不保存（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000359；测试标题、步骤和最终断言与执行契约 S1 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 编辑弹框取消关闭不保存（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000359；测试标题、步骤和最终断言与执行契约 S2 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "S3",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 编辑弹框取消关闭不保存（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000359；测试标题、步骤和最终断言与执行契约 S3 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 编辑弹框取消关闭不保存（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000359；测试标题、步骤和最终断言与执行契约 A1 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 编辑弹框取消关闭不保存（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000359；测试标题、步骤和最终断言与执行契约 A2 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "A3",
+      "implementation": "tests/ui/specs/users.failed-rerun.spec.js :: 用户管理 - 编辑弹框取消关闭不保存（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000359；测试标题、步骤和最终断言与执行契约 A3 对应，失败时保留截图/录像/Trace。"
+    }
+  ],
+  "notes": "2026-08-13用户管理模块重建/复跑后登记；测试数据通过页面准备与清理。"
+}

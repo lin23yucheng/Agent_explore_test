@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000436",
+  "caseRevision": 1,
+  "contractHash": "b6e2cf33148cb73a438887e60ccc9c63dbfc04345e66066df856641988109ce8",
+  "testTitle": "标签管理 - 列表页创建时间显示年月日时分",
+  "file": "tests/ui/specs/tags.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "标签管理 - 列表页创建时间显示年月日时分通过openTags进入标签列表，并使用create生成唯一页面测试数据或用tagRow定位目标行，满足前置条件。",
+      "evidence": "2026-08-13探索批次“标签管理 - 列表页创建时间显示年月日时分”通过；登录、模块就绪及所需页面测试数据的可见性检查均成功。"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "标签管理 - 列表页创建时间显示年月日时分调用openTags直达/admin/scene-tags，并切换为100条/页后等待列表加载完成。",
+      "evidence": "2026-08-13探索批次“标签管理 - 列表页创建时间显示年月日时分”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "标签管理 - 列表页创建时间显示年月日时分读取目标标签行、状态/分类/时间列及页面消息，执行契约要求的观察。",
+      "evidence": "2026-08-13探索批次“标签管理 - 列表页创建时间显示年月日时分”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "标签管理 - 列表页创建时间显示年月日时分调用openTags直达/admin/scene-tags，并切换为100条/页后等待列表加载完成。",
+      "evidence": "openTags的就绪标记“新建标签”按钮可见，列表为可见数据行或明确空状态。"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "标签管理 - 列表页创建时间显示年月日时分在对应CASE测试体中通过页面完成步骤“创建时间字段显示格式为“年月日 时分”，例如“2025-01-15 09:30”，不包含秒数”。",
+      "evidence": "使用tagRow按标签名称精确定位，断言命中行可见，并对非命中行执行数量为0的排除断言。"
+    }
+  ],
+  "notes": "2026-08-13按当前执行契约完成页面探索和脚本逐项审核；标签管理65条探索批次全部通过。测试数据创建与清理均走页面，AI前缀数据在finally中删除并复查；任务引用基准标签“训练”保留。"
+}

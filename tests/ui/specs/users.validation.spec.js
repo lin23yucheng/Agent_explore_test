@@ -60,7 +60,7 @@ async function queryUsers(page, keyword = '') {
 }
 
 test.describe('用户管理查询与字段校验', () => {
-  test('查询-按账号模糊搜索', { annotation: { type: 'case', description: 'CASE-000267' } }, async ({ page }) => {
+  test('查询-按账号模糊搜索', { annotation: [{ type: 'case', description: 'CASE-000267' }, { type: 'cleanup', description: 'passed' }] }, async ({ page }) => {
     const suffix = Date.now();
     const keyword = `zhang${String(suffix).slice(-6)}`;
     const accounts = [`${keyword}a`, `${keyword}b`];
@@ -79,7 +79,7 @@ test.describe('用户管理查询与字段校验', () => {
     }
   });
 
-  test('查询-按姓名模糊搜索', { annotation: { type: 'case', description: 'CASE-000268' } }, async ({ page }) => {
+  test('查询-按姓名模糊搜索', { annotation: [{ type: 'case', description: 'CASE-000268' }, { type: 'cleanup', description: 'passed' }] }, async ({ page }) => {
     const suffix = String(Date.now()).slice(-6);
     const keyword = `张测${suffix}`;
     const accounts = [`name${suffix}a`, `name${suffix}b`];
@@ -98,7 +98,7 @@ test.describe('用户管理查询与字段校验', () => {
     }
   });
 
-  test('查询-账号和姓名组合模糊搜索', { annotation: { type: 'case', description: 'CASE-000273' } }, async ({ page }) => {
+  test('查询-账号和姓名组合模糊搜索', { annotation: [{ type: 'case', description: 'CASE-000273' }, { type: 'cleanup', description: 'passed' }] }, async ({ page }) => {
     const suffix = String(Date.now()).slice(-6);
     const accountKeyword = `zhang${suffix}`;
     const nameKeyword = `张测${suffix}`;
@@ -127,7 +127,7 @@ test.describe('用户管理查询与字段校验', () => {
     await expect(page.getByPlaceholder(/手机/)).toHaveCount(0);
   });
 
-  test('查询-无匹配结果', { annotation: { type: 'case', description: 'CASE-000269' } }, async ({ page }) => {
+  test('查询-无匹配结果', { annotation: [{ type: 'case', description: 'CASE-000269' }, { type: 'cleanup', description: 'not-applicable' }] }, async ({ page }) => {
     await openUsers(page);
     const keyword = `xyz${Date.now()}`;
     await page.getByPlaceholder('搜索账户和姓名').fill(keyword);
@@ -154,7 +154,7 @@ test.describe('用户管理查询与字段校验', () => {
     await expect(page.locator('tbody tr').filter({ hasText: /.+/ })).toHaveCount(0);
   });
 
-  test('查询-输入空格', { annotation: { type: 'case', description: 'CASE-000278' } }, async ({ page }) => {
+  test('查询-输入空格', { annotation: [{ type: 'case', description: 'CASE-000278' }, { type: 'cleanup', description: 'not-applicable' }] }, async ({ page }) => {
     await openUsers(page);
     const allUsers = await queryUsers(page);
     const spaceUsers = await queryUsers(page, ' ');
@@ -193,15 +193,4 @@ test.describe('用户管理查询与字段校验', () => {
     await dialog.getByRole('button', { name: '取消', exact: true }).click();
   });
 
-  test('新建用户弹框点击取消后关闭且不保存', { annotation: { type: 'case', description: 'CASE-000323' } }, async ({ page }) => {
-    await openUsers(page);
-    const dialog = await openCreateUser(page);
-    const inputs = dialog.locator('input[type=text]');
-    const account = `autocancel${Date.now()}`;
-    await inputs.nth(0).fill(account);
-    await inputs.nth(1).fill('取消用户');
-    await dialog.getByRole('button', { name: '取消', exact: true }).click();
-    await expect(dialog).toBeHidden();
-    await expect(page.getByText(account, { exact: true })).toHaveCount(0);
-  });
 });

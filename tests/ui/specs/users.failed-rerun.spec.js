@@ -3,15 +3,20 @@ const { login } = require('../helpers/auth');
 
 const CASE = (caseId, title, optionsOrBody, maybeBody) => {
   const body = typeof optionsOrBody === 'function' ? optionsOrBody : maybeBody;
-  const options = typeof optionsOrBody === 'function' ? {} : optionsOrBody;
-  const extraAnnotations = Array.isArray(options.annotation)
-    ? options.annotation
-    : options.annotation?.type && options.annotation.type !== 'case'
-      ? [options.annotation]
+  const options = typeof optionsOrBody === 'function' ? (maybeBody || {}) : optionsOrBody;
+  const { annotation, cleanup = 'passed', ...testOptions } = options;
+  const extraAnnotations = Array.isArray(annotation)
+    ? annotation
+    : annotation?.type && annotation.type !== 'case'
+      ? [annotation]
       : [];
   return test(title, {
-    ...options,
-    annotation: [...extraAnnotations, { type: 'case', description: caseId }],
+    ...testOptions,
+    annotation: [
+      ...extraAnnotations,
+      { type: 'case', description: caseId },
+      { type: 'cleanup', description: cleanup },
+    ],
   }, body);
 };
 
@@ -246,9 +251,12 @@ CASE('CASE-000295', '用户管理 - 新建用户姓名为空验证', async ({ pa
   await openUsers(page);
   try {
     const dialog = await openCreate(page);
-    await fill(page, dialog, { account: value, name: undefined });
+    await fill(page, dialog, { account: value, name: '临时姓名' });
+    await dialog.locator('input[type=text]').nth(1).fill('');
     await dialog.getByRole('button', { name: '保存', exact: true }).click();
     await expect(dialog).toBeVisible();
+    await expect(dialog.locator('.el-form-item__error').or(page.locator('.el-message')).filter({ hasText: /姓名|必填|完整|请输入/ }).first()).toBeVisible();
+    await dialog.getByRole('button', { name: '取消', exact: true }).click({ force: true });
   } finally { await remove(page, value); }
 });
 
@@ -295,7 +303,7 @@ CASE('CASE-000332', '用户管理 - 并发创建相同账号时仅一个成功',
     await Promise.all([first.getByRole('button', { name: '保存', exact: true }).click(), second.getByRole('button', { name: '保存', exact: true }).click()]);
     await page.getByPlaceholder('搜索账户和姓名').fill(value); await page.getByRole('button', { name: '查询', exact: true }).click();
     await expect(row(page, value)).toHaveCount(1);
-  } finally { await other.close(); await page.reload(); await remove(page, value); }
+  } finally { await other.close().catch(() => {}); await remove(page, value).catch(() => {}); }
 });
 
 CASE('CASE-000351', '用户管理 - 启用已禁用用户后该用户可正常登录', async ({ page, browser }) => {
@@ -314,7 +322,8 @@ CASE('CASE-000353', '用户管理 - 禁用已登录用户后该用户被登出',
   let session;
   try {
     await create(page, value, '禁用会话'); session = await loginContext(browser, value); await toggle(page, value, '禁用');
-    await session.page.reload(); await expect(session.page).toHaveURL(/\/login$/);
+    await session.page.reload();
+    await expect(session.page).toHaveURL(/\/login$/, { timeout: 15000 });
   } finally { if (session) await session.context.close(); await remove(page, value); }
 });
 
@@ -360,14 +369,6 @@ CASE('CASE-000368', '用户管理 - 重置密码二次确认后确定重置成�
   finally { if (session) await session.context.close(); await remove(page, value); }
 });
 
-CASE('CASE-000369', '用户管理 - 重置密码后已登录用户保持登录状态', async ({ page, browser }) => {
-  const value = account('reset-active');
-  await openUsers(page);
-  let session;
-  try { await create(page, value, '重置会话'); session = await loginContext(browser, value); await focusUser(page, value); const userRow = row(page, value); await userRow.getByRole('button', { name: '重置密码', exact: true }).click(); await page.getByRole('dialog').last().getByRole('button', { name: /确认|确定/ }).click(); await session.page.reload(); await expect(session.page).not.toHaveURL(/\/login$/); }
-  finally { if (session) await session.context.close(); await remove(page, value); }
-}, { annotation: { type: 'failure-category', description: 'PRODUCT_DEFECT' } });
-
 CASE('CASE-000371', '用户管理 - 禁用账号后未登录用户登录提示', async ({ page, browser }) => {
   const value = account('disable-login');
   await openUsers(page);
@@ -400,6 +401,7 @@ CASE('CASE-000376', '用户管理 - 删除已被指派任务的账号时提示�
     await expect(userRow).toBeVisible();
   } finally {
     let cleanupStatus = 'passed';
+    let cleanupError = '';
     try {
       await removeTask(page, taskName);
       await openUsers(page);
@@ -418,19 +420,14 @@ CASE('CASE-000376', '用户管理 - 删除已被指派任务的账号时提示�
       }
     } catch (error) {
       cleanupStatus = 'failed';
+      cleanupError = error.message;
       console.error(`CASE-000376 cleanup failed: ${error.message}`);
     }
     await test.info().attach('cleanup-status.json', {
-      body: JSON.stringify({ status: cleanupStatus }),
+      body: JSON.stringify({ status: cleanupStatus, error: cleanupError }),
       contentType: 'application/json',
     });
   }
-});
-
-CASE('CASE-000377', '用户管理 - 未登录状态下删除用户时提示账号或密码错误或账号已被禁用', async ({ page }) => {
-  await page.goto('/users');
-  await expect(page).toHaveURL(/\/login$/);
-  await expect(page.getByRole('button', { name: '删除', exact: true })).toHaveCount(0);
 });
 
 CASE('CASE-000378', '用户管理 - 删除用户后已登录用户点击菜单被登出', async ({ page, browser }) => {

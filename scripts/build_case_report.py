@@ -16,6 +16,7 @@ HISTORY = ROOT / 'reports' / 'history' / 'case-results.json'
 OUTPUT = ROOT / 'reports' / 'execution_report.csv'
 SUMMARY = ROOT / 'reports' / 'execution_summary.json'
 EVIDENCE_ROOT = ROOT / 'reports' / 'latest' / 'test-results'
+EVIDENCE_ARCHIVE_ROOT = ROOT / 'reports' / 'history' / 'evidence'
 EVIDENCE_RETENTION_BATCHES = 1
 AUTOMATION_REGISTRY = ROOT / 'cases' / 'automation-registry.json'
 CASE_REGISTRY = ROOT / 'cases' / 'case-registry.json'
@@ -103,8 +104,9 @@ def resolve_evidence(path_value):
 
 
 def archive_paths(paths, run_id, test_title, cache):
-    """Keep Playwright attachments inside reports/latest; do not duplicate them."""
+    """Copy durable evidence out of reports/latest and return repository-relative paths."""
     archived = []
+    archive_root = EVIDENCE_ARCHIVE_ROOT.resolve()
     for index, path_value in enumerate(paths, start=1):
         if not path_value:
             continue
@@ -115,7 +117,21 @@ def archive_paths(paths, run_id, test_title, cache):
         if source_key in cache:
             archived.append(cache[source_key])
             continue
-        relative = str(source.resolve().relative_to(ROOT.resolve()))
+        resolved = source.resolve()
+        try:
+            resolved.relative_to(archive_root)
+            destination = resolved
+        except ValueError:
+            destination_dir = (
+                EVIDENCE_ARCHIVE_ROOT / safe_name(run_id) / safe_name(test_title)
+            )
+            destination_dir.mkdir(parents=True, exist_ok=True)
+            destination = destination_dir / f'{index:02d}-{safe_name(source.name, 120)}'
+            if source.is_dir():
+                shutil.copytree(source, destination, dirs_exist_ok=True)
+            else:
+                shutil.copy2(source, destination)
+        relative = destination.resolve().relative_to(ROOT.resolve()).as_posix()
         cache[source_key] = relative
         archived.append(relative)
     return archived
@@ -191,18 +207,33 @@ def archive_batch_results(batch_results, execution_time):
 
 
 def cleanup_evidence(history, keep_recent_batches=EVIDENCE_RETENTION_BATCHES):
-    """Validate attachment paths; retention is handled by the run wrapper."""
+    """Archive current attachments and remove only references to missing files."""
     removed_paths = 0
+    archived_paths = 0
+    cache = {}
     for entry in history.get('cases', {}).values():
         existing = []
         for path_value in entry.get('evidence', []):
-            if resolve_evidence(path_value).exists():
-                existing.append(path_value)
-            else:
+            source = resolve_evidence(path_value)
+            if not source.exists():
                 removed_paths += 1
+                continue
+            try:
+                source.resolve().relative_to(EVIDENCE_ARCHIVE_ROOT.resolve())
+                already_archived = True
+            except ValueError:
+                already_archived = False
+            preserved = archive_paths(
+                [path_value],
+                entry.get('runId') or entry.get('executedAt') or 'legacy',
+                entry.get('testTitle') or 'unknown-test',
+                cache,
+            )
+            existing.extend(preserved)
+            archived_paths += int(bool(preserved) and not already_archived)
         entry['evidence'] = existing
     return {'保留批次数': keep_recent_batches, '删除批次数': 0,
-            '清理失效路径数': removed_paths}
+            '归档证据路径数': archived_paths, '清理失效路径数': removed_paths}
 
 
 def merge_batch(history, source_rows, source_headers, mappings, automation=None,
@@ -245,6 +276,7 @@ def merge_batch(history, source_rows, source_headers, mappings, automation=None,
             'implementationHash': planned_bindings.get(source_row.get('用例ID'), {}).get(
                 'implementationHash', ''),
             'executedAt': result.get('executedAt', execution_time),
+            'runId': result.get('runId', ''),
             'healing': '; '.join(item.get('body', '') for item in result.get('attachments', [])
                                 if item.get('name') == 'ai-healing.json' and item.get('body')),
             'failureCategory': result.get('failureCategory', ''),
@@ -273,6 +305,10 @@ def validate_batch_results(raw_results, automation, run_plan=None, case_registry
         reason = ''
         if len(case_ids) != 1:
             reason = f'结果关联{len(case_ids)}个CASE-ID'
+        elif result.get('status') == 'skipped':
+            reason = '计划内用例被跳过，不能视为已执行'
+        elif result.get('cleanupStatus') in {'', None, 'not_reported'}:
+            reason = '正式结果未报告清理状态'
         elif entry is None:
             reason = '自动化注册表中不存在同标题测试'
         elif entry.get('status') == 'retired':
@@ -323,10 +359,7 @@ def sync_case_registry(history, registry_path, automation=None):
     automation = automation or {}
     for case_id, case in registry.get('cases', {}).items():
         result = history.get('cases', {}).get(case_id)
-        active_title = active_test_for_case(automation, case_id, registry) if automation else ''
-        if result is not None and (not automation or (
-                active_title and result.get('testTitle') == active_title
-                and result.get('trusted', True))):
+        if result is not None and result.get('trusted', True):
             case['lastResult'] = result
             updated += 1
             continue
@@ -351,15 +384,21 @@ def sync_case_registry(history, registry_path, automation=None):
 
 def result_fields(entry):
     passed = entry['status'] == 'passed'
+    cleanup_status = entry.get('cleanupStatus', 'unknown')
+    failure_category = ('CLEANUP_FAILED' if cleanup_status == 'failed'
+                        else entry.get('failureCategory', ''))
+    error = entry.get('error', '')
+    if cleanup_status == 'failed' and not error:
+        error = '测试数据清理失败；历史结果未记录具体清理错误。'
     return {
         '自动化状态': '已自动化',
         '执行结果': '通过' if passed else '未通过',
-        '失败分类': entry.get('failureCategory', ''),
-        '清理状态': entry.get('cleanupStatus', 'unknown'),
+        '失败分类': failure_category,
+        '清理状态': cleanup_status,
         'Playwright测试': entry.get('testTitle', ''),
         '执行时间': entry.get('executedAt', ''),
         'AI自愈': entry.get('healing', ''),
-        '失败原因': humanize_failure(entry.get('error', ''), entry.get('failureCategory', '')),
+        '失败原因': humanize_failure(error, failure_category),
         '证据路径': '; '.join(entry.get('evidence', [])),
     }
 
@@ -369,8 +408,9 @@ def humanize_failure(error, category=''):
     text = ANSI_ESCAPE.sub('', error or '').strip()
     if not text:
         return ''
-    expected = re.search(r'Expected:\s*([\s\S]*?)(?:\nReceived:|\n|$)', text)
-    received = re.search(r'Received:\s*([\s\S]*?)(?:\n|$)', text)
+    expected = re.search(
+        r'Expected(?: pattern)?:\s*([\s\S]*?)(?:\nReceived(?: string)?:|\n|$)', text)
+    received = re.search(r'Received(?: string)?:\s*([\s\S]*?)(?:\n|$)', text)
     if category == 'PRODUCT_DEFECT' and expected and received:
         return (f'产品实际行为不符合用例预期：预期为「{expected.group(1).strip()}」，'
                 f'实际为「{received.group(1).strip()}」。')
@@ -422,7 +462,9 @@ def stale_automation_reason(automation, case_id):
             source = entry.get('source', '')
             if source:
                 return source
-    return '自动化映射已失效，旧执行结果不可信，需修正脚本后重新执行。'
+        if entry.get('status') == 'active':
+            return '自动化绑定、脚本哈希或覆盖审计已变化，需重新登记并执行。'
+    return '自动化映射已失效，当前脚本不可直接复用，需修正并重新执行。'
 
 
 def render_reports(history, source_rows, source_headers, batch_case_ids, automation=None,
@@ -437,32 +479,47 @@ def render_reports(history, source_rows, source_headers, batch_case_ids, automat
         # 第一版历史数据只使用标题作为键。优先使用包含模块的键，避免不同模块下
         # 的同名用例互相覆盖，同时兼容已有历史数据。
         entry = history['cases'].get(case_key(source_row)) or history['cases'].get(title)
+        case_id = base['用例ID']
+        titles = (automation or {}).get('cases', {}).get(case_id, [])
         expected_test = active_test_for_case(
-            automation or {}, base['用例ID'], case_registry if automation else None)
-        mapping_unready = bool(automation) and not expected_test
+            automation or {}, case_id, case_registry if automation else None)
+        if expected_test:
+            automation_status = '已自动化'
+        elif titles:
+            automation_status = '需重新执行'
+        else:
+            automation_status = '未自动化'
         mapping_changed = expected_test and entry and entry.get('testTitle') != expected_test
-        if (entry and entry.get('trusted', True)
-                and entry.get('fingerprint') == case_fingerprint(source_row, source_headers)
-                and not mapping_changed and not mapping_unready):
+        history_matches = bool(
+            entry
+            and entry.get('trusted', True)
+            and entry.get('fingerprint') == case_fingerprint(source_row, source_headers)
+        )
+        trusted_history = bool(entry and entry.get('trusted', True))
+        if trusted_history:
             fields = result_fields(entry)
+            if not history_matches or mapping_changed:
+                automation_status = '需重新执行'
+            fields['自动化状态'] = automation_status
+            if automation_status == '需重新执行' and not fields['失败原因']:
+                if not history_matches:
+                    fields['失败原因'] = '当前用例内容或执行契约已变化；保留最后执行结果，需按当前版本重新执行。'
+                elif mapping_changed:
+                    fields['失败原因'] = '当前可信脚本与最后执行脚本不同；保留最后执行结果，需重新执行。'
+                else:
+                    fields['失败原因'] = stale_automation_reason(
+                        automation or {}, case_id)
             passed += fields['执行结果'] == '通过'
             failed += fields['执行结果'] == '未通过'
-        elif entry:
-            stale += 1
-            fields = {'自动化状态': '需重新执行', '执行结果': '未执行',
-                      '失败分类': 'TEST_IMPLEMENTATION_DEFECT', '清理状态': 'unknown',
-                      'Playwright测试': expected_test or entry.get('testTitle', ''),
-                      '执行时间': '', 'AI自愈': '',
-                      '失败原因': (stale_automation_reason(automation or {}, base['用例ID'])
-                               if mapping_unready else
-                               '自动化测试已调整为独立用例，旧的共享执行结果已失效'
-                               if mapping_changed else
-                               '源用例的步骤、预期或其他内容已修改，旧执行结果已失效'),
-                      '证据路径': ''}
         else:
-            fields = {'自动化状态': '未自动化', '执行结果': '未执行', 'Playwright测试': '',
+            fields = {'自动化状态': automation_status, '执行结果': '未执行',
+                      'Playwright测试': expected_test or (titles[0] if len(titles) == 1 else ''),
                       '失败分类': '', '清理状态': 'unknown', '执行时间': '',
-                      'AI自愈': '', '失败原因': '', '证据路径': ''}
+                      'AI自愈': '',
+                      '失败原因': (stale_automation_reason(automation or {}, case_id)
+                                   if automation_status == '需重新执行' else ''),
+                      '证据路径': ''}
+        stale += fields['自动化状态'] == '需重新执行'
         output_row = {**base, **fields}
         cumulative_rows.append(output_row)
         if (source_row.get('用例ID') or title) in batch_case_ids:
@@ -477,6 +534,10 @@ def render_reports(history, source_rows, source_headers, batch_case_ids, automat
         'failed_case_count': failed,
         'needs_rerun_case_count': stale,
         'not_executed_case_count': len(source_rows) - passed - failed,
+        'cleanup_failed_case_count': sum(
+            row['清理状态'] == 'failed' for row in cumulative_rows),
+        'cleanup_not_reported_case_count': sum(
+            row['清理状态'] == 'not_reported' for row in cumulative_rows),
         'report': str(OUTPUT),
         'history': str(HISTORY),
     }
@@ -486,6 +547,10 @@ def render_reports(history, source_rows, source_headers, batch_case_ids, automat
         'batch_case_count': len(batch_rows),
         'passed_case_count': sum(row['执行结果'] == '通过' for row in batch_rows),
         'failed_case_count': sum(row['执行结果'] == '未通过' for row in batch_rows),
+        'cleanup_failed_case_count': sum(
+            row['清理状态'] == 'failed' for row in batch_rows),
+        'cleanup_not_reported_case_count': sum(
+            row['清理状态'] == 'not_reported' for row in batch_rows),
     }
     return summary, batch_summary
 
@@ -541,6 +606,8 @@ def main():
     if args.run_plan:
         with Path(args.run_plan).resolve().open('r', encoding='utf-8') as handle:
             run_plan = json.load(handle)
+    if not args.bootstrap_only and not args.refresh_only and run_plan is None:
+        raise SystemExit('正式结果合并必须提供 --run-plan，禁止绕过精确CASE-ID运行计划。')
     history = load_history()
     migrated = bootstrap_existing_report(history, source_headers)
     batch_titles = set()
@@ -551,7 +618,8 @@ def main():
             automation['updatedAt'] = now_iso()
             automation_path.write_text(json.dumps(automation, ensure_ascii=False, indent=2), encoding='utf-8')
     cleanup_summary = cleanup_evidence(history, args.evidence_retention_batches)
-    if cleanup_summary['删除批次数'] or cleanup_summary['清理失效路径数']:
+    if (cleanup_summary['删除批次数'] or cleanup_summary['归档证据路径数']
+            or cleanup_summary['清理失效路径数']):
         save_history(history)
     summary, batch_summary = render_reports(history, source_rows, source_headers, batch_titles,
                                             automation, case_registry)
@@ -563,6 +631,8 @@ def main():
         '失败用例数': summary['failed_case_count'],
         '需重新执行用例数': summary['needs_rerun_case_count'],
         '未执行用例数': summary['not_executed_case_count'],
+        '清理失败用例数': summary['cleanup_failed_case_count'],
+        '未报告清理状态用例数': summary['cleanup_not_reported_case_count'],
         '报告': summary['report'],
         '历史记录': summary['history'],
     }
@@ -570,6 +640,8 @@ def main():
         '本批用例数': batch_summary['batch_case_count'],
         '通过用例数': batch_summary['passed_case_count'],
         '失败用例数': batch_summary['failed_case_count'],
+        '清理失败用例数': batch_summary['cleanup_failed_case_count'],
+        '未报告清理状态用例数': batch_summary['cleanup_not_reported_case_count'],
         '报告': summary['report'],
     }
     print(json.dumps({'已迁移用例数': migrated, '已同步注册表用例数': synced,

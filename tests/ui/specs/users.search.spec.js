@@ -41,39 +41,10 @@ async function query(page, value) {
   return page.locator('tbody tr');
 }
 
-test('查询-按账号模糊搜索', { annotation: { type: 'case', description: 'CASE-000267' } }, async ({ page }) => {
-  await openUsers(page);
-  const rows = await query(page, 'admin');
-  await expect(rows).toHaveCount(1);
-  await expect(rows.first().locator('td').first()).toHaveText('admin');
-});
-
-test('查询-按姓名模糊搜索', { annotation: { type: 'case', description: 'CASE-000268' } }, async ({ page }) => {
-  await openUsers(page);
-  const rows = await query(page, '管理员');
-  await expect(rows).toHaveCount(1);
-  await expect(rows.first().locator('td').nth(1)).toHaveText('管理员');
-});
-
-test('查询-组合关键字整体匹配无结果', { annotation: { type: 'case', description: 'CASE-000273' } }, async ({ page }) => {
-  await openUsers(page);
-  await expect(await query(page, 'admin 管理员')).toHaveCount(0);
-});
-
-test('查询-无匹配结果', { annotation: { type: 'case', description: 'CASE-000269' } }, async ({ page }) => {
-  await openUsers(page);
-  const rows = await query(page, `AI_NO_MATCH_${Date.now()}`);
-  await expect(rows).toHaveCount(0);
-});
-
-test('查询-关键字包含空格', { annotation: { type: 'case', description: 'CASE-000278' } }, async ({ page }) => {
-  await openUsers(page);
-  const all = await query(page, '');
-  const spaced = await query(page, ' ');
-  expect(await spaced.allTextContents()).toEqual(await all.allTextContents());
-});
-
-test('新建用户取消不保存', { annotation: { type: 'case', description: 'CASE-000323' } }, async ({ page }) => {
+test('新建用户取消不保存', { annotation: [
+  { type: 'case', description: 'CASE-000323' },
+  { type: 'cleanup', description: 'not-applicable' },
+] }, async ({ page }) => {
   const account = `AI_CANCEL_${Date.now()}`.slice(0, 32);
   await openUsers(page);
   await page.getByRole('button', { name: '新建用户', exact: true }).click();

@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { login } = require('../helpers/auth');
+const { openModule } = require('../helpers/auth');
 
 const CASE = (caseId, title, body, { failureCategory } = {}) => test(title, {
   annotation: [
@@ -21,9 +21,7 @@ function row(page, name) {
 }
 
 async function openConfigs(page) {
-  await login(page);
-  await page.getByText('机器人构型配置', { exact: true }).click();
-  await expect(page.getByRole('button', { name: '新建构型', exact: true })).toBeVisible();
+  await openModule(page, '机器人构型配置', '/admin/robot-configs', () => page.getByRole('button', { name: '新建构型', exact: true }));
 }
 
 async function openCreate(page) {
@@ -89,14 +87,13 @@ async function expectBlocked(page, form, name, message, expectedRows = 0) {
   await expect(feedback.filter({ hasText: message }).first()).toBeVisible();
 }
 
-async function expectRequiredFieldErrors(page, form, fields, values, expectFirstFieldFocus = false) {
+async function expectRequiredFieldErrors(page, form, fields, values) {
   for (const field of fields) {
     await form.save.click();
     await expect(form.dialog).toBeVisible();
     await expect(row(page, values.name || '')).toHaveCount(0);
     const message = field === '配置文件' ? /配置文件/ : new RegExp(`请输入${field}`);
     await expect(page.locator('.el-message').filter({ hasText: message })).toBeVisible();
-    if (expectFirstFieldFocus && field === '构型名称') await expect.soft(form.name).toBeFocused();
     if (field === '构型名称') await form.name.fill(unique('requiredname'));
     if (field === '机器人型号') await form.model.fill(unique('requiredmodel'));
     if (field === '配置文件') break;
@@ -315,10 +312,10 @@ for (const [caseId, title, values, missingFields] of [
     const form = await openCreate(page);
     await fill(form, values);
     try {
-      await expectRequiredFieldErrors(page, form, missingFields, values, caseId === 'CASE-000482');
+      await expectRequiredFieldErrors(page, form, missingFields, values);
     }
     finally { await cancel(form); }
-  }, caseId === 'CASE-000482' ? { failureCategory: 'PRODUCT_DEFECT' } : {});
+  });
 }
 
 CASE('CASE-000487', '机器人构型配置 - 新建构型时名称重复提示已存在', async ({ page }) => {

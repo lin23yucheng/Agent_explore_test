@@ -1,5 +1,15 @@
-const { test, expect } = require('@playwright/test');
+const { test: baseTest, expect } = require('@playwright/test');
 const { login } = require('../helpers/auth');
+
+const test = (title, options, body) => {
+  const annotations = Array.isArray(options.annotation)
+    ? options.annotation
+    : [options.annotation].filter(Boolean);
+  return baseTest(title, {
+    ...options,
+    annotation: [...annotations, { type: 'cleanup', description: 'passed' }],
+  }, body);
+};
 
 async function users(page) { await login(page); await page.getByText('用户管理', { exact: true }).click(); await expect(page.getByPlaceholder('搜索账户和姓名')).toBeVisible(); }
 function rows(page) { return page.locator('tbody tr:visible'); }

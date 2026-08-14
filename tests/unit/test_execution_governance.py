@@ -5,6 +5,8 @@ import tempfile
 import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -27,6 +29,9 @@ class ExecutionGovernanceTests(unittest.TestCase):
             "case_report_under_test", REPO_ROOT / "scripts" / "build_case_report.py")
         self.configure_testflow_paths()
         self.report.ROOT = self.root
+        self.report.OUTPUT = self.root / "reports" / "execution_report.csv"
+        self.report.SUMMARY = self.root / "reports" / "execution_summary.json"
+        self.report.EVIDENCE_ARCHIVE_ROOT = self.root / "reports" / "history" / "evidence"
         (self.root / "tests" / "ui" / "specs").mkdir(parents=True)
 
     def tearDown(self):
@@ -219,11 +224,236 @@ class ExecutionGovernanceTests(unittest.TestCase):
                 "implementationHash": entry["implementationHash"],
             }],
         }
-        raw_results = [{"title": "创建用户", "caseIds": [case["id"]], "status": "passed"}]
+        raw_results = [{
+            "title": "创建用户",
+            "caseIds": [case["id"]],
+            "status": "passed",
+            "cleanupStatus": "passed",
+        }]
         registry = self.testflow.load_json(self.testflow.CASE_REGISTRY, {})
 
         with self.assertRaisesRegex(SystemExit, "没有结果"):
             self.report.validate_batch_results(raw_results, automation, run_plan, registry)
+
+    def test_report_rejects_skipped_planned_case(self):
+        _, case = self.make_case()
+        self.register_case(case)
+        automation = self.testflow.load_json(self.testflow.AUTOMATION_REGISTRY, {})
+        entry = automation["tests"]["创建用户"]
+        run_plan = {
+            "caseIds": [case["id"]],
+            "bindings": [{
+                "caseId": case["id"],
+                "caseRevision": case["revision"],
+                "contractHash": case["contractHash"],
+                "testTitle": "创建用户",
+                "file": entry["file"],
+                "implementationHash": entry["implementationHash"],
+            }],
+        }
+        raw_results = [{
+            "title": "创建用户",
+            "caseIds": [case["id"]],
+            "status": "skipped",
+            "cleanupStatus": "passed",
+        }]
+        registry = self.testflow.load_json(self.testflow.CASE_REGISTRY, {})
+
+        with self.assertRaisesRegex(SystemExit, "被跳过"):
+            self.report.validate_batch_results(raw_results, automation, run_plan, registry)
+
+    def test_report_rejects_missing_cleanup_status(self):
+        _, case = self.make_case()
+        self.register_case(case)
+        automation = self.testflow.load_json(self.testflow.AUTOMATION_REGISTRY, {})
+        entry = automation["tests"]["创建用户"]
+        run_plan = {
+            "caseIds": [case["id"]],
+            "bindings": [{
+                "caseId": case["id"],
+                "caseRevision": case["revision"],
+                "contractHash": case["contractHash"],
+                "testTitle": "创建用户",
+                "file": entry["file"],
+                "implementationHash": entry["implementationHash"],
+            }],
+        }
+        raw_results = [{
+            "title": "创建用户",
+            "caseIds": [case["id"]],
+            "status": "passed",
+            "cleanupStatus": "not_reported",
+        }]
+        registry = self.testflow.load_json(self.testflow.CASE_REGISTRY, {})
+
+        with self.assertRaisesRegex(SystemExit, "未报告清理状态"):
+            self.report.validate_batch_results(raw_results, automation, run_plan, registry)
+
+    def test_stale_mapping_does_not_erase_trusted_execution_result(self):
+        registry, case = self.make_case()
+        self.register_case(case)
+        source = self.root / "cases" / "current.csv"
+        self.testflow.export_current(registry, source)
+        rows, headers = self.report.read_csv(source)
+        automation = self.testflow.load_json(self.testflow.AUTOMATION_REGISTRY, {})
+        automation["tests"]["创建用户"]["status"] = "stale"
+        history = {
+            "version": 1,
+            "cases": {
+                case["id"]: {
+                    "fingerprint": self.report.case_fingerprint(rows[0], headers),
+                    "status": "passed",
+                    "trusted": True,
+                    "testTitle": "创建用户",
+                    "executedAt": "2026-08-14T00:00:00Z",
+                    "failureCategory": "",
+                    "cleanupStatus": "passed",
+                    "error": "",
+                    "evidence": [],
+                }
+            },
+        }
+
+        summary, _ = self.report.render_reports(
+            history, rows, headers, set(), automation, registry)
+        rendered, _ = self.report.read_csv(self.report.OUTPUT)
+
+        self.assertEqual(summary["passed_case_count"], 1)
+        self.assertEqual(summary["needs_rerun_case_count"], 1)
+        self.assertEqual(rendered[0]["执行结果"], "通过")
+        self.assertEqual(rendered[0]["自动化状态"], "需重新执行")
+
+    def test_changed_case_does_not_erase_trusted_execution_result(self):
+        registry, case = self.make_case()
+        self.register_case(case)
+        source = self.root / "cases" / "current.csv"
+        self.testflow.export_current(registry, source)
+        rows, headers = self.report.read_csv(source)
+        old_fingerprint = self.report.case_fingerprint(rows[0], headers)
+        rows[0]["预期"] = "当前版本已经修改预期"
+        self.report.write_csv(source, rows, headers)
+        automation = self.testflow.load_json(self.testflow.AUTOMATION_REGISTRY, {})
+        history = {
+            "version": 1,
+            "cases": {
+                case["id"]: {
+                    "fingerprint": old_fingerprint,
+                    "status": "failed",
+                    "trusted": True,
+                    "testTitle": "创建用户",
+                    "executedAt": "2026-08-14T00:00:00Z",
+                    "failureCategory": "PRODUCT_DEFECT",
+                    "cleanupStatus": "passed",
+                    "error": "产品行为不符合预期",
+                    "evidence": [],
+                }
+            },
+        }
+
+        summary, _ = self.report.render_reports(
+            history, rows, headers, set(), automation, registry)
+        rendered, _ = self.report.read_csv(self.report.OUTPUT)
+
+        self.assertEqual(summary["failed_case_count"], 1)
+        self.assertEqual(summary["not_executed_case_count"], 0)
+        self.assertEqual(rendered[0]["执行结果"], "未通过")
+        self.assertEqual(rendered[0]["自动化状态"], "需重新执行")
+
+    def test_stale_mapping_without_history_is_not_unautomated(self):
+        registry, case = self.make_case()
+        self.register_case(case)
+        source = self.root / "cases" / "current.csv"
+        self.testflow.export_current(registry, source)
+        rows, headers = self.report.read_csv(source)
+        automation = self.testflow.load_json(self.testflow.AUTOMATION_REGISTRY, {})
+        automation["tests"]["创建用户"]["status"] = "stale"
+
+        summary, _ = self.report.render_reports(
+            {"version": 1, "cases": {}}, rows, headers, set(), automation, registry)
+        rendered, _ = self.report.read_csv(self.report.OUTPUT)
+
+        self.assertEqual(summary["needs_rerun_case_count"], 1)
+        self.assertEqual(rendered[0]["执行结果"], "未执行")
+        self.assertEqual(rendered[0]["自动化状态"], "需重新执行")
+
+    def test_latest_evidence_is_archived_before_next_batch_cleanup(self):
+        source = self.root / "reports" / "latest" / "test-results" / "failure.png"
+        source.parent.mkdir(parents=True)
+        source.write_bytes(b"evidence")
+        history = {
+            "version": 1,
+            "cases": {
+                "CASE-000001": {
+                    "status": "failed",
+                    "trusted": True,
+                    "testTitle": "创建用户",
+                    "executedAt": "2026-08-14T00:00:00Z",
+                    "evidence": [str(source.relative_to(self.root))],
+                }
+            },
+        }
+
+        summary = self.report.cleanup_evidence(history)
+        archived = history["cases"]["CASE-000001"]["evidence"][0]
+
+        self.assertEqual(summary["归档证据路径数"], 1)
+        self.assertTrue(archived.startswith("reports/history/evidence/"))
+        self.assertTrue((self.root / archived).is_file())
+        source.unlink()
+        second = self.report.cleanup_evidence(history)
+        self.assertEqual(second["清理失效路径数"], 0)
+        self.assertTrue((self.root / archived).is_file())
+
+    def test_discovery_preserves_audited_active_registration(self):
+        _, case = self.make_case()
+        self.register_case(case)
+        completed = SimpleNamespace(
+            returncode=0,
+            stdout="  specs/users.spec.js:1:1 › 创建用户\n",
+            stderr="",
+        )
+
+        with patch.object(self.testflow.subprocess, "run", return_value=completed):
+            with redirect_stdout(io.StringIO()):
+                self.testflow.discover_automation()
+
+        automation = self.testflow.load_json(self.testflow.AUTOMATION_REGISTRY, {})
+        entry = automation["tests"]["创建用户"]
+        self.assertEqual(entry["status"], "active")
+        self.assertEqual(entry["caseRevision"], 1)
+        self.assertTrue(entry["implementationHash"])
+
+    def test_annotation_sync_does_not_borrow_another_tests_audit(self):
+        _, case = self.make_case()
+        self.register_case(case)
+        payload = {
+            "suites": [{
+                "title": "renamed.spec.js",
+                "suites": [],
+                "specs": [{
+                    "title": "重命名后的测试",
+                    "file": "specs/renamed.spec.js",
+                    "tests": [{
+                        "annotations": [{"type": "case", "description": case["id"]}],
+                    }],
+                }],
+            }],
+        }
+        completed = SimpleNamespace(
+            returncode=0,
+            stdout=json.dumps(payload, ensure_ascii=False),
+            stderr="",
+        )
+
+        with patch.object(self.testflow.subprocess, "run", return_value=completed):
+            with redirect_stdout(io.StringIO()):
+                self.testflow.sync_annotations()
+
+        automation = self.testflow.load_json(self.testflow.AUTOMATION_REGISTRY, {})
+        entry = automation["tests"]["重命名后的测试"]
+        self.assertEqual(entry["status"], "stale")
+        self.assertNotIn("implementationHash", entry)
+        self.assertNotIn("auditFile", entry)
 
 
 if __name__ == "__main__":

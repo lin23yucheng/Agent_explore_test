@@ -8,17 +8,17 @@
   "coverage": [
     {
       "contractItemId": "P1",
-      "implementation": "openCategories: login(admin)后进入数据分类管理并等待新建分类按钮可见",
+      "implementation": "openCategories: 复用admin登录态，优先直达数据分类管理并等待新建分类按钮可见",
       "evidence": "正式执行时 P1 对应断言通过；CASE-ID CASE-000533 独立运行并保留列表/弹框最终状态"
     },
     {
       "contractItemId": "P2",
-      "implementation": "openCategories: login(admin)后进入数据分类管理并等待新建分类按钮可见",
+      "implementation": "openCategories: 复用admin登录态，优先直达数据分类管理并等待新建分类按钮可见",
       "evidence": "正式执行时 P2 对应断言通过；CASE-ID CASE-000533 独立运行并保留列表/弹框最终状态"
     },
     {
       "contractItemId": "P3",
-      "implementation": "openCategories: login(admin)后进入数据分类管理并等待新建分类按钮可见",
+      "implementation": "openCategories: 复用admin登录态，优先直达数据分类管理并等待新建分类按钮可见",
       "evidence": "正式执行时 P3 对应断言通过；CASE-ID CASE-000533 独立运行并保留列表/弹框最终状态"
     },
     {
@@ -52,5 +52,5 @@
       "evidence": "正式执行时 A3 对应断言通过；CASE-ID CASE-000533 独立运行并保留列表/弹框最终状态"
     }
   ],
-  "notes": "2026-08-13 已按当前执行契约逐项对照 data-categories.spec.js；测试数据使用AI前缀并在finally清理。"
+  "notes": "2026-08-13 已按当前执行契约逐项对照 data-categories.spec.js；测试数据使用AI前缀并在finally清理。 2026-08-13执行性能优化：复用UI登录态并优先直达模块URL；业务数据准备和清理仍全部通过页面完成。"
 }

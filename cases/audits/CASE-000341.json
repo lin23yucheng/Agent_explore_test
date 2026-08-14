@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000341",
+  "caseRevision": 1,
+  "contractHash": "1fc01f01e49a2060f1ec65c7ca047ccffc3084b44b8bf3d2f34ba6f6c4b7c0b2",
+  "testTitle": "用户管理 - 新增用户时账号唯一性校验 [CASE-000341]",
+  "file": "tests/ui/specs/users.rebuilt.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "tests/ui/specs/users.rebuilt.spec.js :: 用户管理 - 新增用户时账号唯一性校验 [CASE-000341]（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000341；测试标题、步骤和最终断言与执行契约 P1 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "tests/ui/specs/users.rebuilt.spec.js :: 用户管理 - 新增用户时账号唯一性校验 [CASE-000341]（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000341；测试标题、步骤和最终断言与执行契约 S1 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "tests/ui/specs/users.rebuilt.spec.js :: 用户管理 - 新增用户时账号唯一性校验 [CASE-000341]（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000341；测试标题、步骤和最终断言与执行契约 S2 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "tests/ui/specs/users.rebuilt.spec.js :: 用户管理 - 新增用户时账号唯一性校验 [CASE-000341]（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000341；测试标题、步骤和最终断言与执行契约 A1 对应，失败时保留截图/录像/Trace。"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "tests/ui/specs/users.rebuilt.spec.js :: 用户管理 - 新增用户时账号唯一性校验 [CASE-000341]（按当前CASE契约执行）",
+      "evidence": "本批Playwright实际执行 CASE-000341；测试标题、步骤和最终断言与执行契约 A2 对应，失败时保留截图/录像/Trace。"
+    }
+  ],
+  "notes": "2026-08-13用户管理模块重建/复跑后登记；测试数据通过页面准备与清理。"
+}

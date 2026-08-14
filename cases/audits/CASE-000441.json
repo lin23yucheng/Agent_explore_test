@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000441",
+  "caseRevision": 1,
+  "contractHash": "e19cbf74651b93e5635e8cdf5a821e58b80fb3f6199ccf38422d10542e691b25",
+  "testTitle": "标签管理 - 刚创建标签时创建时间与更新时间一致",
+  "file": "tests/ui/specs/tags.spec.js",
+  "coverage": [
+    {
+      "contractItemId": "P1",
+      "implementation": "标签管理 - 刚创建标签时创建时间与更新时间一致通过全局UI登录态和openTags直达标签管理，页面“新建标签”按钮可见后开始执行。",
+      "evidence": "2026-08-13探索批次“标签管理 - 刚创建标签时创建时间与更新时间一致”通过；登录、模块就绪及所需页面测试数据的可见性检查均成功。"
+    },
+    {
+      "contractItemId": "S1",
+      "implementation": "标签管理 - 刚创建标签时创建时间与更新时间一致调用openTags直达/admin/scene-tags，并切换为100条/页后等待列表加载完成。",
+      "evidence": "2026-08-13探索批次“标签管理 - 刚创建标签时创建时间与更新时间一致”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "S2",
+      "implementation": "标签管理 - 刚创建标签时创建时间与更新时间一致使用标签名称输入框fill写入契约数据，并在输入限制场景读取inputValue按控件最终值判定。",
+      "evidence": "2026-08-13探索批次“标签管理 - 刚创建标签时创建时间与更新时间一致”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "S3",
+      "implementation": "标签管理 - 刚创建标签时创建时间与更新时间一致调用openTags直达/admin/scene-tags，并切换为100条/页后等待列表加载完成。",
+      "evidence": "2026-08-13探索批次“标签管理 - 刚创建标签时创建时间与更新时间一致”通过；该页面操作完成，且后续最终状态断言成立。"
+    },
+    {
+      "contractItemId": "A1",
+      "implementation": "标签管理 - 刚创建标签时创建时间与更新时间一致点击“新建标签”，断言对话框可见，并通过create/rejectedCreate完成页面提交。",
+      "evidence": "2026-08-13探索批次“标签管理 - 刚创建标签时创建时间与更新时间一致”通过，与该预期对应的Playwright expect断言已执行成功。"
+    },
+    {
+      "contractItemId": "A2",
+      "implementation": "标签管理 - 刚创建标签时创建时间与更新时间一致在对应CASE测试体中通过页面完成步骤“创建成功，提示操作成功。”。",
+      "evidence": "断言表单错误或.el-message匹配契约原因，并验证弹框保持打开、原行保留或目标状态未生效。"
+    },
+    {
+      "contractItemId": "A3",
+      "implementation": "标签管理 - 刚创建标签时创建时间与更新时间一致在对应CASE测试体中通过页面完成步骤“新标签的创建时间和更新时间显示相同，且均为当前时间。”。",
+      "evidence": "读取目标行创建/更新时间列，断言YYYY-MM-DD HH:mm格式、前后一致/更新关系或全列表倒序。"
+    }
+  ],
+  "notes": "2026-08-13按当前执行契约完成页面探索和脚本逐项审核；标签管理65条探索批次全部通过。测试数据创建与清理均走页面，AI前缀数据在finally中删除并复查；任务引用基准标签“训练”保留。"
+}
