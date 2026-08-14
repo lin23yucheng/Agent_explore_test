@@ -25,6 +25,12 @@ META_HEADERS = ["用例ID", "用例Revision", "执行契约哈希", "状态", "�
                 "源测试点ID", "迭代版本"]
 IDENTITY_HEADERS = set(META_HEADERS)
 VALID_ACTIONS = {"add", "unchanged", "modify", "replace", "retire"}
+VALID_CLEANUP_STATUSES = {"passed", "failed", "not-applicable", "retained-by-design"}
+VALID_FAILURE_CATEGORIES = {
+    "DATA_PRECONDITION_MISSING", "DATA_SETUP_FAILED", "ENVIRONMENT_BLOCKED",
+    "PRODUCT_DEFECT", "TEST_IMPLEMENTATION_DEFECT", "UNKNOWN",
+    "CASE_DESCRIPTION_AMBIGUOUS", "REQUIREMENT_CONFLICT", "CLEANUP_FAILED",
+}
 CONTRACT_FIELDS = {
     "preconditions": "前置条件",
     "steps": "步骤",
@@ -100,6 +106,30 @@ def hash_file(path):
     if not path.is_file():
         return ""
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def audit_is_specific(item):
+    """Reject boilerplate coverage that cannot prove a concrete implementation."""
+    implementation = re.sub(r"\s+", " ", str(item.get("implementation", ""))).strip()
+    evidence = re.sub(r"\s+", " ", str(item.get("evidence", ""))).strip()
+    if len(implementation) < 16 or len(evidence) < 16:
+        return False
+    boilerplate = (
+        r"按当前CASE契约执行|本批Playwright实际执行|正式执行时.*对应断言通过|"
+        r"与执行契约.*对应|对应 CASE 分支.*按契约|对应 CASE 分支的 Playwright 断言"
+    )
+    if re.search(boilerplate, implementation, re.I) or re.search(boilerplate, evidence, re.I):
+        return False
+    implementation_markers = (
+        ".js", "locator", "getBy", "expect", "fill", "click", "open", "inputValue",
+        "断言", "定位", "输入", "点击", "保存", "列表", "弹框", "查询", "创建", "删除",
+    )
+    evidence_markers = (
+        "expect", "断言", "列表", "弹框", "最终", "可见", "输入", "状态", "创建", "删除",
+        "截图", "录像", "trace", "行", "数量", "提示",
+    )
+    return (any(marker.lower() in implementation.lower() for marker in implementation_markers)
+            and any(marker.lower() in evidence.lower() for marker in evidence_markers))
 
 
 def split_contract_items(value):
@@ -274,11 +304,15 @@ def migrate_state():
             continue
         case_ids = entry.get("caseIds", [])
         case = registry.get("cases", {}).get(case_ids[0], {}) if len(case_ids) == 1 else {}
-        issue = automation_binding_issue(entry, case) if case else "未唯一绑定有效用例"
+        issue = automation_binding_issue(
+            entry, case, title, allow_missing_audit_hash=True) if case else "未唯一绑定有效用例"
         if issue:
             entry["status"] = "stale"
             entry["staleReason"] = f"状态迁移：{issue}"
             invalidated += 1
+        else:
+            entry["testTitle"] = title
+            entry["auditHash"] = hash_file(ROOT / entry["auditFile"])
     registry["version"] = 3
     registry["updatedAt"] = now_iso()
     automation["version"] = max(int(automation.get("version", 1)), 2)
@@ -325,7 +359,10 @@ def make_audit_template(case_id, test_title, spec_file, output=None):
 
 
 def validate_audit(audit_path, case, spec_file, test_title):
-    audit_path = Path(audit_path).resolve()
+    audit_path = Path(audit_path)
+    if not audit_path.is_absolute():
+        audit_path = ROOT / audit_path
+    audit_path = audit_path.resolve()
     if not audit_path.is_file():
         raise SystemExit(f"自动化覆盖审计文件不存在: {audit_path}")
     audit = load_json(audit_path, {})
@@ -333,7 +370,7 @@ def validate_audit(audit_path, case, spec_file, test_title):
     required = set(contract["completionGate"]["requiredCoverageIds"])
     coverage = audit.get("coverage", [])
     covered = {item.get("contractItemId") for item in coverage
-               if item.get("implementation") and item.get("evidence")}
+               if item.get("implementation") and item.get("evidence") and audit_is_specific(item)}
     errors = []
     if audit.get("caseId") != case["id"]:
         errors.append("caseId不匹配")
@@ -352,7 +389,7 @@ def validate_audit(audit_path, case, spec_file, test_title):
     if unknown:
         errors.append(f"包含未知覆盖项: {', '.join(unknown)}")
     if len(coverage) != len(covered):
-        errors.append("覆盖项重复，或缺少implementation/evidence")
+        errors.append("覆盖项重复、缺少implementation/evidence，或内容过于模板化")
     if errors:
         raise SystemExit("自动化覆盖审计未通过：" + "；".join(errors))
     return audit_path, audit, contract
@@ -467,6 +504,16 @@ def prepare(source, version, output=None):
         raise SystemExit("尚未初始化用例注册表，请先运行 testflow.py bootstrap。")
     source = Path(source).resolve()
     rows, _ = read_csv(source)
+    seen_input_keys = set()
+    duplicate_rows = []
+    for index, row in enumerate(rows, start=1):
+        key = (row.get("用例ID", ""), logical_key(row), fingerprint(source_fields(row)))
+        if key in seen_input_keys:
+            duplicate_rows.append(index)
+        seen_input_keys.add(key)
+    if duplicate_rows:
+        raise SystemExit(
+            "迭代CSV包含重复用例行，请先消除重复：" + ", ".join(map(str, duplicate_rows)))
     registry = load_json(CASE_REGISTRY, empty_registry())
     by_key = {}
     for case in active_cases(registry):
@@ -509,6 +556,7 @@ def prepare(source, version, output=None):
         "status": "draft",
         "createdAt": now_iso(),
         "sourceCsv": str(source),
+        "sourceHash": hash_file(source),
         "iterationVersion": version,
         "rules": {
             "incrementalInput": True,
@@ -551,6 +599,20 @@ def apply_plan(plan_path):
         raise SystemExit("合并计划必须先由 Agent 审核并将 status 设置为 reviewed。")
     if plan.get("uncertain"):
         raise SystemExit("合并计划仍包含 uncertain 项，不能应用。")
+    plan_source = Path(plan.get("sourceCsv", "")) if plan.get("sourceCsv") else None
+    if plan_source and plan_source.is_file():
+        if not plan.get("sourceHash"):
+            raise SystemExit("合并计划缺少sourceHash，请重新prepare后再审核应用。")
+        if plan.get("sourceHash") != hash_file(plan_source):
+            raise SystemExit("输入CSV在prepare后发生变化，请重新生成并审核合并计划。")
+    item_rows = [item.get("inputRow") for item in plan.get("items", [])]
+    if len(item_rows) != len(set(item_rows)):
+        raise SystemExit("合并计划包含重复inputRow，拒绝应用。")
+    target_ids = [item.get("targetCaseId") for item in plan.get("items", [])
+                  if item.get("targetCaseId")]
+    duplicate_targets = sorted({value for value in target_ids if target_ids.count(value) > 1})
+    if duplicate_targets:
+        raise SystemExit("合并计划重复处理同一CASE-ID：" + ", ".join(duplicate_targets))
     registry = load_json(CASE_REGISTRY, empty_registry())
     ensure_case_metadata(registry)
     automation = load_json(AUTOMATION_REGISTRY,
@@ -678,6 +740,7 @@ def register_automation(test_title, spec_file, case_ids, audit_path=None):
         ]
     automation["tests"][test_title] = {
         "file": normalized_spec,
+        "testTitle": test_title,
         "caseIds": case_ids,
         "status": "active",
         "source": "agent",
@@ -685,6 +748,7 @@ def register_automation(test_title, spec_file, case_ids, audit_path=None):
         "contractHash": contract["contractHash"],
         "implementationHash": hash_file(absolute_spec),
         "auditFile": str(audit_path.relative_to(ROOT)).replace("\\", "/"),
+        "auditHash": hash_file(audit_path),
         "auditedAt": now_iso(),
     }
     for case_id in case_ids:
@@ -802,7 +866,8 @@ def discover_automation():
             "source": previous.get("source", "按标题重新发现，等待本次执行验证"),
             **({key: previous[key] for key in (
                 "caseRevision", "contractHash", "implementationHash",
-                "auditFile", "auditedAt", "staleReason") if previous.get(key)}),
+                "auditFile", "auditHash", "auditedAt", "staleReason", "testTitle")
+                if previous.get(key)}),
             **({"lastRun": previous["lastRun"]} if previous.get("lastRun") else {}),
         }
         for case_id in case_ids:
@@ -876,8 +941,9 @@ def sync_annotations():
                            "聚合脚本机械拆分，等待逐用例实现"
                            if shared_derived else "Playwright用例注解"),
                 **({key: previous[key] for key in (
-                    "caseRevision", "contractHash", "implementationHash",
-                    "auditFile", "auditedAt", "staleReason") if previous.get(key)}),
+                "caseRevision", "contractHash", "implementationHash",
+                "auditFile", "auditHash", "auditedAt", "staleReason", "testTitle")
+                if previous.get(key)}),
                 **({"lastRun": previous["lastRun"]} if previous.get("lastRun") else {}),
             }
             for case_id in case_ids:
@@ -923,7 +989,7 @@ def prune_automation_entries(automation, retained_titles):
     return len(previous) - len(automation["tests"])
 
 
-def automation_binding_issue(entry, case):
+def automation_binding_issue(entry, case, test_title="", allow_missing_audit_hash=False):
     if entry.get("status") != "active":
         return "自动化状态不是active"
     spec_file = entry.get("file", "").replace("\\", "/")
@@ -939,6 +1005,15 @@ def automation_binding_issue(entry, case):
     audit_file = entry.get("auditFile", "")
     if not audit_file or not (ROOT / audit_file).is_file():
         return "缺少自动化覆盖审计文件"
+    try:
+        validate_audit(audit_file, case, spec_file, test_title or entry.get("testTitle", ""))
+    except SystemExit as error:
+        return str(error)
+    audit_hash = hash_file(ROOT / audit_file)
+    if not entry.get("auditHash") and not allow_missing_audit_hash:
+        return "自动化绑定缺少覆盖审计哈希，需重新登记"
+    if entry.get("auditHash") and entry.get("auditHash") != audit_hash:
+        return "覆盖审计文件已变化但尚未重新登记"
     return ""
 
 
@@ -950,7 +1025,7 @@ def classified_tests(case_id, registry, automation):
     for title in automation.get("cases", {}).get(case_id, []):
         entry = automation.get("tests", {}).get(title, {})
         if entry.get("status") == "active":
-            issue = automation_binding_issue(entry, case)
+            issue = automation_binding_issue(entry, case, title)
             if issue:
                 stale_titles.append(title)
                 binding_issues[title] = issue
@@ -977,6 +1052,10 @@ def make_run_plan(source, plan_path=None, output=None):
     ensure_case_metadata(registry)
     automation = load_json(AUTOMATION_REGISTRY, {"tests": {}, "cases": {}})
     case_ids = [item["caseId"] for item in scope["resolved"]]
+    duplicate_case_ids = sorted({case_id for case_id in case_ids if case_ids.count(case_id) > 1})
+    if duplicate_case_ids:
+        raise SystemExit(
+            "运行计划输入重复解析到同一CASE-ID：" + ", ".join(duplicate_case_ids))
     test_titles = []
     bindings = []
     for case_id in case_ids:
@@ -993,7 +1072,14 @@ def make_run_plan(source, plan_path=None, output=None):
             "testTitle": title,
             "file": entry["file"],
             "implementationHash": entry["implementationHash"],
+            "auditHash": entry["auditHash"],
         })
+    leaf_titles = [title.rsplit(" › ", 1)[-1] for title in test_titles]
+    duplicate_leaf_titles = sorted({title for title in leaf_titles if leaf_titles.count(title) > 1})
+    if duplicate_leaf_titles:
+        raise SystemExit(
+            "运行计划包含重复叶子测试标题，无法安全生成Playwright grep："
+            + " | ".join(duplicate_leaf_titles))
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     output = Path(output) if output else RUNS_ROOT / f"run-plan-{stamp}.json"
     payload = {
@@ -1001,6 +1087,7 @@ def make_run_plan(source, plan_path=None, output=None):
         "status": "ready",
         "createdAt": now_iso(),
         "sourceCsv": str(Path(source).resolve()),
+        "sourceHash": hash_file(Path(source).resolve()),
         "mergePlan": str(Path(plan_path).resolve()) if plan_path else "",
         "caseIds": case_ids,
         "testTitles": test_titles,
@@ -1014,6 +1101,7 @@ def make_run_plan(source, plan_path=None, output=None):
 
 
 def resolve_scope(source, emit=True, plan_path=None):
+    source = Path(source).resolve()
     rows, _ = read_csv(source)
     registry = load_json(CASE_REGISTRY, empty_registry())
     ensure_case_metadata(registry)
@@ -1062,6 +1150,13 @@ def resolve_scope(source, emit=True, plan_path=None):
     impacted_ids = []
     if plan_path:
         plan = load_json(plan_path, {})
+        if plan.get("status") != "applied":
+            raise SystemExit("用于正式范围的变更计划必须已经apply，当前状态不是applied")
+        plan_source = plan.get("sourceCsv", "")
+        if not plan_source:
+            raise SystemExit("变更计划缺少sourceCsv，无法绑定本次输入")
+        if Path(plan_source).resolve() != source:
+            raise SystemExit("变更计划sourceCsv与本次输入CSV不一致")
         impacted_ids = list(dict.fromkeys(plan.get("impactedRegressionCaseIds", [])))
         present_ids = {item["caseId"] for item in resolved if item.get("caseId")}
         for case_id in impacted_ids:

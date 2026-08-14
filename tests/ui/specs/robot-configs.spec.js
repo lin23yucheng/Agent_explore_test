@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { openModule } = require('../helpers/auth');
+const { withCleanupStatus } = require('../helpers/case-test');
 
 const CASE = (caseId, title, body, { failureCategory } = {}) => test(title, {
   annotation: [
@@ -7,7 +8,7 @@ const CASE = (caseId, title, body, { failureCategory } = {}) => test(title, {
     { type: 'cleanup', description: 'passed' },
     ...(failureCategory ? [{ type: 'failure-category', description: failureCategory }] : []),
   ],
-}, body);
+}, withCleanupStatus(body));
 
 function unique(prefix) {
   return `AI${prefix}${Date.now()}${Math.floor(Math.random() * 1000)}`.slice(0, 32);

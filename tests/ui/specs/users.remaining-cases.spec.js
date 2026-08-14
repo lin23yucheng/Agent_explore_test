@@ -1,5 +1,6 @@
 const { test: baseTest, expect } = require('@playwright/test');
 const { login } = require('../helpers/auth');
+const { runWithCleanupStatus } = require('../helpers/case-test');
 
 const test = (title, options, body) => {
   const annotations = Array.isArray(options.annotation)
@@ -8,7 +9,9 @@ const test = (title, options, body) => {
   return baseTest(title, {
     ...options,
     annotation: [...annotations, { type: 'cleanup', description: 'passed' }],
-  }, body);
+  }, async ({ page, browser }, testInfo) => runWithCleanupStatus(
+    body, { page, browser }, testInfo, 'passed',
+  ));
 };
 
 async function users(page) { await login(page); await page.getByText('用户管理', { exact: true }).click(); await expect(page.getByPlaceholder('搜索账户和姓名')).toBeVisible(); }
@@ -30,9 +33,83 @@ test('用户管理 - 搜索无匹配结果', { annotation: { type: 'case', descr
 for (const [id, title] of [['CASE-000280','用户管理 - 新建用户账号为空时提示必填'],['CASE-000289','用户管理 - 新建用户账号为空时提示必填'],['CASE-000336','用户管理 - 新增用户时账号必填校验'],['CASE-000343','用户管理 - 新增用户时姓名为空校验']]) {
   test(`${title} ${id}`, { annotation: { type: 'case', description: id } }, async ({ page }) => { await users(page); const d = await dialog(page); await fillUser(page, d, { account: id.endsWith('343') ? unique() : '', name: id.endsWith('280') || id.endsWith('289') || id.endsWith('336') ? '必填校验' : '' }); await d.getByRole('button', { name: '保存', exact: true }).click(); await expect(d).toBeVisible(); });
 }
-for (const [id, value] of [['CASE-000283',''],['CASE-000284','abcdefghijklmnopqrstuvwxyz1234567'],['CASE-000337','a'],['CASE-000338','abcdefghijklmnopqrstuvwxyz1234567'],['CASE-000339','test_user123'],['CASE-000340','test@user']]) {
+for (const [id, value] of [['CASE-000283',''],['CASE-000284','abcdefghijklmnopqrstuvwxyz1234567']]) {
   test(`用户管理 - 账号边界或格式 ${id}`, { annotation: { type: 'case', description: id } }, async ({ page }) => { await users(page); const d = await dialog(page); await fillUser(page, d, { account: value, name: '账号格式' }); const observed = await d.locator('input[type=text]').nth(0).inputValue(); if (id === 'CASE-000339') { expect(observed).toBe(value); } else { expect(observed.length).toBeLessThanOrEqual(32); } await d.getByRole('button', { name: '保存', exact: true }).click(); if (id !== 'CASE-000339') await expect(d).toBeVisible(); else await expect(page.locator('body')).toContainText(/成功|账号/); });
 }
+
+test('用户管理 - 账号边界或格式 CASE-000337', { annotation: { type: 'case', description: 'CASE-000337' } }, async ({ page }) => {
+  const oneCharacter = String.fromCharCode(65 + (Date.now() % 26));
+  const maxLength = `AI${Date.now()}${Math.floor(Math.random() * 100000)}`.padEnd(32, 'x').slice(0, 32);
+  await users(page);
+  try {
+    for (const account of [oneCharacter, maxLength]) {
+      const d = await dialog(page);
+      await fillUser(page, d, { account, name: '账号边界', role: '采集工程师' });
+      await expect(d.locator('input[type=text]').nth(0)).toHaveValue(account);
+      await d.getByRole('button', { name: '保存', exact: true }).click();
+      await expect(d).toBeHidden();
+      await expect(row(page, account)).toBeVisible();
+    }
+  } finally {
+    await remove(page, oneCharacter);
+    await remove(page, maxLength);
+  }
+});
+
+test('用户管理 - 账号边界或格式 CASE-000338', { annotation: { type: 'case', description: 'CASE-000338' } }, async ({ page }) => {
+  const requested = `AI${Date.now()}${Math.floor(Math.random() * 100000)}`.padEnd(33, 'x').slice(0, 33);
+  let actual = '';
+  await users(page);
+  try {
+    const d = await dialog(page);
+    await fillUser(page, d, { account: requested, name: '账号超限', role: '采集工程师' });
+    actual = await d.locator('input[type=text]').nth(0).inputValue();
+    expect(actual.length).toBeLessThanOrEqual(32);
+    await d.getByRole('button', { name: '保存', exact: true }).click();
+    await expect(d).toBeHidden();
+    await expect(row(page, actual)).toBeVisible();
+  } finally {
+    if (actual) await remove(page, actual);
+  }
+});
+
+test('用户管理 - 账号边界或格式 CASE-000339', { annotation: { type: 'case', description: 'CASE-000339' } }, async ({ page }) => {
+  const account = `user_${Date.now()}`.slice(0, 32);
+  await users(page);
+  try {
+    const d = await dialog(page);
+    await fillUser(page, d, { account, name: '合法账号', role: '采集工程师' });
+    await expect(d.locator('input[type=text]').nth(0)).toHaveValue(account);
+    await d.getByRole('button', { name: '保存', exact: true }).click();
+    await expect(d).toBeHidden();
+    await expect(row(page, account)).toBeVisible();
+  } finally {
+    await remove(page, account);
+  }
+});
+
+test('用户管理 - 账号边界或格式 CASE-000340', { annotation: { type: 'case', description: 'CASE-000340' } }, async ({ page }) => {
+  const requested = `user@${Date.now()}`.slice(0, 32);
+  let actual = '';
+  await users(page);
+  try {
+    const d = await dialog(page);
+    await fillUser(page, d, { account: requested, name: '非法账号', role: '采集工程师' });
+    actual = await d.locator('input[type=text]').nth(0).inputValue();
+    await d.getByRole('button', { name: '保存', exact: true }).click();
+    if (actual.includes('@')) {
+      await expect(d).toBeVisible();
+      await expect(d.locator('.el-form-item__error').or(page.locator('.el-message')).filter({ hasText: /账号|格式|仅允许/ }).first()).toBeVisible();
+      await expect(row(page, actual)).toHaveCount(0);
+      await d.getByRole('button', { name: '取消', exact: true }).click();
+    } else {
+      await expect(d).toBeHidden();
+      await expect(row(page, actual)).toBeVisible();
+    }
+  } finally {
+    if (actual) await remove(page, actual);
+  }
+});
 for (const [id, role] of [['CASE-000302','管理员'],['CASE-000303','算法工程师'],['CASE-000304','采集工程师'],['CASE-000306','标注工程师'],['CASE-000308','质检工程师']]) {
   test(`用户管理 - 新建用户选择角色 ${role}`, { annotation: { type: 'case', description: id } }, async ({ page }) => { await users(page); const d = await dialog(page); await selectRole(page, d, role); await expect(d).toContainText(role); await page.keyboard.press('Escape'); await expect(page.locator('.el-select-dropdown:visible')).toHaveCount(0); await d.getByRole('button', { name: '取消', exact: true }).click(); });
 }

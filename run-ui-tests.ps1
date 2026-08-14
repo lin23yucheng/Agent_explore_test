@@ -28,6 +28,31 @@ $latestRoot = Join-Path $reportsRoot 'latest'
 $batchResultsFile = Join-Path $latestRoot 'playwright-results.json'
 $runId = (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssfffZ')
 $startedAt = (Get-Date).ToUniversalTime().ToString('o')
+$lockPath = Join-Path $reportsRoot '.formal-ui-run.lock'
+$lockStream = $null
+$expectedBindingsFile = $null
+
+New-Item -ItemType Directory -Path $reportsRoot -Force | Out-Null
+try {
+    $lockStream = [System.IO.File]::Open(
+        $lockPath,
+        [System.IO.FileMode]::OpenOrCreate,
+        [System.IO.FileAccess]::ReadWrite,
+        [System.IO.FileShare]::None
+    )
+    $lockPayload = [System.Text.Encoding]::UTF8.GetBytes("runId=$runId`nstartedAt=$startedAt`n")
+    $lockStream.SetLength(0)
+    $lockStream.Write($lockPayload, 0, $lockPayload.Length)
+    $lockStream.Flush()
+} catch {
+    if ($lockStream) {
+        $lockStream.Dispose()
+        Remove-Item -LiteralPath $lockPath -Force -ErrorAction SilentlyContinue
+    }
+    throw '已有正式UI批次正在执行，禁止并发清空报告或覆盖注册表。'
+}
+
+try {
 
 if ($Full -and ($TestFiles.Count -gt 0 -or -not [string]::IsNullOrWhiteSpace($RunPlan))) {
     throw '不能同时使用 -Full、-RunPlan 和 -TestFiles。'
@@ -60,6 +85,16 @@ if ($Full) {
     if ($runPlanPayload.status -ne 'ready') {
         throw '运行计划状态不是ready。'
     }
+    $resolvedSourceCsv = (Resolve-Path -LiteralPath $SourceCsv).Path
+    if ([string]::IsNullOrWhiteSpace($runPlanPayload.sourceCsv) -or
+        $runPlanPayload.sourceCsv -ne $resolvedSourceCsv) {
+        throw '运行计划sourceCsv与-SourceCsv不一致。'
+    }
+    $sourceHash = (Get-FileHash -LiteralPath $SourceCsv -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ([string]::IsNullOrWhiteSpace($runPlanPayload.sourceHash) -or
+        $runPlanPayload.sourceHash -ne $sourceHash) {
+        throw '输入CSV在运行计划生成后发生变化，请重新生成运行计划。'
+    }
     $allowedCaseIds = @($runPlanPayload.caseIds)
     $expectedBindings = @($runPlanPayload.bindings)
     $selectedFiles = @($runPlanPayload.testFiles)
@@ -84,7 +119,7 @@ if ($Full) {
         }
         $previousResults = Get-Content -LiteralPath $batchResultsFile -Raw | ConvertFrom-Json
         $failedIds = @($previousResults |
-            Where-Object { $_.status -ne 'passed' } |
+            Where-Object { $_.status -ne 'passed' -or $_.cleanupStatus -eq 'failed' } |
             ForEach-Object { @($_.caseIds) } |
             Where-Object { $_ -in @($runPlanPayload.caseIds) } |
             Sort-Object -Unique)
@@ -97,6 +132,7 @@ if ($Full) {
             @($runPlanPayload.bindings | Where-Object { $_.caseId -in $runPlanPayload.caseIds -and $_.testTitle -eq $title }).Count -gt 0
         })
         $runPlanPayload.bindings = @($runPlanPayload.bindings | Where-Object { $_.caseId -in $runPlanPayload.caseIds })
+        $runPlanPayload.testFiles = @($runPlanPayload.bindings.file | Sort-Object -Unique)
         $failedPlan = Join-Path 'cases\runs' ("failed-" + $runId + '.json')
         $runPlanPayload | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $failedPlan -Encoding utf8
         $RunPlan = $failedPlan
@@ -110,6 +146,33 @@ if ($Full) {
     throw '正式执行不再接受按文件选择范围。请先使用 testflow.py make-run-plan 生成精确CASE-ID运行计划，再传入 -RunPlan。'
 } else {
     throw '请使用 -RunPlan 指定精确CASE-ID批次；只有明确需要全量回归时才使用 -Full。'
+}
+
+$duplicateCaseIds = @($allowedCaseIds | Group-Object | Where-Object { $_.Count -gt 1 })
+if ($duplicateCaseIds.Count -gt 0) {
+    throw ('运行计划包含重复CASE-ID: ' + (($duplicateCaseIds | ForEach-Object { $_.Name }) -join ', '))
+}
+$leafTitles = @($runPlanPayload.testTitles | ForEach-Object { ($_ -split ' › ')[-1] })
+$duplicateLeafTitles = @($leafTitles | Group-Object | Where-Object { $_.Count -gt 1 })
+if ($duplicateLeafTitles.Count -gt 0) {
+    throw ('运行计划包含重复叶子测试标题，无法安全执行grep: ' + (($duplicateLeafTitles | ForEach-Object { $_.Name }) -join ' | '))
+}
+
+$preflightArguments = @('playwright', 'test') + $selectedFiles + @('--grep', $Grep, '--list')
+$preflightOutput = @(& npx.cmd @preflightArguments 2>&1)
+if ($LASTEXITCODE -ne 0) {
+    throw ('Playwright运行计划预检失败: ' + (($preflightOutput | Select-Object -Last 20) -join [Environment]::NewLine))
+}
+$listedTitles = @($preflightOutput |
+    Where-Object { $_ -match '^\s+.+\.spec\.js:\d+:\d+\s+›\s+' } |
+    ForEach-Object { (($_ -split ' › ', 2)[1]).Trim() })
+if ($listedTitles.Count -eq 0) {
+    throw 'Playwright预检没有发现任何计划内测试。'
+}
+$titleDifference = @(Compare-Object -ReferenceObject @($runPlanPayload.testTitles) -DifferenceObject $listedTitles)
+if ($titleDifference.Count -gt 0 -or $listedTitles.Count -ne $allowedCaseIds.Count) {
+    throw ('Playwright预检结果与运行计划不一致，禁止执行。差异: ' +
+        (($titleDifference | ForEach-Object { $_.SideIndicator + ' ' + $_.InputObject }) -join '；'))
 }
 
 if ([string]::IsNullOrWhiteSpace($Password)) {
@@ -203,3 +266,14 @@ Write-Output '全量 CSV 报告: reports\execution_report.csv'
 Write-Output '累计历史: reports\history\case-results.json'
 Write-Output ("AI 自愈: " + $(if ($EnableAiHealing) { '启用' } else { '关闭' }))
 if ($playwrightExitCode -ne 0) { exit $playwrightExitCode }
+} finally {
+    if ($expectedBindingsFile -and (Test-Path -LiteralPath $expectedBindingsFile)) {
+        Remove-Item -LiteralPath $expectedBindingsFile -Force -ErrorAction SilentlyContinue
+    }
+    if ($lockStream) {
+        $lockStream.Dispose()
+    }
+    if (Test-Path -LiteralPath $lockPath) {
+        Remove-Item -LiteralPath $lockPath -Force -ErrorAction SilentlyContinue
+    }
+}

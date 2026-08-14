@@ -1,12 +1,13 @@
 const { test, expect } = require('@playwright/test');
 const { openModule } = require('../helpers/auth');
+const { withCleanupStatus } = require('../helpers/case-test');
 
 const CASE = (id, title, body) => test(`${title} [${id}]`, {
   annotation: [
     { type: 'case', description: id },
     { type: 'cleanup', description: 'passed' },
   ],
-}, body);
+}, withCleanupStatus(body));
 
 function account(label) {
   const safeLabel = label.replace(/[^A-Za-z0-9_]/g, '');
@@ -391,7 +392,7 @@ CASE('CASE-000366', '用户管理 - 修改姓名后任务指派显示同步更�
     await createTask(page, taskName); const assignment = await openAssignment(page, taskName); await chooseSelectOption(page, assignment.locator('.el-select').first(), /旧姓名/); await assignment.getByRole('button', { name: '确认指派', exact: true }).click(); await expect(assignment).toBeHidden(); await expect(page.locator('tbody tr:visible').filter({ hasText: taskName })).toContainText('旧姓名');
     await openUsers(page); const row = userRow(page, value); await row.getByRole('button', { name: '编辑', exact: true }).click(); const dialog = page.getByRole('dialog').last(); await dialog.locator('input[type=text]').nth(1).fill('新姓名'); await dialog.getByRole('button', { name: '保存', exact: true }).click(); await expect(userRow(page, value)).toContainText('新姓名');
     await page.goto('/algorithm/tasks'); const search = page.getByPlaceholder('搜索任务名称/编号'); await search.fill(taskName); await page.getByRole('button', { name: '查询', exact: true }).click(); await expect(page.locator('tbody tr:visible').filter({ hasText: taskName })).toContainText('新姓名');
-  } finally { await removeTask(page, taskName).catch(() => {}); await removeUser(page, value).catch(() => {}); }
+  } finally { await removeTask(page, taskName); await removeUser(page, value); }
 });
 
 CASE('CASE-000367', '用户管理 - 取消重置密码弹窗关闭且不修改密码', async ({ page }) => {

@@ -83,3 +83,61 @@ test('cleanup attachment overrides annotations and fails a formal batch', () => 
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
+
+test('formal batches reject unknown failure categories', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'case-reporter-'));
+  const outputFile = path.join(root, 'results.json');
+  const previousFormal = process.env.FORMAL_UI_RUN;
+  try {
+    process.env.FORMAL_UI_RUN = 'true';
+    const reporter = new CaseResultReporter({ outputFile });
+    const testCase = fakeTest();
+    testCase.annotations = [
+      { type: 'case', description: 'CASE-000001' },
+      { type: 'cleanup', description: 'not-applicable' },
+    ];
+    reporter.onTestEnd(testCase, fakeResult('failed', 'Expected: true\nReceived: false'));
+    assert.throws(() => reporter.onEnd(), /尚未完成归因/);
+  } finally {
+    if (previousFormal === undefined) delete process.env.FORMAL_UI_RUN;
+    else process.env.FORMAL_UI_RUN = previousFormal;
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('formal batches reject static cleanup success', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'case-reporter-'));
+  const outputFile = path.join(root, 'results.json');
+  const previousFormal = process.env.FORMAL_UI_RUN;
+  try {
+    process.env.FORMAL_UI_RUN = 'true';
+    const reporter = new CaseResultReporter({ outputFile });
+    reporter.onTestEnd(fakeTest(), fakeResult('passed'));
+    assert.throws(() => reporter.onEnd(), /仅静态声明清理成功/);
+  } finally {
+    if (previousFormal === undefined) delete process.env.FORMAL_UI_RUN;
+    else process.env.FORMAL_UI_RUN = previousFormal;
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('formal batches reject invalid cleanup status values', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'case-reporter-'));
+  const outputFile = path.join(root, 'results.json');
+  const previousFormal = process.env.FORMAL_UI_RUN;
+  try {
+    process.env.FORMAL_UI_RUN = 'true';
+    const reporter = new CaseResultReporter({ outputFile });
+    const result = fakeResult('passed');
+    result.attachments = [{
+      name: 'cleanup-status.json',
+      body: Buffer.from(JSON.stringify({ status: 'maybe' })),
+    }];
+    reporter.onTestEnd(fakeTest(), result);
+    assert.throws(() => reporter.onEnd(), /非法清理状态/);
+  } finally {
+    if (previousFormal === undefined) delete process.env.FORMAL_UI_RUN;
+    else process.env.FORMAL_UI_RUN = previousFormal;
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});

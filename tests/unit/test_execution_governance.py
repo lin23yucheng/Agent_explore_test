@@ -86,8 +86,8 @@ class ExecutionGovernanceTests(unittest.TestCase):
             "coverage": [
                 {
                     "contractItemId": item_id,
-                    "implementation": f"test body covers {item_id}",
-                    "evidence": f"assertion or trace for {item_id}",
+                    "implementation": f"users.spec.js: test body uses locator.fill and click for {item_id}",
+                    "evidence": f"expect assertion verifies the final visible list state for {item_id}",
                 }
                 for item_id in contract["completionGate"]["requiredCoverageIds"]
             ],
@@ -178,6 +178,63 @@ class ExecutionGovernanceTests(unittest.TestCase):
         self.assertEqual(plan["bindings"][0]["caseRevision"], 1)
         self.assertEqual(plan["bindings"][0]["contractHash"], case["contractHash"])
         self.assertTrue(plan["bindings"][0]["implementationHash"])
+        self.assertTrue(plan["bindings"][0]["auditHash"])
+
+    def test_template_audit_cannot_register_as_active(self):
+        _, case = self.make_case()
+        spec_file = "tests/ui/specs/users.spec.js"
+        (self.root / spec_file).write_text("test('创建用户', async () => {});\n", encoding="utf-8")
+        audit = self.complete_audit(case, "创建用户", spec_file)
+        payload = json.loads(audit.read_text(encoding="utf-8"))
+        for item in payload["coverage"]:
+            item["implementation"] = f"{spec_file} :: 创建用户（按当前CASE契约执行）"
+            item["evidence"] = f"本批Playwright实际执行 {case['id']}；与执行契约对应。"
+        self.testflow.write_json(audit, payload)
+
+        with self.assertRaisesRegex(SystemExit, "模板化"):
+            self.testflow.register_automation("创建用户", spec_file, [case["id"]], audit)
+
+    def test_audit_change_invalidates_binding(self):
+        _, case = self.make_case()
+        self.register_case(case)
+        automation = self.testflow.load_json(self.testflow.AUTOMATION_REGISTRY, {})
+        audit = self.root / automation["tests"]["创建用户"]["auditFile"]
+        payload = json.loads(audit.read_text(encoding="utf-8"))
+        payload["notes"] = "changed after registration"
+        self.testflow.write_json(audit, payload)
+
+        issue = self.testflow.automation_binding_issue(
+            automation["tests"]["创建用户"], case, "创建用户")
+        self.assertIn("审计文件已变化", issue)
+
+    def test_run_plan_rejects_duplicate_case_ids(self):
+        _, case = self.make_case()
+        self.register_case(case)
+        source = self.root / "cases" / "iteration.csv"
+        self.testflow.export_current(
+            self.testflow.load_json(self.testflow.CASE_REGISTRY, {}), source)
+        rows, headers = self.testflow.read_csv(source)
+        self.testflow.write_csv(source, [rows[0], rows[0]], headers)
+
+        with self.assertRaisesRegex(SystemExit, "重复解析到同一CASE-ID"):
+            self.testflow.make_run_plan(source)
+
+    def test_run_plan_requires_applied_matching_merge_plan(self):
+        _, case = self.make_case()
+        self.register_case(case)
+        source = self.root / "cases" / "iteration.csv"
+        self.testflow.export_current(
+            self.testflow.load_json(self.testflow.CASE_REGISTRY, {}), source)
+        plan_path = self.root / "cases" / "changes" / "plan.json"
+        self.testflow.write_json(plan_path, {
+            "status": "reviewed",
+            "sourceCsv": str(source),
+            "sourceHash": self.testflow.hash_file(source),
+            "impactedRegressionCaseIds": [],
+        })
+
+        with self.assertRaisesRegex(SystemExit, "必须已经apply"):
+            self.testflow.make_run_plan(source, plan_path=plan_path)
 
     def test_explicit_retire_does_not_create_replacement_case(self):
         registry, case = self.make_case()
@@ -222,6 +279,7 @@ class ExecutionGovernanceTests(unittest.TestCase):
                 "testTitle": "创建用户",
                 "file": entry["file"],
                 "implementationHash": entry["implementationHash"],
+                "auditHash": entry["auditHash"],
             }],
         }
         raw_results = [{
@@ -229,6 +287,7 @@ class ExecutionGovernanceTests(unittest.TestCase):
             "caseIds": [case["id"]],
             "status": "passed",
             "cleanupStatus": "passed",
+            "cleanupReportedDynamically": True,
         }]
         registry = self.testflow.load_json(self.testflow.CASE_REGISTRY, {})
 
@@ -286,7 +345,53 @@ class ExecutionGovernanceTests(unittest.TestCase):
         }]
         registry = self.testflow.load_json(self.testflow.CASE_REGISTRY, {})
 
-        with self.assertRaisesRegex(SystemExit, "未报告清理状态"):
+        with self.assertRaisesRegex(SystemExit, "非法或未报告"):
+            self.report.validate_batch_results(raw_results, automation, run_plan, registry)
+
+    def test_report_rejects_static_cleanup_success(self):
+        _, case = self.make_case()
+        self.register_case(case)
+        automation = self.testflow.load_json(self.testflow.AUTOMATION_REGISTRY, {})
+        entry = automation["tests"]["创建用户"]
+        run_plan = {
+            "caseIds": [case["id"]],
+            "bindings": [{
+                "caseId": case["id"], "caseRevision": case["revision"],
+                "contractHash": case["contractHash"], "testTitle": "创建用户",
+                "file": entry["file"], "implementationHash": entry["implementationHash"],
+                "auditHash": entry["auditHash"],
+            }],
+        }
+        raw_results = [{
+            "title": "创建用户", "caseIds": [case["id"]], "status": "passed",
+            "cleanupStatus": "passed", "cleanupReportedDynamically": False,
+        }]
+        registry = self.testflow.load_json(self.testflow.CASE_REGISTRY, {})
+
+        with self.assertRaisesRegex(SystemExit, "静态声明"):
+            self.report.validate_batch_results(raw_results, automation, run_plan, registry)
+
+    def test_report_rejects_unknown_failure_category(self):
+        _, case = self.make_case()
+        self.register_case(case)
+        automation = self.testflow.load_json(self.testflow.AUTOMATION_REGISTRY, {})
+        entry = automation["tests"]["创建用户"]
+        run_plan = {
+            "caseIds": [case["id"]],
+            "bindings": [{
+                "caseId": case["id"], "caseRevision": case["revision"],
+                "contractHash": case["contractHash"], "testTitle": "创建用户",
+                "file": entry["file"], "implementationHash": entry["implementationHash"],
+                "auditHash": entry["auditHash"],
+            }],
+        }
+        raw_results = [{
+            "title": "创建用户", "caseIds": [case["id"]], "status": "failed",
+            "cleanupStatus": "not-applicable", "failureCategory": "UNKNOWN",
+        }]
+        registry = self.testflow.load_json(self.testflow.CASE_REGISTRY, {})
+
+        with self.assertRaisesRegex(SystemExit, "未归因"):
             self.report.validate_batch_results(raw_results, automation, run_plan, registry)
 
     def test_stale_mapping_does_not_erase_trusted_execution_result(self):

@@ -17,6 +17,12 @@ OUTPUT = ROOT / 'reports' / 'execution_report.csv'
 SUMMARY = ROOT / 'reports' / 'execution_summary.json'
 EVIDENCE_ROOT = ROOT / 'reports' / 'latest' / 'test-results'
 EVIDENCE_ARCHIVE_ROOT = ROOT / 'reports' / 'history' / 'evidence'
+VALID_CLEANUP_STATUSES = {'passed', 'failed', 'not-applicable', 'retained-by-design'}
+VALID_FAILURE_CATEGORIES = {
+    'DATA_PRECONDITION_MISSING', 'DATA_SETUP_FAILED', 'ENVIRONMENT_BLOCKED',
+    'PRODUCT_DEFECT', 'TEST_IMPLEMENTATION_DEFECT', 'CASE_DESCRIPTION_AMBIGUOUS',
+    'REQUIREMENT_CONFLICT', 'CLEANUP_FAILED',
+}
 EVIDENCE_RETENTION_BATCHES = 1
 AUTOMATION_REGISTRY = ROOT / 'cases' / 'automation-registry.json'
 CASE_REGISTRY = ROOT / 'cases' / 'case-registry.json'
@@ -294,9 +300,16 @@ def validate_batch_results(raw_results, automation, run_plan=None, case_registry
     seen_case_ids = set()
     invalid = []
     tests = automation.get('tests', {})
-    planned_ids = set((run_plan or {}).get('caseIds', []))
+    planned_id_values = (run_plan or {}).get('caseIds', [])
+    planned_ids = set(planned_id_values)
+    if len(planned_id_values) != len(planned_ids):
+        raise SystemExit('拒绝合并运行计划：caseIds包含重复CASE-ID')
+    binding_values = (run_plan or {}).get('bindings', [])
+    binding_ids = [item.get('caseId') for item in binding_values]
+    if len(binding_ids) != len(set(binding_ids)):
+        raise SystemExit('拒绝合并运行计划：bindings包含重复CASE-ID')
     planned_bindings = {
-        item.get('caseId'): item for item in (run_plan or {}).get('bindings', [])
+        item.get('caseId'): item for item in binding_values
     }
     for result in raw_results:
         title = result.get('title', '')
@@ -307,8 +320,15 @@ def validate_batch_results(raw_results, automation, run_plan=None, case_registry
             reason = f'结果关联{len(case_ids)}个CASE-ID'
         elif result.get('status') == 'skipped':
             reason = '计划内用例被跳过，不能视为已执行'
-        elif result.get('cleanupStatus') in {'', None, 'not_reported'}:
-            reason = '正式结果未报告清理状态'
+        elif result.get('cleanupStatus') not in VALID_CLEANUP_STATUSES:
+            reason = f"清理状态非法或未报告: {result.get('cleanupStatus') or '<空>'}"
+        elif (result.get('cleanupStatus') == 'passed'
+              and not result.get('cleanupReportedDynamically')):
+            reason = '清理成功仅为静态声明，缺少本次运行时附件'
+        elif result.get('cleanupStatus') == 'failed' and result.get('failureCategory') != 'CLEANUP_FAILED':
+            reason = '清理失败结果必须分类为CLEANUP_FAILED'
+        elif result.get('status') != 'passed' and result.get('failureCategory') not in VALID_FAILURE_CATEGORIES:
+            reason = f"失败分类未归因或非法: {result.get('failureCategory') or '<空>'}"
         elif entry is None:
             reason = '自动化注册表中不存在同标题测试'
         elif entry.get('status') == 'retired':
@@ -332,12 +352,20 @@ def validate_batch_results(raw_results, automation, run_plan=None, case_registry
                 reason = '运行时用例已不是有效状态'
             elif binding.get('testTitle') != title:
                 reason = '测试标题与运行计划绑定不一致'
+            elif binding.get('file') != entry.get('file'):
+                reason = '脚本文件与自动化注册表绑定不一致'
             elif int(binding.get('caseRevision', 0)) != int(case.get('revision', 0)):
                 reason = '用例revision在计划生成后发生变化'
             elif binding.get('contractHash') != case.get('contractHash'):
                 reason = '执行契约在计划生成后发生变化'
             elif binding.get('implementationHash') != file_hash(ROOT / binding.get('file', '')):
                 reason = '脚本在计划生成后发生变化'
+            elif binding.get('implementationHash') != entry.get('implementationHash'):
+                reason = '脚本哈希与自动化注册表绑定不一致'
+            elif binding.get('auditHash') != entry.get('auditHash'):
+                reason = '覆盖审计哈希与自动化注册表绑定不一致'
+            elif binding.get('auditHash') != file_hash(ROOT / entry.get('auditFile', '')):
+                reason = '覆盖审计在计划生成后发生变化'
         if reason:
             invalid.append(f'{title or "<无标题>"}：{reason}')
         else:
@@ -452,6 +480,7 @@ def automation_binding_valid(entry, case):
         and entry.get('implementationHash') == file_hash(ROOT / spec_file)
         and entry.get('auditFile')
         and (ROOT / entry['auditFile']).is_file()
+        and entry.get('auditHash') == file_hash(ROOT / entry['auditFile'])
     )
 
 

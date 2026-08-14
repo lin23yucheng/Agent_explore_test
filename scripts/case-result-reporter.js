@@ -1,6 +1,18 @@
 const fs = require('fs');
 const path = require('path');
 
+const VALID_CLEANUP_STATUSES = new Set(['passed', 'failed', 'not-applicable', 'retained-by-design']);
+const VALID_FAILURE_CATEGORIES = new Set([
+  'DATA_PRECONDITION_MISSING',
+  'DATA_SETUP_FAILED',
+  'ENVIRONMENT_BLOCKED',
+  'PRODUCT_DEFECT',
+  'TEST_IMPLEMENTATION_DEFECT',
+  'CASE_DESCRIPTION_AMBIGUOUS',
+  'REQUIREMENT_CONFLICT',
+  'CLEANUP_FAILED',
+]);
+
 class CaseResultReporter {
   constructor(options) {
     this.outputFile = options.outputFile;
@@ -77,6 +89,7 @@ class CaseResultReporter {
         ? 'CLEANUP_FAILED'
         : result.status === 'passed' ? '' : failureCategory,
       cleanupStatus,
+      cleanupReportedDynamically: Boolean(attachedCleanup.status),
       durationMs: result.duration,
       executedAt: this.executedAt,
       runId: this.runId,
@@ -109,6 +122,25 @@ class CaseResultReporter {
       const cleanupMissing = results.filter((result) => result.cleanupStatus === 'not_reported');
       if (cleanupMissing.length > 0) {
         throw new Error(`正式批次存在${cleanupMissing.length}条未报告清理状态的用例：${cleanupMissing.slice(0, 10).map((item) => item.title).join('；')}`);
+      }
+      const cleanupInvalid = results.filter(
+        (result) => !VALID_CLEANUP_STATUSES.has(result.cleanupStatus),
+      );
+      if (cleanupInvalid.length > 0) {
+        throw new Error(`正式批次存在${cleanupInvalid.length}条非法清理状态：${cleanupInvalid.slice(0, 10).map((item) => `${item.title}=${item.cleanupStatus || '<空>'}`).join('；')}`);
+      }
+      const cleanupUnverified = results.filter(
+        (result) => result.cleanupStatus === 'passed' && !result.cleanupReportedDynamically,
+      );
+      if (cleanupUnverified.length > 0) {
+        throw new Error(`正式批次存在${cleanupUnverified.length}条仅静态声明清理成功的用例：${cleanupUnverified.slice(0, 10).map((item) => item.title).join('；')}`);
+      }
+      const unresolved = results.filter(
+        (result) => result.status !== 'passed'
+          && !VALID_FAILURE_CATEGORIES.has(result.failureCategory),
+      );
+      if (unresolved.length > 0) {
+        throw new Error(`正式批次存在${unresolved.length}条尚未完成归因的失败：${unresolved.slice(0, 10).map((item) => item.title).join('；')}`);
       }
     }
     if (this.allowedCaseIds.size > 0) {
@@ -146,6 +178,11 @@ function parseBindings(value, filePath) {
   if (!value) return new Map();
   try {
     const bindings = JSON.parse(value.replace(/^\uFEFF/, ''));
+    if (!Array.isArray(bindings)) throw new Error('绑定内容必须是数组');
+    const caseIds = bindings.map((binding) => binding.caseId);
+    if (caseIds.length !== new Set(caseIds).size) {
+      throw new Error('绑定内容包含重复CASE-ID');
+    }
     return new Map(bindings.map((binding) => [binding.caseId, binding]));
   } catch (_error) {
     throw new Error('EXPECTED_CASE_BINDINGS不是有效JSON');

@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { openModule } = require('../helpers/auth');
+const { withCleanupStatus } = require('../helpers/case-test');
 
 const CASE = (id, title, body, { failureCategory, cleanup = 'passed' } = {}) => test(title, {
   annotation: [
@@ -7,7 +8,7 @@ const CASE = (id, title, body, { failureCategory, cleanup = 'passed' } = {}) => 
     { type: 'cleanup', description: cleanup },
     ...(failureCategory ? [{ type: 'failure-category', description: failureCategory }] : []),
   ],
-}, body);
+}, withCleanupStatus(body, cleanup));
 
 function unique(label = 'tag') {
   return `AI${label}${Date.now()}${Math.floor(Math.random() * 1000)}`.slice(0, 32);
@@ -86,6 +87,7 @@ async function create(page, name, category = '其他') {
 }
 
 async function remove(page, name) {
+  await reset(page);
   const row = tagRow(page, name);
   if (!await row.count()) return;
   await row.getByRole('button', { name: '删除', exact: true }).click();
@@ -156,7 +158,7 @@ for (const [id, title, keyword] of [
     const match = `${keyword}${Date.now()}`; const other = `AIOther${Date.now()}`;
     await openTags(page);
     try { await create(page, match); await create(page, other); await page.getByRole('textbox', { name: '搜索标签名称' }).fill(match); await query(page); await expect(tagRow(page, match)).toBeVisible(); await expect(tagRow(page, other)).toHaveCount(0); }
-    finally { await reset(page).catch(() => {}); await remove(page, match); await remove(page, other); }
+    finally { await reset(page); await remove(page, match); await remove(page, other); }
   });
 }
 
@@ -172,7 +174,7 @@ for (const [id, title, category] of [
   ['CASE-000393', '标签管理 - 按质量分类查询标签列表', '质量'],
   ['CASE-000395', '标签管理 - 按分类“其他”查询标签列表', '其他'],
 ]) {
-  CASE(id, title, async ({ page }) => { const name = unique(id.slice(-3)); await openTags(page); try { await create(page, name, category); await choose(page, filterSelect(page, 0), category); await query(page); await expect(tagRow(page, name)).toBeVisible(); for (const row of await page.locator('tbody tr').all()) await expect(row.locator('td').nth(1)).toHaveText(category); } finally { await reset(page).catch(() => {}); await remove(page, name); } });
+  CASE(id, title, async ({ page }) => { const name = unique(id.slice(-3)); await openTags(page); try { await create(page, name, category); await choose(page, filterSelect(page, 0), category); await query(page); await expect(tagRow(page, name)).toBeVisible(); for (const row of await page.locator('tbody tr').all()) await expect(row.locator('td').nth(1)).toHaveText(category); } finally { await reset(page); await remove(page, name); } });
 }
 
 for (const [id, title, status] of [
@@ -181,10 +183,10 @@ for (const [id, title, status] of [
   ['CASE-000399', '标签管理 - 按禁用状态查询标签列表（CASE-000399）', '禁用'],
   ['CASE-000400', '标签管理 - 按启用状态查询标签列表（CASE-000400）', '启用'],
 ]) {
-  CASE(id, title, async ({ page }) => { const name = unique(id.slice(-3)); await openTags(page); try { await create(page, name); if (status === '禁用') await disable(page, name); await choose(page, filterSelect(page, 1), status); await query(page); await expect(tagRow(page, name)).toBeVisible(); for (const row of await page.locator('tbody tr').all()) await expect(row.locator('td').nth(2)).toHaveText(status); } finally { await reset(page).catch(() => {}); if (status === '禁用') await enable(page, name).catch(() => {}); await remove(page, name); } });
+  CASE(id, title, async ({ page }) => { const name = unique(id.slice(-3)); await openTags(page); try { await create(page, name); if (status === '禁用') await disable(page, name); await choose(page, filterSelect(page, 1), status); await query(page); await expect(tagRow(page, name)).toBeVisible(); for (const row of await page.locator('tbody tr').all()) await expect(row.locator('td').nth(2)).toHaveText(status); } finally { await reset(page); if (status === '禁用') await enable(page, name); await remove(page, name); } });
 }
 
-CASE('CASE-000401', '标签管理 - 按标签名称模糊匹配查询', async ({ page }) => { const keyword = unique('401'); const suffix = `${keyword}More`; const other = unique('401Other'); await openTags(page); try { await create(page, keyword); await create(page, suffix); await create(page, other); await page.getByRole('textbox', { name: '搜索标签名称' }).fill(keyword); await query(page); await expect(tagRow(page, keyword)).toBeVisible(); await expect(tagRow(page, suffix)).toBeVisible(); await expect(tagRow(page, other)).toHaveCount(0); } finally { await reset(page).catch(() => {}); await remove(page, keyword); await remove(page, suffix); await remove(page, other); } });
+CASE('CASE-000401', '标签管理 - 按标签名称模糊匹配查询', async ({ page }) => { const keyword = unique('401'); const suffix = `${keyword}More`; const other = unique('401Other'); await openTags(page); try { await create(page, keyword); await create(page, suffix); await create(page, other); await page.getByRole('textbox', { name: '搜索标签名称' }).fill(keyword); await query(page); await expect(tagRow(page, keyword)).toBeVisible(); await expect(tagRow(page, suffix)).toBeVisible(); await expect(tagRow(page, other)).toHaveCount(0); } finally { await reset(page); await remove(page, keyword); await remove(page, suffix); await remove(page, other); } });
 
 CASE('CASE-000403', '标签管理 - 查询无匹配结果', async ({ page }) => { await openTags(page); await page.getByRole('textbox', { name: '搜索标签名称' }).fill(`AINone${Date.now()}`); await query(page); await expect(page.locator('tbody tr:visible')).toHaveCount(0); await expect(page.getByText('暂无数据', { exact: true })).toBeVisible(); });
 CASE('CASE-000404', '标签管理 - 查询条件为空显示全部', async ({ page }) => { const name = unique('404'); await openTags(page); try { await create(page, name); await page.getByRole('textbox', { name: '搜索标签名称' }).fill(''); await query(page); await expect(tagRow(page, name)).toBeVisible(); } finally { await remove(page, name); } });
@@ -263,7 +265,7 @@ CASE('CASE-000424', '标签管理 - 新增标签时名称长度边界为1时创�
 CASE('CASE-000425', '标签管理 - 新增标签时名称长度边界为32时创建成功', async ({ page }) => { const name = 'a'.repeat(32); await openTags(page); try { await create(page, name, '质量'); } finally { await remove(page, name); } });
 CASE('CASE-000433', '标签管理 - 启用状态标签在列表中的展示', async ({ page }) => { const name = unique('433'); await openTags(page); try { const row = await create(page, name); await expect(row.locator('td').nth(2)).toHaveText('启用'); } finally { await remove(page, name); } });
 
-CASE('CASE-000434', '标签管理 - 禁用标签后状态更新为禁用', async ({ page }) => { const name = unique('434'); await openTags(page); try { const row = await create(page, name); const created = await row.locator('td').nth(3).innerText(); await disable(page, name); await expect(row.locator('td').nth(2)).toHaveText('禁用'); await expect(row.locator('td').nth(3)).toHaveText(created); } finally { await enable(page, name).catch(() => {}); await remove(page, name); } });
+CASE('CASE-000434', '标签管理 - 禁用标签后状态更新为禁用', async ({ page }) => { const name = unique('434'); await openTags(page); try { const row = await create(page, name); const created = await row.locator('td').nth(3).innerText(); await disable(page, name); await expect(row.locator('td').nth(2)).toHaveText('禁用'); await expect(row.locator('td').nth(3)).toHaveText(created); } finally { await enable(page, name); await remove(page, name); } });
 
 CASE('CASE-000436', '标签管理 - 列表页创建时间显示年月日时分', async ({ page }) => { const name = unique('436'); await openTags(page); try { const row = await create(page, name); await expect(row.locator('td').nth(3)).toHaveText(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/); } finally { await remove(page, name); } });
 
@@ -273,7 +275,7 @@ CASE('CASE-000438', '标签管理 - 列表页更新时间显示格式验证', as
 
 CASE('CASE-000439', '标签管理 - 编辑标签后更新时间更新为当前时间', async ({ page }) => { const name = unique('439'); const updated = unique('439edit'); await openTags(page); try { const row = await create(page, name); const created = await row.locator('td').nth(3).innerText(); const form = await edit(page, name, updated); await form.name.fill(updated); await form.save.click(); await expect(form.dialog).toBeHidden(); await page.reload(); await expect(page.getByRole('button', { name: '新建标签', exact: true })).toBeVisible(); const next = tagRow(page, updated); await expect(next).toBeVisible(); const changed = await next.locator('td').nth(4).innerText(); expect(changed).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/); expect(changed >= created).toBeTruthy(); } finally { await closeDialog(page.getByRole('dialog', { name: '编辑标签' })); await remove(page, updated); await remove(page, name); } });
 
-CASE('CASE-000440', '标签管理 - 禁用标签后更新时间更新为当前时间', async ({ page }) => { const name = unique('440'); await openTags(page); try { const row = await create(page, name); const created = await row.locator('td').nth(3).innerText(); await disable(page, name); const changed = await row.locator('td').nth(4).innerText(); expect(changed).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/); expect(changed >= created).toBeTruthy(); } finally { await enable(page, name).catch(() => {}); await remove(page, name); } });
+CASE('CASE-000440', '标签管理 - 禁用标签后更新时间更新为当前时间', async ({ page }) => { const name = unique('440'); await openTags(page); try { const row = await create(page, name); const created = await row.locator('td').nth(3).innerText(); await disable(page, name); const changed = await row.locator('td').nth(4).innerText(); expect(changed).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/); expect(changed >= created).toBeTruthy(); } finally { await enable(page, name); await remove(page, name); } });
 
 CASE('CASE-000441', '标签管理 - 刚创建标签时创建时间与更新时间一致', async ({ page }) => { const name = unique('441'); await openTags(page); try { const row = await create(page, name, '质量'); await expect(row.locator('td').nth(4)).toHaveText(await row.locator('td').nth(3).innerText()); } finally { await remove(page, name); } });
 

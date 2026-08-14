@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { test, expect } = require('@playwright/test');
 const { login } = require('../helpers/auth');
+const { withCleanupStatus } = require('../helpers/case-test');
 
 const CASE = (id, title, body, failureCategory = '') => test(title, {
   annotation: [
@@ -8,7 +9,7 @@ const CASE = (id, title, body, failureCategory = '') => test(title, {
     { type: 'cleanup', description: 'passed' },
     ...(failureCategory ? [{ type: 'failure-category', description: failureCategory }] : []),
   ],
-}, body);
+}, withCleanupStatus(body));
 
 function taskCases() {
   const registry = JSON.parse(fs.readFileSync('cases/case-registry.json', 'utf8'));

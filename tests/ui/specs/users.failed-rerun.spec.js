@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { login } = require('../helpers/auth');
+const { runWithCleanupStatus } = require('../helpers/case-test');
 
 const CASE = (caseId, title, optionsOrBody, maybeBody) => {
   const body = typeof optionsOrBody === 'function' ? optionsOrBody : maybeBody;
@@ -17,7 +18,9 @@ const CASE = (caseId, title, optionsOrBody, maybeBody) => {
       { type: 'case', description: caseId },
       { type: 'cleanup', description: cleanup },
     ],
-  }, body);
+  }, async ({ page, browser }, testInfo) => runWithCleanupStatus(
+    body, { page, browser }, testInfo, cleanup,
+  ));
 };
 
 async function openUsers(page) {
@@ -303,7 +306,7 @@ CASE('CASE-000332', '用户管理 - 并发创建相同账号时仅一个成功',
     await Promise.all([first.getByRole('button', { name: '保存', exact: true }).click(), second.getByRole('button', { name: '保存', exact: true }).click()]);
     await page.getByPlaceholder('搜索账户和姓名').fill(value); await page.getByRole('button', { name: '查询', exact: true }).click();
     await expect(row(page, value)).toHaveCount(1);
-  } finally { await other.close().catch(() => {}); await remove(page, value).catch(() => {}); }
+  } finally { await other.close().catch(() => {}); await remove(page, value); }
 });
 
 CASE('CASE-000351', '用户管理 - 启用已禁用用户后该用户可正常登录', async ({ page, browser }) => {

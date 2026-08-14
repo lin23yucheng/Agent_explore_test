@@ -1,5 +1,13 @@
 const { test, expect } = require('@playwright/test');
 const { login } = require('../helpers/auth');
+const { withCleanupStatus } = require('../helpers/case-test');
+
+const CASE = (id, title, body, cleanup = 'passed') => test(title, {
+  annotation: [
+    { type: 'case', description: id },
+    { type: 'cleanup', description: cleanup },
+  ],
+}, withCleanupStatus(body, cleanup));
 
 async function openUsers(page) {
   await login(page);
@@ -60,7 +68,7 @@ async function queryUsers(page, keyword = '') {
 }
 
 test.describe('用户管理查询与字段校验', () => {
-  test('查询-按账号模糊搜索', { annotation: [{ type: 'case', description: 'CASE-000267' }, { type: 'cleanup', description: 'passed' }] }, async ({ page }) => {
+  CASE('CASE-000267', '查询-按账号模糊搜索', async ({ page }) => {
     const suffix = Date.now();
     const keyword = `zhang${String(suffix).slice(-6)}`;
     const accounts = [`${keyword}a`, `${keyword}b`];
@@ -79,7 +87,7 @@ test.describe('用户管理查询与字段校验', () => {
     }
   });
 
-  test('查询-按姓名模糊搜索', { annotation: [{ type: 'case', description: 'CASE-000268' }, { type: 'cleanup', description: 'passed' }] }, async ({ page }) => {
+  CASE('CASE-000268', '查询-按姓名模糊搜索', async ({ page }) => {
     const suffix = String(Date.now()).slice(-6);
     const keyword = `张测${suffix}`;
     const accounts = [`name${suffix}a`, `name${suffix}b`];
@@ -98,7 +106,7 @@ test.describe('用户管理查询与字段校验', () => {
     }
   });
 
-  test('查询-账号和姓名组合模糊搜索', { annotation: [{ type: 'case', description: 'CASE-000273' }, { type: 'cleanup', description: 'passed' }] }, async ({ page }) => {
+  CASE('CASE-000273', '查询-账号和姓名组合模糊搜索', async ({ page }) => {
     const suffix = String(Date.now()).slice(-6);
     const accountKeyword = `zhang${suffix}`;
     const nameKeyword = `张测${suffix}`;
@@ -127,13 +135,13 @@ test.describe('用户管理查询与字段校验', () => {
     await expect(page.getByPlaceholder(/手机/)).toHaveCount(0);
   });
 
-  test('查询-无匹配结果', { annotation: [{ type: 'case', description: 'CASE-000269' }, { type: 'cleanup', description: 'not-applicable' }] }, async ({ page }) => {
+  CASE('CASE-000269', '查询-无匹配结果', async ({ page }) => {
     await openUsers(page);
     const keyword = `xyz${Date.now()}`;
     await page.getByPlaceholder('搜索账户和姓名').fill(keyword);
     await page.getByRole('button', { name: '查询', exact: true }).click();
     await expect(page.locator('tbody tr').filter({ hasText: /.+/ })).toHaveCount(0);
-  });
+  }, 'not-applicable');
 
   test('重置后查询条件恢复为空并执行查询', async ({ page }) => {
     await openUsers(page);
@@ -154,12 +162,12 @@ test.describe('用户管理查询与字段校验', () => {
     await expect(page.locator('tbody tr').filter({ hasText: /.+/ })).toHaveCount(0);
   });
 
-  test('查询-输入空格', { annotation: [{ type: 'case', description: 'CASE-000278' }, { type: 'cleanup', description: 'not-applicable' }] }, async ({ page }) => {
+  CASE('CASE-000278', '查询-输入空格', async ({ page }) => {
     await openUsers(page);
     const allUsers = await queryUsers(page);
     const spaceUsers = await queryUsers(page, ' ');
     expect(spaceUsers).toEqual(allUsers);
-  });
+  }, 'not-applicable');
 
   test('查询-清空查询条件', async ({ page }) => {
     await openUsers(page);
