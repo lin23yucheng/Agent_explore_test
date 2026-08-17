@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000389",
+  "caseContentHash": "289b8bb97182ef3b4258b4d38067bf85a87d376bad79624b43d56fcc728c0473",
+  "title": "角色管理 - 验证列表页无删除角色入口",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且当前用户具有角色管理模块的访问权限"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入角色管理列表页"
+    },
+    {
+      "id": "S2",
+      "text": "检查每个角色行是否存在“删除”按钮或入口"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "列表页正常显示"
+    },
+    {
+      "id": "A2",
+      "text": "每个角色行均不存在删除按钮或入口，无法进行删除操作"
+    }
+  ],
+  "contractHash": "5c92e978c2a86adb53af2a625cb739ec3510a939b80aa9d6867b7d3d382f1626",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "A1",
+      "A2"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

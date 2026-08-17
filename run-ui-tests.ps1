@@ -243,7 +243,9 @@ try {
     if ($runPlanPayload.status -ne 'ready') { throw '运行计划状态不是ready。' }
     $resolvedRunPlan = (Resolve-Path -LiteralPath $RunPlan).Path
     $runPlanHash = (Get-FileHash -LiteralPath $RunPlan -Algorithm SHA256).Hash.ToLowerInvariant()
-    if ($Resume -and $resumeCheckpoint.runPlanHash -ne $runPlanHash) {
+    # An explicit -Rerun abandons the prior batch result and may use a corrected
+    # plan; plain -Resume remains bound to the original plan hash.
+    if ($Resume -and -not $Rerun -and $resumeCheckpoint.runPlanHash -ne $runPlanHash) {
         throw '恢复批次绑定的运行计划已经变化。'
     }
     if (-not $sourceCsvWasProvided -and -not $Full) {

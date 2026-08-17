@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000383",
+  "caseContentHash": "a8a17c35224b9e0b59c8df8145a6999be049f98d9f22ad682c58111339f18fe6",
+  "contractHash": "f1de5741c328b25ca5b0af7c52090d2f401ba7f0a71ab82c54808bbdf9fc6f39",
+  "testTitle": "角色管理 › 查看采集工程师角色信息及权限描述 [CASE-000383]",
+  "file": "tests/ui/specs/CASE-000383.spec.js",
+  "contractFile": "cases/contracts/CASE-000383.json",
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有角色管理查看权限",
+      "implementation": "globalSetup authenticates admin; openRolesPage confirms authenticated access by loading the role-management column header.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入角色管理列表页",
+      "implementation": "openRolesPage navigates to /admin/roles through openModule and waits for the 角色编码 column header.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "S2",
+      "text": "在角色列表中查找角色编码为collection_engineer的记录",
+      "implementation": "expectRole filters the loaded data rows by the required role code and requires exactly one matching row.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "S3",
+      "text": "查看该记录的角色名称、描述、状态字段",
+      "implementation": "expectRole reads the matching row role-name cell and asserts the expected value.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "A1",
+      "text": "角色管理列表页正常显示",
+      "implementation": "openRolesPage asserts the four headers and exactly five populated role rows.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "A2",
+      "text": "找到角色编码为collection_engineer的记录",
+      "implementation": "expectRole asserts the required role-code cell in the unique matching row.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "A3",
+      "text": "角色名称为“采集工程师”，描述为“工作台、我的采集权限”，状态为“启用”",
+      "implementation": "expectRole asserts the required role-name cell in the unique matching row.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    }
+  ]
+}

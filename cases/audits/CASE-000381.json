@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000381",
+  "caseContentHash": "00d5057b96d706c8bf9efaa845abdeacc389ade20bd51daa83c3fa912fb0fa70",
+  "contractHash": "97377dcf125fe7a9ec8390466a0653a0b7bc8e4452bed4b4fd1ac5a343790c8c",
+  "testTitle": "角色管理 › 查看admin角色编码、名称、描述和状态 [CASE-000381]",
+  "file": "tests/ui/specs/CASE-000381.spec.js",
+  "contractFile": "cases/contracts/CASE-000381.json",
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有角色管理模块访问权限",
+      "implementation": "globalSetup authenticates admin; openRolesPage confirms authenticated access by loading the role-management column header.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入角色管理列表页",
+      "implementation": "openRolesPage navigates to /admin/roles through openModule and waits for the 角色编码 column header.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "S2",
+      "text": "查看角色编码为admin的记录",
+      "implementation": "expectRole filters the loaded data rows by the required role code and requires exactly one matching row.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "S3",
+      "text": "查看该记录的角色名称",
+      "implementation": "expectRole reads the matching row role-name cell and asserts the expected value.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "S4",
+      "text": "查看该记录的描述",
+      "implementation": "expectRole reads the matching row description cell and asserts the expected value.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "S5",
+      "text": "查看该记录的状态",
+      "implementation": "expectRole reads the matching row status cell and asserts the expected value.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "A1",
+      "text": "列表页正常显示所有角色",
+      "implementation": "openRolesPage asserts the four headers and exactly five populated role rows.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "A2",
+      "text": "角色编码显示为admin",
+      "implementation": "expectRole asserts the required role-code cell in the unique matching row.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "A3",
+      "text": "角色名称显示为管理员",
+      "implementation": "expectRole asserts the required role-name cell in the unique matching row.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "A4",
+      "text": "描述显示为所有权限",
+      "implementation": "expectRole asserts the required description cell in the unique matching row.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "A5",
+      "text": "状态显示为启用",
+      "implementation": "expectRole asserts the required status cell in the unique matching row.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    }
+  ]
+}

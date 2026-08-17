@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000381",
+  "caseContentHash": "00d5057b96d706c8bf9efaa845abdeacc389ade20bd51daa83c3fa912fb0fa70",
+  "title": "角色管理 - 查看admin角色编码、名称、描述和状态",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有角色管理模块访问权限"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入角色管理列表页"
+    },
+    {
+      "id": "S2",
+      "text": "查看角色编码为admin的记录"
+    },
+    {
+      "id": "S3",
+      "text": "查看该记录的角色名称"
+    },
+    {
+      "id": "S4",
+      "text": "查看该记录的描述"
+    },
+    {
+      "id": "S5",
+      "text": "查看该记录的状态"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "列表页正常显示所有角色"
+    },
+    {
+      "id": "A2",
+      "text": "角色编码显示为admin"
+    },
+    {
+      "id": "A3",
+      "text": "角色名称显示为管理员"
+    },
+    {
+      "id": "A4",
+      "text": "描述显示为所有权限"
+    },
+    {
+      "id": "A5",
+      "text": "状态显示为启用"
+    }
+  ],
+  "contractHash": "97377dcf125fe7a9ec8390466a0653a0b7bc8e4452bed4b4fd1ac5a343790c8c",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "S5",
+      "A1",
+      "A2",
+      "A3",
+      "A4",
+      "A5"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

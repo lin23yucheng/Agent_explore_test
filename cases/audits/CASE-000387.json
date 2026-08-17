@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000387",
+  "caseContentHash": "36109d5d952e3a1ddf9a3ecabe2bba8def5a32eb7d95ebed910ecaa426b2456b",
+  "contractHash": "bf2fd01627408ec4f557cb778586b3d4a9c355d9de096a564cefe089e9d277d4",
+  "testTitle": "角色管理 › 验证列表页无新增角色入口 [CASE-000387]",
+  "file": "tests/ui/specs/CASE-000387.spec.js",
+  "contractFile": "cases/contracts/CASE-000387.json",
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且当前用户具有角色管理模块的访问权限",
+      "implementation": "globalSetup authenticates admin; openRolesPage confirms authenticated access by loading the role-management column header.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入角色管理列表页",
+      "implementation": "openRolesPage navigates to /admin/roles through openModule and waits for the 角色编码 column header.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "S2",
+      "text": "检查页面是否存在“新增角色”或“创建角色”按钮或入口",
+      "implementation": "expectRole filters the loaded data rows by the required role code and requires exactly one matching row.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "A1",
+      "text": "列表页正常显示",
+      "implementation": "openRolesPage asserts the four headers and exactly five populated role rows.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "A2",
+      "text": "页面不存在任何新增角色的按钮或入口，无法进行新增操作",
+      "implementation": "expectRole asserts the required role-code cell in the unique matching row.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    }
+  ]
+}

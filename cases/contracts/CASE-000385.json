@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000385",
+  "caseContentHash": "2622041b3fa2f41545a1abc6c94f97e410651e0546a42d197c218983c2a0d515",
+  "title": "角色管理 - 查看质检工程师角色信息及权限描述",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录VLA数据任务平台，且当前用户具有角色管理模块的查看权限"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入角色管理列表页；"
+    },
+    {
+      "id": "S2",
+      "text": "在角色列表中查找角色编码为“qc_engineer”的记录；"
+    },
+    {
+      "id": "S3",
+      "text": "查看该记录的“角色名称”、“描述”、“状态”字段内容。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "角色管理列表页正常显示，包含角色编码、角色名称、描述、状态等列；"
+    },
+    {
+      "id": "A2",
+      "text": "列表中存在角色编码为“qc_engineer”的记录；"
+    },
+    {
+      "id": "A3",
+      "text": "该记录的角色名称为“质检工程师”，描述为“工作台、我的质检权限”，状态为“启用”。"
+    }
+  ],
+  "contractHash": "841623a700670536ff4183d214fe8be381fd3c32101500358f5ac9814aa0c067",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

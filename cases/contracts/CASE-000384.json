@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000384",
+  "caseContentHash": "eabff655d12cf0e6daed0c8c75e34e994d318fc9a76b251d0e450da95f8e8a82",
+  "title": "角色管理 - 查看标注工程师角色详情",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有角色管理查看权限"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入角色管理列表页"
+    },
+    {
+      "id": "S2",
+      "text": "在角色列表中查找角色编码为annotation_engineer的记录"
+    },
+    {
+      "id": "S3",
+      "text": "查看该记录的角色名称、描述、状态字段"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "角色管理列表页正常显示"
+    },
+    {
+      "id": "A2",
+      "text": "列表中存在角色编码为annotation_engineer的记录"
+    },
+    {
+      "id": "A3",
+      "text": "该记录角色名称为“标注工程师”，描述为“工作台、我的标注权限”，状态为“启用”"
+    }
+  ],
+  "contractHash": "1930ef739e769d97ca0b29e0175f37f7062f895af515547c426a042bc7a721d5",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

@@ -1,9 +1,9 @@
 {
   "source_case_count": 525,
-  "passed_case_count": 0,
+  "passed_case_count": 9,
   "failed_case_count": 0,
-  "not_executed_case_count": 525,
-  "automated_case_count": 0,
-  "batch_passed_case_count": 0,
+  "not_executed_case_count": 516,
+  "automated_case_count": 9,
+  "batch_passed_case_count": 9,
   "batch_failed_case_count": 0
 }

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000389",
+  "caseContentHash": "289b8bb97182ef3b4258b4d38067bf85a87d376bad79624b43d56fcc728c0473",
+  "contractHash": "5c92e978c2a86adb53af2a625cb739ec3510a939b80aa9d6867b7d3d382f1626",
+  "testTitle": "角色管理 › 验证列表页无删除角色入口 [CASE-000389]",
+  "file": "tests/ui/specs/CASE-000389.spec.js",
+  "contractFile": "cases/contracts/CASE-000389.json",
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且当前用户具有角色管理模块的访问权限",
+      "implementation": "globalSetup authenticates admin; openRolesPage confirms authenticated access by loading the role-management column header.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入角色管理列表页",
+      "implementation": "openRolesPage navigates to /admin/roles through openModule and waits for the 角色编码 column header.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "S2",
+      "text": "检查每个角色行是否存在“删除”按钮或入口",
+      "implementation": "expectRole filters the loaded data rows by the required role code and requires exactly one matching row.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "A1",
+      "text": "列表页正常显示",
+      "implementation": "openRolesPage asserts the four headers and exactly five populated role rows.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    },
+    {
+      "id": "A2",
+      "text": "每个角色行均不存在删除按钮或入口，无法进行删除操作",
+      "implementation": "expectRole asserts the required role-code cell in the unique matching row.",
+      "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
+    }
+  ]
+}
