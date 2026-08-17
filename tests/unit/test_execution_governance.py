@@ -188,6 +188,67 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
         self.assertFalse((self.root / spec_file).exists())
         self.assertFalse((self.flow.CANDIDATES_ROOT / "CASE-000001.json").exists())
 
+    def test_invalid_later_plan_item_does_not_delete_earlier_case_assets(self):
+        _, spec_file, _ = self.register_candidate()
+        source = self.root / "iteration.csv"
+        changed = {**self.case, "预期": "用户保存后显示在列表"}
+        self.flow.write_csv_atomic(source, [changed], self.flow.CURRENT_HEADERS)
+        plan_path = self.flow.CHANGES_ROOT / "invalid.json"
+        plan = {
+            "schemaVersion": 1, "status": "reviewed", "uncertain": [],
+            "sourceCsv": str(source), "sourceHash": self.flow.hash_file(source),
+            "baseCurrentHash": self.flow.hash_file(self.flow.CURRENT),
+            "items": [
+                {"inputRow": 1, "action": "modify", "targetCaseId": "CASE-000001",
+                 "reason": "业务预期变化", "case": self.flow.business_fields(changed)},
+                {"inputRow": 2, "action": "invalid", "targetCaseId": "CASE-000001",
+                 "reason": "后续计划未审核", "case": self.flow.business_fields(changed)},
+            ],
+            "impactedRegressionCaseIds": [],
+        }
+        self.flow.write_json_atomic(plan_path, plan)
+        with self.assertRaisesRegex(SystemExit, "未审核动作"):
+            self.flow.apply_plan(plan_path)
+        self.assertTrue((self.root / spec_file).exists())
+        self.assertTrue((self.flow.CANDIDATES_ROOT / "CASE-000001.json").exists())
+        self.assertEqual(self.flow.load_current()[0]["用例ID"], "CASE-000001")
+
+    def test_apply_write_failure_rolls_back_state_and_case_assets(self):
+        _, spec_file, _ = self.register_candidate()
+        source = self.root / "iteration.csv"
+        changed = {**self.case, "预期": "用户保存后显示在列表"}
+        self.flow.write_csv_atomic(source, [changed], self.flow.CURRENT_HEADERS)
+        plan_path = self.flow.CHANGES_ROOT / "rollback.json"
+        plan = {
+            "schemaVersion": 1, "status": "reviewed", "uncertain": [],
+            "sourceCsv": str(source), "sourceHash": self.flow.hash_file(source),
+            "baseCurrentHash": self.flow.hash_file(self.flow.CURRENT),
+            "items": [{"inputRow": 1, "action": "modify",
+                       "targetCaseId": "CASE-000001", "reason": "业务预期变化",
+                       "case": self.flow.business_fields(changed)}],
+            "impactedRegressionCaseIds": [],
+        }
+        self.flow.write_json_atomic(plan_path, plan)
+        original_write_json = self.flow.write_json_atomic
+
+        def fail_after_current(path, value):
+            if Path(path) == self.flow.ID_SEQUENCE:
+                raise OSError("simulated sequence write failure")
+            return original_write_json(path, value)
+
+        self.flow.write_json_atomic = fail_after_current
+        try:
+            with self.assertRaisesRegex(OSError, "simulated sequence"):
+                self.flow.apply_plan(plan_path)
+        finally:
+            self.flow.write_json_atomic = original_write_json
+
+        self.assertEqual(self.flow.load_current()[0]["用例ID"], "CASE-000001")
+        self.assertEqual(self.flow.load_sequence()["nextSequence"], 2)
+        self.assertEqual(self.flow.load_json(plan_path, {})["status"], "reviewed")
+        self.assertTrue((self.root / spec_file).exists())
+        self.assertTrue((self.flow.CANDIDATES_ROOT / "CASE-000001.json").exists())
+
     def test_incremental_scope_requires_applied_plan(self):
         source = self.root / "iteration.csv"
         self.flow.write_csv_atomic(source, [self.case], self.flow.CURRENT_HEADERS)
@@ -224,6 +285,31 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
         self.assertFalse((self.root / spec_file).exists())
         self.assertNotIn("CASE-000001", self.flow.load_automation()["cases"])
         self.assertEqual(report[0]["执行结果"], "未通过")
+        self.assertIn("reports/evidence/", report[0]["证据路径"])
+
+    def test_unclassified_failure_deletes_script_and_records_report(self):
+        title, spec_file, _ = self.register_candidate()
+        plan = self.promotion_plan()
+        with redirect_stdout(io.StringIO()):
+            self.report.merge_results(plan, [self.result(title, "failed", "UNCLASSIFIED")])
+        report, _ = self.flow.read_csv(self.flow.EXECUTION_REPORT)
+        self.assertFalse((self.root / spec_file).exists())
+        self.assertEqual(report[0]["执行结果"], "未通过")
+        self.assertEqual(report[0]["失败分类"], "UNCLASSIFIED")
+        self.assertNotIn("CASE-000001", self.flow.load_automation()["cases"])
+
+    def test_unverified_cleanup_deletes_script_and_records_failure(self):
+        title, spec_file, _ = self.register_candidate()
+        plan = self.promotion_plan()
+        result = self.result(title)
+        result["cleanupStatus"] = "not_reported"
+        with redirect_stdout(io.StringIO()):
+            self.report.merge_results(plan, [result])
+        report, _ = self.flow.read_csv(self.flow.EXECUTION_REPORT)
+        self.assertFalse((self.root / spec_file).exists())
+        self.assertEqual(report[0]["执行结果"], "未通过")
+        self.assertEqual(report[0]["失败分类"], "UNCLASSIFIED")
+        self.assertEqual(report[0]["清理状态"], "unverified")
         self.assertIn("reports/evidence/", report[0]["证据路径"])
 
     def test_direct_exploration_failure_updates_report_without_script(self):

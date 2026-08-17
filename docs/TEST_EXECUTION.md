@@ -57,7 +57,7 @@ Agent审核每个item：
 python scripts/testflow.py apply 'cases\changes\本次变更.json'
 ```
 
-应用会校验输入CSV和current基线哈希，并自动同步执行报告。
+应用会先校验整份计划、输入CSV和current基线哈希，再删除旧资产并写入。写入中途失败时会恢复current、序号、报告、登记、计划和脚本；成功后自动同步执行报告。
 
 ## 4. 选择执行范围
 
@@ -126,12 +126,12 @@ python scripts/testflow.py export-contract --case-id CASE-000001
 
 python scripts/testflow.py make-audit-template `
   --case-id CASE-000001 `
-  --test-title '任务管理 › 示例用例' `
+  --test-title '任务管理 › 示例用例 [CASE-000001]' `
   --file tests/ui/specs/CASE-000001.spec.js
 
 python scripts/testflow.py register-candidate `
   --case-id CASE-000001 `
-  --test-title '任务管理 › 示例用例' `
+  --test-title '任务管理 › 示例用例 [CASE-000001]' `
   --file tests/ui/specs/CASE-000001.spec.js `
   --audit cases/audits/CASE-000001.json `
   --exploration-evidence '直接探索已完成全部步骤并验证最终列表状态'
@@ -169,6 +169,8 @@ promotion通过后自动写为“通过、已自动化”。promotion失败后�
 ```
 
 完整回归只能包含当前通过且拥有有效脚本的用例。如果current中有任何未执行、未通过或没有有效脚本的用例，`validate-state --full`会阻止执行。
+
+正式执行默认`Workers=1`。只有确认用例之间不修改相同业务数据、系统配置或唯一性约束时，才能显式提高`-Workers`；每个CASE独立文件不会让同模块自动串行。
 
 正式脚本回归失败后，报告合并器会：
 
@@ -212,9 +214,11 @@ python scripts/testflow.py make-run-plan `
 
 - 普通失败继续执行其他计划用例。
 - 缺少某个计划CASE结果时拒绝整批合并。
-- skip、重复CASE-ID、计划外结果或缺失清理状态时拒绝合并。
+- skip、重复CASE-ID、计划外结果时拒绝合并；清理状态缺失、非法或未经动态验证时按`unverified`失败合并。
 - current、脚本、契约或审计在计划生成后变化时拒绝合并。
 - Playwright失败但结果完整且分类有效时，允许更新未通过结果并删除失败脚本。
+- 无法自动归因的失败写为`UNCLASSIFIED`，仍然更新为未通过并删除脚本；后续直接探索时必须重新归因。
+- 清理状态缺失、非法或只静态声明成功时写为`unverified`，整体按未通过处理并删除脚本。
 - 进程中断且没有结果时，不更新为通过；修复环境后重新执行。
 - 每批执行前清空`reports/latest`，失败证据归档到`reports/evidence/<runId>/<CASE-ID>/`。
 

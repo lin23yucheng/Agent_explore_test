@@ -18,6 +18,13 @@ EVIDENCE_ROOT = ROOT / "reports" / "evidence"
 VALID_FAILURE_CATEGORIES = flow.VALID_FAILURE_CATEGORIES
 
 
+def has_archivable_evidence(result):
+    return any(
+        item.get("name") != "cleanup-status.json" and (item.get("path") or item.get("body"))
+        for item in result.get("attachments", [])
+    )
+
+
 def safe_name(value, limit=100):
     value = re.sub(r'[<>:"/\\|?*\x00-\x1f]', "_", str(value or "")).strip(" .")
     return (value or "unnamed")[:limit]
@@ -100,6 +107,31 @@ def validate_results(raw_results, plan, current, automation):
     errors = []
     by_id = {}
     for result in raw_results:
+        cleanup = result.get("cleanupStatus")
+        cleanup_issue = ""
+        if cleanup not in flow.VALID_CLEANUP_STATUSES:
+            cleanup_issue = f"清理状态非法或未报告: {cleanup or '<空>'}"
+        elif cleanup == "passed" and not result.get("cleanupReportedDynamically"):
+            cleanup_issue = "清理成功只做了静态声明，未动态验证"
+        if cleanup_issue:
+            result["cleanupStatus"] = "unverified"
+            if result.get("failureCategory") not in VALID_FAILURE_CATEGORIES:
+                result["failureCategory"] = "UNCLASSIFIED"
+            result["error"] = "; ".join(
+                value for value in [result.get("error", ""), cleanup_issue] if value
+            )
+            if not has_archivable_evidence(result):
+                result.setdefault("attachments", []).append({
+                    "name": "cleanup-unverified",
+                    "path": "",
+                    "body": cleanup_issue,
+                })
+        elif cleanup == "failed" and not has_archivable_evidence(result):
+            result.setdefault("attachments", []).append({
+                "name": "cleanup-failed-context",
+                "path": "",
+                "body": result.get("error") or "测试数据清理失败",
+            })
         case_ids = list(dict.fromkeys(result.get("caseIds", [])))
         if len(case_ids) != 1:
             errors.append(f"{result.get('title') or '<无标题>'}关联{len(case_ids)}个CASE-ID")
@@ -119,16 +151,14 @@ def validate_results(raw_results, plan, current, automation):
         if result.get("status") == "skipped":
             errors.append(f"{case_id}被跳过")
         cleanup = result.get("cleanupStatus")
-        if cleanup not in flow.VALID_CLEANUP_STATUSES:
-            errors.append(f"{case_id}清理状态非法或未报告: {cleanup or '<空>'}")
-        if cleanup == "passed" and not result.get("cleanupReportedDynamically"):
-            errors.append(f"{case_id}只静态声明清理成功")
-        if result.get("status") != "passed" and result.get("failureCategory") not in VALID_FAILURE_CATEGORIES:
+        successful = result.get("status") == "passed" and cleanup in {
+            "passed", "not-applicable", "retained-by-design",
+        }
+        if not successful and result.get("failureCategory") not in VALID_FAILURE_CATEGORIES:
             errors.append(f"{case_id}失败尚未完成归因")
         if cleanup == "failed" and result.get("failureCategory") != "CLEANUP_FAILED":
             errors.append(f"{case_id}清理失败必须分类为CLEANUP_FAILED")
-        if result.get("status") != "passed" and not any(
-                item.get("path") or item.get("body") for item in result.get("attachments", [])):
+        if not successful and not has_archivable_evidence(result):
             errors.append(f"{case_id}失败结果缺少截图、录像、Trace或错误上下文证据")
         issue = validate_binding(binding, case, automation)
         if issue:
@@ -164,7 +194,9 @@ def merge_results(plan, raw_results):
         result = results[case_id]
         binding = bindings[case_id]
         cleanup = result.get("cleanupStatus", "")
-        successful = result.get("status") == "passed" and cleanup != "failed"
+        successful = result.get("status") == "passed" and cleanup in {
+            "passed", "not-applicable", "retained-by-design",
+        }
         evidence = archive_attachments(result, case_id)
         row = report_by_id[case_id]
         row.update({

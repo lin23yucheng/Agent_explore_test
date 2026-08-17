@@ -33,11 +33,13 @@ RESULT_HEADERS = [
     "运行ID", "失败原因", "证据路径", "Playwright测试", "脚本路径",
 ]
 VALID_ACTIONS = {"add", "unchanged", "modify", "delete"}
-VALID_CLEANUP_STATUSES = {"passed", "failed", "not-applicable", "retained-by-design"}
+VALID_CLEANUP_STATUSES = {
+    "passed", "failed", "not-applicable", "retained-by-design", "unverified",
+}
 VALID_FAILURE_CATEGORIES = {
     "DATA_PRECONDITION_MISSING", "DATA_SETUP_FAILED", "ENVIRONMENT_BLOCKED",
     "PRODUCT_DEFECT", "TEST_IMPLEMENTATION_DEFECT", "CASE_DESCRIPTION_AMBIGUOUS",
-    "REQUIREMENT_CONFLICT", "CLEANUP_FAILED",
+    "REQUIREMENT_CONFLICT", "CLEANUP_FAILED", "UNCLASSIFIED",
 }
 CONTRACT_FIELDS = {"preconditions": "前置条件", "steps": "步骤", "assertions": "预期"}
 
@@ -315,6 +317,47 @@ def remove_file_if_present(path):
         path.unlink()
 
 
+def snapshot_paths(paths):
+    return {
+        Path(path): Path(path).read_bytes() if Path(path).is_file() else None
+        for path in set(paths)
+    }
+
+
+def restore_snapshot(snapshot):
+    for path, content in snapshot.items():
+        if content is None:
+            remove_file_if_present(path)
+            continue
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = path.with_name(f".{path.name}.rollback.tmp")
+        temporary.write_bytes(content)
+        os.replace(temporary, path)
+
+
+def case_asset_paths(case_ids, automation):
+    paths = set()
+    for case_id in set(case_ids):
+        entry = automation.get("cases", {}).get(case_id, {})
+        candidate_path = CANDIDATES_ROOT / f"{case_id}.json"
+        candidate = load_json(candidate_path, {})
+        paths.update({
+            candidate_path,
+            CONTRACTS_ROOT / f"{case_id}.json",
+            AUDITS_ROOT / f"{case_id}.json",
+        })
+        for value in [entry, candidate]:
+            if value.get("file"):
+                paths.add(safe_spec_path(value["file"]))
+            if value.get("auditFile"):
+                audit_path = ROOT / value["auditFile"]
+                paths.add(audit_path)
+                audit = load_json(audit_path, {})
+                if audit.get("contractFile"):
+                    paths.add(ROOT / audit["contractFile"])
+    return paths
+
+
 def remove_case_assets(case_id, automation=None, delete_script=True):
     automation = automation if automation is not None else load_automation()
     entry = automation.get("cases", {}).pop(case_id, None)
@@ -550,6 +593,7 @@ def apply_plan(plan_path):
     by_id = {row["用例ID"]: row for row in current}
     order = [row["用例ID"] for row in current]
     touched_targets = set()
+    removed_case_ids = []
     result_ids = []
     for item in plan.get("items", []):
         action = item.get("action")
@@ -571,7 +615,7 @@ def apply_plan(plan_path):
                 raise SystemExit(f"delete必须提供有效targetCaseId和明确原因: {target}")
             by_id.pop(target)
             order.remove(target)
-            remove_case_assets(target, automation)
+            removed_case_ids.append(target)
             item["resultCaseId"] = ""
             continue
         normalized = normalize_case(item.get("case", {}))
@@ -581,7 +625,7 @@ def apply_plan(plan_path):
             position = order.index(target)
             by_id.pop(target)
             order.remove(target)
-            remove_case_assets(target, automation)
+            removed_case_ids.append(target)
         else:
             position = len(order)
         new_id = allocate_case_id(sequence)
@@ -592,16 +636,32 @@ def apply_plan(plan_path):
         result_ids.append(new_id)
     output = [by_id[case_id] for case_id in order]
     validate_current_rows(output)
-    write_csv_atomic(CURRENT, output, CURRENT_HEADERS)
-    write_json_atomic(ID_SEQUENCE, sequence)
-    automation["updatedAt"] = now_iso()
-    write_json_atomic(AUTOMATION_REGISTRY, automation)
-    plan["status"] = "applied"
-    plan["appliedAt"] = now_iso()
-    plan["resultCaseIds"] = result_ids
-    plan["appliedCurrentHash"] = hash_file(CURRENT)
-    write_json_atomic(plan_path, plan)
-    sync_report()
+    state_paths = {
+        CURRENT, ID_SEQUENCE, AUTOMATION_REGISTRY, EXECUTION_REPORT,
+        ROOT / "reports" / "execution_summary.json", plan_path,
+    }
+    transaction_snapshot = snapshot_paths(
+        state_paths | case_asset_paths(removed_case_ids, automation)
+    )
+    try:
+        for case_id in removed_case_ids:
+            remove_case_assets(case_id, automation)
+        write_csv_atomic(CURRENT, output, CURRENT_HEADERS)
+        write_json_atomic(ID_SEQUENCE, sequence)
+        automation["updatedAt"] = now_iso()
+        write_json_atomic(AUTOMATION_REGISTRY, automation)
+        plan["status"] = "applied"
+        plan["appliedAt"] = now_iso()
+        plan["resultCaseIds"] = result_ids
+        plan["appliedCurrentHash"] = hash_file(CURRENT)
+        write_json_atomic(plan_path, plan)
+        sync_report()
+    except BaseException as error:
+        try:
+            restore_snapshot(transaction_snapshot)
+        except Exception as rollback_error:
+            raise RuntimeError(f"变更计划失败且状态回滚不完整: {rollback_error}") from error
+        raise
     print(json.dumps({"当前有效用例数": len(output), "本次结果用例ID": result_ids,
                       "当前用例文件": str(CURRENT)}, ensure_ascii=False, indent=2))
 

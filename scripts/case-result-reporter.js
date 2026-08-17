@@ -11,6 +11,7 @@ const VALID_FAILURE_CATEGORIES = new Set([
   'CASE_DESCRIPTION_AMBIGUOUS',
   'REQUIREMENT_CONFLICT',
   'CLEANUP_FAILED',
+  'UNCLASSIFIED',
 ]);
 
 class CaseResultReporter {
@@ -201,15 +202,15 @@ function readCleanupStatus(attachments) {
 }
 
 function classifyFailure(message) {
-  if (!message) return 'UNKNOWN';
+  if (!message) return 'UNCLASSIFIED';
   if (/element\(s\) not found|locator\(.+\).*toBeVisible|等待.*元素|找不到.*元素/i.test(message)) {
-    return 'UNKNOWN';
+    return 'UNCLASSIFIED';
   }
   if (/当前.*(?:页面|弹窗).*(?:没有|缺少).*(?:控件|字段)|无法建立.*前置数据/i.test(message)) {
     return 'DATA_PRECONDITION_MISSING';
   }
   if (/Expected:|Received:|expect\(.+\) failed/i.test(message) && !/ENOTFOUND|ECONNREFUSED/i.test(message)) {
-    return 'UNKNOWN';
+    return 'UNCLASSIFIED';
   }
   if (/需求冲突|需求与用例|需求矛盾/.test(message)) return 'REQUIREMENT_CONFLICT';
   if (/描述不明确|无法判断预期|用例歧义/.test(message)) return 'CASE_DESCRIPTION_AMBIGUOUS';
@@ -227,7 +228,7 @@ function classifyFailure(message) {
   if (/用例|CASE-ID|断言|未覆盖|空跑|测试脚本/.test(message)) {
     return 'TEST_IMPLEMENTATION_DEFECT';
   }
-  return 'UNKNOWN';
+  return 'UNCLASSIFIED';
 }
 
 module.exports = CaseResultReporter;

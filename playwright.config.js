@@ -6,10 +6,10 @@ module.exports = defineConfig({
   testMatch: ['specs/**/*.spec.js'],
   timeout: 90_000,
   globalSetup: require.resolve('./tests/ui/global-setup.js'),
-  workers: process.env.PLAYWRIGHT_WORKERS ? Number(process.env.PLAYWRIGHT_WORKERS) : 2,
+  workers: process.env.PLAYWRIGHT_WORKERS ? Number(process.env.PLAYWRIGHT_WORKERS) : 1,
   expect: { timeout: 10_000 },
-  // Spec files may run in parallel, while tests in the same business module
-  // stay ordered to avoid collisions on global uniqueness constraints.
+  // Default to serial execution because one CASE lives in each spec file and
+  // cases from the same module can mutate shared business data.
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,

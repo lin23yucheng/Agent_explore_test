@@ -6,7 +6,7 @@ param(
     [string]$MergePlan = '',
     [string[]]$CaseId = @(),
     [string[]]$Module = @(),
-    [int]$Workers = 2,
+    [int]$Workers = 1,
     [switch]$Promotion,
     [switch]$Full
 )

@@ -42,7 +42,7 @@ test('only the final retry result is written', () => {
   }
 });
 
-test('generic assertion failures remain unclassified for review', () => {
+test('generic assertion failures remain unclassified for later analysis', () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'case-reporter-'));
   const outputFile = path.join(root, 'results.json');
   try {
@@ -51,7 +51,7 @@ test('generic assertion failures remain unclassified for review', () => {
     reporter.onEnd();
 
     const results = JSON.parse(fs.readFileSync(outputFile, 'utf8'));
-    assert.equal(results[0].failureCategory, 'UNKNOWN');
+    assert.equal(results[0].failureCategory, 'UNCLASSIFIED');
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }
@@ -84,7 +84,7 @@ test('cleanup attachment overrides annotations and fails a formal batch', () => 
   }
 });
 
-test('formal batches reject unknown failure categories', () => {
+test('formal batches accept unclassified failures for script cleanup', () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'case-reporter-'));
   const outputFile = path.join(root, 'results.json');
   const previousFormal = process.env.FORMAL_UI_RUN;
@@ -97,7 +97,9 @@ test('formal batches reject unknown failure categories', () => {
       { type: 'cleanup', description: 'not-applicable' },
     ];
     reporter.onTestEnd(testCase, fakeResult('failed', 'Expected: true\nReceived: false'));
-    assert.throws(() => reporter.onEnd(), /尚未完成归因/);
+    reporter.onEnd();
+    const results = JSON.parse(fs.readFileSync(outputFile, 'utf8'));
+    assert.equal(results[0].failureCategory, 'UNCLASSIFIED');
   } finally {
     if (previousFormal === undefined) delete process.env.FORMAL_UI_RUN;
     else process.env.FORMAL_UI_RUN = previousFormal;

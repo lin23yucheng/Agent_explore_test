@@ -60,7 +60,7 @@ Agent逐条审核计划，并明确设置：
 python scripts/testflow.py apply <merge-plan.json>
 ```
 
-`apply`必须校验输入CSV哈希和current基线哈希。修改和删除会同时移除旧报告行、自动化映射、候选、契约、审计和独立脚本。
+`apply`必须先校验整份计划、输入CSV哈希和current基线哈希。只有全部动作校验通过后才能删除旧资产并写入；任一状态文件写入失败必须恢复current、序号、报告、登记、计划和脚本。修改和删除会同时移除旧报告行、自动化映射、候选、契约、审计和独立脚本。
 
 ## 4. CASE-ID规则
 
@@ -106,13 +106,13 @@ python scripts/testflow.py record-exploration-failure `
 python scripts/testflow.py export-contract --case-id CASE-000001
 python scripts/testflow.py make-audit-template `
   --case-id CASE-000001 `
-  --test-title '模块 › 用例标题' `
+  --test-title '模块 › 用例标题 [CASE-000001]' `
   --file tests/ui/specs/CASE-000001.spec.js
 
 # 填写审计后登记候选
 python scripts/testflow.py register-candidate `
   --case-id CASE-000001 `
-  --test-title '模块 › 用例标题' `
+  --test-title '模块 › 用例标题 [CASE-000001]' `
   --file tests/ui/specs/CASE-000001.spec.js `
   --audit cases/audits/CASE-000001.json `
   --exploration-evidence '<本次直接探索的具体结果或证据路径>'
@@ -197,22 +197,25 @@ python scripts/testflow.py make-run-plan <iteration.csv> `
 - `CASE_DESCRIPTION_AMBIGUOUS`
 - `REQUIREMENT_CONFLICT`
 - `CLEANUP_FAILED`
+- `UNCLASSIFIED`（工具无法仅凭错误文本确定归因，仍必须保留失败证据并删除脚本；后续直接探索时重新归因）
 
-普通断言差异不能未经分析直接标为脚本缺陷。无法归因的失败不能作为可信正式结果结束任务。
+普通断言差异不能未经分析直接标为脚本缺陷。无法自动归因时先记录为`UNCLASSIFIED`，按未通过删除脚本；任务结束前仍需通过直接探索完成最终归因。
 
-功能结果和清理状态分开记录。正式用例必须动态报告`passed`、`not-applicable`或`retained-by-design`。清理失败最终按未通过处理，并删除正式或候选脚本。
+功能结果和清理状态分开记录。正式用例必须动态报告`passed`、`not-applicable`或`retained-by-design`。清理失败最终按未通过处理，并删除正式或候选脚本；清理状态缺失、非法或只静态声明成功时记录为`unverified`，同样按未通过删除脚本。
 
 测试数据必须使用运行ID和CASE-ID唯一前缀，创建后登记，在`finally`中逆序清理，清理后再次查询确认。不得删除管理员、系统基准数据或其他批次数据。
 
 ## 10. 批次异常
 
 - 普通用例失败不能中断后续用例。
+- 自动归因失败也必须落为`未通过`并删除该CASE脚本，不能因为等待人工归因而保留可回归脚本。
 - 正式范围内每个CASE-ID必须有且只有一个结果。
 - 禁止skip、计划外结果、重复CASE-ID和重复叶子测试标题。
 - 运行中断后，没有结果的用例不得写成通过。
 - 能确认环境故障时标记`ENVIRONMENT_BLOCKED`；无法确认执行状态时批次保持不完整并重新执行。
 - 每次正式运行先清空`reports/latest`，禁止复用上一批原始结果。
 - 正式运行使用独占锁，禁止并发批次覆盖报告。
+- 默认使用单Worker执行。只有确认用例之间不读写相同业务数据、系统配置或唯一性约束时，才能显式提高`-Workers`；一个CASE一个文件并不代表同模块会自动串行。
 
 ## 11. 结束条件
 
