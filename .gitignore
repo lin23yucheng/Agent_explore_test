@@ -25,4 +25,5 @@ node_modules/
 !/cases/changes/.gitkeep
 /cases/iterations/*
 !/cases/iterations/.gitkeep
+/cases/.testflow-state.lock
 

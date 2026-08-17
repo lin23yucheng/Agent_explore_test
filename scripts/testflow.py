@@ -5,6 +5,8 @@ import hashlib
 import json
 import os
 import re
+import shutil
+from contextlib import contextmanager, nullcontext
 from datetime import datetime
 from pathlib import Path
 
@@ -42,6 +44,10 @@ VALID_FAILURE_CATEGORIES = {
     "REQUIREMENT_CONFLICT", "CLEANUP_FAILED", "UNCLASSIFIED",
 }
 CONTRACT_FIELDS = {"preconditions": "前置条件", "steps": "步骤", "assertions": "预期"}
+REQUIRED_BUSINESS_HEADERS = ["所属模块", "用例标题", "前置条件", "步骤", "预期"]
+VALID_EXECUTION_RESULTS = {"未执行", "未通过", "通过"}
+VALID_AUTOMATION_STATUSES = {"未自动化", "已自动化"}
+_STATE_LOCK_DEPTH = 0
 
 
 class ChineseArgumentParser(argparse.ArgumentParser):
@@ -58,6 +64,55 @@ class ChineseArgumentParser(argparse.ArgumentParser):
 
 def now_iso():
     return datetime.now().astimezone().isoformat(timespec="seconds")
+
+
+@contextmanager
+def state_lock():
+    global _STATE_LOCK_DEPTH
+    if os.getenv("TESTFLOW_LOCK_HELD") == "true" or _STATE_LOCK_DEPTH:
+        _STATE_LOCK_DEPTH += 1
+        try:
+            yield
+        finally:
+            _STATE_LOCK_DEPTH -= 1
+        return
+
+    lock_path = CASES_ROOT / ".testflow-state.lock"
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    handle = None
+    try:
+        handle = lock_path.open("a+b")
+        handle.seek(0, os.SEEK_END)
+        if handle.tell() == 0:
+            handle.write(b"0")
+            handle.flush()
+        handle.seek(0)
+        if os.name == "nt":
+            import msvcrt
+            msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+        else:
+            import fcntl
+            fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except (OSError, PermissionError) as error:
+        if handle:
+            handle.close()
+        raise SystemExit("另一个测试状态变更或正式批次正在执行，请勿并发写入") from error
+
+    _STATE_LOCK_DEPTH = 1
+    try:
+        yield
+    finally:
+        _STATE_LOCK_DEPTH = 0
+        try:
+            handle.seek(0)
+            if os.name == "nt":
+                import msvcrt
+                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+            else:
+                import fcntl
+                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+        finally:
+            handle.close()
 
 
 def read_csv(path):
@@ -127,8 +182,18 @@ def logical_key(row):
 def load_current():
     if not CURRENT.is_file():
         raise SystemExit(f"当前有效用例文件不存在: {CURRENT}")
-    rows, _ = read_csv(CURRENT)
+    rows, headers = read_csv(CURRENT)
+    missing_headers = [header for header in CURRENT_HEADERS if header not in headers]
+    if missing_headers:
+        raise SystemExit("current.csv缺少字段：" + ", ".join(missing_headers))
     normalized = [normalize_case(row) for row in rows]
+    stale_hashes = [
+        row.get("用例ID", f"第{index}行")
+        for index, (row, case) in enumerate(zip(rows, normalized), start=2)
+        if normalize_text(row.get("用例内容哈希")) != case["用例内容哈希"]
+    ]
+    if stale_hashes:
+        raise SystemExit("current.csv存在内容哈希漂移：" + ", ".join(stale_hashes[:20]))
     validate_current_rows(normalized)
     return normalized
 
@@ -140,10 +205,25 @@ def validate_current_rows(rows):
     logical_keys = [logical_key(row) for row in rows]
     duplicate_titles = sorted({value for value in logical_keys
                                if value.strip("\x1f") and logical_keys.count(value) > 1})
+    invalid_ids = [value for value in ids if value and not re.fullmatch(r"CASE-\d{6}", value)]
+    missing_business = [
+        f"{row.get('用例ID') or f'第{index}行'}:{header}"
+        for index, row in enumerate(rows, start=2)
+        for header in REQUIRED_BUSINESS_HEADERS if not normalize_text(row.get(header))
+    ]
+    invalid_priorities = [
+        row["用例ID"] for row in rows if normalize_text(row.get("优先级")) not in {"1", "2", "3", "4"}
+    ]
     if missing:
         raise SystemExit("当前用例存在空CASE-ID，行号：" + ", ".join(map(str, missing)))
     if duplicates:
         raise SystemExit("当前用例存在重复CASE-ID：" + ", ".join(duplicates))
+    if invalid_ids:
+        raise SystemExit("当前用例存在非法CASE-ID：" + ", ".join(invalid_ids[:20]))
+    if missing_business:
+        raise SystemExit("当前用例存在空业务字段：" + "；".join(missing_business[:20]))
+    if invalid_priorities:
+        raise SystemExit("当前用例存在非法优先级：" + ", ".join(invalid_priorities[:20]))
     if duplicate_titles:
         readable = [value.replace("\x1f", " / ") for value in duplicate_titles[:20]]
         raise SystemExit("当前用例存在重复模块和标题：" + "；".join(readable))
@@ -161,12 +241,17 @@ def load_automation():
 
 def load_sequence(rows=None):
     state = load_json(ID_SEQUENCE, {})
-    if int(state.get("nextSequence", 0) or 0) > 0:
-        return state
     rows = rows if rows is not None else load_current()
     numbers = [int(match.group(1)) for row in rows
                if (match := re.fullmatch(r"CASE-(\d+)", row.get("用例ID", "")))]
-    return {"schemaVersion": 1, "nextSequence": max(numbers, default=0) + 1}
+    try:
+        configured = int(state.get("nextSequence", 0) or 0)
+    except (AttributeError, TypeError, ValueError):
+        configured = 0
+    return {
+        "schemaVersion": 1,
+        "nextSequence": max(configured, max(numbers, default=0) + 1),
+    }
 
 
 def allocate_case_id(sequence):
@@ -179,7 +264,7 @@ def split_contract_items(value):
     value = normalize_text(value)
     if not value:
         return []
-    parts = re.split(r"\n+|[；;]+", value)
+    parts = re.split(r"\n+", value)
     items = []
     for part in parts:
         text = re.sub(r"^\s*(?:\d+[.、)]|[-*])\s*", "", part).strip()
@@ -217,7 +302,7 @@ def find_case(case_id):
 
 
 def write_contract(case, output=None):
-    output = Path(output) if output else CONTRACTS_ROOT / f"{case['用例ID']}.json"
+    output = safe_contract_path(output or CONTRACTS_ROOT / f"{case['用例ID']}.json")
     contract = execution_contract(case)
     write_json_atomic(output, contract)
     return output, contract
@@ -230,7 +315,7 @@ def export_contracts(case_ids=None, output_dir=None):
         missing = sorted(set(case_ids) - {row["用例ID"] for row in selected})
         if missing:
             raise SystemExit("找不到当前有效用例：" + ", ".join(missing))
-    root = Path(output_dir) if output_dir else CONTRACTS_ROOT
+    root = safe_owned_path(output_dir or CONTRACTS_ROOT, CONTRACTS_ROOT, "执行契约")
     for row in selected:
         write_contract(row, root / f"{row['用例ID']}.json")
     print(json.dumps({"已导出契约数": len(selected), "目录": str(root)}, ensure_ascii=False, indent=2))
@@ -251,7 +336,7 @@ def make_audit_template(case_id, test_title, spec_file, output=None):
     if not case:
         raise SystemExit(f"找不到当前有效用例: {case_id}")
     contract_path, contract = write_contract(case)
-    output = Path(output) if output else AUDITS_ROOT / f"{case_id}.json"
+    output = safe_audit_path(output or AUDITS_ROOT / f"{case_id}.json")
     coverage = []
     for key in CONTRACT_FIELDS:
         for item in contract[key]:
@@ -271,9 +356,7 @@ def make_audit_template(case_id, test_title, spec_file, output=None):
 
 
 def validate_audit(audit_path, case, spec_file, test_title):
-    audit_path = Path(audit_path)
-    if not audit_path.is_absolute():
-        audit_path = ROOT / audit_path
+    audit_path = safe_audit_path(audit_path)
     audit = load_json(audit_path, {})
     contract = execution_contract(case)
     if audit.get("caseId") != case["用例ID"]:
@@ -286,6 +369,18 @@ def validate_audit(audit_path, case, spec_file, test_title):
         raise SystemExit("覆盖审计绑定的测试标题不一致")
     if audit.get("file", "").replace("\\", "/") != spec_file.replace("\\", "/"):
         raise SystemExit("覆盖审计绑定的脚本文件不一致")
+    try:
+        contract_path = safe_contract_path(audit.get("contractFile", ""))
+    except SystemExit as error:
+        raise SystemExit(str(error)) from error
+    if not contract_path.is_file():
+        raise SystemExit("覆盖审计引用的执行契约不存在")
+    try:
+        saved_contract = load_json(contract_path, {})
+    except (OSError, json.JSONDecodeError) as error:
+        raise SystemExit("覆盖审计引用的执行契约无法读取") from error
+    if saved_contract != contract:
+        raise SystemExit("覆盖审计引用的执行契约与当前用例不一致")
     required = contract["completionGate"]["requiredCoverageIds"]
     items = audit.get("coverage", [])
     ids = [item.get("id") for item in items]
@@ -302,19 +397,42 @@ def validate_audit(audit_path, case, spec_file, test_title):
     return audit_path, contract
 
 
-def safe_spec_path(spec_file):
-    path = (ROOT / spec_file).resolve()
+def safe_owned_path(value, root, label):
+    path = Path(value)
+    if not path.is_absolute():
+        path = ROOT / path
+    path = path.resolve()
     try:
-        path.relative_to(SPECS_ROOT.resolve())
+        path.relative_to(root.resolve())
     except ValueError as error:
-        raise SystemExit("正式脚本必须位于 tests/ui/specs 目录") from error
+        raise SystemExit(f"{label}必须位于{root.resolve()}目录") from error
     return path
+
+
+def safe_spec_path(spec_file):
+    return safe_owned_path(spec_file, SPECS_ROOT, "正式脚本")
+
+
+def safe_audit_path(audit_file):
+    return safe_owned_path(audit_file, AUDITS_ROOT, "覆盖审计")
+
+
+def safe_contract_path(contract_file):
+    return safe_owned_path(contract_file, CONTRACTS_ROOT, "执行契约")
 
 
 def remove_file_if_present(path):
     path = Path(path)
     if path.is_file():
         path.unlink()
+
+
+def remove_path_if_present(path):
+    path = Path(path)
+    if path.is_symlink() or path.is_file():
+        path.unlink()
+    elif path.is_dir():
+        shutil.rmtree(path)
 
 
 def snapshot_paths(paths):
@@ -335,9 +453,18 @@ def restore_snapshot(snapshot):
         os.replace(temporary, path)
 
 
-def case_asset_paths(case_ids, automation):
+def case_asset_paths(case_ids, automation, include_scripts=True):
+    case_ids = set(case_ids)
     paths = set()
-    for case_id in set(case_ids):
+    protected_scripts = {
+        value.get("file") for key, value in automation.get("cases", {}).items()
+        if key not in case_ids and value.get("file")
+    }
+    if CANDIDATES_ROOT.is_dir():
+        for candidate_path in CANDIDATES_ROOT.glob("*.json"):
+            if candidate_path.stem not in case_ids:
+                protected_scripts.add(load_json(candidate_path, {}).get("file"))
+    for case_id in case_ids:
         entry = automation.get("cases", {}).get(case_id, {})
         candidate_path = CANDIDATES_ROOT / f"{case_id}.json"
         candidate = load_json(candidate_path, {})
@@ -347,39 +474,25 @@ def case_asset_paths(case_ids, automation):
             AUDITS_ROOT / f"{case_id}.json",
         })
         for value in [entry, candidate]:
-            if value.get("file"):
+            if include_scripts and value.get("file") and value["file"] not in protected_scripts:
                 paths.add(safe_spec_path(value["file"]))
             if value.get("auditFile"):
-                audit_path = ROOT / value["auditFile"]
+                audit_path = safe_audit_path(value["auditFile"])
                 paths.add(audit_path)
                 audit = load_json(audit_path, {})
                 if audit.get("contractFile"):
-                    paths.add(ROOT / audit["contractFile"])
+                    paths.add(safe_contract_path(audit["contractFile"]))
     return paths
 
 
 def remove_case_assets(case_id, automation=None, delete_script=True):
     automation = automation if automation is not None else load_automation()
-    entry = automation.get("cases", {}).pop(case_id, None)
     candidate_path = CANDIDATES_ROOT / f"{case_id}.json"
     candidate = load_json(candidate_path, {})
-    files = []
-    if entry and entry.get("file"):
-        files.append(entry["file"])
-    if candidate.get("file"):
-        files.append(candidate["file"])
-    if delete_script:
-        other_files = {
-            value.get("file") for value in automation.get("cases", {}).values() if value.get("file")
-        }
-        for value in CANDIDATES_ROOT.glob("*.json") if CANDIDATES_ROOT.is_dir() else []:
-            if value != candidate_path:
-                other_files.add(load_json(value, {}).get("file"))
-        for spec_file in set(files) - other_files:
-            remove_file_if_present(safe_spec_path(spec_file))
-    remove_file_if_present(candidate_path)
-    remove_file_if_present(CONTRACTS_ROOT / f"{case_id}.json")
-    remove_file_if_present(AUDITS_ROOT / f"{case_id}.json")
+    paths = case_asset_paths([case_id], automation, include_scripts=delete_script)
+    entry = automation.get("cases", {}).pop(case_id, None)
+    for path in paths:
+        remove_file_if_present(path)
     return entry or candidate
 
 
@@ -396,11 +509,18 @@ def valid_active_entry(case, entry):
         spec_path = safe_spec_path(spec_file)
     except SystemExit as error:
         return False, str(error)
+    if spec_path.name != f"{case['用例ID']}.spec.js":
+        return False, "正式脚本文件名与CASE-ID不一致"
+    if case["用例ID"] not in entry.get("testTitle", ""):
+        return False, "正式测试标题不包含CASE-ID"
     if not spec_path.is_file():
         return False, "脚本文件不存在"
     if entry.get("implementationHash") != hash_file(spec_path):
         return False, "脚本文件已变化"
-    audit_file = ROOT / entry.get("auditFile", "")
+    try:
+        audit_file = safe_audit_path(entry.get("auditFile", ""))
+    except SystemExit as error:
+        return False, str(error)
     if not audit_file.is_file() or entry.get("auditHash") != hash_file(audit_file):
         return False, "覆盖审计不存在或已变化"
     try:
@@ -480,14 +600,36 @@ def reset_state():
     rows, _ = read_csv(CURRENT)
     normalized = [normalize_case(row) for row in rows]
     validate_current_rows(normalized)
-    write_csv_atomic(CURRENT, normalized, CURRENT_HEADERS)
     sequence = load_sequence(normalized)
-    write_json_atomic(ID_SEQUENCE, sequence)
-    write_json_atomic(AUTOMATION_REGISTRY, empty_automation())
-    CANDIDATES_ROOT.mkdir(parents=True, exist_ok=True)
-    for path in CANDIDATES_ROOT.glob("*.json"):
-        path.unlink()
-    sync_report(reset=True)
+    asset_files = set()
+    for root, pattern in [
+            (SPECS_ROOT, "*.spec.js"), (CANDIDATES_ROOT, "*.json"),
+            (CONTRACTS_ROOT, "*.json"), (AUDITS_ROOT, "*.json")]:
+        if root.is_dir():
+            asset_files.update(root.rglob(pattern))
+    state_paths = {
+        CURRENT, ID_SEQUENCE, AUTOMATION_REGISTRY, EXECUTION_REPORT,
+        ROOT / "reports" / "execution_summary.json",
+    }
+    transaction_snapshot = snapshot_paths(state_paths | asset_files)
+    try:
+        write_csv_atomic(CURRENT, normalized, CURRENT_HEADERS)
+        write_json_atomic(ID_SEQUENCE, sequence)
+        write_json_atomic(AUTOMATION_REGISTRY, empty_automation())
+        for path in asset_files:
+            remove_file_if_present(path)
+        sync_report(reset=True)
+    except BaseException as error:
+        try:
+            restore_snapshot(transaction_snapshot)
+        except Exception as rollback_error:
+            raise RuntimeError(f"状态重置失败且回滚不完整: {rollback_error}") from error
+        raise
+    for root in [ROOT / "reports" / "evidence", ROOT / "reports" / "latest"]:
+        if root.is_dir():
+            for path in root.iterdir():
+                if path.name != ".gitkeep":
+                    remove_path_if_present(path)
     print(json.dumps({
         "已重置用例数": len(normalized), "下一个CASE序号": sequence["nextSequence"],
         "历史结果": "已清空", "正式自动化": "已清空",
@@ -607,6 +749,10 @@ def apply_plan(plan_path):
         if action == "unchanged":
             if target not in by_id:
                 raise SystemExit(f"unchanged目标不存在: {target}")
+            unchanged_case = normalize_case(item.get("case", {}), target)
+            if unchanged_case["用例内容哈希"] != by_id[target]["用例内容哈希"]:
+                raise SystemExit(f"unchanged包含执行内容变化，必须改为modify: {target}")
+            by_id[target] = unchanged_case
             item["resultCaseId"] = target
             result_ids.append(target)
             continue
@@ -622,11 +768,15 @@ def apply_plan(plan_path):
         if action == "modify":
             if target not in by_id:
                 raise SystemExit(f"modify目标不存在: {target}")
+            if normalized["用例内容哈希"] == by_id[target]["用例内容哈希"]:
+                raise SystemExit(f"modify没有执行内容变化，必须改为unchanged: {target}")
             position = order.index(target)
             by_id.pop(target)
             order.remove(target)
             removed_case_ids.append(target)
         else:
+            if target:
+                raise SystemExit("add不能提供targetCaseId")
             position = len(order)
         new_id = allocate_case_id(sequence)
         new_case = normalize_case(normalized, new_id)
@@ -636,6 +786,11 @@ def apply_plan(plan_path):
         result_ids.append(new_id)
     output = [by_id[case_id] for case_id in order]
     validate_current_rows(output)
+    impacted = list(dict.fromkeys(plan.get("impactedRegressionCaseIds", [])))
+    missing_impacted = [case_id for case_id in impacted if case_id not in by_id]
+    if missing_impacted:
+        raise SystemExit("受影响回归CASE-ID不存在或已删除：" + ", ".join(missing_impacted))
+    plan["impactedRegressionCaseIds"] = impacted
     state_paths = {
         CURRENT, ID_SEQUENCE, AUTOMATION_REGISTRY, EXECUTION_REPORT,
         ROOT / "reports" / "execution_summary.json", plan_path,
@@ -703,14 +858,29 @@ def invalidate_automation(case_ids, reason):
     if not normalize_text(reason):
         raise SystemExit("失效自动化必须填写原因")
     automation = load_automation()
+    case_ids = list(dict.fromkeys(case_ids))
+    state_paths = {
+        AUTOMATION_REGISTRY, EXECUTION_REPORT,
+        ROOT / "reports" / "execution_summary.json",
+    }
+    transaction_snapshot = snapshot_paths(
+        state_paths | case_asset_paths(case_ids, automation)
+    )
     invalidated = []
-    for case_id in list(dict.fromkeys(case_ids)):
-        removed = remove_case_assets(case_id, automation)
-        if removed:
-            invalidated.append(case_id)
-    automation["updatedAt"] = now_iso()
-    write_json_atomic(AUTOMATION_REGISTRY, automation)
-    sync_report()
+    try:
+        for case_id in case_ids:
+            removed = remove_case_assets(case_id, automation)
+            if removed:
+                invalidated.append(case_id)
+        automation["updatedAt"] = now_iso()
+        write_json_atomic(AUTOMATION_REGISTRY, automation)
+        sync_report()
+    except BaseException as error:
+        try:
+            restore_snapshot(transaction_snapshot)
+        except Exception as rollback_error:
+            raise RuntimeError(f"自动化失效失败且状态回滚不完整: {rollback_error}") from error
+        raise
     print(json.dumps({"已删除正式或候选自动化": invalidated, "原因": reason}, ensure_ascii=False, indent=2))
 
 
@@ -730,24 +900,38 @@ def record_exploration_failure(case_id, category, reason, cleanup_status, eviden
     if not evidence:
         raise SystemExit("探索失败必须提供截图、录像、Trace或错误上下文证据")
     automation = load_automation()
-    remove_case_assets(case_id, automation, delete_script=True)
-    automation["updatedAt"] = now_iso()
-    write_json_atomic(AUTOMATION_REGISTRY, automation)
-    report = sync_report()
-    for row in report:
-        if row["用例ID"] != case_id:
-            continue
-        row.update({
-            "自动化状态": "未自动化", "执行结果": "未通过",
-            "失败分类": category, "清理状态": cleanup_status,
-            "执行时间": now_iso(),
-            "运行ID": run_id or f"EXPLORATION-{datetime.now().strftime('%Y%m%d%H%M%S')}",
-            "失败原因": reason, "证据路径": "; ".join(evidence),
-            "Playwright测试": "", "脚本路径": "",
-        })
-        break
-    write_csv_atomic(EXECUTION_REPORT, report, [*CURRENT_HEADERS, *RESULT_HEADERS])
-    write_execution_summary(report)
+    state_paths = {
+        AUTOMATION_REGISTRY, EXECUTION_REPORT,
+        ROOT / "reports" / "execution_summary.json",
+    }
+    transaction_snapshot = snapshot_paths(
+        state_paths | case_asset_paths([case_id], automation)
+    )
+    try:
+        remove_case_assets(case_id, automation, delete_script=True)
+        automation["updatedAt"] = now_iso()
+        write_json_atomic(AUTOMATION_REGISTRY, automation)
+        report = sync_report()
+        for row in report:
+            if row["用例ID"] != case_id:
+                continue
+            row.update({
+                "自动化状态": "未自动化", "执行结果": "未通过",
+                "失败分类": category, "清理状态": cleanup_status,
+                "执行时间": now_iso(),
+                "运行ID": run_id or f"EXPLORATION-{datetime.now().strftime('%Y%m%d%H%M%S')}",
+                "失败原因": reason, "证据路径": "; ".join(evidence),
+                "Playwright测试": "", "脚本路径": "",
+            })
+            break
+        write_csv_atomic(EXECUTION_REPORT, report, [*CURRENT_HEADERS, *RESULT_HEADERS])
+        write_execution_summary(report)
+    except BaseException as error:
+        try:
+            restore_snapshot(transaction_snapshot)
+        except Exception as rollback_error:
+            raise RuntimeError(f"探索失败记录写入失败且状态回滚不完整: {rollback_error}") from error
+        raise
     print(json.dumps({"用例ID": case_id, "执行结果": "未通过", "失败分类": category,
                       "清理状态": cleanup_status, "正式脚本": "无"}, ensure_ascii=False, indent=2))
 
@@ -794,10 +978,20 @@ def candidate_binding(case):
         return None, "没有待晋级候选脚本"
     if entry.get("caseContentHash") != case["用例内容哈希"]:
         return None, "候选脚本绑定的用例内容已变化"
-    spec_path = safe_spec_path(entry.get("file", ""))
+    try:
+        spec_path = safe_spec_path(entry.get("file", ""))
+    except SystemExit as error:
+        return None, str(error)
+    if spec_path.name != f"{case['用例ID']}.spec.js":
+        return None, "候选脚本文件名与CASE-ID不一致"
+    if case["用例ID"] not in entry.get("testTitle", ""):
+        return None, "候选测试标题不包含CASE-ID"
     if not spec_path.is_file() or entry.get("implementationHash") != hash_file(spec_path):
         return None, "候选脚本不存在或已变化"
-    audit_path = ROOT / entry.get("auditFile", "")
+    try:
+        audit_path = safe_audit_path(entry.get("auditFile", ""))
+    except SystemExit as error:
+        return None, str(error)
     if not audit_path.is_file() or entry.get("auditHash") != hash_file(audit_path):
         return None, "候选覆盖审计不存在或已变化"
     try:
@@ -889,40 +1083,197 @@ def validate_state(require_all_automated=False):
     if current_ids != report_ids:
         issues.append("current.csv与execution_report.csv的ID或顺序不一致")
     by_id = {row["用例ID"]: row for row in current}
-    registered_files = set()
+    current_id_set = set(current_ids)
+    automation_cases = automation.get("cases", {})
+    if not isinstance(automation_cases, dict):
+        issues.append("automation-registry.json的cases必须是对象")
+        automation_cases = {}
+
+    unknown_automation_ids = sorted(set(automation_cases) - current_id_set)
+    if unknown_automation_ids:
+        issues.append("正式自动化包含非当前CASE-ID：" + ", ".join(unknown_automation_ids))
+
+    active_by_id = {}
+    registered_files = {}
+    referenced_audits = set()
+    referenced_contracts = set()
+
+    def collect_assets(case_id, entry, kind):
+        if not isinstance(entry, dict):
+            issues.append(f"{case_id}{kind}登记格式非法")
+            return
+        try:
+            spec_path = safe_spec_path(entry.get("file", ""))
+            audit_path = safe_audit_path(entry.get("auditFile", ""))
+        except SystemExit as error:
+            issues.append(f"{case_id}{kind}资产路径非法: {error}")
+            return
+        relative_spec = spec_path.relative_to(ROOT.resolve()).as_posix()
+        registered_files.setdefault(relative_spec, []).append(f"{kind}:{case_id}")
+        referenced_audits.add(audit_path.resolve())
+        try:
+            audit = load_json(audit_path, {})
+            contract_path = safe_contract_path(audit.get("contractFile", ""))
+        except (SystemExit, OSError, json.JSONDecodeError) as error:
+            issues.append(f"{case_id}{kind}契约路径或内容非法: {error}")
+            return
+        referenced_contracts.add(contract_path.resolve())
+
+    for case_id, entry in automation_cases.items():
+        case = by_id.get(case_id)
+        if not case:
+            continue
+        if not isinstance(entry, dict):
+            active_by_id[case_id] = (False, "登记格式非法")
+            issues.append(f"{case_id}正式自动化登记格式非法")
+            continue
+        try:
+            active, reason = valid_active_entry(case, entry)
+        except (OSError, json.JSONDecodeError, KeyError, TypeError) as error:
+            active, reason = False, str(error)
+        active_by_id[case_id] = (active, reason)
+        if not active:
+            issues.append(f"{case_id}正式自动化登记无效: {reason}")
+            continue
+        collect_assets(case_id, entry, "正式")
+
+    candidate_specs = set()
+    if CANDIDATES_ROOT.is_dir():
+        for candidate_path in CANDIDATES_ROOT.rglob("*.json"):
+            try:
+                candidate = load_json(candidate_path, {})
+            except (OSError, json.JSONDecodeError) as error:
+                issues.append(f"候选登记无法读取: {candidate_path}: {error}")
+                continue
+            case_id = normalize_text(candidate.get("caseId"))
+            expected_path = CANDIDATES_ROOT / f"{case_id}.json"
+            if not case_id or candidate_path.resolve() != expected_path.resolve():
+                issues.append(f"候选登记文件名或目录与CASE-ID不一致: {candidate_path}")
+                continue
+            case = by_id.get(case_id)
+            if not case:
+                issues.append(f"候选自动化包含非当前CASE-ID: {case_id}")
+                continue
+            if case_id in automation_cases:
+                issues.append(f"{case_id}同时存在正式和候选自动化")
+            try:
+                binding, reason = candidate_binding(case)
+            except (OSError, json.JSONDecodeError, KeyError, TypeError) as error:
+                binding, reason = None, str(error)
+            if not binding:
+                issues.append(f"{case_id}候选自动化登记无效: {reason}")
+                continue
+            collect_assets(case_id, binding, "候选")
+            try:
+                candidate_specs.add(safe_spec_path(binding["file"]).resolve())
+            except SystemExit:
+                pass
+
+    for file_name, owners in registered_files.items():
+        owner_case_ids = {owner.split(":", 1)[-1] for owner in owners}
+        if len(owner_case_ids) > 1:
+            issues.append(f"脚本文件被多个CASE-ID共享: {file_name} ({', '.join(owners)})")
+
+    valid_report_cleanup = VALID_CLEANUP_STATUSES | {"未执行"}
     for result in report:
         case = by_id[result["用例ID"]]
         for header in CURRENT_HEADERS:
             if result.get(header, "") != case.get(header, ""):
                 issues.append(f"{case['用例ID']}报告字段{header}与current.csv不一致")
                 break
-        entry = automation.get("cases", {}).get(case["用例ID"])
-        active, reason = valid_active_entry(case, entry)
-        if result.get("执行结果") == "通过" and not active:
-            issues.append(f"{case['用例ID']}通过但没有有效自动化: {reason}")
-        if result.get("执行结果") != "通过" and active:
-            issues.append(f"{case['用例ID']}未通过或未执行但仍有正式自动化")
+        case_id = case["用例ID"]
+        execution_result = result.get("执行结果", "")
+        automation_status = result.get("自动化状态", "")
+        failure_category = result.get("失败分类", "")
+        cleanup_status = result.get("清理状态", "")
+        if execution_result not in VALID_EXECUTION_RESULTS:
+            issues.append(f"{case_id}执行结果非法: {execution_result or '<空>'}")
+        if automation_status not in VALID_AUTOMATION_STATUSES:
+            issues.append(f"{case_id}自动化状态非法: {automation_status or '<空>'}")
+        if failure_category and failure_category not in VALID_FAILURE_CATEGORIES:
+            issues.append(f"{case_id}失败分类非法: {failure_category}")
+        if cleanup_status not in valid_report_cleanup:
+            issues.append(f"{case_id}清理状态非法: {cleanup_status or '<空>'}")
+
+        active, reason = active_by_id.get(case_id, (False, "没有正式自动化登记"))
+        if execution_result == "通过":
+            if not active:
+                issues.append(f"{case_id}通过但没有有效自动化: {reason}")
+            if automation_status != "已自动化":
+                issues.append(f"{case_id}通过但报告未标记为已自动化")
+            if failure_category:
+                issues.append(f"{case_id}通过但仍保留失败分类")
+            if cleanup_status not in {"passed", "not-applicable", "retained-by-design"}:
+                issues.append(f"{case_id}通过但清理状态不可信: {cleanup_status or '<空>'}")
+        elif execution_result == "未通过":
+            if active:
+                issues.append(f"{case_id}未通过但仍有正式自动化")
+            if automation_status != "未自动化":
+                issues.append(f"{case_id}未通过但报告仍标记为已自动化")
+            if failure_category not in VALID_FAILURE_CATEGORIES:
+                issues.append(f"{case_id}未通过但没有合法失败分类")
+            if not normalize_text(result.get("失败原因")):
+                issues.append(f"{case_id}未通过但没有失败原因")
+            if not normalize_text(result.get("证据路径")):
+                issues.append(f"{case_id}未通过但没有失败证据")
+        elif execution_result == "未执行":
+            if active:
+                issues.append(f"{case_id}未执行但仍有正式自动化")
+            if automation_status != "未自动化":
+                issues.append(f"{case_id}未执行但报告仍标记为已自动化")
+            if failure_category:
+                issues.append(f"{case_id}未执行但仍保留失败分类")
+            if cleanup_status != "未执行":
+                issues.append(f"{case_id}未执行但清理状态不是未执行")
         if require_all_automated and (result.get("执行结果") != "通过" or not active):
             issues.append(f"{case['用例ID']}尚未达到完整回归条件")
-        if active:
-            if entry["file"] in registered_files:
-                issues.append(f"脚本文件被多个CASE-ID共享: {entry['file']}")
-            registered_files.add(entry["file"])
-    orphan_files = []
-    candidate_files = {
-        load_json(path, {}).get("file") for path in CANDIDATES_ROOT.glob("*.json")
-    } if CANDIDATES_ROOT.is_dir() else set()
-    for path in SPECS_ROOT.glob("*.spec.js") if SPECS_ROOT.is_dir() else []:
-        relative = str(path.relative_to(ROOT)).replace("\\", "/")
-        if relative not in registered_files and relative not in candidate_files:
-            orphan_files.append(relative)
-    if orphan_files:
-        issues.append("存在未登记正式脚本：" + ", ".join(orphan_files))
+
+    referenced_specs = {
+        safe_spec_path(file_name).resolve() for file_name in registered_files
+    } | candidate_specs
+    orphan_specs = [
+        path.relative_to(ROOT).as_posix()
+        for path in (SPECS_ROOT.rglob("*.spec.js") if SPECS_ROOT.is_dir() else [])
+        if path.resolve() not in referenced_specs
+    ]
+    orphan_audits = [
+        path.relative_to(ROOT).as_posix()
+        for path in (AUDITS_ROOT.rglob("*.json") if AUDITS_ROOT.is_dir() else [])
+        if path.resolve() not in referenced_audits
+    ]
+    orphan_contracts = [
+        path.relative_to(ROOT).as_posix()
+        for path in (CONTRACTS_ROOT.rglob("*.json") if CONTRACTS_ROOT.is_dir() else [])
+        if path.resolve() not in referenced_contracts
+    ]
+    if orphan_specs:
+        issues.append("存在未登记正式脚本：" + ", ".join(orphan_specs))
+    if orphan_audits:
+        issues.append("存在未登记覆盖审计：" + ", ".join(orphan_audits))
+    if orphan_contracts:
+        issues.append("存在未登记执行契约：" + ", ".join(orphan_contracts))
+
+    sequence = load_json(ID_SEQUENCE, {})
+    try:
+        next_sequence = int(sequence.get("nextSequence", 0))
+    except (AttributeError, TypeError, ValueError):
+        next_sequence = 0
+    max_sequence = max((int(case_id.removeprefix("CASE-")) for case_id in current_ids), default=0)
+    if next_sequence <= max_sequence:
+        issues.append(
+            f"id-sequence.nextSequence必须大于当前最大序号: {next_sequence} <= {max_sequence}"
+        )
+
+    full_ready = bool(current) and all(
+        row.get("执行结果") == "通过" and active_by_id.get(row["用例ID"], (False, ""))[0]
+        for row in report
+    )
     if issues:
         raise SystemExit("状态校验失败：" + "；".join(issues[:30]))
     print(json.dumps({"检查结果": "通过", "当前用例数": len(current),
-                      "正式自动化数": len(registered_files),
-                      "完整回归就绪": require_all_automated}, ensure_ascii=False, indent=2))
+                      "正式自动化数": sum(active for active, _ in active_by_id.values()),
+                      "候选自动化数": len(candidate_specs),
+                      "完整回归就绪": full_ready}, ensure_ascii=False, indent=2))
 
 
 def main():
@@ -978,33 +1329,40 @@ def main():
     validate_parser.add_argument("--full", action="store_true")
 
     args = parser.parse_args()
-    if args.command == "reset-state":
-        reset_state()
-    elif args.command == "sync-report":
-        sync_report()
-    elif args.command == "prepare":
-        prepare(args.source, args.output)
-    elif args.command == "apply":
-        apply_plan(args.plan)
-    elif args.command == "export-contract":
-        export_contracts(args.case_id, args.output_dir)
-    elif args.command == "make-audit-template":
-        make_audit_template(args.case_id, args.test_title, args.file, args.output)
-    elif args.command == "register-candidate":
-        register_candidate(args.case_id, args.test_title, args.file, args.audit,
-                           args.exploration_evidence)
-    elif args.command == "invalidate-automation":
-        invalidate_automation(args.case_id, args.reason)
-    elif args.command == "record-exploration-failure":
-        record_exploration_failure(args.case_id, args.failure_category, args.reason,
-                                   args.cleanup_status, args.evidence, args.run_id)
-    elif args.command == "scope":
-        resolve_scope(args.source, args.plan, args.case_id, args.module, args.promotion)
-    elif args.command == "make-run-plan":
-        make_run_plan(args.source, args.plan, args.output, args.case_id, args.module,
-                      args.promotion)
-    elif args.command == "validate-state":
-        validate_state(args.full)
+    locked_commands = {
+        "reset-state", "sync-report", "prepare", "apply", "export-contract",
+        "make-audit-template", "register-candidate", "invalidate-automation",
+        "record-exploration-failure", "make-run-plan", "validate-state",
+    }
+    lock_context = state_lock() if args.command in locked_commands else nullcontext()
+    with lock_context:
+        if args.command == "reset-state":
+            reset_state()
+        elif args.command == "sync-report":
+            sync_report()
+        elif args.command == "prepare":
+            prepare(args.source, args.output)
+        elif args.command == "apply":
+            apply_plan(args.plan)
+        elif args.command == "export-contract":
+            export_contracts(args.case_id, args.output_dir)
+        elif args.command == "make-audit-template":
+            make_audit_template(args.case_id, args.test_title, args.file, args.output)
+        elif args.command == "register-candidate":
+            register_candidate(args.case_id, args.test_title, args.file, args.audit,
+                               args.exploration_evidence)
+        elif args.command == "invalidate-automation":
+            invalidate_automation(args.case_id, args.reason)
+        elif args.command == "record-exploration-failure":
+            record_exploration_failure(args.case_id, args.failure_category, args.reason,
+                                       args.cleanup_status, args.evidence, args.run_id)
+        elif args.command == "scope":
+            resolve_scope(args.source, args.plan, args.case_id, args.module, args.promotion)
+        elif args.command == "make-run-plan":
+            make_run_plan(args.source, args.plan, args.output, args.case_id, args.module,
+                          args.promotion)
+        elif args.command == "validate-state":
+            validate_state(args.full)
 
 
 if __name__ == "__main__":

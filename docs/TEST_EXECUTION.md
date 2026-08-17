@@ -146,6 +146,8 @@ python scripts/testflow.py make-run-plan cases/current.csv `
   -Promotion -Password '<密码>'
 ```
 
+已有运行计划时可以省略`-SourceCsv`，执行器会读取计划绑定的输入CSV并重新校验路径和SHA-256；如果显式传入`-SourceCsv`，它必须与运行计划完全一致。
+
 promotion通过后自动写为“通过、已自动化”。promotion失败后自动写未通过，并删除候选脚本、契约和审计。
 
 ## 7. 正式回归
@@ -216,6 +218,7 @@ python scripts/testflow.py make-run-plan `
 - 缺少某个计划CASE结果时拒绝整批合并。
 - skip、重复CASE-ID、计划外结果时拒绝合并；清理状态缺失、非法或未经动态验证时按`unverified`失败合并。
 - current、脚本、契约或审计在计划生成后变化时拒绝合并。
+- 非当前CASE-ID的登记、失效候选、共享脚本、孤儿脚本/审计/契约或倒退的ID序号会被`validate-state`拒绝。
 - Playwright失败但结果完整且分类有效时，允许更新未通过结果并删除失败脚本。
 - 无法自动归因的失败写为`UNCLASSIFIED`，仍然更新为未通过并删除脚本；后续直接探索时必须重新归因。
 - 清理状态缺失、非法或只静态声明成功时写为`unverified`，整体按未通过处理并删除脚本。

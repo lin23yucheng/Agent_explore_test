@@ -74,9 +74,10 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
             "适用阶段": "功能测试阶段",
         })
 
-    def make_complete_audit(self, case, test_title, spec_file):
-        audit_path = self.flow.AUDITS_ROOT / f"{case['用例ID']}.json"
-        contract_path, contract = self.flow.write_contract(case)
+    def make_complete_audit(self, case, test_title, spec_file,
+                            audit_path=None, contract_path=None):
+        audit_path = audit_path or self.flow.AUDITS_ROOT / f"{case['用例ID']}.json"
+        contract_path, contract = self.flow.write_contract(case, contract_path)
         coverage = []
         for key in self.flow.CONTRACT_FIELDS:
             for item in contract[key]:
@@ -144,6 +145,14 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
         self.assertNotIn("用例Revision", current[0])
         self.assertEqual(report[0]["执行结果"], "未执行")
         self.assertEqual(report[0]["自动化状态"], "未自动化")
+
+    def test_reset_state_repairs_stale_id_sequence(self):
+        self.flow.write_json_atomic(
+            self.flow.ID_SEQUENCE, {"schemaVersion": 1, "nextSequence": 1}
+        )
+        with redirect_stdout(io.StringIO()):
+            self.flow.reset_state()
+        self.assertEqual(self.flow.load_json(self.flow.ID_SEQUENCE, {})["nextSequence"], 2)
 
     def test_sync_report_mirrors_current_and_removes_extra_ids(self):
         extra = {**self.case, "用例ID": "CASE-999999", **self.flow.initial_result_fields()}
@@ -343,6 +352,167 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
         self.assertFalse((self.root / spec_file).exists())
         self.assertEqual(report[0]["执行结果"], "未通过")
         self.assertEqual(report[0]["自动化状态"], "未自动化")
+
+    def test_invalidate_removes_custom_audit_and_contract_paths(self):
+        case_id = self.case["用例ID"]
+        spec_file = f"tests/ui/specs/{case_id}.spec.js"
+        title = f"用户管理 › 创建用户 [{case_id}]"
+        spec_path = self.root / spec_file
+        spec_path.write_text("const testBody = 'custom assets';\n", encoding="utf-8")
+        audit_path = self.flow.AUDITS_ROOT / "custom" / "coverage.json"
+        contract_path = self.flow.CONTRACTS_ROOT / "custom" / "contract.json"
+        audit = self.make_complete_audit(
+            self.case, title, spec_file, audit_path=audit_path,
+            contract_path=contract_path,
+        )
+        with redirect_stdout(io.StringIO()):
+            self.flow.register_candidate(case_id, title, spec_file, audit,
+                                         "直接探索已保存并验证最终列表")
+            self.flow.invalidate_automation([case_id], "用例需要重新执行")
+        self.assertFalse(spec_path.exists())
+        self.assertFalse(audit_path.exists())
+        self.assertFalse(contract_path.exists())
+        self.assertFalse((self.flow.CANDIDATES_ROOT / f"{case_id}.json").exists())
+
+    def test_invalidate_write_failure_restores_candidate_and_assets(self):
+        _, spec_file, audit_path = self.register_candidate()
+        contract_path = self.flow.CONTRACTS_ROOT / "CASE-000001.json"
+        original_write_json = self.flow.write_json_atomic
+
+        def fail_registry_write(path, value):
+            if Path(path) == self.flow.AUTOMATION_REGISTRY:
+                raise OSError("simulated registry write failure")
+            return original_write_json(path, value)
+
+        self.flow.write_json_atomic = fail_registry_write
+        try:
+            with self.assertRaisesRegex(OSError, "simulated registry"):
+                self.flow.invalidate_automation(["CASE-000001"], "重新探索")
+        finally:
+            self.flow.write_json_atomic = original_write_json
+        self.assertTrue((self.flow.CANDIDATES_ROOT / "CASE-000001.json").exists())
+        self.assertTrue((self.root / spec_file).exists())
+        self.assertTrue(audit_path.exists())
+        self.assertTrue(contract_path.exists())
+
+    def test_exploration_failure_write_failure_restores_candidate_and_assets(self):
+        _, spec_file, audit_path = self.register_candidate()
+        contract_path = self.flow.CONTRACTS_ROOT / "CASE-000001.json"
+        original_write_csv = self.flow.write_csv_atomic
+
+        def fail_report_write(path, rows, headers):
+            if Path(path) == self.flow.EXECUTION_REPORT:
+                raise OSError("simulated exploration report failure")
+            return original_write_csv(path, rows, headers)
+
+        self.flow.write_csv_atomic = fail_report_write
+        try:
+            with self.assertRaisesRegex(OSError, "simulated exploration"):
+                self.flow.record_exploration_failure(
+                    "CASE-000001", "PRODUCT_DEFECT", "最终结果不符合预期",
+                    "not-applicable", ["reports/evidence/RUN/error.txt"], "RUN",
+                )
+        finally:
+            self.flow.write_csv_atomic = original_write_csv
+        report, _ = self.flow.read_csv(self.flow.EXECUTION_REPORT)
+        self.assertEqual(report[0]["执行结果"], "未执行")
+        self.assertTrue((self.flow.CANDIDATES_ROOT / "CASE-000001.json").exists())
+        self.assertTrue((self.root / spec_file).exists())
+        self.assertTrue(audit_path.exists())
+        self.assertTrue(contract_path.exists())
+
+    def test_reset_state_removes_all_script_audit_and_contract_assets(self):
+        _, spec_file, audit_path = self.register_candidate()
+        contract_path = self.flow.CONTRACTS_ROOT / "CASE-000001.json"
+        with redirect_stdout(io.StringIO()):
+            self.flow.reset_state()
+        self.assertFalse((self.root / spec_file).exists())
+        self.assertFalse(audit_path.exists())
+        self.assertFalse(contract_path.exists())
+        self.assertFalse(list(self.flow.CANDIDATES_ROOT.glob("*.json")))
+        self.assertFalse(self.flow.load_automation()["cases"])
+
+    def test_merge_write_failure_restores_candidate_and_all_assets(self):
+        title, spec_file, audit_path = self.register_candidate()
+        contract_path = self.flow.CONTRACTS_ROOT / "CASE-000001.json"
+        plan = self.promotion_plan()
+        original_write_csv = self.flow.write_csv_atomic
+
+        def fail_report_write(path, rows, headers):
+            if Path(path) == self.flow.EXECUTION_REPORT:
+                raise OSError("simulated report write failure")
+            return original_write_csv(path, rows, headers)
+
+        self.flow.write_csv_atomic = fail_report_write
+        try:
+            with self.assertRaisesRegex(OSError, "simulated report"):
+                self.report.merge_results(plan, [self.result(title)])
+        finally:
+            self.flow.write_csv_atomic = original_write_csv
+
+        report, _ = self.flow.read_csv(self.flow.EXECUTION_REPORT)
+        self.assertEqual(report[0]["执行结果"], "未执行")
+        self.assertFalse(self.flow.load_automation()["cases"])
+        self.assertTrue((self.flow.CANDIDATES_ROOT / "CASE-000001.json").exists())
+        self.assertTrue((self.root / spec_file).exists())
+        self.assertTrue(audit_path.exists())
+        self.assertTrue(contract_path.exists())
+
+    def test_evidence_archive_failure_leaves_state_and_assets_unchanged(self):
+        title, spec_file, audit_path = self.register_candidate()
+        contract_path = self.flow.CONTRACTS_ROOT / "CASE-000001.json"
+        plan = self.promotion_plan()
+        first = self.root / "first.txt"
+        second = self.root / "second.txt"
+        first.write_text("first", encoding="utf-8")
+        second.write_text("second", encoding="utf-8")
+        result = self.result(title, "failed", "PRODUCT_DEFECT")
+        result["attachments"] = [
+            {"name": "first", "path": str(first), "body": ""},
+            {"name": "second", "path": str(second), "body": ""},
+        ]
+        original_copy = self.report.shutil.copy2
+        copy_count = 0
+
+        def fail_second_copy(source, destination):
+            nonlocal copy_count
+            copy_count += 1
+            if copy_count == 2:
+                raise OSError("simulated evidence copy failure")
+            return original_copy(source, destination)
+
+        self.report.shutil.copy2 = fail_second_copy
+        try:
+            with self.assertRaisesRegex(OSError, "simulated evidence"):
+                self.report.merge_results(plan, [result])
+        finally:
+            self.report.shutil.copy2 = original_copy
+
+        report, _ = self.flow.read_csv(self.flow.EXECUTION_REPORT)
+        self.assertEqual(report[0]["执行结果"], "未执行")
+        self.assertFalse(self.flow.load_automation()["cases"])
+        self.assertTrue((self.flow.CANDIDATES_ROOT / "CASE-000001.json").exists())
+        self.assertTrue((self.root / spec_file).exists())
+        self.assertTrue(audit_path.exists())
+        self.assertTrue(contract_path.exists())
+        evidence_files = list(self.report.EVIDENCE_ROOT.rglob("*")) \
+            if self.report.EVIDENCE_ROOT.exists() else []
+        self.assertFalse([path for path in evidence_files if path.is_file()])
+
+    def test_validate_state_accepts_valid_candidate_assets(self):
+        self.register_candidate()
+        with redirect_stdout(io.StringIO()):
+            self.flow.validate_state()
+
+    def test_validate_state_reports_full_ready_from_actual_active_state(self):
+        title, _, _ = self.register_candidate()
+        plan = self.promotion_plan()
+        with redirect_stdout(io.StringIO()):
+            self.report.merge_results(plan, [self.result(title)])
+        output = io.StringIO()
+        with redirect_stdout(output):
+            self.flow.validate_state(require_all_automated=True)
+        self.assertIn('"完整回归就绪": true', output.getvalue())
 
     def test_missing_planned_result_is_rejected(self):
         self.register_candidate()

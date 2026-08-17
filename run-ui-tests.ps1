@@ -12,8 +12,10 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$sourceCsvWasProvided = $PSBoundParameters.ContainsKey('SourceCsv')
 
-if (-not (Test-Path -LiteralPath $SourceCsv)) {
+if (([string]::IsNullOrWhiteSpace($RunPlan) -or $sourceCsvWasProvided -or $Full) -and
+        -not (Test-Path -LiteralPath $SourceCsv)) {
     throw "测试范围CSV不存在: $SourceCsv"
 }
 if ($Full -and (-not [string]::IsNullOrWhiteSpace($RunPlan) -or $CaseId.Count -gt 0 -or
@@ -31,9 +33,20 @@ $latestRoot = Join-Path $reportsRoot 'latest'
 $batchResultsFile = Join-Path $latestRoot 'playwright-results.json'
 $runId = (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssfffZ')
 $startedAt = (Get-Date).ToUniversalTime().ToString('o')
-$lockPath = Join-Path $reportsRoot '.formal-ui-run.lock'
+$lockPath = Join-Path 'cases' '.testflow-state.lock'
 $lockStream = $null
 $expectedBindingsFile = $null
+$managedEnvironmentNames = @(
+    'UI_USERNAME', 'UI_PASSWORD', 'FORMAL_UI_RUN', 'PLAYWRIGHT_REUSE_AUTH',
+    'TEST_RUN_ID', 'PLAYWRIGHT_HTML_DIR', 'PLAYWRIGHT_OUTPUT_DIR',
+    'CASE_RESULTS_FILE', 'ALLOWED_CASE_IDS', 'EXPECTED_CASE_BINDINGS_FILE',
+    'EXPECTED_CASE_BINDINGS', 'RUN_PLAN_FILE', 'PLAYWRIGHT_WORKERS',
+    'TESTFLOW_LOCK_HELD'
+)
+$previousEnvironment = @{}
+foreach ($name in $managedEnvironmentNames) {
+    $previousEnvironment[$name] = [Environment]::GetEnvironmentVariable($name, 'Process')
+}
 
 New-Item -ItemType Directory -Path $reportsRoot -Force | Out-Null
 try {
@@ -47,6 +60,7 @@ try {
     $lockStream.SetLength(0)
     $lockStream.Write($lockPayload, 0, $lockPayload.Length)
     $lockStream.Flush()
+    $env:TESTFLOW_LOCK_HELD = 'true'
 } catch {
     if ($lockStream) { $lockStream.Dispose() }
     throw '已有正式UI批次正在执行。'
@@ -80,6 +94,12 @@ try {
     }
     $runPlanPayload = Get-Content -LiteralPath $RunPlan -Raw | ConvertFrom-Json
     if ($runPlanPayload.status -ne 'ready') { throw '运行计划状态不是ready。' }
+    if (-not $sourceCsvWasProvided -and -not $Full) {
+        $SourceCsv = [string]$runPlanPayload.sourceCsv
+    }
+    if (-not (Test-Path -LiteralPath $SourceCsv)) {
+        throw "运行计划绑定的测试范围CSV不存在: $SourceCsv"
+    }
     $resolvedSource = (Resolve-Path -LiteralPath $SourceCsv).Path
     if ($runPlanPayload.sourceCsv -ne $resolvedSource) {
         throw '运行计划sourceCsv与-SourceCsv不一致。'
@@ -114,14 +134,18 @@ try {
         [regex]::Escape(($_ -split ' › ')[-1])
     }) -join '|') + ')$'
 
-    $preflightArguments = @('playwright', 'test') + $selectedFiles + @('--grep', $grep, '--list')
+    $preflightArguments = @('playwright', 'test') + $selectedFiles + @('--list')
     $preflightOutput = @(& npx.cmd @preflightArguments 2>&1)
     if ($LASTEXITCODE -ne 0) {
         throw ('Playwright预检失败: ' + (($preflightOutput | Select-Object -Last 20) -join [Environment]::NewLine))
     }
-    $listedTitles = @($preflightOutput |
-        Where-Object { $_ -match '^\s+.+\.spec\.js:\d+:\d+\s+›\s+' } |
-        ForEach-Object { (($_ -split ' › ', 2)[1]).Trim() })
+    $listedTitles = @($preflightOutput | ForEach-Object {
+        $listedMatch = [regex]::Match(
+            [string]$_,
+            '\.spec\.js:\d+:\d+\s+›\s+(?<title>.+)$'
+        )
+        if ($listedMatch.Success) { $listedMatch.Groups['title'].Value.Trim() }
+    })
     $difference = @(Compare-Object -ReferenceObject @($runPlanPayload.testTitles) -DifferenceObject $listedTitles)
     if ($difference.Count -gt 0 -or $listedTitles.Count -ne $allowedCaseIds.Count) {
         throw 'Playwright预检结果与运行计划不一致。'
@@ -196,5 +220,13 @@ try {
     if ($lockStream) { $lockStream.Dispose() }
     if (Test-Path -LiteralPath $lockPath) {
         Remove-Item -LiteralPath $lockPath -Force -ErrorAction SilentlyContinue
+    }
+    foreach ($name in $managedEnvironmentNames) {
+        $value = $previousEnvironment[$name]
+        if ($null -eq $value) {
+            Remove-Item -LiteralPath "Env:$name" -ErrorAction SilentlyContinue
+        } else {
+            [Environment]::SetEnvironmentVariable($name, $value, 'Process')
+        }
     }
 }
