@@ -26,4 +26,7 @@ node_modules/
 /cases/iterations/*
 !/cases/iterations/.gitkeep
 /cases/.testflow-state.lock
+/cases/.state-backups/
+/cases/.transactions/
+/cases/explorations/
 

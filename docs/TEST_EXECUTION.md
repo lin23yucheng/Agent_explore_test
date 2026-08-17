@@ -4,6 +4,25 @@
 
 强制规则以根目录`AGENTS.md`为准；本文提供实际操作顺序。
 
+## 0. 恢复优先于继续执行
+
+每次新Agent接手、上下文压缩或命令异常后，先读取当前真源和检查点，再执行：
+
+```powershell
+python scripts/testflow.py recovery-status
+```
+
+输出提示存在安全可恢复项时执行：
+
+```powershell
+python scripts/testflow.py recover-state
+python scripts/testflow.py recovery-status
+python scripts/testflow.py sync-report
+python scripts/testflow.py validate-state
+```
+
+不要删除锁文件、事务目录、关键JSON备份或`reports/latest`来“重新开始”。正式批次存在未完成检查点时使用`.\run-ui-tests.ps1 -Resume`；只有明确放弃已有结果时才使用`.\run-ui-tests.ps1 -Resume -Rerun`。
+
 ## 1. 当前状态初始化
 
 仅在明确需要清空旧结果并从current重新开始时执行：
@@ -109,6 +128,21 @@ python scripts/testflow.py record-exploration-failure `
 
 产品修复或环境恢复后，再从直接探索开始。
 
+直接探索开始和推进时必须写检查点：
+
+```powershell
+python scripts/testflow.py checkpoint-exploration `
+  --case-id CASE-000001 --phase started --note '开始核对前置条件'
+
+python scripts/testflow.py checkpoint-exploration `
+  --case-id CASE-000001 --phase failed-awaiting-record `
+  --completed-item P1 --completed-item S1 `
+  --evidence 'reports/evidence/<runId>/CASE-000001/error-context.md' `
+  --cleanup-status not-applicable
+```
+
+`record-exploration-failure`成功后会在同一事务中删除探索检查点。
+
 ## 6. 首次探索通过
 
 探索通过后仍不能直接把执行结果写为通过。必须生成并晋级脚本：
@@ -122,6 +156,16 @@ python scripts/testflow.py record-exploration-failure `
 7. 登记候选脚本并提供直接探索证据。
 8. 生成promotion运行计划。
 9. 通过`run-ui-tests.ps1`正式复跑。
+
+登记候选前，先把探索检查点更新为`passed-awaiting-automation`。所有契约项都必须通过重复的`--completed-item`写入，并提供可信清理状态：
+
+```powershell
+python scripts/testflow.py checkpoint-exploration `
+  --case-id CASE-000001 --phase passed-awaiting-automation `
+  --completed-item P1 --completed-item S1 --completed-item A1 `
+  --cleanup-status not-applicable `
+  --evidence '已读取控件值并验证最终列表状态'
+```
 
 ```powershell
 python scripts/testflow.py export-contract --case-id CASE-000001
@@ -226,10 +270,16 @@ python scripts/testflow.py make-run-plan `
 - 清理状态缺失、非法或只静态声明成功时写为`unverified`，整体按未通过处理并删除脚本。
 - 进程中断且没有结果时，不更新为通过；修复环境后重新执行。
 - 每批执行前清空`reports/latest`，失败证据归档到`reports/evidence/<runId>/<CASE-ID>/`。
+- 未完成批次不会被下一批静默清空；启动器会要求`-Resume`。重跑前的`latest`会归档到`reports/interrupted/<runId>-<时间>/`。
+- `results-ready`以后恢复且结果哈希一致时只继续合并；此前阶段一律完整重跑原计划，不能从某个Playwright测试行继续。
+- 状态事务在提交标记前中断时由`recover-state`回滚；提交标记后只做日志收尾，不重复应用。
+- `reports/latest/merge-receipt.json`与报告、登记在同一事务提交；回执有效时说明结果已经落库，恢复只完成批次收尾，禁止再次合并或强制重跑。
+- 旧证据裁剪失败不会撤销已提交结果，而是写入`reports/pending-maintenance.json`并由`recover-state`重试。
 
 ## 11. 结束检查
 
 ```powershell
+python scripts/testflow.py recovery-status
 python scripts/testflow.py sync-report
 python scripts/testflow.py validate-state
 ```

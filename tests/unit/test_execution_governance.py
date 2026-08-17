@@ -1,6 +1,8 @@
 import importlib.util
 import io
 import json
+import os
+import subprocess
 import tempfile
 import unittest
 from contextlib import redirect_stdout
@@ -55,6 +57,7 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
         self.flow.write_json_atomic(self.flow.AUTOMATION_REGISTRY, self.flow.empty_automation())
         with redirect_stdout(io.StringIO()):
             self.flow.sync_report(reset=True)
+            self.flow.recover_state()
 
     def tearDown(self):
         self.temporary.cleanup()
@@ -105,7 +108,12 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
         spec_path = self.root / spec_file
         spec_path.write_text("const testBody = 'current case implementation';\n", encoding="utf-8")
         audit = self.make_complete_audit(self.case, title, spec_file)
+        coverage_ids = self.flow.execution_contract(self.case)["completionGate"]["requiredCoverageIds"]
         with redirect_stdout(io.StringIO()):
+            self.flow.checkpoint_exploration(
+                case_id, "passed-awaiting-automation", completed_items=coverage_ids,
+                evidence=["直接探索已验证最终列表"], cleanup_status="not-applicable",
+            )
             self.flow.register_candidate(case_id, title, spec_file, audit,
                                          "直接探索已保存并验证最终列表")
         return title, spec_file, audit
@@ -284,6 +292,9 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
         self.assertEqual(report[0]["执行结果"], "通过")
         self.assertEqual(report[0]["自动化状态"], "已自动化")
         self.assertEqual(summary["automated_case_count"], 1)
+        receipt = self.flow.load_json(self.report.merge_receipt_path(), {})
+        self.assertEqual(receipt["status"], "committed")
+        self.assertEqual(receipt["caseIds"], ["CASE-000001"])
 
     def test_promotion_failure_deletes_script_and_keeps_evidence(self):
         title, spec_file, _ = self.register_candidate()
@@ -365,7 +376,12 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
             self.case, title, spec_file, audit_path=audit_path,
             contract_path=contract_path,
         )
+        coverage_ids = self.flow.execution_contract(self.case)["completionGate"]["requiredCoverageIds"]
         with redirect_stdout(io.StringIO()):
+            self.flow.checkpoint_exploration(
+                case_id, "passed-awaiting-automation", completed_items=coverage_ids,
+                evidence=["直接探索已验证最终列表"], cleanup_status="not-applicable",
+            )
             self.flow.register_candidate(case_id, title, spec_file, audit,
                                          "直接探索已保存并验证最终列表")
             self.flow.invalidate_automation([case_id], "用例需要重新执行")
@@ -498,6 +514,146 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
         evidence_files = list(self.report.EVIDENCE_ROOT.rglob("*")) \
             if self.report.EVIDENCE_ROOT.exists() else []
         self.assertFalse([path for path in evidence_files if path.is_file()])
+
+    def test_interrupted_durable_transaction_is_recovered_on_request(self):
+        before = self.flow.EXECUTION_REPORT.read_bytes()
+        transaction = self.flow.begin_state_transaction(
+            {self.flow.EXECUTION_REPORT}, "simulated interrupted report update"
+        )
+        self.flow.write_bytes_atomic(self.flow.EXECUTION_REPORT, b"partial state")
+
+        actions = self.flow.recover_transactions()
+
+        self.assertEqual(self.flow.EXECUTION_REPORT.read_bytes(), before)
+        self.assertEqual(actions[0]["transaction"], transaction.name)
+        self.assertEqual(actions[0]["action"], "rollback")
+        self.assertFalse(transaction.exists())
+
+    def test_handled_transaction_failure_rolls_back_without_stale_journal(self):
+        before = self.flow.EXECUTION_REPORT.read_bytes()
+
+        with self.assertRaisesRegex(OSError, "simulated transaction failure"):
+            with self.flow.state_transaction(
+                    {self.flow.EXECUTION_REPORT}, "simulated handled failure"):
+                self.flow.write_bytes_atomic(self.flow.EXECUTION_REPORT, b"partial state")
+                raise OSError("simulated transaction failure")
+
+        self.assertEqual(self.flow.EXECUTION_REPORT.read_bytes(), before)
+        self.assertEqual(self.flow.pending_transactions(), [])
+
+    @unittest.skipUnless(os.name == "nt", "Windows lock interoperability test")
+    def test_powershell_and_python_state_locks_block_each_other(self):
+        lock_path = self.flow.CASES_ROOT / ".testflow-state.lock"
+        quoted_path = str(lock_path).replace("'", "''")
+        holder = subprocess.Popen(
+            [
+                "powershell.exe", "-NoProfile", "-Command",
+                "$stream=[System.IO.File]::Open('" + quoted_path + "',"
+                "[System.IO.FileMode]::OpenOrCreate,[System.IO.FileAccess]::ReadWrite,"
+                "[System.IO.FileShare]::None);[Console]::Out.WriteLine('READY');"
+                "[Console]::Out.Flush();Start-Sleep -Seconds 2;$stream.Dispose()",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        try:
+            self.assertEqual(holder.stdout.readline().strip(), "READY")
+            with self.assertRaisesRegex(SystemExit, "请勿并发写入"):
+                with self.flow.state_lock():
+                    pass
+        finally:
+            try:
+                holder.wait(timeout=5)
+            finally:
+                holder.stdout.close()
+                holder.stderr.close()
+
+        with self.flow.state_lock():
+            contender = subprocess.run(
+                [
+                    "powershell.exe", "-NoProfile", "-Command",
+                    "try{$stream=[System.IO.File]::Open('" + quoted_path + "',"
+                    "[System.IO.FileMode]::OpenOrCreate,[System.IO.FileAccess]::ReadWrite,"
+                    "[System.IO.FileShare]::None);$stream.Dispose();exit 2}catch{exit 0}",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=5,
+                check=False,
+            )
+        self.assertEqual(contender.returncode, 0)
+
+    def test_corrupt_critical_json_recovers_from_last_known_good_backup(self):
+        with redirect_stdout(io.StringIO()):
+            self.flow.recover_state()
+        self.flow.AUTOMATION_REGISTRY.write_text('{"schemaVersion":', encoding="utf-8")
+
+        with self.assertRaisesRegex(SystemExit, "损坏或无法读取"):
+            self.flow.load_automation()
+
+        with redirect_stdout(io.StringIO()):
+            self.flow.recover_state()
+        self.assertEqual(self.flow.load_automation()["cases"], {})
+
+    def test_sequence_loader_never_regresses_below_backup_high_watermark(self):
+        self.flow.write_json_atomic(
+            self.flow.ID_SEQUENCE, {"schemaVersion": 1, "nextSequence": 10}
+        )
+        self.flow.write_json_atomic(
+            self.flow.ID_SEQUENCE, {"schemaVersion": 1, "nextSequence": 11}
+        )
+        self.flow.ID_SEQUENCE.write_text(
+            json.dumps({"schemaVersion": 1, "nextSequence": 2}), encoding="utf-8"
+        )
+
+        self.assertEqual(self.flow.load_sequence()["nextSequence"], 10)
+
+    def test_evidence_prune_failure_is_queued_after_successful_commit(self):
+        title, _, _ = self.register_candidate()
+        plan = self.promotion_plan()
+        old_evidence = self.report.EVIDENCE_ROOT / "OLD-RUN" / "CASE-000001" / "error.txt"
+        old_evidence.parent.mkdir(parents=True, exist_ok=True)
+        old_evidence.write_text("old", encoding="utf-8")
+        original_prune = self.flow.prune_case_evidence
+
+        def fail_prune(*_args, **_kwargs):
+            raise OSError("simulated prune failure")
+
+        self.flow.prune_case_evidence = fail_prune
+        try:
+            with redirect_stdout(io.StringIO()):
+                summary = self.report.merge_results(plan, [self.result(title)])
+        finally:
+            self.flow.prune_case_evidence = original_prune
+
+        report, _ = self.flow.read_csv(self.flow.EXECUTION_REPORT)
+        self.assertEqual(report[0]["执行结果"], "通过")
+        self.assertIn("maintenanceWarnings", summary)
+        self.assertTrue(self.flow.pending_maintenance_path().is_file())
+        self.assertTrue(old_evidence.is_file())
+
+        self.flow.retry_pending_maintenance()
+        self.assertFalse(old_evidence.exists())
+        self.assertFalse(self.flow.pending_maintenance_path().exists())
+
+    def test_exploration_checkpoint_survives_progress_and_is_cleared_by_candidate(self):
+        with redirect_stdout(io.StringIO()):
+            self.flow.checkpoint_exploration(
+                "CASE-000001", "steps-in-progress", completed_items=["P1", "S1"],
+                created_data=["用户:AI_RUN_CASE000001_用户1"],
+                notes=["下一步验证最终列表"], cleanup_status="pending",
+            )
+        checkpoint_path = self.flow.exploration_checkpoint_path("CASE-000001")
+        checkpoint = self.flow.load_json(checkpoint_path, {})
+        self.assertEqual(checkpoint["phase"], "steps-in-progress")
+        self.assertIn("用户:AI_RUN_CASE000001_用户1", checkpoint["createdData"])
+        with self.assertRaisesRegex(SystemExit, "未完成直接探索"):
+            with redirect_stdout(io.StringIO()):
+                self.flow.validate_state()
+
+        self.register_candidate()
+        self.assertFalse(checkpoint_path.exists())
 
     def test_validate_state_accepts_valid_candidate_assets(self):
         self.register_candidate()

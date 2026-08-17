@@ -19,6 +19,10 @@ VALID_FAILURE_CATEGORIES = flow.VALID_FAILURE_CATEGORIES
 VALID_PLAYWRIGHT_STATUSES = {"passed", "failed", "timedOut", "skipped", "interrupted"}
 
 
+def merge_receipt_path():
+    return flow.ROOT / "reports" / "latest" / "merge-receipt.json"
+
+
 def has_archivable_evidence(result):
     return any(
         item.get("name") != "cleanup-status.json" and (item.get("path") or item.get("body"))
@@ -75,19 +79,6 @@ def remove_archived_evidence(paths):
         for parent in [path.parent, path.parent.parent]:
             if parent != EVIDENCE_ROOT and parent.is_dir() and not any(parent.iterdir()):
                 parent.rmdir()
-
-
-def prune_case_evidence(case_id, keep_run_id=None):
-    if not EVIDENCE_ROOT.is_dir():
-        return
-    safe_case = safe_name(case_id)
-    safe_run = safe_name(keep_run_id) if keep_run_id else ""
-    for run_root in EVIDENCE_ROOT.iterdir():
-        if not run_root.is_dir() or run_root.name == safe_run:
-            continue
-        flow.remove_path_if_present(run_root / safe_case)
-        if run_root.is_dir() and not any(run_root.iterdir()):
-            run_root.rmdir()
 
 
 def load_run_plan(path):
@@ -217,89 +208,104 @@ def promote_candidate(case_id, binding, result, automation):
 
 
 def merge_results(plan, raw_results):
+    current = flow.load_current()
+    automation = flow.load_automation()
+    results, bindings = validate_results(raw_results, plan, current, automation)
     state_paths = {
         flow.AUTOMATION_REGISTRY, OUTPUT, SUMMARY,
-    }
-    transaction_snapshot = flow.snapshot_paths(state_paths)
+        flow.pending_maintenance_path(), merge_receipt_path(),
+    } | flow.case_asset_paths(plan["caseIds"], automation)
     archived_paths = []
     try:
-        current = flow.load_current()
-        report_rows = flow.sync_report()
-        report_by_id = {row["用例ID"]: row for row in report_rows}
-        automation = flow.load_automation()
-        results, bindings = validate_results(raw_results, plan, current, automation)
-        transaction_snapshot.update(flow.snapshot_paths(
-            flow.case_asset_paths(plan["caseIds"], automation)
-        ))
-        evidence_by_id = {}
-        for case_id in plan["caseIds"]:
-            result = results[case_id]
-            successful = result.get("status") == "passed" and result.get("cleanupStatus") in {
-                "passed", "not-applicable", "retained-by-design",
-            }
-            evidence_by_id[case_id] = (
-                [] if successful else archive_attachments(result, case_id)
-            )
-            archived_paths.extend(evidence_by_id[case_id])
+        with flow.state_transaction(state_paths, "合并正式测试结果"):
+            report_rows = flow.sync_report()
+            report_by_id = {row["用例ID"]: row for row in report_rows}
+            evidence_by_id = {}
+            for case_id in plan["caseIds"]:
+                result = results[case_id]
+                successful = result.get("status") == "passed" and result.get("cleanupStatus") in {
+                    "passed", "not-applicable", "retained-by-design",
+                }
+                evidence_by_id[case_id] = (
+                    [] if successful else archive_attachments(result, case_id)
+                )
+                archived_paths.extend(evidence_by_id[case_id])
 
-        passed = failed = 0
-        for case_id in plan["caseIds"]:
-            result = results[case_id]
-            binding = bindings[case_id]
-            cleanup = result.get("cleanupStatus", "")
-            successful = result.get("status") == "passed" and cleanup in {
-                "passed", "not-applicable", "retained-by-design",
-            }
-            row = report_by_id[case_id]
-            row.update({
-                "执行结果": "通过" if successful else "未通过",
-                "失败分类": "" if successful else (
-                    "CLEANUP_FAILED" if cleanup == "failed" else result.get("failureCategory", "")
-                ),
-                "清理状态": cleanup,
-                "执行时间": result.get("executedAt") or flow.now_iso(),
-                "运行ID": result.get("runId", ""),
-                "失败原因": "" if successful else result.get("error", ""),
-                "证据路径": "; ".join(evidence_by_id[case_id]),
-            })
-            if successful:
-                if binding.get("bindingType") == "promotion":
-                    entry = promote_candidate(case_id, binding, result, automation)
+            passed = failed = 0
+            for case_id in plan["caseIds"]:
+                result = results[case_id]
+                binding = bindings[case_id]
+                cleanup = result.get("cleanupStatus", "")
+                successful = result.get("status") == "passed" and cleanup in {
+                    "passed", "not-applicable", "retained-by-design",
+                }
+                row = report_by_id[case_id]
+                row.update({
+                    "执行结果": "通过" if successful else "未通过",
+                    "失败分类": "" if successful else (
+                        "CLEANUP_FAILED" if cleanup == "failed" else result.get("failureCategory", "")
+                    ),
+                    "清理状态": cleanup,
+                    "执行时间": result.get("executedAt") or flow.now_iso(),
+                    "运行ID": result.get("runId", ""),
+                    "失败原因": "" if successful else result.get("error", ""),
+                    "证据路径": "; ".join(evidence_by_id[case_id]),
+                })
+                if successful:
+                    if binding.get("bindingType") == "promotion":
+                        entry = promote_candidate(case_id, binding, result, automation)
+                    else:
+                        entry = automation["cases"][case_id]
+                        entry["lastPassedAt"] = row["执行时间"]
+                        entry["lastRunId"] = row["运行ID"]
+                    row["自动化状态"] = "已自动化"
+                    row["Playwright测试"] = entry["testTitle"]
+                    row["脚本路径"] = entry["file"]
+                    passed += 1
                 else:
-                    entry = automation["cases"][case_id]
-                    entry["lastPassedAt"] = row["执行时间"]
-                    entry["lastRunId"] = row["运行ID"]
-                row["自动化状态"] = "已自动化"
-                row["Playwright测试"] = entry["testTitle"]
-                row["脚本路径"] = entry["file"]
-                passed += 1
-            else:
-                flow.remove_case_assets(case_id, automation, delete_script=True)
-                row["自动化状态"] = "未自动化"
-                row["Playwright测试"] = ""
-                row["脚本路径"] = ""
-                failed += 1
-        automation["updatedAt"] = flow.now_iso()
-        flow.write_json_atomic(flow.AUTOMATION_REGISTRY, automation)
-        output = [report_by_id[row["用例ID"]] for row in current]
-        flow.write_csv_atomic(OUTPUT, output, [*flow.CURRENT_HEADERS, *flow.RESULT_HEADERS])
-        summary = flow.write_execution_summary(
-            output, batch_passed=passed, batch_failed=failed, path=SUMMARY,
-        )
-    except BaseException as error:
+                    flow.remove_case_assets(case_id, automation, delete_script=True)
+                    row["自动化状态"] = "未自动化"
+                    row["Playwright测试"] = ""
+                    row["脚本路径"] = ""
+                    failed += 1
+            automation["updatedAt"] = flow.now_iso()
+            flow.write_json_atomic(flow.AUTOMATION_REGISTRY, automation)
+            output = [report_by_id[row["用例ID"]] for row in current]
+            flow.write_csv_atomic(OUTPUT, output, [*flow.CURRENT_HEADERS, *flow.RESULT_HEADERS])
+            summary = flow.write_execution_summary(
+                output, batch_passed=passed, batch_failed=failed, path=SUMMARY,
+            )
+            for case_id in plan["caseIds"]:
+                result = results[case_id]
+                successful = result.get("status") == "passed" and result.get("cleanupStatus") in {
+                    "passed", "not-applicable", "retained-by-design",
+                }
+                flow.queue_evidence_prune(
+                    case_id, None if successful else result.get("runId"), "scheduled after merge",
+                )
+            flow.write_json_atomic(merge_receipt_path(), {
+                "schemaVersion": 1,
+                "status": "committed",
+                "committedAt": flow.now_iso(),
+                "runPlanHash": plan.get("_runtimePlanHash", ""),
+                "batchResultsHash": plan.get("_runtimeBatchResultsHash", ""),
+                "caseIds": list(plan["caseIds"]),
+                "runIds": sorted({results[case_id].get("runId", "") for case_id in plan["caseIds"]}),
+            })
+    except BaseException:
         try:
-            flow.restore_snapshot(transaction_snapshot)
             remove_archived_evidence(archived_paths)
-        except Exception as rollback_error:
-            raise RuntimeError(f"正式结果合并失败且回滚不完整: {rollback_error}") from error
+        except Exception as cleanup_error:
+            raise RuntimeError(f"正式结果合并失败且新证据清理不完整: {cleanup_error}")
         raise
 
-    for case_id in plan["caseIds"]:
-        result = results[case_id]
-        successful = result.get("status") == "passed" and result.get("cleanupStatus") in {
-            "passed", "not-applicable", "retained-by-design",
-        }
-        prune_case_evidence(case_id, None if successful else result.get("runId"))
+    maintenance_actions = flow.retry_pending_maintenance()
+    maintenance_warnings = [
+        f"{item.get('caseId', '')}旧证据清理待重试: {item.get('error', '')}"
+        for item in maintenance_actions if item.get("action") != "evidence-pruned"
+    ]
+    if maintenance_warnings:
+        summary["maintenanceWarnings"] = maintenance_warnings
     return summary
 
 
@@ -309,11 +315,14 @@ def main():
     parser.add_argument("--batch-results", default=str(BATCH_RESULTS))
     args = parser.parse_args()
     with flow.state_lock():
+        flow.require_recovered_state()
         plan = load_run_plan(args.run_plan)
         batch_path = Path(args.batch_results)
         if not batch_path.is_file():
             raise SystemExit(f"本批Playwright结果不存在: {batch_path}")
         raw_results = flow.load_json(batch_path, [])
+        plan["_runtimePlanHash"] = flow.hash_file(args.run_plan)
+        plan["_runtimeBatchResultsHash"] = flow.hash_file(batch_path)
         summary = merge_results(plan, raw_results)
     print(json.dumps({"结果已合并": str(OUTPUT), "汇总": summary}, ensure_ascii=False))
 

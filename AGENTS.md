@@ -4,6 +4,53 @@
 
 用户要求执行CSV、FreeMind `.mm`、特定模块、特定CASE-ID或全部用例时，Agent完整负责生成、合并、探索、自动化、执行、失败归因、数据清理和报告更新。
 
+## 0. 中断恢复和Agent上下文断层
+
+对话上下文、Agent记忆和口头进度都不是恢复依据。新Agent接手、上下文压缩、工具调用中断、终端退出或正式批次异常后，必须从项目中的当前文件、事务日志、探索检查点和批次检查点恢复事实。
+
+开始任何状态写入或继续测试前先执行：
+
+```powershell
+python scripts/testflow.py recovery-status
+```
+
+恢复规则：
+
+- 检测到`未完成事务`、关键状态备份待恢复或待重试证据清理时，执行`python scripts/testflow.py recover-state`，然后重新运行`recovery-status`、`sync-report`和`validate-state`。
+- `recover-state`是显式写操作。它只回滚未提交事务、完成已提交事务日志收尾、从有效last-known-good备份恢复损坏的关键JSON，并重试待清理任务；不能把损坏状态静默当成空状态。
+- 发现锁正在被占用时，说明原批次或状态操作仍可能运行。禁止删除锁文件、事务目录、`reports/latest`或强制启动第二批；先等待原进程结束并重新检查。
+- `cases/.transactions/`、`cases/.state-backups/`、`cases/explorations/`、`reports/latest/run-checkpoint.json`和`reports/pending-maintenance.json`属于恢复资产，禁止人工删除来绕过预检。
+- 恢复后必须重新读取本次范围的CSV、契约、审计、脚本及检查点绑定哈希。对话摘要只能帮助定位，不能证明步骤完成或结果通过。
+
+首次直接探索一开始就必须建立检查点，并在完成契约项、创建测试数据、保存证据或清理状态变化后立即更新：
+
+```powershell
+python scripts/testflow.py checkpoint-exploration `
+  --case-id CASE-000001 --phase started `
+  --note '准备核对前置条件'
+
+python scripts/testflow.py checkpoint-exploration `
+  --case-id CASE-000001 --phase steps-in-progress `
+  --completed-item P1 --completed-item S1 `
+  --created-data '用户:AI_RUN123_CASE000001_用户1；清理入口:用户管理删除' `
+  --evidence 'reports/evidence/RUN123/CASE-000001/step-S1.png'
+```
+
+探索检查点只记录可恢复进度，不能作为通过结果。上下文恢复后，Agent必须核对页面当前状态、已创建数据和清理责任；无法确认的步骤必须重新执行。只有所有`P*`、`S*`、`A*`均完成且清理状态可信时，才能写为`passed-awaiting-automation`。探索失败正式落库或候选登记成功时，检查点由事务自动删除。
+
+正式批次由`run-ui-tests.ps1`自动记录`planned`、`preflight-passed`、`running`、`results-ready`、`merging`、`merge-failed`和`completed`阶段。恢复命令：
+
+```powershell
+.\run-ui-tests.ps1 -Resume
+```
+
+- `results-ready`、`merging`或`merge-failed`且原始结果哈希一致时，`-Resume`只继续结果合并，不重复页面操作。
+- `planned`、`preflight-passed`、`running`或`interrupted`没有可信完整结果时，`-Resume`归档旧`latest`并使用同一运行计划、新运行ID完整重跑。
+- 已有结果不可信或合并错误不可重试时，使用`.\run-ui-tests.ps1 -Resume -Rerun`明确放弃本次结果并按原计划重跑。
+- 存在有效`merge-receipt.json`表示报告事务已经提交，此时禁止`-Rerun`，只能用`-Resume`完成清理、清单和检查点收尾。
+- `completed`表示报告合并已完成，即使Playwright退出码非零也不能盲目重跑；先读取执行报告、失败分类和证据。
+- 检查点、运行计划、current、输入CSV或结果哈希不一致时禁止继续合并。保留现场，完成归因后重新生成计划或明确重跑。
+
 ## 1. 必读文件
 
 开始任何测试资产变更或正式执行前，必须读取并对照：
@@ -81,15 +128,16 @@ python scripts/testflow.py apply <merge-plan.json>
 首次流程严格为：
 
 1. 按CSV前置条件、步骤和预期直接探索页面。
-2. 读取控件实际值，验证提交后的列表、详情或最终业务状态。
-3. 探索失败时写入未通过结果、分类、截图、录像、Trace和清理状态；不得创建正式脚本。
-4. 探索通过后，为该CASE-ID创建独立文件`tests/ui/specs/<CASE-ID>.spec.js`。
-5. 一个脚本文件只能包含一个正式测试并关联一个CASE-ID；测试标题必须包含CASE-ID以区分同名业务用例。
-6. 生成当前执行契约和覆盖审计，逐项填写每个`P*`、`S*`和`A*`的具体实现与证据。
-7. 使用`register-candidate`登记探索通过的候选脚本，必须提供探索证据。
-8. 生成`--promotion`运行计划并正式复跑。
-9. 候选脚本复跑通过后，报告合并器自动把它晋级为正式自动化。
-10. 候选复跑失败时，删除候选映射、契约、审计和脚本，只保留失败报告与证据。
+2. 创建并持续更新该CASE-ID的探索检查点，记录契约项、测试数据、证据和清理责任。
+3. 读取控件实际值，验证提交后的列表、详情或最终业务状态。
+4. 探索失败时写入未通过结果、分类、截图、录像、Trace和清理状态；不得创建正式脚本。
+5. 探索通过后，将检查点更新为`passed-awaiting-automation`，再为该CASE-ID创建独立文件`tests/ui/specs/<CASE-ID>.spec.js`。
+6. 一个脚本文件只能包含一个正式测试并关联一个CASE-ID；测试标题必须包含CASE-ID以区分同名业务用例。
+7. 生成当前执行契约和覆盖审计，逐项填写每个`P*`、`S*`和`A*`的具体实现与证据。
+8. 使用`register-candidate`登记探索通过的候选脚本，必须提供探索证据；登记成功后自动清除探索检查点。
+9. 生成`--promotion`运行计划并正式复跑。
+10. 候选脚本复跑通过后，报告合并器自动把它晋级为正式自动化。
+11. 候选复跑失败时，删除候选映射、契约、审计和脚本，只保留失败报告与证据。
 
 直接探索失败必须立即写入当前执行报告，`--evidence`可以重复：
 
@@ -217,7 +265,7 @@ python scripts/testflow.py make-run-plan <iteration.csv> `
 - 禁止skip、计划外结果、重复CASE-ID和重复叶子测试标题。
 - 运行中断后，没有结果的用例不得写成通过。
 - 能确认环境故障时标记`ENVIRONMENT_BLOCKED`；无法确认执行状态时批次保持不完整并重新执行。
-- 每次正式运行先清空`reports/latest`，禁止复用上一批原始结果。
+- 每次没有未完成检查点的正式运行先清空`reports/latest`；存在未完成检查点时必须保留现场并使用`-Resume`，禁止复用或覆盖上一批原始结果。
 - 正式运行使用独占锁，禁止并发批次覆盖报告。
 - 默认使用单Worker执行。只有确认用例之间不读写相同业务数据、系统配置或唯一性约束时，才能显式提高`-Workers`；一个CASE一个文件并不代表同模块会自动串行。
 
@@ -231,6 +279,7 @@ python scripts/testflow.py make-run-plan <iteration.csv> `
 - 未通过或未执行用例没有正式自动化映射。
 - 不存在非当前CASE-ID登记、无效候选、共享脚本、孤儿脚本/审计/契约或倒退的ID序号。
 - 失败证据和清理结果已保存。
+- 不存在未完成事务、待清理队列、未落库探索检查点或未完成正式批次检查点。
 - `python scripts/testflow.py validate-state`通过。
 
 只有缺少凭据、环境不可访问、操作有实质风险或用例预期确实无法判断时才能暂停。

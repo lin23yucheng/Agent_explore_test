@@ -6,6 +6,7 @@ import json
 import os
 import re
 import shutil
+import uuid
 from contextlib import contextmanager, nullcontext
 from datetime import datetime
 from pathlib import Path
@@ -47,7 +48,13 @@ CONTRACT_FIELDS = {"preconditions": "前置条件", "steps": "步骤", "assertio
 REQUIRED_BUSINESS_HEADERS = ["所属模块", "用例标题", "前置条件", "步骤", "预期"]
 VALID_EXECUTION_RESULTS = {"未执行", "未通过", "通过"}
 VALID_AUTOMATION_STATUSES = {"未自动化", "已自动化"}
+VALID_EXPLORATION_PHASES = {
+    "started", "preconditions-checked", "steps-in-progress", "assertions-checked",
+    "cleanup-pending", "passed-awaiting-automation", "failed-awaiting-record",
+}
 _STATE_LOCK_DEPTH = 0
+_TRANSACTION_DEPTH = 0
+_ACTIVE_TRANSACTION_PATHS = set()
 
 
 class ChineseArgumentParser(argparse.ArgumentParser):
@@ -122,15 +129,48 @@ def read_csv(path):
         return list(reader), reader.fieldnames or []
 
 
+def _flush_directory(path):
+    if os.name == "nt":
+        return
+    descriptor = os.open(Path(path), os.O_RDONLY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def write_bytes_atomic(path, content):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.{uuid.uuid4().hex}.tmp")
+    try:
+        with temporary.open("xb") as handle:
+            handle.write(content)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+        _flush_directory(path.parent)
+    finally:
+        if temporary.is_file():
+            temporary.unlink()
+
+
 def write_csv_atomic(path, rows, headers):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_name(f".{path.name}.tmp")
-    with temporary.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=headers, extrasaction="ignore")
-        writer.writeheader()
-        writer.writerows(rows)
-    os.replace(temporary, path)
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.{uuid.uuid4().hex}.tmp")
+    try:
+        with temporary.open("x", encoding="utf-8-sig", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=headers, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows(rows)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+        _flush_directory(path.parent)
+    finally:
+        if temporary.is_file():
+            temporary.unlink()
 
 
 def load_json(path, default):
@@ -141,12 +181,410 @@ def load_json(path, default):
         return json.load(handle)
 
 
-def write_json_atomic(path, value):
+def state_backups_root():
+    return CASES_ROOT / ".state-backups"
+
+
+def transactions_root():
+    return CASES_ROOT / ".transactions"
+
+
+def pending_maintenance_path():
+    return ROOT / "reports" / "pending-maintenance.json"
+
+
+def run_checkpoint_path():
+    return ROOT / "reports" / "latest" / "run-checkpoint.json"
+
+
+def explorations_root():
+    return CASES_ROOT / "explorations"
+
+
+def exploration_checkpoint_path(case_id):
+    if not re.fullmatch(r"CASE-\d{6}", str(case_id or "")):
+        raise SystemExit(f"探索检查点CASE-ID非法: {case_id}")
+    return explorations_root() / f"{case_id}.json"
+
+
+def critical_backup_path(path):
+    path = Path(path).resolve()
+    mapping = {
+        ID_SEQUENCE.resolve(): "id-sequence.json",
+        AUTOMATION_REGISTRY.resolve(): "automation-registry.json",
+    }
+    name = mapping.get(path)
+    return state_backups_root() / name if name else None
+
+
+def valid_json_bytes(content):
+    try:
+        json.loads(content.decode("utf-8-sig"))
+        return True
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return False
+
+
+def write_json_atomic(path, value, preserve_backup=True):
     path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_name(f".{path.name}.tmp")
-    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding="utf-8")
-    os.replace(temporary, path)
+    content = json.dumps(value, ensure_ascii=False, indent=2).encode("utf-8")
+    json.loads(content.decode("utf-8"))
+    backup = critical_backup_path(path) if preserve_backup else None
+    if backup and path.is_file():
+        previous = path.read_bytes()
+        if valid_json_bytes(previous):
+            write_bytes_atomic(backup, previous)
+    write_bytes_atomic(path, content)
+
+
+def _relative_owned_path(path):
+    path = Path(path).resolve()
+    try:
+        return path.relative_to(ROOT.resolve()).as_posix()
+    except ValueError as error:
+        raise SystemExit(f"事务文件不在项目目录内: {path}") from error
+
+
+def _transaction_directories():
+    root = transactions_root()
+    return sorted((path for path in root.iterdir() if path.is_dir()), key=lambda path: path.name) \
+        if root.is_dir() else []
+
+
+def pending_transactions():
+    output = []
+    for directory in _transaction_directories():
+        manifest_path = directory / "manifest.json"
+        if not manifest_path.is_file():
+            output.append({"transaction": directory.name, "status": "incomplete-prepare"})
+            continue
+        try:
+            manifest = load_json(manifest_path, {})
+            output.append({
+                "transaction": directory.name,
+                "status": manifest.get("status", "invalid"),
+                "operation": manifest.get("operation", ""),
+                "createdAt": manifest.get("createdAt", ""),
+            })
+        except (OSError, json.JSONDecodeError) as error:
+            output.append({"transaction": directory.name, "status": "invalid", "error": str(error)})
+    return output
+
+
+def require_recovered_state():
+    pending = pending_transactions()
+    if pending:
+        raise SystemExit(
+            "检测到未完成的状态事务，请先运行 python scripts/testflow.py recover-state: "
+            + ", ".join(item["transaction"] for item in pending)
+        )
+
+
+def begin_state_transaction(paths, operation):
+    require_recovered_state()
+    transaction_id = f"{datetime.now().strftime('%Y%m%dT%H%M%S%f')}-{uuid.uuid4().hex[:8]}"
+    directory = transactions_root() / transaction_id
+    directory.mkdir(parents=True, exist_ok=False)
+    entries = []
+    try:
+        for index, raw_path in enumerate(sorted(set(map(Path, paths)), key=lambda value: str(value))):
+            path = raw_path.resolve()
+            entry = {"path": _relative_owned_path(path), "existed": path.is_file()}
+            if path.is_file():
+                snapshot_name = f"{index:04d}.snapshot"
+                content = path.read_bytes()
+                write_bytes_atomic(directory / snapshot_name, content)
+                entry.update({"snapshot": snapshot_name,
+                              "sha256": hashlib.sha256(content).hexdigest()})
+            entries.append(entry)
+        manifest = {
+            "schemaVersion": 1,
+            "transactionId": transaction_id,
+            "operation": operation,
+            "status": "prepared",
+            "createdAt": now_iso(),
+            "entries": entries,
+        }
+        write_json_atomic(directory / "manifest.json", manifest)
+        return directory
+    except BaseException:
+        shutil.rmtree(directory, ignore_errors=True)
+        raise
+
+
+def _restore_transaction(directory, manifest):
+    for entry in reversed(manifest.get("entries", [])):
+        path = (ROOT / entry.get("path", "")).resolve()
+        _relative_owned_path(path)
+        if entry.get("existed"):
+            snapshot = directory / entry.get("snapshot", "")
+            if not snapshot.is_file():
+                raise RuntimeError(f"事务快照缺失: {snapshot}")
+            content = snapshot.read_bytes()
+            if hashlib.sha256(content).hexdigest() != entry.get("sha256"):
+                raise RuntimeError(f"事务快照哈希不一致: {snapshot}")
+            write_bytes_atomic(path, content)
+        elif path.is_file() or path.is_symlink():
+            path.unlink()
+        elif path.exists():
+            raise RuntimeError(f"事务原目标不存在但恢复时出现目录: {path}")
+
+
+def recover_transactions():
+    actions = []
+    for directory in _transaction_directories():
+        manifest_path = directory / "manifest.json"
+        if not manifest_path.is_file():
+            shutil.rmtree(directory)
+            actions.append({"transaction": directory.name, "action": "remove-incomplete-prepare"})
+            continue
+        try:
+            manifest = load_json(manifest_path, {})
+        except (OSError, json.JSONDecodeError) as error:
+            raise SystemExit(f"事务日志损坏，无法自动恢复: {manifest_path}: {error}") from error
+        status = manifest.get("status")
+        if status == "prepared":
+            _restore_transaction(directory, manifest)
+            manifest["status"] = "rolled-back"
+            manifest["recoveredAt"] = now_iso()
+            write_json_atomic(manifest_path, manifest)
+            action = "rollback"
+        elif status in {"committed", "rolled-back"}:
+            action = "finalize"
+        else:
+            raise SystemExit(f"事务日志状态非法，无法自动恢复: {manifest_path}: {status}")
+        shutil.rmtree(directory)
+        actions.append({"transaction": directory.name, "action": action})
+    return actions
+
+
+def critical_state_status():
+    output = []
+    for label, path, validator in [
+        ("automation-registry", AUTOMATION_REGISTRY, _validate_automation_payload),
+        ("id-sequence", ID_SEQUENCE, None),
+    ]:
+        item = {"name": label, "path": str(path), "primary": "missing", "backup": "missing"}
+        for key, candidate in [("primary", path), ("backup", critical_backup_path(path))]:
+            if not candidate or not candidate.is_file():
+                continue
+            try:
+                value = load_json(candidate, {})
+                if label == "automation-registry":
+                    _validate_automation_payload(value, candidate)
+                else:
+                    if not isinstance(value, dict) or value.get("schemaVersion") != 1:
+                        raise ValueError("schemaVersion非法")
+                    int(value.get("nextSequence"))
+                item[key] = "valid"
+            except (OSError, UnicodeDecodeError, json.JSONDecodeError, SystemExit,
+                    TypeError, ValueError) as error:
+                item[key] = {"status": "invalid", "error": str(error)}
+        output.append(item)
+    return output
+
+
+def _load_pending_maintenance():
+    path = pending_maintenance_path()
+    if not path.is_file():
+        return {"schemaVersion": 1, "evidencePrunes": []}
+    try:
+        value = load_json(path, {})
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise SystemExit(f"待清理队列损坏: {path}: {error}") from error
+    if not isinstance(value, dict) or value.get("schemaVersion") != 1 \
+            or not isinstance(value.get("evidencePrunes"), list):
+        raise SystemExit(f"待清理队列结构非法: {path}")
+    return value
+
+
+def _evidence_root():
+    return ROOT / "reports" / "evidence"
+
+
+def prune_case_evidence(case_id, keep_run_id=None):
+    evidence_root = _evidence_root()
+    if not evidence_root.is_dir():
+        return
+    safe_case = re.sub(r"[<>:\"/\\|?*\x00-\x1f]", "_", str(case_id or "")).strip(" .") or "unnamed"
+    safe_run = re.sub(r"[<>:\"/\\|?*\x00-\x1f]", "_", str(keep_run_id or "")).strip(" .")
+    for run_root in evidence_root.iterdir():
+        if not run_root.is_dir() or run_root.name == safe_run:
+            continue
+        remove_path_if_present(run_root / safe_case)
+        if run_root.is_dir() and not any(run_root.iterdir()):
+            run_root.rmdir()
+
+
+def queue_evidence_prune(case_id, keep_run_id=None, error=None):
+    queue = _load_pending_maintenance()
+    entries = queue.setdefault("evidencePrunes", [])
+    matching = next((item for item in entries
+                     if item.get("caseId") == case_id and item.get("keepRunId", "") == (keep_run_id or "")), None)
+    if matching is None:
+        matching = {"caseId": case_id, "keepRunId": keep_run_id or "", "attempts": 0,
+                    "createdAt": now_iso()}
+        entries.append(matching)
+    matching["attempts"] = int(matching.get("attempts", 0) or 0) + 1
+    matching["lastError"] = str(error or "")
+    write_json_atomic(pending_maintenance_path(), queue)
+
+
+def retry_pending_maintenance():
+    queue = _load_pending_maintenance()
+    remaining = []
+    actions = []
+    for item in queue.get("evidencePrunes", []):
+        try:
+            prune_case_evidence(item.get("caseId", ""), item.get("keepRunId", ""))
+            actions.append({"caseId": item.get("caseId", ""), "action": "evidence-pruned"})
+        except BaseException as error:
+            item["attempts"] = int(item.get("attempts", 0) or 0) + 1
+            item["lastError"] = str(error)
+            remaining.append(item)
+            actions.append({"caseId": item.get("caseId", ""), "action": "evidence-prune-pending",
+                            "error": str(error)})
+    if remaining:
+        queue["evidencePrunes"] = remaining
+        try:
+            write_json_atomic(pending_maintenance_path(), queue)
+        except BaseException as error:
+            actions.append({"action": "maintenance-queue-write-failed", "error": str(error)})
+    else:
+        try:
+            remove_file_if_present(pending_maintenance_path())
+        except BaseException as error:
+            actions.append({"action": "maintenance-queue-remove-failed", "error": str(error)})
+    return actions
+
+
+def recover_state():
+    actions = recover_transactions()
+    issues = []
+    for item in critical_state_status():
+        path = Path(item["path"])
+        primary = item["primary"]
+        backup = item["backup"]
+        backup_path = critical_backup_path(path)
+        if primary == "valid":
+            if backup != "valid":
+                backup_path.parent.mkdir(parents=True, exist_ok=True)
+                write_bytes_atomic(backup_path, path.read_bytes())
+                actions.append({"file": str(path), "action": "backup-initialized"})
+            continue
+        if backup == "valid" and backup_path:
+            write_bytes_atomic(path, backup_path.read_bytes())
+            actions.append({"file": str(path), "action": "restored-from-backup"})
+            continue
+        if path == AUTOMATION_REGISTRY and primary == "missing" and backup == "missing":
+            write_json_atomic(path, empty_automation())
+            write_bytes_atomic(critical_backup_path(path), path.read_bytes())
+            actions.append({"file": str(path), "action": "initialized-empty-registry"})
+            continue
+        issues.append(f"{path}没有可用主文件或备份")
+    if not issues:
+        sequence = load_sequence()
+        current_sequence = load_json(ID_SEQUENCE, {})
+        if current_sequence.get("nextSequence") != sequence["nextSequence"]:
+            write_json_atomic(ID_SEQUENCE, sequence)
+            actions.append({"file": str(ID_SEQUENCE), "action": "sequence-high-water-reconciled",
+                            "nextSequence": sequence["nextSequence"]})
+    actions.extend(retry_pending_maintenance())
+    if issues:
+        raise SystemExit("状态恢复不完整：" + "; ".join(issues))
+    print(json.dumps({"恢复结果": "通过", "动作": actions}, ensure_ascii=False, indent=2))
+
+
+def recovery_status():
+    checkpoint = run_checkpoint_path()
+    checkpoint_value = None
+    checkpoint_issue = ""
+    if checkpoint.is_file():
+        try:
+            checkpoint_value = load_json(checkpoint, {})
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+            checkpoint_issue = str(error)
+    exploration_checkpoints, exploration_issues = load_exploration_checkpoints()
+    output = {
+        "未完成事务": pending_transactions(),
+        "关键状态": critical_state_status(),
+        "待清理": _load_pending_maintenance(),
+        "探索检查点": exploration_checkpoints,
+        "探索检查点错误": exploration_issues,
+        "批次检查点": checkpoint_value,
+        "检查点错误": checkpoint_issue,
+    }
+    actions = []
+    if output["未完成事务"]:
+        actions.append("recover-state")
+    if any(item["primary"] == "valid" and item["backup"] != "valid"
+           for item in output["关键状态"]):
+        actions.append("recover-state")
+    if any(item["primary"] != "valid" and item["backup"] != "valid"
+           and not (item["name"] == "automation-registry" and item["primary"] == "missing")
+           for item in output["关键状态"]):
+        actions.append("manual-state-repair")
+    if output["待清理"].get("evidencePrunes"):
+        actions.append("recover-state")
+    if exploration_issues:
+        actions.append("manual-exploration-repair")
+    if exploration_checkpoints:
+        actions.append("resume-exploration")
+    if checkpoint_issue:
+        actions.append("manual-checkpoint-repair")
+    elif checkpoint_value and checkpoint_value.get("status") not in {"completed", ""}:
+        actions.append("run-ui-tests.ps1 -Resume")
+    output["建议动作"] = list(dict.fromkeys(actions))
+    print(json.dumps(output, ensure_ascii=False, indent=2))
+
+
+@contextmanager
+def state_transaction(paths, operation):
+    global _TRANSACTION_DEPTH, _ACTIVE_TRANSACTION_PATHS
+    resolved = {Path(path).resolve() for path in paths}
+    if _TRANSACTION_DEPTH:
+        missing = resolved - _ACTIVE_TRANSACTION_PATHS
+        if missing:
+            raise RuntimeError(
+                "嵌套事务访问了外层未登记的文件: " + ", ".join(map(str, sorted(missing)))
+            )
+        _TRANSACTION_DEPTH += 1
+        try:
+            yield
+        finally:
+            _TRANSACTION_DEPTH -= 1
+        return
+
+    directory = begin_state_transaction(resolved, operation)
+    manifest_path = directory / "manifest.json"
+    _TRANSACTION_DEPTH = 1
+    _ACTIVE_TRANSACTION_PATHS = resolved
+    try:
+        yield
+        manifest = load_json(manifest_path, {})
+        manifest["status"] = "committed"
+        manifest["committedAt"] = now_iso()
+        write_json_atomic(manifest_path, manifest)
+    except BaseException as error:
+        try:
+            manifest = load_json(manifest_path, {})
+            _restore_transaction(directory, manifest)
+            manifest["status"] = "rolled-back"
+            manifest["recoveredAt"] = now_iso()
+            write_json_atomic(manifest_path, manifest)
+        except BaseException as rollback_error:
+            raise RuntimeError(f"{operation}失败且持久事务回滚不完整: {rollback_error}") from error
+        raise
+    finally:
+        _TRANSACTION_DEPTH = 0
+        _ACTIVE_TRANSACTION_PATHS = set()
+        try:
+            terminal_manifest = load_json(manifest_path, {})
+            if terminal_manifest.get("status") in {"committed", "rolled-back"}:
+                shutil.rmtree(directory)
+        except (OSError, json.JSONDecodeError):
+            # A terminal journal is safe to finalize during the next recovery pass.
+            pass
 
 
 def hash_file(path):
@@ -233,21 +671,59 @@ def empty_automation():
     return {"schemaVersion": 1, "updatedAt": "", "cases": {}}
 
 
-def load_automation():
-    value = load_json(AUTOMATION_REGISTRY, empty_automation())
-    value.setdefault("cases", {})
+def _load_critical_json(path, label, default=None):
+    path = Path(path)
+    backup = critical_backup_path(path)
+    if not path.is_file():
+        if backup and backup.is_file():
+            raise SystemExit(
+                f"关键状态文件缺失但存在可恢复备份: {path}；请运行 recover-state"
+            )
+        if default is not None:
+            return default
+        raise SystemExit(f"关键状态文件不存在: {path}；请先初始化或运行 recover-state")
+    try:
+        return load_json(path, {})
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+        backup_hint = f"；可恢复备份: {backup}" if backup and backup.is_file() else ""
+        raise SystemExit(f"{label}损坏或无法读取: {path}: {error}{backup_hint}") from error
+
+
+def _validate_automation_payload(value, path):
+    if not isinstance(value, dict) or value.get("schemaVersion") != 1:
+        raise SystemExit(f"automation-registry.json结构非法: {path}；请运行 recover-state")
+    if not isinstance(value.get("cases"), dict):
+        raise SystemExit(f"automation-registry.json的cases不是对象: {path}；请运行 recover-state")
     return value
 
 
+def load_automation():
+    value = _load_critical_json(AUTOMATION_REGISTRY, "automation-registry.json",
+                                empty_automation())
+    return _validate_automation_payload(value, AUTOMATION_REGISTRY)
+
+
 def load_sequence(rows=None):
-    state = load_json(ID_SEQUENCE, {})
     rows = rows if rows is not None else load_current()
     numbers = [int(match.group(1)) for row in rows
                if (match := re.fullmatch(r"CASE-(\d+)", row.get("用例ID", "")))]
+    state = _load_critical_json(ID_SEQUENCE, "id-sequence.json")
+    if not isinstance(state, dict) or state.get("schemaVersion") != 1:
+        raise SystemExit(f"id-sequence.json结构非法: {ID_SEQUENCE}；请运行 recover-state")
     try:
-        configured = int(state.get("nextSequence", 0) or 0)
-    except (AttributeError, TypeError, ValueError):
-        configured = 0
+        configured = int(state.get("nextSequence"))
+    except (AttributeError, TypeError, ValueError) as error:
+        raise SystemExit(f"id-sequence.nextSequence非法: {ID_SEQUENCE}；请运行 recover-state") from error
+    if configured < 1:
+        raise SystemExit(f"id-sequence.nextSequence必须为正数: {ID_SEQUENCE}")
+    backup = critical_backup_path(ID_SEQUENCE)
+    if backup and backup.is_file():
+        try:
+            backup_state = load_json(backup, {})
+            backup_next = int(backup_state.get("nextSequence", 0))
+            configured = max(configured, backup_next)
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError, AttributeError, TypeError, ValueError):
+            pass
     return {
         "schemaVersion": 1,
         "nextSequence": max(configured, max(numbers, default=0) + 1),
@@ -299,6 +775,91 @@ def execution_contract(case):
 
 def find_case(case_id):
     return next((row for row in load_current() if row["用例ID"] == case_id), None)
+
+
+def load_exploration_checkpoints():
+    checkpoints = []
+    issues = []
+    root = explorations_root()
+    if not root.is_dir():
+        return checkpoints, issues
+    for path in sorted(root.glob("*.json")):
+        try:
+            value = load_json(path, {})
+            if not isinstance(value, dict) or value.get("schemaVersion") != 1:
+                raise ValueError("schemaVersion或根结构非法")
+            if path != exploration_checkpoint_path(value.get("caseId", "")):
+                raise ValueError("文件名与CASE-ID不一致")
+            checkpoints.append(value)
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError, SystemExit, ValueError) as error:
+            issues.append(f"{path}: {error}")
+    return checkpoints, issues
+
+
+def checkpoint_exploration(case_id, phase, run_id=None, completed_items=None,
+                           created_data=None, evidence=None, notes=None,
+                           cleanup_status=None):
+    case = find_case(case_id)
+    if not case:
+        raise SystemExit(f"找不到当前有效用例: {case_id}")
+    if phase not in VALID_EXPLORATION_PHASES:
+        raise SystemExit(f"探索阶段非法: {phase}")
+    path = exploration_checkpoint_path(case_id)
+    if path.is_file():
+        try:
+            payload = load_json(path, {})
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+            raise SystemExit(f"探索检查点损坏: {path}: {error}") from error
+        if payload.get("caseContentHash") != case["用例内容哈希"]:
+            raise SystemExit("探索检查点绑定的用例内容已变化，必须先清理旧测试数据并人工处理检查点")
+        if run_id and payload.get("runId") != run_id:
+            raise SystemExit("探索检查点已有不同运行ID，必须先恢复或清理原探索会话")
+    else:
+        payload = {
+            "schemaVersion": 1,
+            "caseId": case_id,
+            "caseContentHash": case["用例内容哈希"],
+            "module": case["所属模块"],
+            "title": case["用例标题"],
+            "runId": run_id or f"EXPLORATION-{datetime.now().strftime('%Y%m%dT%H%M%S')}-{case_id}",
+            "startedAt": now_iso(),
+            "completedItems": [],
+            "createdData": [],
+            "evidence": [],
+            "notes": [],
+            "cleanupStatus": "not-started",
+        }
+    contract_ids = set(execution_contract(case)["completionGate"]["requiredCoverageIds"])
+    requested_items = [normalize_text(value) for value in (completed_items or []) if normalize_text(value)]
+    invalid_items = sorted(set(requested_items) - contract_ids)
+    if invalid_items:
+        raise SystemExit("探索检查点包含未知契约项: " + ", ".join(invalid_items))
+    for key, values in [
+            ("completedItems", requested_items),
+            ("createdData", created_data or []),
+            ("evidence", evidence or []),
+            ("notes", notes or [])]:
+        normalized = [normalize_text(value) for value in values if normalize_text(value)]
+        payload[key] = list(dict.fromkeys([*payload.get(key, []), *normalized]))
+    if cleanup_status:
+        valid_checkpoint_cleanup = VALID_CLEANUP_STATUSES | {"not-started", "pending"}
+        if cleanup_status not in valid_checkpoint_cleanup:
+            raise SystemExit(f"探索检查点清理状态非法: {cleanup_status}")
+        payload["cleanupStatus"] = cleanup_status
+    if phase == "passed-awaiting-automation":
+        missing = sorted(contract_ids - set(payload.get("completedItems", [])))
+        if missing:
+            raise SystemExit("探索通过前仍有未完成契约项: " + ", ".join(missing))
+        if payload.get("cleanupStatus") not in {"passed", "not-applicable", "retained-by-design"}:
+            raise SystemExit("探索通过前必须记录可信清理状态")
+    if phase == "failed-awaiting-record" and not payload.get("evidence"):
+        raise SystemExit("探索失败检查点必须记录证据路径或错误上下文")
+    payload["phase"] = phase
+    payload["updatedAt"] = now_iso()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    write_json_atomic(path, payload)
+    print(json.dumps({"探索检查点": str(path), "状态": payload}, ensure_ascii=False, indent=2))
+    return payload
 
 
 def write_contract(case, output=None):
@@ -435,24 +996,6 @@ def remove_path_if_present(path):
         shutil.rmtree(path)
 
 
-def snapshot_paths(paths):
-    return {
-        Path(path): Path(path).read_bytes() if Path(path).is_file() else None
-        for path in set(paths)
-    }
-
-
-def restore_snapshot(snapshot):
-    for path, content in snapshot.items():
-        if content is None:
-            remove_file_if_present(path)
-            continue
-        path.parent.mkdir(parents=True, exist_ok=True)
-        temporary = path.with_name(f".{path.name}.rollback.tmp")
-        temporary.write_bytes(content)
-        os.replace(temporary, path)
-
-
 def case_asset_paths(case_ids, automation, include_scripts=True):
     case_ids = set(case_ids)
     paths = set()
@@ -472,6 +1015,7 @@ def case_asset_paths(case_ids, automation, include_scripts=True):
             candidate_path,
             CONTRACTS_ROOT / f"{case_id}.json",
             AUDITS_ROOT / f"{case_id}.json",
+            exploration_checkpoint_path(case_id),
         })
         for value in [entry, candidate]:
             if include_scripts and value.get("file") and value["file"] not in protected_scripts:
@@ -540,7 +1084,13 @@ def initial_result_fields():
 
 def write_execution_summary(rows, batch_passed=None, batch_failed=None, path=None):
     summary_path = Path(path) if path else ROOT / "reports" / "execution_summary.json"
-    previous = load_json(summary_path, {})
+    try:
+        previous = load_json(summary_path, {})
+        if not isinstance(previous, dict):
+            previous = {}
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        # The summary is derived state; counters can be rebuilt from the report.
+        previous = {}
     summary = {
         "source_case_count": len(rows),
         "passed_case_count": sum(row["执行结果"] == "通过" for row in rows),
@@ -584,11 +1134,13 @@ def sync_report(reset=False):
             fields["Playwright测试"] = ""
             fields["脚本路径"] = ""
         output.append({**case, **fields})
-    write_csv_atomic(EXECUTION_REPORT, output, [*CURRENT_HEADERS, *RESULT_HEADERS])
-    if reset:
-        write_execution_summary(output, batch_passed=0, batch_failed=0)
-    else:
-        write_execution_summary(output)
+    summary_path = ROOT / "reports" / "execution_summary.json"
+    with state_transaction({EXECUTION_REPORT, summary_path}, "同步执行报告"):
+        write_csv_atomic(EXECUTION_REPORT, output, [*CURRENT_HEADERS, *RESULT_HEADERS])
+        if reset:
+            write_execution_summary(output, batch_passed=0, batch_failed=0)
+        else:
+            write_execution_summary(output)
     print(json.dumps({
         "当前有效用例数": len(current), "执行报告行数": len(output),
         "报告": str(EXECUTION_REPORT), "模式": "重置" if reset else "同步",
@@ -604,35 +1156,33 @@ def reset_state():
     asset_files = set()
     for root, pattern in [
             (SPECS_ROOT, "*.spec.js"), (CANDIDATES_ROOT, "*.json"),
-            (CONTRACTS_ROOT, "*.json"), (AUDITS_ROOT, "*.json")]:
+            (CONTRACTS_ROOT, "*.json"), (AUDITS_ROOT, "*.json"),
+            (explorations_root(), "*.json")]:
         if root.is_dir():
             asset_files.update(root.rglob(pattern))
     state_paths = {
         CURRENT, ID_SEQUENCE, AUTOMATION_REGISTRY, EXECUTION_REPORT,
         ROOT / "reports" / "execution_summary.json",
     }
-    transaction_snapshot = snapshot_paths(state_paths | asset_files)
-    try:
+    with state_transaction(state_paths | asset_files, "重置当前测试状态"):
         write_csv_atomic(CURRENT, normalized, CURRENT_HEADERS)
         write_json_atomic(ID_SEQUENCE, sequence)
         write_json_atomic(AUTOMATION_REGISTRY, empty_automation())
         for path in asset_files:
             remove_file_if_present(path)
         sync_report(reset=True)
-    except BaseException as error:
-        try:
-            restore_snapshot(transaction_snapshot)
-        except Exception as rollback_error:
-            raise RuntimeError(f"状态重置失败且回滚不完整: {rollback_error}") from error
-        raise
+    cleanup_warnings = []
     for root in [ROOT / "reports" / "evidence", ROOT / "reports" / "latest"]:
         if root.is_dir():
             for path in root.iterdir():
                 if path.name != ".gitkeep":
-                    remove_path_if_present(path)
+                    try:
+                        remove_path_if_present(path)
+                    except OSError as error:
+                        cleanup_warnings.append(f"{path}: {error}")
     print(json.dumps({
         "已重置用例数": len(normalized), "下一个CASE序号": sequence["nextSequence"],
-        "历史结果": "已清空", "正式自动化": "已清空",
+        "历史结果": "已清空", "正式自动化": "已清空", "清理警告": cleanup_warnings,
     }, ensure_ascii=False, indent=2))
 
 
@@ -795,10 +1345,8 @@ def apply_plan(plan_path):
         CURRENT, ID_SEQUENCE, AUTOMATION_REGISTRY, EXECUTION_REPORT,
         ROOT / "reports" / "execution_summary.json", plan_path,
     }
-    transaction_snapshot = snapshot_paths(
-        state_paths | case_asset_paths(removed_case_ids, automation)
-    )
-    try:
+    transaction_paths = state_paths | case_asset_paths(removed_case_ids, automation)
+    with state_transaction(transaction_paths, "应用用例变更计划"):
         for case_id in removed_case_ids:
             remove_case_assets(case_id, automation)
         write_csv_atomic(CURRENT, output, CURRENT_HEADERS)
@@ -811,12 +1359,6 @@ def apply_plan(plan_path):
         plan["appliedCurrentHash"] = hash_file(CURRENT)
         write_json_atomic(plan_path, plan)
         sync_report()
-    except BaseException as error:
-        try:
-            restore_snapshot(transaction_snapshot)
-        except Exception as rollback_error:
-            raise RuntimeError(f"变更计划失败且状态回滚不完整: {rollback_error}") from error
-        raise
     print(json.dumps({"当前有效用例数": len(output), "本次结果用例ID": result_ids,
                       "当前用例文件": str(CURRENT)}, ensure_ascii=False, indent=2))
 
@@ -839,6 +1381,17 @@ def register_candidate(case_id, test_title, spec_file, audit_path, exploration_e
     automation = load_automation()
     if case_id in automation.get("cases", {}):
         raise SystemExit("该用例已有正式自动化，必须先失效后再登记候选")
+    checkpoint_path = exploration_checkpoint_path(case_id)
+    if not checkpoint_path.is_file():
+        raise SystemExit("登记候选前必须存在直接探索检查点")
+    try:
+        checkpoint = load_json(checkpoint_path, {})
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise SystemExit(f"直接探索检查点无法读取: {checkpoint_path}: {error}") from error
+    if checkpoint.get("caseContentHash") != case["用例内容哈希"]:
+        raise SystemExit("直接探索检查点绑定的用例内容已变化")
+    if checkpoint.get("phase") != "passed-awaiting-automation":
+        raise SystemExit("直接探索尚未完成全部契约项和清理验证")
     CANDIDATES_ROOT.mkdir(parents=True, exist_ok=True)
     payload = {
         "schemaVersion": 1, "status": "candidate", "caseId": case_id,
@@ -849,7 +1402,10 @@ def register_candidate(case_id, test_title, spec_file, audit_path, exploration_e
         "auditHash": hash_file(audit_path), "explorationEvidence": exploration_evidence,
         "exploredAt": now_iso(),
     }
-    write_json_atomic(CANDIDATES_ROOT / f"{case_id}.json", payload)
+    candidate_path = CANDIDATES_ROOT / f"{case_id}.json"
+    with state_transaction({candidate_path, checkpoint_path}, "登记候选自动化"):
+        write_json_atomic(candidate_path, payload)
+        remove_file_if_present(checkpoint_path)
     print(json.dumps({"候选自动化": case_id, "脚本": normalized_file,
                       "下一步": "生成promotion运行计划并正式复跑"}, ensure_ascii=False, indent=2))
 
@@ -863,11 +1419,9 @@ def invalidate_automation(case_ids, reason):
         AUTOMATION_REGISTRY, EXECUTION_REPORT,
         ROOT / "reports" / "execution_summary.json",
     }
-    transaction_snapshot = snapshot_paths(
-        state_paths | case_asset_paths(case_ids, automation)
-    )
+    transaction_paths = state_paths | case_asset_paths(case_ids, automation)
     invalidated = []
-    try:
+    with state_transaction(transaction_paths, "失效自动化"):
         for case_id in case_ids:
             removed = remove_case_assets(case_id, automation)
             if removed:
@@ -875,12 +1429,6 @@ def invalidate_automation(case_ids, reason):
         automation["updatedAt"] = now_iso()
         write_json_atomic(AUTOMATION_REGISTRY, automation)
         sync_report()
-    except BaseException as error:
-        try:
-            restore_snapshot(transaction_snapshot)
-        except Exception as rollback_error:
-            raise RuntimeError(f"自动化失效失败且状态回滚不完整: {rollback_error}") from error
-        raise
     print(json.dumps({"已删除正式或候选自动化": invalidated, "原因": reason}, ensure_ascii=False, indent=2))
 
 
@@ -904,10 +1452,8 @@ def record_exploration_failure(case_id, category, reason, cleanup_status, eviden
         AUTOMATION_REGISTRY, EXECUTION_REPORT,
         ROOT / "reports" / "execution_summary.json",
     }
-    transaction_snapshot = snapshot_paths(
-        state_paths | case_asset_paths([case_id], automation)
-    )
-    try:
+    transaction_paths = state_paths | case_asset_paths([case_id], automation)
+    with state_transaction(transaction_paths, "记录直接探索失败"):
         remove_case_assets(case_id, automation, delete_script=True)
         automation["updatedAt"] = now_iso()
         write_json_atomic(AUTOMATION_REGISTRY, automation)
@@ -926,12 +1472,6 @@ def record_exploration_failure(case_id, category, reason, cleanup_status, eviden
             break
         write_csv_atomic(EXECUTION_REPORT, report, [*CURRENT_HEADERS, *RESULT_HEADERS])
         write_execution_summary(report)
-    except BaseException as error:
-        try:
-            restore_snapshot(transaction_snapshot)
-        except Exception as rollback_error:
-            raise RuntimeError(f"探索失败记录写入失败且状态回滚不完整: {rollback_error}") from error
-        raise
     print(json.dumps({"用例ID": case_id, "执行结果": "未通过", "失败分类": category,
                       "清理状态": cleanup_status, "正式脚本": "无"}, ensure_ascii=False, indent=2))
 
@@ -1088,6 +1628,19 @@ def validate_state(require_all_automated=False):
     current_ids = [row["用例ID"] for row in current]
     report_ids = [row["用例ID"] for row in report]
     issues = []
+    for item in critical_state_status():
+        if item["backup"] != "valid":
+            issues.append(f"{item['name']}缺少有效last-known-good备份，请运行recover-state")
+    pending_maintenance = _load_pending_maintenance().get("evidencePrunes", [])
+    if pending_maintenance:
+        issues.append(f"存在{len(pending_maintenance)}条待重试证据清理，请运行recover-state")
+    exploration_checkpoints, exploration_issues = load_exploration_checkpoints()
+    issues.extend(f"探索检查点非法: {value}" for value in exploration_issues)
+    if exploration_checkpoints:
+        issues.append(
+            "存在未完成直接探索，请先恢复并完成结果落库: "
+            + ", ".join(item.get("caseId", "<未知>") for item in exploration_checkpoints)
+        )
     if current_ids != report_ids:
         issues.append("current.csv与execution_report.csv的ID或顺序不一致")
     by_id = {row["用例ID"]: row for row in current}
@@ -1290,6 +1843,8 @@ def main():
 
     subparsers.add_parser("reset-state", help="保留current.csv业务用例并清空执行与自动化状态")
     subparsers.add_parser("sync-report", help="让执行报告严格镜像current.csv")
+    subparsers.add_parser("recovery-status", help="只读检查中断事务、关键备份和批次检查点")
+    subparsers.add_parser("recover-state", help="恢复未提交事务、关键JSON和待清理任务")
 
     prepare_parser = subparsers.add_parser("prepare")
     prepare_parser.add_argument("source")
@@ -1323,6 +1878,16 @@ def main():
                                 choices=sorted(VALID_CLEANUP_STATUSES))
     failure_parser.add_argument("--evidence", action="append", required=True)
     failure_parser.add_argument("--run-id")
+    exploration_parser = subparsers.add_parser("checkpoint-exploration")
+    exploration_parser.add_argument("--case-id", required=True)
+    exploration_parser.add_argument("--phase", required=True,
+                                    choices=sorted(VALID_EXPLORATION_PHASES))
+    exploration_parser.add_argument("--run-id")
+    exploration_parser.add_argument("--completed-item", action="append")
+    exploration_parser.add_argument("--created-data", action="append")
+    exploration_parser.add_argument("--evidence", action="append")
+    exploration_parser.add_argument("--note", action="append")
+    exploration_parser.add_argument("--cleanup-status")
 
     for name in ["scope", "make-run-plan"]:
         scope_parser = subparsers.add_parser(name)
@@ -1341,10 +1906,17 @@ def main():
         "reset-state", "sync-report", "prepare", "apply", "export-contract",
         "make-audit-template", "register-candidate", "invalidate-automation",
         "record-exploration-failure", "make-run-plan", "validate-state",
+        "recovery-status", "recover-state", "checkpoint-exploration",
     }
     lock_context = state_lock() if args.command in locked_commands else nullcontext()
     with lock_context:
-        if args.command == "reset-state":
+        if args.command not in {"recovery-status", "recover-state"}:
+            require_recovered_state()
+        if args.command == "recovery-status":
+            recovery_status()
+        elif args.command == "recover-state":
+            recover_state()
+        elif args.command == "reset-state":
             reset_state()
         elif args.command == "sync-report":
             sync_report()
@@ -1364,6 +1936,11 @@ def main():
         elif args.command == "record-exploration-failure":
             record_exploration_failure(args.case_id, args.failure_category, args.reason,
                                        args.cleanup_status, args.evidence, args.run_id)
+        elif args.command == "checkpoint-exploration":
+            checkpoint_exploration(
+                args.case_id, args.phase, args.run_id, args.completed_item,
+                args.created_data, args.evidence, args.note, args.cleanup_status,
+            )
         elif args.command == "scope":
             resolve_scope(args.source, args.plan, args.case_id, args.module, args.promotion)
         elif args.command == "make-run-plan":
