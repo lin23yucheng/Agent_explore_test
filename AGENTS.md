@@ -27,6 +27,8 @@ python scripts/testflow.py sync-report
 python scripts/testflow.py validate-state
 ```
 
+`sync-report`是显式写操作；`validate-state`必须保持只读，只报告不一致，不能在校验时静默改写执行报告。
+
 同步规则：
 
 - current中没有、报告中存在的ID，从报告删除。

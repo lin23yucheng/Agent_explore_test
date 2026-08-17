@@ -21,6 +21,8 @@ python scripts/testflow.py sync-report
 python scripts/testflow.py validate-state
 ```
 
+`sync-report`负责写入并修正报告；`validate-state`只读取状态并拒绝不一致，不会在校验过程中改写CSV。
+
 ## 2. 从FreeMind生成增量CSV
 
 ```powershell

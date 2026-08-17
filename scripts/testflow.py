@@ -1075,7 +1075,15 @@ def resolve_scope(source, plan_path=None, case_ids=None, modules=None, promotion
 
 def validate_state(require_all_automated=False):
     current = load_current()
-    report = sync_report()
+    if not EXECUTION_REPORT.is_file():
+        raise SystemExit("执行报告不存在，请先运行sync-report")
+    report, report_headers = read_csv(EXECUTION_REPORT)
+    missing_report_headers = [
+        header for header in [*CURRENT_HEADERS, *RESULT_HEADERS]
+        if header not in report_headers
+    ]
+    if missing_report_headers:
+        raise SystemExit("执行报告缺少字段：" + ", ".join(missing_report_headers))
     automation = load_automation()
     current_ids = [row["用例ID"] for row in current]
     report_ids = [row["用例ID"] for row in report]

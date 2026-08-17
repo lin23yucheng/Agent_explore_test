@@ -504,6 +504,21 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
         with redirect_stdout(io.StringIO()):
             self.flow.validate_state()
 
+    def test_validate_state_does_not_rewrite_execution_report(self):
+        before = self.flow.EXECUTION_REPORT.read_bytes()
+        original_write_csv = self.flow.write_csv_atomic
+
+        def reject_write(*_args, **_kwargs):
+            raise AssertionError("validate-state must be read-only")
+
+        self.flow.write_csv_atomic = reject_write
+        try:
+            with redirect_stdout(io.StringIO()):
+                self.flow.validate_state()
+        finally:
+            self.flow.write_csv_atomic = original_write_csv
+        self.assertEqual(self.flow.EXECUTION_REPORT.read_bytes(), before)
+
     def test_validate_state_reports_full_ready_from_actual_active_state(self):
         title, _, _ = self.register_candidate()
         plan = self.promotion_plan()
