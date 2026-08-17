@@ -1,12 +1,8 @@
-# 测试报告目录
+# 当前执行报告
 
-本目录是唯一的测试执行产物入口。
+- `execution_report.csv`：与`cases/current.csv`一一对应的当前执行状态。
+- `execution_summary.json`：当前快照和最近批次汇总。
+- `latest/`：最近一次正式批次的HTML、原始结果和附件。
+- `evidence/<runId>/<CASE-ID>/`：失败截图、录像、Trace和错误上下文。
 
-- `latest/`：最近一次正式批次的报告、原始结果和失败附件。
-- `latest/playwright-report/index.html`：Playwright可视化报告。
-- `execution_report.csv`：唯一 CSV 报告，包含当前全量有效用例及其最近可信状态（未执行、通过或未通过）。每次执行会原地更新。
-- `latest/test-results/`：失败截图、录像、Trace和错误上下文。
-- `latest/run-manifest.json`：本批输入、测试文件、时间和退出码。
-- `history/case-results.json`：每个稳定CASE-ID的最近可信结果历史。
-
-`playwright-report/`、`test-results/`和`test-evidence/`不再作为顶层目录使用。
+执行报告只保存当前CASE的最近结果。删除或修改产生新ID后，旧ID从报告移除。通过必须同时拥有有效正式脚本；未通过和未执行不得保留正式自动化映射。

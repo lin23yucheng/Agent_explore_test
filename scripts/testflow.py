@@ -3,9 +3,8 @@ import csv
 import difflib
 import hashlib
 import json
+import os
 import re
-import subprocess
-from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
 
@@ -13,45 +12,46 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CASES_ROOT = ROOT / "cases"
 CURRENT = CASES_ROOT / "current.csv"
-CASE_REGISTRY = CASES_ROOT / "case-registry.json"
+ID_SEQUENCE = CASES_ROOT / "id-sequence.json"
 AUTOMATION_REGISTRY = CASES_ROOT / "automation-registry.json"
+CANDIDATES_ROOT = CASES_ROOT / "candidates"
 CHANGES_ROOT = CASES_ROOT / "changes"
+CONTRACTS_ROOT = CASES_ROOT / "contracts"
+AUDITS_ROOT = CASES_ROOT / "audits"
 RUNS_ROOT = CASES_ROOT / "runs"
-LEGACY_SOURCE = ROOT / "ExcelFiles" / "AI测试用例_full_cases.csv"
-LEGACY_MAPPINGS = ROOT / "scripts" / "case-mappings.json"
-LEGACY_HISTORY = ROOT / "test-history" / "case-results.json"
+EXECUTION_REPORT = ROOT / "reports" / "execution_report.csv"
+SPECS_ROOT = ROOT / "tests" / "ui" / "specs"
 
-META_HEADERS = ["用例ID", "用例Revision", "执行契约哈希", "状态", "首次版本", "最后变更版本",
-                "源测试点ID", "迭代版本"]
-IDENTITY_HEADERS = set(META_HEADERS)
-VALID_ACTIONS = {"add", "unchanged", "modify", "replace", "retire"}
+BUSINESS_HEADERS = [
+    "源测试点ID", "所属模块", "用例标题", "前置条件", "步骤", "预期",
+    "关键词", "优先级", "用例类型", "适用阶段",
+]
+EXECUTION_HEADERS = ["所属模块", "用例标题", "前置条件", "步骤", "预期"]
+CURRENT_HEADERS = ["用例ID", "用例内容哈希", *BUSINESS_HEADERS]
+RESULT_HEADERS = [
+    "自动化状态", "执行结果", "失败分类", "清理状态", "执行时间",
+    "运行ID", "失败原因", "证据路径", "Playwright测试", "脚本路径",
+]
+VALID_ACTIONS = {"add", "unchanged", "modify", "delete"}
 VALID_CLEANUP_STATUSES = {"passed", "failed", "not-applicable", "retained-by-design"}
 VALID_FAILURE_CATEGORIES = {
     "DATA_PRECONDITION_MISSING", "DATA_SETUP_FAILED", "ENVIRONMENT_BLOCKED",
-    "PRODUCT_DEFECT", "TEST_IMPLEMENTATION_DEFECT", "UNKNOWN",
-    "CASE_DESCRIPTION_AMBIGUOUS", "REQUIREMENT_CONFLICT", "CLEANUP_FAILED",
+    "PRODUCT_DEFECT", "TEST_IMPLEMENTATION_DEFECT", "CASE_DESCRIPTION_AMBIGUOUS",
+    "REQUIREMENT_CONFLICT", "CLEANUP_FAILED",
 }
-CONTRACT_FIELDS = {
-    "preconditions": "前置条件",
-    "steps": "步骤",
-    "assertions": "预期",
-}
+CONTRACT_FIELDS = {"preconditions": "前置条件", "steps": "步骤", "assertions": "预期"}
 
 
 class ChineseArgumentParser(argparse.ArgumentParser):
-    """将argparse自动生成的终端帮助标题转换为中文。"""
-
-    def format_help(self):
-        help_text = super().format_help()
+    def error(self, message):
         replacements = {
-            "usage:": "用法：",
-            "options:": "可选参数：",
-            "positional arguments:": "位置参数：",
-            "show this help message and exit": "显示帮助信息并退出",
+            "the following arguments are required": "缺少必填参数",
+            "unrecognized arguments": "无法识别的参数",
+            "invalid choice": "不支持的命令",
         }
         for source, target in replacements.items():
-            help_text = help_text.replace(source, target)
-        return help_text
+            message = message.replace(source, target)
+        super().error(message)
 
 
 def now_iso():
@@ -59,81 +59,122 @@ def now_iso():
 
 
 def read_csv(path):
-    with Path(path).open("r", encoding="utf-8-sig", newline="") as handle:
+    path = Path(path)
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
-        rows = [{key: value or "" for key, value in row.items()} for row in reader]
-        return rows, reader.fieldnames or []
+        return list(reader), reader.fieldnames or []
 
 
-def write_csv(path, rows, headers):
+def write_csv_atomic(path, rows, headers):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8-sig", newline="") as handle:
+    temporary = path.with_name(f".{path.name}.tmp")
+    with temporary.open("w", encoding="utf-8-sig", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=headers, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
-
-
-def write_json(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding="utf-8")
+    os.replace(temporary, path)
 
 
 def load_json(path, default):
     path = Path(path)
-    if not path.exists():
-        return deepcopy(default)
-    return json.loads(path.read_text(encoding="utf-8"))
+    if not path.is_file():
+        return default
+    with path.open("r", encoding="utf-8-sig") as handle:
+        return json.load(handle)
 
 
-def normalized_content(row):
-    return {
-        key: re.sub(r"\s+", " ", str(value or "")).strip()
-        for key, value in row.items()
-        if key not in IDENTITY_HEADERS and value is not None
-    }
-
-
-def fingerprint(row):
-    payload = json.dumps(normalized_content(row), ensure_ascii=False, sort_keys=True,
-                         separators=(",", ":"))
-    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+def write_json_atomic(path, value):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.tmp")
+    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding="utf-8")
+    os.replace(temporary, path)
 
 
 def hash_file(path):
     path = Path(path)
-    if not path.is_file():
-        return ""
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else ""
 
 
-def audit_is_specific(item):
-    """Reject boilerplate coverage that cannot prove a concrete implementation."""
-    implementation = re.sub(r"\s+", " ", str(item.get("implementation", ""))).strip()
-    evidence = re.sub(r"\s+", " ", str(item.get("evidence", ""))).strip()
-    if len(implementation) < 16 or len(evidence) < 16:
-        return False
-    boilerplate = (
-        r"按当前CASE契约执行|本批Playwright实际执行|正式执行时.*对应断言通过|"
-        r"与执行契约.*对应|对应 CASE 分支.*按契约|对应 CASE 分支的 Playwright 断言"
-    )
-    if re.search(boilerplate, implementation, re.I) or re.search(boilerplate, evidence, re.I):
-        return False
-    implementation_markers = (
-        ".js", "locator", "getBy", "expect", "fill", "click", "open", "inputValue",
-        "断言", "定位", "输入", "点击", "保存", "列表", "弹框", "查询", "创建", "删除",
-    )
-    evidence_markers = (
-        "expect", "断言", "列表", "弹框", "最终", "可见", "输入", "状态", "创建", "删除",
-        "截图", "录像", "trace", "行", "数量", "提示",
-    )
-    return (any(marker.lower() in implementation.lower() for marker in implementation_markers)
-            and any(marker.lower() in evidence.lower() for marker in evidence_markers))
+def normalize_text(value):
+    return str(value or "").replace("\r\n", "\n").replace("\r", "\n").strip()
+
+
+def business_fields(row):
+    return {header: normalize_text(row.get(header, "")) for header in BUSINESS_HEADERS}
+
+
+def case_content_hash(row):
+    payload = {header: normalize_text(row.get(header, "")) for header in EXECUTION_HEADERS}
+    canonical = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def normalize_case(row, case_id=None):
+    normalized = business_fields(row)
+    normalized["用例ID"] = case_id or normalize_text(row.get("用例ID", ""))
+    normalized["用例内容哈希"] = case_content_hash(normalized)
+    return {header: normalized.get(header, "") for header in CURRENT_HEADERS}
+
+
+def logical_key(row):
+    return f"{normalize_text(row.get('所属模块'))}\x1f{normalize_text(row.get('用例标题'))}"
+
+
+def load_current():
+    if not CURRENT.is_file():
+        raise SystemExit(f"当前有效用例文件不存在: {CURRENT}")
+    rows, _ = read_csv(CURRENT)
+    normalized = [normalize_case(row) for row in rows]
+    validate_current_rows(normalized)
+    return normalized
+
+
+def validate_current_rows(rows):
+    ids = [row.get("用例ID", "") for row in rows]
+    missing = [index for index, value in enumerate(ids, start=1) if not value]
+    duplicates = sorted({value for value in ids if value and ids.count(value) > 1})
+    logical_keys = [logical_key(row) for row in rows]
+    duplicate_titles = sorted({value for value in logical_keys
+                               if value.strip("\x1f") and logical_keys.count(value) > 1})
+    if missing:
+        raise SystemExit("当前用例存在空CASE-ID，行号：" + ", ".join(map(str, missing)))
+    if duplicates:
+        raise SystemExit("当前用例存在重复CASE-ID：" + ", ".join(duplicates))
+    if duplicate_titles:
+        readable = [value.replace("\x1f", " / ") for value in duplicate_titles[:20]]
+        raise SystemExit("当前用例存在重复模块和标题：" + "；".join(readable))
+
+
+def empty_automation():
+    return {"schemaVersion": 1, "updatedAt": "", "cases": {}}
+
+
+def load_automation():
+    value = load_json(AUTOMATION_REGISTRY, empty_automation())
+    value.setdefault("cases", {})
+    return value
+
+
+def load_sequence(rows=None):
+    state = load_json(ID_SEQUENCE, {})
+    if int(state.get("nextSequence", 0) or 0) > 0:
+        return state
+    rows = rows if rows is not None else load_current()
+    numbers = [int(match.group(1)) for row in rows
+               if (match := re.fullmatch(r"CASE-(\d+)", row.get("用例ID", "")))]
+    return {"schemaVersion": 1, "nextSequence": max(numbers, default=0) + 1}
+
+
+def allocate_case_id(sequence):
+    case_id = f"CASE-{int(sequence['nextSequence']):06d}"
+    sequence["nextSequence"] = int(sequence["nextSequence"]) + 1
+    return case_id
 
 
 def split_contract_items(value):
-    value = str(value or "").replace("\r\n", "\n").strip()
+    value = normalize_text(value)
     if not value:
         return []
     parts = re.split(r"\n+|[；;]+", value)
@@ -145,28 +186,20 @@ def split_contract_items(value):
     return items
 
 
-def case_revision(case):
-    return int(case.get("revision") or (len(case.get("revisions", [])) + 1))
-
-
 def execution_contract(case):
     contract = {
         "schemaVersion": 1,
-        "caseId": case["id"],
-        "caseRevision": case_revision(case),
-        "caseFingerprint": case.get("fingerprint", ""),
-        "title": case.get("fields", {}).get("用例标题", ""),
+        "caseId": case["用例ID"],
+        "caseContentHash": case["用例内容哈希"],
+        "title": case.get("用例标题", ""),
     }
     for contract_key, field_name in CONTRACT_FIELDS.items():
         prefix = {"preconditions": "P", "steps": "S", "assertions": "A"}[contract_key]
         contract[contract_key] = [
             {"id": f"{prefix}{index}", "text": text}
-            for index, text in enumerate(
-                split_contract_items(case.get("fields", {}).get(field_name, "")), start=1
-            )
+            for index, text in enumerate(split_contract_items(case.get(field_name, "")), start=1)
         ]
-    canonical = json.dumps(contract, ensure_ascii=False, sort_keys=True,
-                           separators=(",", ":"))
+    canonical = json.dumps(contract, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     contract["contractHash"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     contract["completionGate"] = {
         "requiredCoverageIds": [
@@ -177,1106 +210,674 @@ def execution_contract(case):
     return contract
 
 
-def ensure_case_metadata(registry):
-    changed = False
-    for case in registry.get("cases", {}).values():
-        revision = case_revision(case)
-        contract_hash = execution_contract(case)["contractHash"]
-        if case.get("revision") != revision:
-            case["revision"] = revision
-            changed = True
-        if case.get("contractHash") != contract_hash:
-            case["contractHash"] = contract_hash
-            changed = True
-    if changed:
-        registry["version"] = max(int(registry.get("version", 1)), 3)
-        registry["updatedAt"] = now_iso()
-    return changed
-
-
-def logical_key(row):
-    return f"{row.get('所属模块', '').strip()}\x1f{row.get('用例标题', '').strip()}"
-
-
-def history_key(row):
-    return f"{row.get('所属模块', '')}\x1f{row.get('用例标题', '')}"
-
-
-def empty_registry():
-    return {"version": 3, "nextSequence": 1, "updatedAt": "", "cases": {}}
-
-
-def allocate_case_id(registry):
-    case_id = f"CASE-{registry['nextSequence']:06d}"
-    registry["nextSequence"] += 1
-    return case_id
-
-
-def active_cases(registry):
-    return [case for case in registry["cases"].values() if case.get("status") == "active"]
-
-
-def source_fields(row):
-    return {key: value for key, value in row.items() if key not in META_HEADERS}
-
-
-def make_case(registry, row, version, case_id=None):
-    case_id = case_id or allocate_case_id(registry)
-    fields = source_fields(row)
-    case = {
-        "id": case_id,
-        "status": "active",
-        "revision": 1,
-        "firstSeenVersion": version,
-        "lastChangedVersion": version,
-        "sourceNodeId": row.get("源测试点ID", ""),
-        "fingerprint": fingerprint(fields),
-        "fields": fields,
-        "revisions": [],
-        "replacedBy": "",
-        "lastResult": {},
-    }
-    case["contractHash"] = execution_contract(case)["contractHash"]
-    return case
-
-
-def export_current(registry, path=None):
-    path = path or CURRENT
-    rows = []
-    field_order = []
-    for case in active_cases(registry):
-        for field in case["fields"]:
-            if field not in field_order and field not in META_HEADERS:
-                field_order.append(field)
-        rows.append({
-            "用例ID": case["id"],
-            "用例Revision": case_revision(case),
-            "执行契约哈希": execution_contract(case)["contractHash"],
-            "状态": "有效",
-            "首次版本": case.get("firstSeenVersion", ""),
-            "最后变更版本": case.get("lastChangedVersion", ""),
-            "源测试点ID": case.get("sourceNodeId", ""),
-            "迭代版本": case.get("lastChangedVersion", ""),
-            **case["fields"],
-        })
-    write_csv(path, rows, META_HEADERS + field_order)
-    return len(rows)
+def find_case(case_id):
+    return next((row for row in load_current() if row["用例ID"] == case_id), None)
 
 
 def write_contract(case, output=None):
-    output = Path(output) if output else CASES_ROOT / "contracts" / f"{case['id']}.json"
+    output = Path(output) if output else CONTRACTS_ROOT / f"{case['用例ID']}.json"
     contract = execution_contract(case)
-    write_json(output, contract)
+    write_json_atomic(output, contract)
     return output, contract
 
 
 def export_contracts(case_ids=None, output_dir=None):
-    registry = load_json(CASE_REGISTRY, empty_registry())
-    ensure_case_metadata(registry)
-    output_dir = Path(output_dir) if output_dir else CASES_ROOT / "contracts"
-    selected = list(dict.fromkeys(case_ids or [case["id"] for case in active_cases(registry)]))
-    missing = [case_id for case_id in selected if case_id not in registry.get("cases", {})]
-    if missing:
-        raise SystemExit(f"无法生成不存在用例的执行契约: {', '.join(missing)}")
-    paths = []
-    for case_id in selected:
-        case = registry["cases"][case_id]
-        if case.get("status") != "active":
-            raise SystemExit(f"无法生成非有效用例的执行契约: {case_id}")
-        path, _ = write_contract(case, output_dir / f"{case_id}.json")
-        paths.append(str(path))
-    write_json(CASE_REGISTRY, registry)
-    print(json.dumps({"已生成执行契约数": len(paths), "执行契约": paths},
-                     ensure_ascii=False, indent=2))
+    rows = load_current()
+    selected = rows if not case_ids else [row for row in rows if row["用例ID"] in case_ids]
+    if case_ids:
+        missing = sorted(set(case_ids) - {row["用例ID"] for row in selected})
+        if missing:
+            raise SystemExit("找不到当前有效用例：" + ", ".join(missing))
+    root = Path(output_dir) if output_dir else CONTRACTS_ROOT
+    for row in selected:
+        write_contract(row, root / f"{row['用例ID']}.json")
+    print(json.dumps({"已导出契约数": len(selected), "目录": str(root)}, ensure_ascii=False, indent=2))
 
 
-def migrate_state():
-    registry = load_json(CASE_REGISTRY, empty_registry())
-    changed = ensure_case_metadata(registry)
-    automation = load_json(AUTOMATION_REGISTRY,
-                           {"version": 2, "updatedAt": "", "tests": {}, "cases": {}})
-    invalidated = 0
-    for title, entry in automation.get("tests", {}).items():
-        spec_file = entry.get("file", "").replace("\\", "/")
-        if spec_file.startswith("tests/ui/") and spec_file.count("/") == 2:
-            entry["file"] = f"tests/ui/specs/{Path(spec_file).name}"
-        if entry.get("status") != "active":
-            continue
-        case_ids = entry.get("caseIds", [])
-        case = registry.get("cases", {}).get(case_ids[0], {}) if len(case_ids) == 1 else {}
-        issue = automation_binding_issue(
-            entry, case, title, allow_missing_audit_hash=True) if case else "未唯一绑定有效用例"
-        if issue:
-            entry["status"] = "stale"
-            entry["staleReason"] = f"状态迁移：{issue}"
-            invalidated += 1
-        else:
-            entry["testTitle"] = title
-            entry["auditHash"] = hash_file(ROOT / entry["auditFile"])
-    registry["version"] = 3
-    registry["updatedAt"] = now_iso()
-    automation["version"] = max(int(automation.get("version", 1)), 2)
-    automation["updatedAt"] = now_iso()
-    write_json(CASE_REGISTRY, registry)
-    write_json(AUTOMATION_REGISTRY, automation)
-    count = export_current(registry)
-    print(json.dumps({"迁移状态": "已完成", "用例元数据已变化": changed,
-                      "旧自动化已显式失效": invalidated,
-                      "当前有效用例数": count, "注册表版本": 3},
-                     ensure_ascii=False, indent=2))
+def audit_is_specific(item):
+    implementation = normalize_text(item.get("implementation"))
+    evidence = normalize_text(item.get("evidence"))
+    if not implementation or not evidence:
+        return False
+    combined = f"{implementation} {evidence}".lower()
+    generic = ["按当前case契约", "对应断言通过", "正式执行时", "已覆盖", "见脚本", "todo"]
+    return len(implementation) >= 8 and len(evidence) >= 8 and not any(value in combined for value in generic)
 
 
 def make_audit_template(case_id, test_title, spec_file, output=None):
-    registry = load_json(CASE_REGISTRY, empty_registry())
-    ensure_case_metadata(registry)
-    case = registry.get("cases", {}).get(case_id)
-    if not case or case.get("status") != "active":
-        raise SystemExit(f"无法为不存在或非有效用例生成覆盖审计: {case_id}")
-    contract = execution_contract(case)
-    output = Path(output) if output else CASES_ROOT / "audits" / f"{case_id}.json"
+    case = find_case(case_id)
+    if not case:
+        raise SystemExit(f"找不到当前有效用例: {case_id}")
+    contract_path, contract = write_contract(case)
+    output = Path(output) if output else AUDITS_ROOT / f"{case_id}.json"
+    coverage = []
+    for key in CONTRACT_FIELDS:
+        for item in contract[key]:
+            coverage.append({"id": item["id"], "text": item["text"], "implementation": "", "evidence": ""})
     payload = {
         "schemaVersion": 1,
         "caseId": case_id,
-        "caseRevision": case_revision(case),
+        "caseContentHash": case["用例内容哈希"],
         "contractHash": contract["contractHash"],
         "testTitle": test_title,
         "file": spec_file.replace("\\", "/"),
-        "coverage": [
-            {
-                "contractItemId": item_id,
-                "implementation": "",
-                "evidence": "",
-            }
-            for item_id in contract["completionGate"]["requiredCoverageIds"]
-        ],
-        "notes": "",
+        "contractFile": str(contract_path.relative_to(ROOT)).replace("\\", "/"),
+        "coverage": coverage,
     }
-    write_json(output, payload)
-    write_json(CASE_REGISTRY, registry)
-    print(json.dumps({"覆盖审计模板": str(output), "用例ID": case_id,
-                      "待填写覆盖项数": len(payload["coverage"])},
-                     ensure_ascii=False, indent=2))
+    write_json_atomic(output, payload)
+    print(json.dumps({"覆盖审计模板": str(output), "覆盖项数": len(coverage)}, ensure_ascii=False, indent=2))
 
 
 def validate_audit(audit_path, case, spec_file, test_title):
     audit_path = Path(audit_path)
     if not audit_path.is_absolute():
         audit_path = ROOT / audit_path
-    audit_path = audit_path.resolve()
-    if not audit_path.is_file():
-        raise SystemExit(f"自动化覆盖审计文件不存在: {audit_path}")
     audit = load_json(audit_path, {})
     contract = execution_contract(case)
-    required = set(contract["completionGate"]["requiredCoverageIds"])
-    coverage = audit.get("coverage", [])
-    covered = {item.get("contractItemId") for item in coverage
-               if item.get("implementation") and item.get("evidence") and audit_is_specific(item)}
-    errors = []
-    if audit.get("caseId") != case["id"]:
-        errors.append("caseId不匹配")
-    if int(audit.get("caseRevision", 0)) != case_revision(case):
-        errors.append("caseRevision不是当前版本")
+    if audit.get("caseId") != case["用例ID"]:
+        raise SystemExit("覆盖审计绑定的CASE-ID不一致")
+    if audit.get("caseContentHash") != case["用例内容哈希"]:
+        raise SystemExit("覆盖审计绑定的用例内容已变化")
     if audit.get("contractHash") != contract["contractHash"]:
-        errors.append("contractHash不是当前契约")
+        raise SystemExit("覆盖审计绑定的执行契约已变化")
     if audit.get("testTitle") != test_title:
-        errors.append("testTitle不匹配")
+        raise SystemExit("覆盖审计绑定的测试标题不一致")
     if audit.get("file", "").replace("\\", "/") != spec_file.replace("\\", "/"):
-        errors.append("file不匹配")
-    missing = sorted(required - covered)
-    unknown = sorted(value for value in covered - required if value)
-    if missing:
-        errors.append(f"缺少覆盖项: {', '.join(missing)}")
-    if unknown:
-        errors.append(f"包含未知覆盖项: {', '.join(unknown)}")
-    if len(coverage) != len(covered):
-        errors.append("覆盖项重复、缺少implementation/evidence，或内容过于模板化")
-    if errors:
-        raise SystemExit("自动化覆盖审计未通过：" + "；".join(errors))
-    return audit_path, audit, contract
+        raise SystemExit("覆盖审计绑定的脚本文件不一致")
+    required = contract["completionGate"]["requiredCoverageIds"]
+    items = audit.get("coverage", [])
+    ids = [item.get("id") for item in items]
+    missing = sorted(set(required) - set(ids))
+    extra = sorted(set(ids) - set(required))
+    duplicate = sorted({value for value in ids if value and ids.count(value) > 1})
+    incomplete = [item.get("id") for item in items if not audit_is_specific(item)]
+    if missing or extra or duplicate or incomplete:
+        raise SystemExit(
+            "覆盖审计未完成："
+            f"缺少={missing or '无'}；多余={extra or '无'}；重复={duplicate or '无'}；"
+            f"描述不具体={incomplete or '无'}"
+        )
+    return audit_path, contract
 
 
-def find_spec_for_title(test_title):
-    leaf_title = test_title.rsplit(" › ", 1)[-1]
-    matches = []
-    for spec in (ROOT / "tests" / "ui" / "specs").rglob("*.spec.js"):
-        if leaf_title and leaf_title in spec.read_text(encoding="utf-8"):
-            matches.append(str(spec.relative_to(ROOT)).replace("\\", "/"))
-    return matches[0] if len(matches) == 1 else ""
+def safe_spec_path(spec_file):
+    path = (ROOT / spec_file).resolve()
+    try:
+        path.relative_to(SPECS_ROOT.resolve())
+    except ValueError as error:
+        raise SystemExit("正式脚本必须位于 tests/ui/specs 目录") from error
+    return path
 
 
-def migrate_automation(registry):
-    mappings = load_json(LEGACY_MAPPINGS, {})
-    by_title = {}
-    for case in registry["cases"].values():
-        by_title.setdefault(case["fields"].get("用例标题", ""), []).append(case["id"])
-    tests = {}
-    cases = {}
-    for test_title, case_titles in mappings.items():
-        case_ids = []
-        for title in case_titles:
-            case_ids.extend(by_title.get(title, []))
-        case_ids = list(dict.fromkeys(case_ids))
-        tests[test_title] = {
-            "file": find_spec_for_title(test_title),
-            "caseIds": case_ids,
-            "status": "stale",
-            "source": "旧标题映射未绑定用例revision与执行契约，等待覆盖审计",
+def remove_file_if_present(path):
+    path = Path(path)
+    if path.is_file():
+        path.unlink()
+
+
+def remove_case_assets(case_id, automation=None, delete_script=True):
+    automation = automation if automation is not None else load_automation()
+    entry = automation.get("cases", {}).pop(case_id, None)
+    candidate_path = CANDIDATES_ROOT / f"{case_id}.json"
+    candidate = load_json(candidate_path, {})
+    files = []
+    if entry and entry.get("file"):
+        files.append(entry["file"])
+    if candidate.get("file"):
+        files.append(candidate["file"])
+    if delete_script:
+        other_files = {
+            value.get("file") for value in automation.get("cases", {}).values() if value.get("file")
         }
-        for case_id in case_ids:
-            cases.setdefault(case_id, []).append(test_title)
-    automation = {"version": 1, "updatedAt": now_iso(), "tests": tests, "cases": cases}
-    write_json(AUTOMATION_REGISTRY, automation)
-    return automation
+        for value in CANDIDATES_ROOT.glob("*.json") if CANDIDATES_ROOT.is_dir() else []:
+            if value != candidate_path:
+                other_files.add(load_json(value, {}).get("file"))
+        for spec_file in set(files) - other_files:
+            remove_file_if_present(safe_spec_path(spec_file))
+    remove_file_if_present(candidate_path)
+    remove_file_if_present(CONTRACTS_ROOT / f"{case_id}.json")
+    remove_file_if_present(AUDITS_ROOT / f"{case_id}.json")
+    return entry or candidate
 
 
-def migrate_history(registry):
-    history = load_json(LEGACY_HISTORY, {"cases": {}}).get("cases", {})
-    migrated = 0
-    for case in registry["cases"].values():
-        entry = history.get(history_key(case["fields"])) or history.get(
-            case["fields"].get("用例标题", ""))
-        if entry:
-            case["lastResult"] = entry
-            migrated += 1
-    return migrated
+def valid_active_entry(case, entry):
+    if not entry or entry.get("status") != "active":
+        return False, "自动化状态不是active"
+    if entry.get("caseContentHash") != case["用例内容哈希"]:
+        return False, "自动化绑定的用例内容已变化"
+    contract = execution_contract(case)
+    if entry.get("contractHash") != contract["contractHash"]:
+        return False, "自动化绑定的执行契约已变化"
+    spec_file = entry.get("file", "")
+    try:
+        spec_path = safe_spec_path(spec_file)
+    except SystemExit as error:
+        return False, str(error)
+    if not spec_path.is_file():
+        return False, "脚本文件不存在"
+    if entry.get("implementationHash") != hash_file(spec_path):
+        return False, "脚本文件已变化"
+    audit_file = ROOT / entry.get("auditFile", "")
+    if not audit_file.is_file() or entry.get("auditHash") != hash_file(audit_file):
+        return False, "覆盖审计不存在或已变化"
+    try:
+        validate_audit(audit_file, case, spec_file, entry.get("testTitle", ""))
+    except SystemExit as error:
+        return False, str(error)
+    return True, ""
 
 
-def bootstrap(source, version):
-    source = Path(source)
-    if CASE_REGISTRY.exists():
-        raise SystemExit(f"用例注册表已存在，不可重复初始化: {CASE_REGISTRY}")
-    rows, _ = read_csv(source)
-    registry = empty_registry()
-    seen = set()
-    duplicates = []
-    for index, row in enumerate(rows, start=1):
-        key = (logical_key(row), fingerprint(row))
-        if key in seen:
-            duplicates.append(index)
-            continue
-        seen.add(key)
-        case = make_case(registry, row, version)
-        registry["cases"][case["id"]] = case
-    migrated_results = migrate_history(registry)
-    registry["updatedAt"] = now_iso()
-    write_json(CASE_REGISTRY, registry)
-    automation = migrate_automation(registry)
-    count = export_current(registry)
-    result = {
-        "源文件": str(source),
-        "有效用例数": count,
-        "已跳过重复行": duplicates,
-        "已迁移结果数": migrated_results,
-        "已迁移自动化测试数": len(automation["tests"]),
-        "当前有效用例文件": str(CURRENT),
+def initial_result_fields():
+    return {
+        "自动化状态": "未自动化", "执行结果": "未执行", "失败分类": "",
+        "清理状态": "未执行", "执行时间": "", "运行ID": "", "失败原因": "",
+        "证据路径": "", "Playwright测试": "", "脚本路径": "",
     }
-    print(json.dumps(result, ensure_ascii=False, indent=2))
+
+
+def write_execution_summary(rows, batch_passed=None, batch_failed=None, path=None):
+    summary_path = Path(path) if path else ROOT / "reports" / "execution_summary.json"
+    previous = load_json(summary_path, {})
+    summary = {
+        "source_case_count": len(rows),
+        "passed_case_count": sum(row["执行结果"] == "通过" for row in rows),
+        "failed_case_count": sum(row["执行结果"] == "未通过" for row in rows),
+        "not_executed_case_count": sum(row["执行结果"] == "未执行" for row in rows),
+        "automated_case_count": sum(row["自动化状态"] == "已自动化" for row in rows),
+        "batch_passed_case_count": (
+            previous.get("batch_passed_case_count", 0) if batch_passed is None else batch_passed
+        ),
+        "batch_failed_case_count": (
+            previous.get("batch_failed_case_count", 0) if batch_failed is None else batch_failed
+        ),
+    }
+    write_json_atomic(summary_path, summary)
+    return summary
+
+
+def sync_report(reset=False):
+    current = load_current()
+    old_rows = []
+    if EXECUTION_REPORT.is_file() and not reset:
+        old_rows, _ = read_csv(EXECUTION_REPORT)
+    old_by_id = {row.get("用例ID", ""): row for row in old_rows}
+    automation = load_automation()
+    output = []
+    for case in current:
+        previous = old_by_id.get(case["用例ID"])
+        fields = initial_result_fields()
+        if previous and previous.get("用例内容哈希") == case["用例内容哈希"]:
+            fields.update({header: previous.get(header, fields[header]) for header in RESULT_HEADERS})
+        entry = automation.get("cases", {}).get(case["用例ID"])
+        active, _ = valid_active_entry(case, entry)
+        if fields["执行结果"] == "通过" and active:
+            fields["自动化状态"] = "已自动化"
+            fields["Playwright测试"] = entry.get("testTitle", "")
+            fields["脚本路径"] = entry.get("file", "")
+        elif fields["执行结果"] == "通过":
+            fields = initial_result_fields()
+        else:
+            fields["自动化状态"] = "未自动化"
+            fields["Playwright测试"] = ""
+            fields["脚本路径"] = ""
+        output.append({**case, **fields})
+    write_csv_atomic(EXECUTION_REPORT, output, [*CURRENT_HEADERS, *RESULT_HEADERS])
+    if reset:
+        write_execution_summary(output, batch_passed=0, batch_failed=0)
+    else:
+        write_execution_summary(output)
+    print(json.dumps({
+        "当前有效用例数": len(current), "执行报告行数": len(output),
+        "报告": str(EXECUTION_REPORT), "模式": "重置" if reset else "同步",
+    }, ensure_ascii=False, indent=2))
+    return output
+
+
+def reset_state():
+    rows, _ = read_csv(CURRENT)
+    normalized = [normalize_case(row) for row in rows]
+    validate_current_rows(normalized)
+    write_csv_atomic(CURRENT, normalized, CURRENT_HEADERS)
+    sequence = load_sequence(normalized)
+    write_json_atomic(ID_SEQUENCE, sequence)
+    write_json_atomic(AUTOMATION_REGISTRY, empty_automation())
+    CANDIDATES_ROOT.mkdir(parents=True, exist_ok=True)
+    for path in CANDIDATES_ROOT.glob("*.json"):
+        path.unlink()
+    sync_report(reset=True)
+    print(json.dumps({
+        "已重置用例数": len(normalized), "下一个CASE序号": sequence["nextSequence"],
+        "历史结果": "已清空", "正式自动化": "已清空",
+    }, ensure_ascii=False, indent=2))
 
 
 def similarity(row, case):
-    old = case["fields"]
-    title_score = difflib.SequenceMatcher(
-        None, row.get("用例标题", ""), old.get("用例标题", "")).ratio()
-    module_score = difflib.SequenceMatcher(
-        None, row.get("所属模块", ""), old.get("所属模块", "")).ratio()
-    return round(title_score * 0.75 + module_score * 0.25, 4)
+    title_score = difflib.SequenceMatcher(None, row.get("用例标题", ""), case.get("用例标题", "")).ratio()
+    module_score = difflib.SequenceMatcher(None, row.get("所属模块", ""), case.get("所属模块", "")).ratio()
+    return round(title_score * 0.8 + module_score * 0.2, 4)
 
 
-def candidate_cases(row, registry, limit=5):
-    scored = [
-        (similarity(row, case), case)
-        for case in active_cases(registry)
-    ]
-    return [
-        {
-            "caseId": case["id"],
-            "title": case["fields"].get("用例标题", ""),
-            "module": case["fields"].get("所属模块", ""),
-            "score": score,
-        }
-        for score, case in sorted(scored, key=lambda item: item[0], reverse=True)[:limit]
-        if score >= 0.45
-    ]
+def candidate_cases(row, current, limit=5):
+    scored = sorted(((similarity(row, case), case) for case in current), reverse=True,
+                    key=lambda item: item[0])
+    return [{"caseId": case["用例ID"], "title": case["用例标题"],
+             "module": case["所属模块"], "score": score}
+            for score, case in scored[:limit] if score >= 0.45]
 
 
-def prepare(source, version, output=None):
-    if not CASE_REGISTRY.exists():
-        raise SystemExit("尚未初始化用例注册表，请先运行 testflow.py bootstrap。")
+def prepare(source, output=None):
     source = Path(source).resolve()
-    rows, _ = read_csv(source)
-    seen_input_keys = set()
-    duplicate_rows = []
-    for index, row in enumerate(rows, start=1):
-        key = (row.get("用例ID", ""), logical_key(row), fingerprint(source_fields(row)))
-        if key in seen_input_keys:
-            duplicate_rows.append(index)
-        seen_input_keys.add(key)
-    if duplicate_rows:
-        raise SystemExit(
-            "迭代CSV包含重复用例行，请先消除重复：" + ", ".join(map(str, duplicate_rows)))
-    registry = load_json(CASE_REGISTRY, empty_registry())
+    input_rows, _ = read_csv(source)
+    current = load_current()
+    by_id = {row["用例ID"]: row for row in current}
     by_key = {}
-    for case in active_cases(registry):
-        by_key.setdefault(logical_key(case["fields"]), []).append(case)
     by_source = {}
-    for case in active_cases(registry):
-        if case.get("sourceNodeId"):
-            by_source.setdefault(case["sourceNodeId"], []).append(case)
-
+    for case in current:
+        by_key.setdefault(logical_key(case), []).append(case)
+        if case.get("源测试点ID"):
+            by_source.setdefault(case["源测试点ID"], []).append(case)
+    seen = set()
+    seen_titles = set()
     items = []
-    for index, row in enumerate(rows, start=1):
-        exact_matches = by_key.get(logical_key(row), [])
-        exact = exact_matches[0] if len(exact_matches) == 1 else None
+    uncertain = []
+    for index, raw in enumerate(input_rows, start=1):
+        row = normalize_case(raw)
+        duplicate_key = (logical_key(row), row["用例内容哈希"])
+        if duplicate_key in seen:
+            raise SystemExit(f"迭代CSV存在重复用例，行号: {index}")
+        seen.add(duplicate_key)
+        if logical_key(row) in seen_titles:
+            raise SystemExit(f"迭代CSV存在重复模块和用例标题，行号: {index}，请先微调标题")
+        seen_titles.add(logical_key(row))
+        explicit = by_id.get(normalize_text(raw.get("用例ID")))
+        exact = by_key.get(logical_key(row), [])
         source_matches = by_source.get(row.get("源测试点ID", ""), [])
-        matched = exact or (source_matches[0] if len(source_matches) == 1 else None)
+        matched = explicit or (exact[0] if len(exact) == 1 else None)
+        confidence = "explicit-id" if explicit else "exact-title" if matched else ""
+        if not matched and len(source_matches) == 1:
+            matched = source_matches[0]
+            confidence = "source-node"
+        candidates = [] if matched else candidate_cases(row, current)
         if matched:
-            same = fingerprint(source_fields(row)) == matched.get("fingerprint")
-            action = "unchanged" if same else "modify"
-            confidence = "exact" if exact else "source-node"
-            target = matched["id"]
+            action = "unchanged" if row["用例内容哈希"] == matched["用例内容哈希"] else "modify"
+            target = matched["用例ID"]
+        elif candidates and candidates[0]["score"] >= 0.70:
+            action = "review"
+            target = ""
+            uncertain.append({"inputRow": index, "reason": "存在高相似历史用例，需确认新增或修改"})
+            confidence = "needs-agent-review"
         else:
             action = "add"
-            confidence = "new-or-needs-agent-review"
             target = ""
+            confidence = "new"
         items.append({
-            "inputRow": index,
-            "action": action,
-            "targetCaseId": target,
-            "retireCaseIds": [],
-            "reason": "",
-            "confidence": confidence,
-            "case": row,
-            "candidates": [] if matched else candidate_cases(row, registry),
+            "inputRow": index, "action": action, "targetCaseId": target,
+            "reason": "", "confidence": confidence, "case": business_fields(row),
+            "candidates": candidates,
         })
-
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    output = Path(output) if output else CHANGES_ROOT / f"{version}-{stamp}.merge-plan.json"
+    output = Path(output) if output else CHANGES_ROOT / f"merge-plan-{stamp}.json"
     plan = {
-        "version": 1,
-        "status": "draft",
-        "createdAt": now_iso(),
-        "sourceCsv": str(source),
-        "sourceHash": hash_file(source),
-        "iterationVersion": version,
-        "rules": {
-            "incrementalInput": True,
-            "absenceNeverMeansRetirement": True,
-            "agentMustReviewCandidates": True,
-        },
-        "items": items,
-        "impactedRegressionCaseIds": [],
-        "uncertain": [],
+        "schemaVersion": 1, "status": "draft", "createdAt": now_iso(),
+        "sourceCsv": str(source), "sourceHash": hash_file(source),
+        "baseCurrentHash": hash_file(CURRENT),
+        "rules": {"incrementalInput": True, "absenceNeverMeansDeletion": True,
+                  "modifiedCaseGetsNewId": True, "agentReviewRequired": True},
+        "items": items, "impactedRegressionCaseIds": [], "uncertain": uncertain,
     }
-    write_json(output, plan)
-    summary = {action: sum(item["action"] == action for item in items)
-               for action in sorted(VALID_ACTIONS)}
-    summary_text = {
-        "新增": summary["add"],
-        "修改": summary["modify"],
-        "替代": summary["replace"],
-        "退役": summary["retire"],
-        "未变化": summary["unchanged"],
-    }
-    print(json.dumps({"变更计划": str(output), "动作统计": summary_text,
-                      "需要Agent审核": True}, ensure_ascii=False, indent=2))
-
-
-def archive_revision(case):
-    case.setdefault("revisions", []).append({
-        "changedAt": now_iso(),
-        "version": case.get("lastChangedVersion", ""),
-        "fingerprint": case.get("fingerprint", ""),
-        "revision": case_revision(case),
-        "contractHash": case.get("contractHash", execution_contract(case)["contractHash"]),
-        "fields": deepcopy(case.get("fields", {})),
-    })
+    write_json_atomic(output, plan)
+    counts = {name: sum(item["action"] == name for item in items)
+              for name in ["add", "unchanged", "modify", "review"]}
+    print(json.dumps({"变更计划": str(output), "动作统计": counts,
+                      "需要审核": True, "不确定项": len(uncertain)}, ensure_ascii=False, indent=2))
 
 
 def apply_plan(plan_path):
     plan_path = Path(plan_path)
     plan = load_json(plan_path, {})
     if plan.get("status") != "reviewed":
-        raise SystemExit("合并计划必须先由 Agent 审核并将 status 设置为 reviewed。")
+        raise SystemExit("变更计划必须先由Agent审核并把status改为reviewed")
     if plan.get("uncertain"):
-        raise SystemExit("合并计划仍包含 uncertain 项，不能应用。")
-    plan_source = Path(plan.get("sourceCsv", "")) if plan.get("sourceCsv") else None
-    if plan_source and plan_source.is_file():
-        if not plan.get("sourceHash"):
-            raise SystemExit("合并计划缺少sourceHash，请重新prepare后再审核应用。")
-        if plan.get("sourceHash") != hash_file(plan_source):
-            raise SystemExit("输入CSV在prepare后发生变化，请重新生成并审核合并计划。")
-    item_rows = [item.get("inputRow") for item in plan.get("items", [])]
-    if len(item_rows) != len(set(item_rows)):
-        raise SystemExit("合并计划包含重复inputRow，拒绝应用。")
-    target_ids = [item.get("targetCaseId") for item in plan.get("items", [])
-                  if item.get("targetCaseId")]
-    duplicate_targets = sorted({value for value in target_ids if target_ids.count(value) > 1})
-    if duplicate_targets:
-        raise SystemExit("合并计划重复处理同一CASE-ID：" + ", ".join(duplicate_targets))
-    registry = load_json(CASE_REGISTRY, empty_registry())
-    ensure_case_metadata(registry)
-    automation = load_json(AUTOMATION_REGISTRY,
-                           {"version": 1, "updatedAt": "", "tests": {}, "cases": {}})
-    changed_ids = []
-    retired_ids = []
-    version = plan.get("iterationVersion", "iteration")
-
+        raise SystemExit("变更计划仍包含uncertain项，不能应用")
+    source = Path(plan.get("sourceCsv", ""))
+    if not source.is_file() or hash_file(source) != plan.get("sourceHash"):
+        raise SystemExit("迭代CSV不存在或在计划生成后发生变化")
+    if hash_file(CURRENT) != plan.get("baseCurrentHash"):
+        raise SystemExit("current.csv在计划生成后发生变化，请重新prepare")
+    current = load_current()
+    sequence = load_sequence(current)
+    automation = load_automation()
+    by_id = {row["用例ID"]: row for row in current}
+    order = [row["用例ID"] for row in current]
+    touched_targets = set()
+    result_ids = []
     for item in plan.get("items", []):
         action = item.get("action")
+        target = item.get("targetCaseId", "")
         if action not in VALID_ACTIONS:
-            raise SystemExit(f"不支持的合并动作: {action}")
-        row = item.get("case", {})
-        target_id = item.get("targetCaseId", "")
-        result_case_id = target_id
-        if action in {"unchanged", "modify"} and target_id in item.get("retireCaseIds", []):
-            raise SystemExit(f"{action} 不能同时退役自身 {target_id}；替代用例请使用 replace。")
-        if action == "retire":
-            if target_id not in registry["cases"]:
-                raise SystemExit(f"retire 缺少有效 targetCaseId: {target_id}")
-            if not item.get("reason", "").strip():
-                raise SystemExit(f"retire 必须说明明确退役原因: {target_id}")
-            item.setdefault("retireCaseIds", []).append(target_id)
-            result_case_id = ""
-        elif action == "unchanged":
-            if target_id not in registry["cases"]:
-                raise SystemExit(f"unchanged 缺少有效 targetCaseId: {target_id}")
-        elif action == "modify":
-            if target_id not in registry["cases"]:
-                raise SystemExit(f"modify 缺少有效 targetCaseId: {target_id}")
-            case = registry["cases"][target_id]
-            archive_revision(case)
-            case["revision"] = case_revision(case) + 1
-            case["fields"] = source_fields(row)
-            case["fingerprint"] = fingerprint(case["fields"])
-            case["sourceNodeId"] = row.get("源测试点ID", case.get("sourceNodeId", ""))
-            case["lastChangedVersion"] = version
-            case["lastResult"] = {}
-            case["contractHash"] = execution_contract(case)["contractHash"]
-            changed_ids.append(target_id)
+            raise SystemExit(f"变更计划包含未审核动作: {action}")
+        if target:
+            if target in touched_targets:
+                raise SystemExit(f"变更计划重复处理CASE-ID: {target}")
+            touched_targets.add(target)
+        if action == "unchanged":
+            if target not in by_id:
+                raise SystemExit(f"unchanged目标不存在: {target}")
+            item["resultCaseId"] = target
+            result_ids.append(target)
+            continue
+        if action == "delete":
+            if target not in by_id or not normalize_text(item.get("reason")):
+                raise SystemExit(f"delete必须提供有效targetCaseId和明确原因: {target}")
+            by_id.pop(target)
+            order.remove(target)
+            remove_case_assets(target, automation)
+            item["resultCaseId"] = ""
+            continue
+        normalized = normalize_case(item.get("case", {}))
+        if action == "modify":
+            if target not in by_id:
+                raise SystemExit(f"modify目标不存在: {target}")
+            position = order.index(target)
+            by_id.pop(target)
+            order.remove(target)
+            remove_case_assets(target, automation)
         else:
-            case = make_case(registry, row, version)
-            registry["cases"][case["id"]] = case
-            result_case_id = case["id"]
-            changed_ids.append(case["id"])
-            if action == "replace":
-                if target_id not in registry["cases"]:
-                    raise SystemExit(f"replace 缺少有效 targetCaseId: {target_id}")
-                item.setdefault("retireCaseIds", []).append(target_id)
-
-        for retire_id in item.get("retireCaseIds", []):
-            old = registry["cases"].get(retire_id)
-            if retire_id in retired_ids:
-                continue
-            if not old or old.get("status") != "active":
-                raise SystemExit(f"无法退役不存在或非有效用例: {retire_id}")
-            old["status"] = "superseded" if action == "replace" else "retired"
-            old["lastChangedVersion"] = version
-            old["replacedBy"] = result_case_id if action == "replace" else ""
-            retired_ids.append(retire_id)
-            for test_title in automation.get("cases", {}).get(retire_id, []):
-                test_entry = automation.get("tests", {}).get(test_title, {})
-                test_entry["caseIds"] = [value for value in test_entry.get("caseIds", [])
-                                         if value != retire_id]
-                if not test_entry["caseIds"]:
-                    test_entry["status"] = "retirement-candidate"
-
-    for case_id in changed_ids:
-        for test_title in automation.get("cases", {}).get(case_id, []):
-            automation["tests"][test_title]["status"] = "stale"
-            automation["tests"][test_title]["staleReason"] = "用例revision或执行契约已变化"
-    registry["updatedAt"] = now_iso()
+            position = len(order)
+        new_id = allocate_case_id(sequence)
+        new_case = normalize_case(normalized, new_id)
+        by_id[new_id] = new_case
+        order.insert(position, new_id)
+        item["resultCaseId"] = new_id
+        result_ids.append(new_id)
+    output = [by_id[case_id] for case_id in order]
+    validate_current_rows(output)
+    write_csv_atomic(CURRENT, output, CURRENT_HEADERS)
+    write_json_atomic(ID_SEQUENCE, sequence)
     automation["updatedAt"] = now_iso()
-    write_json(CASE_REGISTRY, registry)
-    write_json(AUTOMATION_REGISTRY, automation)
-    count = export_current(registry)
+    write_json_atomic(AUTOMATION_REGISTRY, automation)
     plan["status"] = "applied"
     plan["appliedAt"] = now_iso()
-    plan["changedCaseIds"] = changed_ids
-    plan["retiredCaseIds"] = list(dict.fromkeys(retired_ids))
-    write_json(plan_path, plan)
-    print(json.dumps({"有效用例数": count, "已变更用例ID": changed_ids,
-                      "已退役用例ID": retired_ids, "当前有效用例文件": str(CURRENT)},
-                     ensure_ascii=False, indent=2))
+    plan["resultCaseIds"] = result_ids
+    plan["appliedCurrentHash"] = hash_file(CURRENT)
+    write_json_atomic(plan_path, plan)
+    sync_report()
+    print(json.dumps({"当前有效用例数": len(output), "本次结果用例ID": result_ids,
+                      "当前用例文件": str(CURRENT)}, ensure_ascii=False, indent=2))
 
 
-def list_specs():
-    registry = load_json(AUTOMATION_REGISTRY, {"tests": {}})
-    files = {
-        entry.get("file") for entry in registry.get("tests", {}).values()
-        if entry.get("status") == "active" and entry.get("file")
-    }
-    for path in sorted(files):
-        print(path)
-
-
-def register_automation(test_title, spec_file, case_ids, audit_path=None):
-    case_ids = list(dict.fromkeys(case_ids))
-    if len(case_ids) != 1:
-        raise SystemExit(
-            f"正式测试必须且只能关联一个用例ID，当前收到{len(case_ids)}个："
-            f"{', '.join(case_ids) or '无'}"
-        )
-    registry = load_json(CASE_REGISTRY, empty_registry())
-    ensure_case_metadata(registry)
-    missing = [case_id for case_id in case_ids if case_id not in registry.get("cases", {})]
-    if missing:
-        raise SystemExit(f"无法关联不存在的用例ID: {', '.join(missing)}")
-    case = registry["cases"][case_ids[0]]
-    if case.get("status") != "active":
-        raise SystemExit(f"无法关联非有效用例: {case['id']}")
-    normalized_spec = spec_file.replace("\\", "/")
-    absolute_spec = ROOT / normalized_spec
-    if not absolute_spec.is_file():
-        raise SystemExit(f"Playwright脚本不存在: {normalized_spec}")
-    if audit_path is None:
-        raise SystemExit("登记可信自动化必须提供 --audit 覆盖审计文件")
-    audit_path, _audit, contract = validate_audit(audit_path, case, normalized_spec, test_title)
-    automation = load_json(AUTOMATION_REGISTRY,
-                           {"version": 1, "updatedAt": "", "tests": {}, "cases": {}})
-    previous = automation["tests"].get(test_title, {})
-    for old_case_id in previous.get("caseIds", []):
-        automation["cases"][old_case_id] = [
-            title for title in automation["cases"].get(old_case_id, []) if title != test_title
-        ]
-    automation["tests"][test_title] = {
-        "file": normalized_spec,
-        "testTitle": test_title,
-        "caseIds": case_ids,
-        "status": "active",
-        "source": "agent",
-        "caseRevision": case_revision(case),
-        "contractHash": contract["contractHash"],
-        "implementationHash": hash_file(absolute_spec),
+def register_candidate(case_id, test_title, spec_file, audit_path, exploration_evidence):
+    case = find_case(case_id)
+    if not case:
+        raise SystemExit(f"找不到当前有效用例: {case_id}")
+    if not normalize_text(exploration_evidence):
+        raise SystemExit("候选脚本必须提供探索通过证据")
+    if case_id not in test_title:
+        raise SystemExit("正式测试标题必须包含CASE-ID，以区分当前库中的同名用例")
+    normalized_file = spec_file.replace("\\", "/")
+    spec_path = safe_spec_path(normalized_file)
+    if not spec_path.is_file():
+        raise SystemExit(f"候选脚本不存在: {normalized_file}")
+    if spec_path.name != f"{case_id}.spec.js":
+        raise SystemExit(f"每个候选脚本必须使用独立文件 tests/ui/specs/{case_id}.spec.js")
+    audit_path, contract = validate_audit(audit_path, case, normalized_file, test_title)
+    automation = load_automation()
+    if case_id in automation.get("cases", {}):
+        raise SystemExit("该用例已有正式自动化，必须先失效后再登记候选")
+    CANDIDATES_ROOT.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "schemaVersion": 1, "status": "candidate", "caseId": case_id,
+        "caseContentHash": case["用例内容哈希"], "contractHash": contract["contractHash"],
+        "testTitle": test_title, "file": normalized_file,
+        "implementationHash": hash_file(spec_path),
         "auditFile": str(audit_path.relative_to(ROOT)).replace("\\", "/"),
-        "auditHash": hash_file(audit_path),
-        "auditedAt": now_iso(),
+        "auditHash": hash_file(audit_path), "explorationEvidence": exploration_evidence,
+        "exploredAt": now_iso(),
     }
-    for case_id in case_ids:
-        # A newly audited one-to-one test supersedes stale candidates for the
-        # same case. Keeping both would make the full-run gate fail forever.
-        for old_title in list(automation["cases"].get(case_id, [])):
-            if old_title == test_title:
-                continue
-            old_entry = automation["tests"].get(old_title, {})
-            same_agent_test_renamed = (
-                old_entry.get("status") == "active"
-                and old_entry.get("source") == "agent"
-                and old_entry.get("file", "").replace("\\", "/") == normalized_spec
-            )
-            if old_entry.get("status") != "stale" and not same_agent_test_renamed:
-                continue
-            old_entry["caseIds"] = [
-                value for value in old_entry.get("caseIds", []) if value != case_id
-            ]
-            automation["cases"][case_id] = [
-                value for value in automation["cases"].get(case_id, []) if value != old_title
-            ]
-            if not old_entry["caseIds"]:
-                automation["tests"].pop(old_title, None)
-        automation["cases"].setdefault(case_id, [])
-        if test_title not in automation["cases"][case_id]:
-            automation["cases"][case_id].append(test_title)
-    automation["updatedAt"] = now_iso()
-    write_json(CASE_REGISTRY, registry)
-    write_json(AUTOMATION_REGISTRY, automation)
-    registered = automation["tests"][test_title]
-    print(json.dumps({
-        "测试标题": test_title,
-        "脚本文件": registered["file"],
-        "关联用例ID": registered["caseIds"],
-        "用例Revision": registered["caseRevision"],
-        "执行契约哈希": registered["contractHash"],
-        "状态": "有效" if registered["status"] == "active" else registered["status"],
-    }, ensure_ascii=False, indent=2))
+    write_json_atomic(CANDIDATES_ROOT / f"{case_id}.json", payload)
+    print(json.dumps({"候选自动化": case_id, "脚本": normalized_file,
+                      "下一步": "生成promotion运行计划并正式复跑"}, ensure_ascii=False, indent=2))
 
 
 def invalidate_automation(case_ids, reason):
-    if not reason.strip():
-        raise SystemExit("失效自动化时必须说明语义覆盖不足的原因")
-    automation = load_json(AUTOMATION_REGISTRY,
-                           {"version": 1, "updatedAt": "", "tests": {}, "cases": {}})
+    if not normalize_text(reason):
+        raise SystemExit("失效自动化必须填写原因")
+    automation = load_automation()
     invalidated = []
-    missing = []
     for case_id in list(dict.fromkeys(case_ids)):
-        titles = automation.get("cases", {}).get(case_id, [])
-        active_titles = [
-            title for title in titles
-            if automation.get("tests", {}).get(title, {}).get("status") == "active"
-        ]
-        if not active_titles:
-            missing.append(case_id)
-            continue
-        for title in active_titles:
-            entry = automation["tests"][title]
-            entry["status"] = "stale"
-            entry["source"] = f"语义审计未完整覆盖：{reason.strip()}"
-            invalidated.append({"caseId": case_id, "testTitle": title})
-    if missing:
-        raise SystemExit(f"以下用例没有可失效的有效自动化映射：{', '.join(missing)}")
+        removed = remove_case_assets(case_id, automation)
+        if removed:
+            invalidated.append(case_id)
     automation["updatedAt"] = now_iso()
-    write_json(AUTOMATION_REGISTRY, automation)
-    print(json.dumps({
-        "已失效自动化": invalidated,
-        "原因": reason.strip(),
-    }, ensure_ascii=False, indent=2))
+    write_json_atomic(AUTOMATION_REGISTRY, automation)
+    sync_report()
+    print(json.dumps({"已删除正式或候选自动化": invalidated, "原因": reason}, ensure_ascii=False, indent=2))
 
 
-def discover_automation():
-    """从Playwright测试清单中发现与当前用例标题完全一致的旧脚本。"""
-    registry = load_json(CASE_REGISTRY, empty_registry())
-    automation = load_json(AUTOMATION_REGISTRY,
-                           {"version": 1, "updatedAt": "", "tests": {}, "cases": {}})
-    by_title = {}
-    for case in active_cases(registry):
-        title = case["fields"].get("用例标题", "")
-        by_title.setdefault(title, []).append(case["id"])
-
-    completed = subprocess.run(
-        ["npx.cmd", "playwright", "test", "--list"],
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-        check=False,
-    )
-    if completed.returncode != 0:
-        raise SystemExit(f"读取Playwright测试清单失败：{completed.stderr.strip()}")
-
-    pattern = re.compile(r"^\s+([^:]+\.spec\.js):\d+:\d+ › (.+)$")
-    discovered = 0
-    ambiguous = []
-    unmatched = []
-    for line in completed.stdout.splitlines():
-        match = pattern.match(line)
-        if not match:
-            continue
-        spec_name, test_title = match.groups()
-        leaf_title = test_title.rsplit(" › ", 1)[-1]
-        case_ids = by_title.get(leaf_title, [])
-        if len(case_ids) != 1:
-            (ambiguous if len(case_ids) > 1 else unmatched).append(test_title)
-            continue
-        full_title = test_title
-        previous = automation.get("tests", {}).get(full_title, {})
-        automation["tests"][full_title] = {
-            "file": f"tests/ui/{spec_name.replace(chr(92), '/')}",
-            "caseIds": case_ids,
-            "status": previous.get("status", "stale"),
-            "source": previous.get("source", "按标题重新发现，等待本次执行验证"),
-            **({key: previous[key] for key in (
-                "caseRevision", "contractHash", "implementationHash",
-                "auditFile", "auditHash", "auditedAt", "staleReason", "testTitle")
-                if previous.get(key)}),
-            **({"lastRun": previous["lastRun"]} if previous.get("lastRun") else {}),
-        }
-        for case_id in case_ids:
-            automation["cases"].setdefault(case_id, [])
-            if full_title not in automation["cases"][case_id]:
-                automation["cases"][case_id].append(full_title)
-        discovered += 1
+def record_exploration_failure(case_id, category, reason, cleanup_status, evidence, run_id=None):
+    case = find_case(case_id)
+    if not case:
+        raise SystemExit(f"找不到当前有效用例: {case_id}")
+    if category not in VALID_FAILURE_CATEGORIES:
+        raise SystemExit(f"不支持的失败分类: {category}")
+    if cleanup_status not in VALID_CLEANUP_STATUSES:
+        raise SystemExit(f"不支持的清理状态: {cleanup_status}")
+    if cleanup_status == "failed":
+        category = "CLEANUP_FAILED"
+    if not normalize_text(reason):
+        raise SystemExit("探索失败必须记录具体原因")
+    evidence = [normalize_text(value) for value in evidence if normalize_text(value)]
+    if not evidence:
+        raise SystemExit("探索失败必须提供截图、录像、Trace或错误上下文证据")
+    automation = load_automation()
+    remove_case_assets(case_id, automation, delete_script=True)
     automation["updatedAt"] = now_iso()
-    write_json(AUTOMATION_REGISTRY, automation)
-    print(json.dumps({
-        "发现的待验证测试数": discovered,
-        "标题对应多条用例的测试": ambiguous,
-        "未匹配当前用例的旧测试数": len(unmatched),
-        "未匹配当前用例的旧测试": unmatched,
-    }, ensure_ascii=False, indent=2))
-
-
-def sync_annotations():
-    """从Playwright清单中的case注解同步稳定用例映射。"""
-    registry = load_json(CASE_REGISTRY, empty_registry())
-    automation = load_json(AUTOMATION_REGISTRY,
-                           {"version": 1, "updatedAt": "", "tests": {}, "cases": {}})
-    previous_tests = dict(automation.get("tests", {}))
-    completed = subprocess.run(
-        ["npx.cmd", "playwright", "test", "--list", "--reporter=json"],
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-        check=False,
-    )
-    if completed.returncode != 0:
-        raise SystemExit(f"读取Playwright注解失败：{completed.stderr.strip()}")
-    payload = json.loads(completed.stdout)
-    synced = 0
-    seen_titles = set()
-
-    def visit(suite, parents):
-        nonlocal synced
-        title = suite.get("title", "")
-        current_parents = parents if title.endswith(".spec.js") else [*parents, title]
-        for spec in suite.get("specs", []):
-            tests = spec.get("tests", [])
-            annotations = tests[0].get("annotations", []) if tests else []
-            case_ids = [item.get("description", "") for item in annotations
-                        if item.get("type") == "case" and item.get("description")]
-            shared_derived = any(item.get("type") == "implementation"
-                                  and item.get("description") == "shared-derived"
-                                  for item in annotations)
-            if not case_ids:
-                continue
-            missing = [case_id for case_id in case_ids if case_id not in registry.get("cases", {})]
-            if missing:
-                raise SystemExit(f"测试{spec.get('title')}引用了不存在的用例ID：{', '.join(missing)}")
-            test_title = " › ".join([*current_parents, spec.get("title", "")])
-            seen_titles.add(test_title)
-            previous = previous_tests.get(test_title, {})
-            for old_case_id in previous.get("caseIds", []):
-                automation["cases"][old_case_id] = [
-                    value for value in automation["cases"].get(old_case_id, []) if value != test_title
-                ]
-            invalid_case_count = len(case_ids) != 1
-            automation["tests"][test_title] = {
-                "file": f"tests/ui/{spec.get('file')}",
-                "caseIds": case_ids,
-                "status": "stale" if shared_derived or invalid_case_count
-                          else previous.get("status", "stale"),
-                "source": ("测试关联多个用例ID，等待逐用例实现"
-                           if invalid_case_count else
-                           "聚合脚本机械拆分，等待逐用例实现"
-                           if shared_derived else "Playwright用例注解"),
-                **({key: previous[key] for key in (
-                "caseRevision", "contractHash", "implementationHash",
-                "auditFile", "auditHash", "auditedAt", "staleReason", "testTitle")
-                if previous.get(key)}),
-                **({"lastRun": previous["lastRun"]} if previous.get("lastRun") else {}),
-            }
-            for case_id in case_ids:
-                automation["cases"].setdefault(case_id, [])
-                if test_title not in automation["cases"][case_id]:
-                    automation["cases"][case_id].append(test_title)
-            synced += 1
-        for child in suite.get("suites", []):
-            visit(child, current_parents)
-
-    for suite in payload.get("suites", []):
-        visit(suite, [])
-    removed = prune_automation_entries(automation, seen_titles)
-    duplicate_cases = {
-        case_id: titles for case_id, titles in automation.get("cases", {}).items()
-        if len(titles) > 1
-    }
-    if duplicate_cases:
-        details = "；".join(
-            f"{case_id}: {' | '.join(titles)}"
-            for case_id, titles in sorted(duplicate_cases.items())
-        )
-        raise SystemExit(f"注解同步发现CASE-ID重复映射，拒绝写入注册表：{details}")
-    automation["updatedAt"] = now_iso()
-    write_json(AUTOMATION_REGISTRY, automation)
-    print(json.dumps({
-        "已同步带用例ID的测试数": synced,
-        "已清理旧自动化记录数": removed,
-    }, ensure_ascii=False, indent=2))
-
-
-def prune_automation_entries(automation, retained_titles):
-    """仅保留当前脚本中存在的测试，并重建用例到测试的反向索引。"""
-    previous = automation.get("tests", {})
-    automation["tests"] = {
-        title: entry for title, entry in previous.items() if title in retained_titles
-    }
-    cases = {}
-    for title, entry in automation["tests"].items():
-        for case_id in entry.get("caseIds", []):
-            cases.setdefault(case_id, []).append(title)
-    automation["cases"] = cases
-    return len(previous) - len(automation["tests"])
-
-
-def automation_binding_issue(entry, case, test_title="", allow_missing_audit_hash=False):
-    if entry.get("status") != "active":
-        return "自动化状态不是active"
-    spec_file = entry.get("file", "").replace("\\", "/")
-    if not spec_file or not (ROOT / spec_file).is_file():
-        return "脚本文件不存在"
-    expected_contract = execution_contract(case)["contractHash"]
-    if int(entry.get("caseRevision", 0)) != case_revision(case):
-        return "自动化绑定的caseRevision已过期"
-    if entry.get("contractHash") != expected_contract:
-        return "自动化绑定的执行契约已过期"
-    if entry.get("implementationHash") != hash_file(ROOT / spec_file):
-        return "脚本文件已变化但尚未重新审计登记"
-    audit_file = entry.get("auditFile", "")
-    if not audit_file or not (ROOT / audit_file).is_file():
-        return "缺少自动化覆盖审计文件"
-    try:
-        validate_audit(audit_file, case, spec_file, test_title or entry.get("testTitle", ""))
-    except SystemExit as error:
-        return str(error)
-    audit_hash = hash_file(ROOT / audit_file)
-    if not entry.get("auditHash") and not allow_missing_audit_hash:
-        return "自动化绑定缺少覆盖审计哈希，需重新登记"
-    if entry.get("auditHash") and entry.get("auditHash") != audit_hash:
-        return "覆盖审计文件已变化但尚未重新登记"
-    return ""
-
-
-def classified_tests(case_id, registry, automation):
-    case = registry.get("cases", {}).get(case_id, {})
-    active_titles = []
-    stale_titles = []
-    binding_issues = {}
-    for title in automation.get("cases", {}).get(case_id, []):
-        entry = automation.get("tests", {}).get(title, {})
-        if entry.get("status") == "active":
-            issue = automation_binding_issue(entry, case, title)
-            if issue:
-                stale_titles.append(title)
-                binding_issues[title] = issue
-            else:
-                active_titles.append(title)
-        elif entry.get("status") == "stale":
-            stale_titles.append(title)
-            binding_issues[title] = entry.get("staleReason") or entry.get("source", "")
-    return active_titles, stale_titles, binding_issues
-
-
-def make_run_plan(source, plan_path=None, output=None):
-    scope = resolve_scope(source, emit=False, plan_path=plan_path)
-    if scope["unknownInputRows"]:
-        raise SystemExit("运行计划包含无法匹配稳定CASE-ID的输入行")
-    if scope["unautomatedCaseIds"] or scope["staleCaseIds"]:
-        details = []
-        if scope["unautomatedCaseIds"]:
-            details.append(f"未自动化: {', '.join(scope['unautomatedCaseIds'])}")
-        if scope["staleCaseIds"]:
-            details.append(f"自动化失效: {', '.join(scope['staleCaseIds'])}")
-        raise SystemExit("无法生成正式运行计划；" + "；".join(details))
-    registry = load_json(CASE_REGISTRY, empty_registry())
-    ensure_case_metadata(registry)
-    automation = load_json(AUTOMATION_REGISTRY, {"tests": {}, "cases": {}})
-    case_ids = [item["caseId"] for item in scope["resolved"]]
-    duplicate_case_ids = sorted({case_id for case_id in case_ids if case_ids.count(case_id) > 1})
-    if duplicate_case_ids:
-        raise SystemExit(
-            "运行计划输入重复解析到同一CASE-ID：" + ", ".join(duplicate_case_ids))
-    test_titles = []
-    bindings = []
-    for case_id in case_ids:
-        active, _, _ = classified_tests(case_id, registry, automation)
-        if len(active) != 1:
-            raise SystemExit(f"{case_id}必须且只能有一个可信自动化，当前为{len(active)}个")
-        title = active[0]
-        entry = automation["tests"][title]
-        test_titles.append(title)
-        bindings.append({
-            "caseId": case_id,
-            "caseRevision": case_revision(registry["cases"][case_id]),
-            "contractHash": registry["cases"][case_id]["contractHash"],
-            "testTitle": title,
-            "file": entry["file"],
-            "implementationHash": entry["implementationHash"],
-            "auditHash": entry["auditHash"],
+    write_json_atomic(AUTOMATION_REGISTRY, automation)
+    report = sync_report()
+    for row in report:
+        if row["用例ID"] != case_id:
+            continue
+        row.update({
+            "自动化状态": "未自动化", "执行结果": "未通过",
+            "失败分类": category, "清理状态": cleanup_status,
+            "执行时间": now_iso(),
+            "运行ID": run_id or f"EXPLORATION-{datetime.now().strftime('%Y%m%d%H%M%S')}",
+            "失败原因": reason, "证据路径": "; ".join(evidence),
+            "Playwright测试": "", "脚本路径": "",
         })
-    leaf_titles = [title.rsplit(" › ", 1)[-1] for title in test_titles]
-    duplicate_leaf_titles = sorted({title for title in leaf_titles if leaf_titles.count(title) > 1})
-    if duplicate_leaf_titles:
-        raise SystemExit(
-            "运行计划包含重复叶子测试标题，无法安全生成Playwright grep："
-            + " | ".join(duplicate_leaf_titles))
+        break
+    write_csv_atomic(EXECUTION_REPORT, report, [*CURRENT_HEADERS, *RESULT_HEADERS])
+    write_execution_summary(report)
+    print(json.dumps({"用例ID": case_id, "执行结果": "未通过", "失败分类": category,
+                      "清理状态": cleanup_status, "正式脚本": "无"}, ensure_ascii=False, indent=2))
+
+
+def select_scope(source, plan_path=None, case_ids=None, modules=None):
+    source = Path(source).resolve()
+    current = load_current()
+    by_id = {row["用例ID"]: row for row in current}
+    selected_ids = []
+    if source == CURRENT.resolve():
+        selected_ids = [row["用例ID"] for row in current]
+    else:
+        if not plan_path:
+            raise SystemExit("增量CSV必须提供已经apply的变更计划")
+        plan = load_json(plan_path, {})
+        if plan.get("status") != "applied":
+            raise SystemExit("增量运行计划绑定的变更计划必须已经apply")
+        if Path(plan.get("sourceCsv", "")).resolve() != source:
+            raise SystemExit("变更计划sourceCsv与本次输入不一致")
+        if hash_file(source) != plan.get("sourceHash"):
+            raise SystemExit("增量CSV在变更计划应用后发生变化")
+        if hash_file(CURRENT) != plan.get("appliedCurrentHash"):
+            raise SystemExit("current.csv在变更计划应用后发生变化")
+        selected_ids = list(plan.get("resultCaseIds", []))
+        selected_ids.extend(plan.get("impactedRegressionCaseIds", []))
+    if case_ids:
+        requested = list(dict.fromkeys(case_ids))
+        missing = [value for value in requested if value not in by_id]
+        if missing:
+            raise SystemExit("请求的CASE-ID不存在：" + ", ".join(missing))
+        selected_ids = [value for value in selected_ids if value in requested]
+    if modules:
+        allowed = set(modules)
+        selected_ids = [value for value in selected_ids if by_id[value].get("所属模块") in allowed]
+    selected_ids = list(dict.fromkeys(value for value in selected_ids if value in by_id))
+    if not selected_ids:
+        raise SystemExit("执行范围为空")
+    return source, [by_id[value] for value in selected_ids]
+
+
+def candidate_binding(case):
+    entry = load_json(CANDIDATES_ROOT / f"{case['用例ID']}.json", {})
+    if not entry or entry.get("status") != "candidate":
+        return None, "没有待晋级候选脚本"
+    if entry.get("caseContentHash") != case["用例内容哈希"]:
+        return None, "候选脚本绑定的用例内容已变化"
+    spec_path = safe_spec_path(entry.get("file", ""))
+    if not spec_path.is_file() or entry.get("implementationHash") != hash_file(spec_path):
+        return None, "候选脚本不存在或已变化"
+    audit_path = ROOT / entry.get("auditFile", "")
+    if not audit_path.is_file() or entry.get("auditHash") != hash_file(audit_path):
+        return None, "候选覆盖审计不存在或已变化"
+    try:
+        validate_audit(audit_path, case, entry["file"], entry["testTitle"])
+    except SystemExit as error:
+        return None, str(error)
+    return entry, ""
+
+
+def make_run_plan(source, plan_path=None, output=None, case_ids=None, modules=None,
+                  promotion=False):
+    source, cases = select_scope(source, plan_path, case_ids, modules)
+    automation = load_automation()
+    report_rows = sync_report()
+    report_by_id = {row["用例ID"]: row for row in report_rows}
+    bindings = []
+    issues = []
+    for case in cases:
+        if promotion:
+            entry, issue = candidate_binding(case)
+            binding_type = "promotion"
+        else:
+            entry = automation.get("cases", {}).get(case["用例ID"])
+            valid, issue = valid_active_entry(case, entry)
+            entry = entry if valid else None
+            binding_type = "active"
+            if entry and report_by_id[case["用例ID"]].get("执行结果") != "通过":
+                issue = "正式自动化没有对应的当前通过结果"
+                entry = None
+        if not entry:
+            issues.append(f"{case['用例ID']}: {issue}")
+            continue
+        bindings.append({
+            "caseId": case["用例ID"], "caseContentHash": case["用例内容哈希"],
+            "contractHash": entry["contractHash"], "testTitle": entry["testTitle"],
+            "file": entry["file"], "implementationHash": entry["implementationHash"],
+            "auditFile": entry["auditFile"], "auditHash": entry["auditHash"],
+            "bindingType": binding_type,
+        })
+    if issues:
+        raise SystemExit("无法生成正式运行计划：" + "；".join(issues[:20]))
+    titles = [item["testTitle"] for item in bindings]
+    leaf_titles = [value.rsplit(" › ", 1)[-1] for value in titles]
+    duplicate_titles = sorted({value for value in leaf_titles if leaf_titles.count(value) > 1})
+    if duplicate_titles:
+        raise SystemExit("运行计划包含重复叶子测试标题：" + "；".join(duplicate_titles))
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     output = Path(output) if output else RUNS_ROOT / f"run-plan-{stamp}.json"
     payload = {
-        "schemaVersion": 1,
-        "status": "ready",
-        "createdAt": now_iso(),
-        "sourceCsv": str(Path(source).resolve()),
-        "sourceHash": hash_file(Path(source).resolve()),
+        "schemaVersion": 2, "status": "ready", "createdAt": now_iso(),
+        "runType": "promotion" if promotion else "regression",
+        "sourceCsv": str(source), "sourceHash": hash_file(source),
+        "currentCsv": str(CURRENT.resolve()), "currentHash": hash_file(CURRENT),
         "mergePlan": str(Path(plan_path).resolve()) if plan_path else "",
-        "caseIds": case_ids,
-        "testTitles": test_titles,
-        "testFiles": sorted({item["file"] for item in bindings}),
-        "bindings": bindings,
+        "caseIds": [item["caseId"] for item in bindings], "testTitles": titles,
+        "testFiles": sorted({item["file"] for item in bindings}), "bindings": bindings,
     }
-    write_json(output, payload)
-    print(json.dumps({"运行计划": str(output), "用例数": len(case_ids),
-                      "脚本文件": payload["testFiles"]}, ensure_ascii=False, indent=2))
+    write_json_atomic(output, payload)
+    print(json.dumps({"运行计划": str(output), "类型": payload["runType"],
+                      "用例数": len(bindings), "脚本文件": payload["testFiles"]},
+                     ensure_ascii=False, indent=2))
     return payload
 
 
-def resolve_scope(source, emit=True, plan_path=None):
-    source = Path(source).resolve()
-    rows, _ = read_csv(source)
-    registry = load_json(CASE_REGISTRY, empty_registry())
-    ensure_case_metadata(registry)
-    automation = load_json(AUTOMATION_REGISTRY, {"tests": {}, "cases": {}})
-    by_key = {}
-    by_fingerprint = {}
-    for case in active_cases(registry):
-        by_key.setdefault(logical_key(case["fields"]), []).append(case["id"])
-        by_fingerprint.setdefault(case.get("fingerprint", ""), []).append(case["id"])
-    resolved = []
-    unknown_rows = []
-    test_files = set()
-    unautomated = []
-    stale = []
-    for index, row in enumerate(rows, start=1):
-        case_id = row.get("用例ID", "")
-        if (case_id not in registry.get("cases", {})
-                or registry.get("cases", {}).get(case_id, {}).get("status") != "active"):
-            fingerprint_matches = by_fingerprint.get(fingerprint(source_fields(row)), [])
-            if len(fingerprint_matches) == 1:
-                case_id = fingerprint_matches[0]
-            else:
-                matches = by_key.get(logical_key(row), [])
-                case_id = matches[0] if len(matches) == 1 else ""
-        if not case_id:
-            unknown_rows.append(index)
-            continue
-        active_titles, stale_titles, binding_issues = classified_tests(
-            case_id, registry, automation)
-        entries = [automation.get("tests", {}).get(title, {})
-                   for title in active_titles + stale_titles]
-        for entry in entries:
-            if entry.get("file"):
-                test_files.add(entry["file"])
-        if stale_titles:
-            stale.append(case_id)
-        if not active_titles and not stale_titles:
-            unautomated.append(case_id)
-        resolved.append({
-            "inputRow": index,
-            "caseId": case_id,
-            "activeTests": active_titles,
-            "staleTests": stale_titles,
-            "bindingIssues": binding_issues,
-        })
-    impacted_ids = []
-    if plan_path:
-        plan = load_json(plan_path, {})
-        if plan.get("status") != "applied":
-            raise SystemExit("用于正式范围的变更计划必须已经apply，当前状态不是applied")
-        plan_source = plan.get("sourceCsv", "")
-        if not plan_source:
-            raise SystemExit("变更计划缺少sourceCsv，无法绑定本次输入")
-        if Path(plan_source).resolve() != source:
-            raise SystemExit("变更计划sourceCsv与本次输入CSV不一致")
-        impacted_ids = list(dict.fromkeys(plan.get("impactedRegressionCaseIds", [])))
-        present_ids = {item["caseId"] for item in resolved if item.get("caseId")}
-        for case_id in impacted_ids:
-            if case_id in present_ids or case_id not in registry.get("cases", {}):
-                continue
-            active_titles, stale_titles, binding_issues = classified_tests(
-                case_id, registry, automation)
-            entries = [automation.get("tests", {}).get(title, {})
-                       for title in active_titles + stale_titles]
-            for entry in entries:
-                if entry.get("file"):
-                    test_files.add(entry["file"])
-            if stale_titles:
-                stale.append(case_id)
-            if not active_titles and not stale_titles:
-                unautomated.append(case_id)
-            resolved.append({
-                "inputRow": f"impact:{case_id}",
-                "caseId": case_id,
-                "activeTests": active_titles,
-                "staleTests": stale_titles,
-                "bindingIssues": binding_issues,
-                "impactedRegression": True,
-            })
-    result = {
-        "sourceCsv": str(Path(source).resolve()),
-        "resolved": resolved,
-        "testFiles": sorted(test_files),
-        "unautomatedCaseIds": list(dict.fromkeys(unautomated)),
-        "staleCaseIds": list(dict.fromkeys(stale)),
-        "bindingIssues": {item["caseId"]: item.get("bindingIssues", {})
-                          for item in resolved if item.get("bindingIssues")},
-        "unknownInputRows": unknown_rows,
-        "impactedRegressionCaseIds": impacted_ids,
-    }
-    resolved_text = [{
-        "输入行": item["inputRow"],
-        "用例ID": item["caseId"],
-        "有效测试": item["activeTests"],
-        "已失效测试": item["staleTests"],
-        "绑定问题": item.get("bindingIssues", {}),
-    } for item in result["resolved"]]
-    output = {
-        "源用例文件": result["sourceCsv"],
-        "已解析用例": resolved_text,
-        "需要执行的脚本": result["testFiles"],
-        "未自动化用例ID": result["unautomatedCaseIds"],
-        "自动化已失效用例ID": result["staleCaseIds"],
-        "无法匹配的输入行": result["unknownInputRows"],
-        "受影响回归用例ID": result["impactedRegressionCaseIds"],
-    }
-    if emit:
-        print(json.dumps(output, ensure_ascii=False, indent=2))
-    return result
+def resolve_scope(source, plan_path=None, case_ids=None, modules=None, promotion=False):
+    _, cases = select_scope(source, plan_path, case_ids, modules)
+    automation = load_automation()
+    output = []
+    for case in cases:
+        if promotion:
+            entry, issue = candidate_binding(case)
+        else:
+            candidate = automation.get("cases", {}).get(case["用例ID"])
+            valid, issue = valid_active_entry(case, candidate)
+            entry = candidate if valid else None
+        output.append({"用例ID": case["用例ID"], "所属模块": case["所属模块"],
+                       "用例标题": case["用例标题"], "可执行": bool(entry),
+                       "脚本": entry.get("file", "") if entry else "", "问题": issue})
+    print(json.dumps({"范围用例数": len(output), "用例": output}, ensure_ascii=False, indent=2))
 
 
-def validate_automation(source):
-    """完整回归前验证全部用例均有唯一、可执行的有效映射。"""
-    scope = resolve_scope(source, emit=False)
-    automation = load_json(AUTOMATION_REGISTRY, {"tests": {}, "cases": {}})
-    missing_files = [path for path in scope["testFiles"] if not (ROOT / path).is_file()]
-    duplicate_case_ids = [
-        item["caseId"] for item in scope["resolved"] if len(item.get("activeTests", [])) > 1
-    ]
-    shared_result_tests = [
-        title for title, entry in automation.get("tests", {}).items()
-        if entry.get("status") == "active" and len(entry.get("caseIds", [])) != 1
-    ]
+def validate_state(require_all_automated=False):
+    current = load_current()
+    report = sync_report()
+    automation = load_automation()
+    current_ids = [row["用例ID"] for row in current]
+    report_ids = [row["用例ID"] for row in report]
     issues = []
-    if scope["unknownInputRows"]:
-        issues.append(f"{len(scope['unknownInputRows'])} 行无法匹配稳定用例ID")
-    if scope["unautomatedCaseIds"]:
-        issues.append(f"{len(scope['unautomatedCaseIds'])} 条用例没有自动化映射")
-    if scope["staleCaseIds"]:
-        issues.append(f"{len(scope['staleCaseIds'])} 条用例仍有关联的失效映射")
-    if duplicate_case_ids:
-        issues.append(f"{len(duplicate_case_ids)} 条用例存在重复有效映射")
-    if shared_result_tests:
-        issues.append(f"{len(shared_result_tests)} 个测试仍共享多个用例结果")
-    if missing_files:
-        issues.append(f"{len(missing_files)} 个自动化脚本文件不存在")
+    if current_ids != report_ids:
+        issues.append("current.csv与execution_report.csv的ID或顺序不一致")
+    by_id = {row["用例ID"]: row for row in current}
+    registered_files = set()
+    for result in report:
+        case = by_id[result["用例ID"]]
+        for header in CURRENT_HEADERS:
+            if result.get(header, "") != case.get(header, ""):
+                issues.append(f"{case['用例ID']}报告字段{header}与current.csv不一致")
+                break
+        entry = automation.get("cases", {}).get(case["用例ID"])
+        active, reason = valid_active_entry(case, entry)
+        if result.get("执行结果") == "通过" and not active:
+            issues.append(f"{case['用例ID']}通过但没有有效自动化: {reason}")
+        if result.get("执行结果") != "通过" and active:
+            issues.append(f"{case['用例ID']}未通过或未执行但仍有正式自动化")
+        if require_all_automated and (result.get("执行结果") != "通过" or not active):
+            issues.append(f"{case['用例ID']}尚未达到完整回归条件")
+        if active:
+            if entry["file"] in registered_files:
+                issues.append(f"脚本文件被多个CASE-ID共享: {entry['file']}")
+            registered_files.add(entry["file"])
+    orphan_files = []
+    candidate_files = {
+        load_json(path, {}).get("file") for path in CANDIDATES_ROOT.glob("*.json")
+    } if CANDIDATES_ROOT.is_dir() else set()
+    for path in SPECS_ROOT.glob("*.spec.js") if SPECS_ROOT.is_dir() else []:
+        relative = str(path.relative_to(ROOT)).replace("\\", "/")
+        if relative not in registered_files and relative not in candidate_files:
+            orphan_files.append(relative)
+    if orphan_files:
+        issues.append("存在未登记正式脚本：" + ", ".join(orphan_files))
     if issues:
-        raise SystemExit("完整回归前检查失败：" + "；".join(issues))
-    result = {
-        "检查结果": "通过",
-        "有效用例数": len(scope["resolved"]),
-        "自动化脚本数": len(scope["testFiles"]),
-        "脚本文件": scope["testFiles"],
-    }
-    print(json.dumps(result, ensure_ascii=False, indent=2))
-    return result
+        raise SystemExit("状态校验失败：" + "；".join(issues[:30]))
+    print(json.dumps({"检查结果": "通过", "当前用例数": len(current),
+                      "正式自动化数": len(registered_files),
+                      "完整回归就绪": require_all_automated}, ensure_ascii=False, indent=2))
 
 
 def main():
-    parser = ChineseArgumentParser(description="管理增量测试用例、变更计划和测试执行范围。")
+    parser = ChineseArgumentParser(description="管理当前用例快照、通过脚本和精确执行范围。")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    bootstrap_parser = subparsers.add_parser("bootstrap")
-    bootstrap_parser.add_argument("source")
-    bootstrap_parser.add_argument("--version", default="baseline")
+    subparsers.add_parser("reset-state", help="保留current.csv业务用例并清空执行与自动化状态")
+    subparsers.add_parser("sync-report", help="让执行报告严格镜像current.csv")
 
     prepare_parser = subparsers.add_parser("prepare")
     prepare_parser.add_argument("source")
-    prepare_parser.add_argument("--version")
     prepare_parser.add_argument("--output")
-
     apply_parser = subparsers.add_parser("apply")
     apply_parser.add_argument("plan")
-    register_parser = subparsers.add_parser("register-automation")
-    register_parser.add_argument("--test-title", required=True)
-    register_parser.add_argument("--file", required=True)
-    register_parser.add_argument("--case-id", action="append", required=True)
-    register_parser.add_argument("--audit", required=True,
-                                 help="逐项对应当前执行契约的覆盖审计JSON。")
-    invalidate_parser = subparsers.add_parser("invalidate-automation")
-    invalidate_parser.add_argument("--case-id", action="append", required=True)
-    invalidate_parser.add_argument("--reason", required=True)
-    scope_parser = subparsers.add_parser("scope")
-    scope_parser.add_argument("source")
-    scope_parser.add_argument("--plan", help="将变更计划中的受影响历史回归用例加入执行范围。")
+
     contract_parser = subparsers.add_parser("export-contract")
     contract_parser.add_argument("--case-id", action="append")
     contract_parser.add_argument("--output-dir")
@@ -1285,47 +886,65 @@ def main():
     audit_parser.add_argument("--test-title", required=True)
     audit_parser.add_argument("--file", required=True)
     audit_parser.add_argument("--output")
-    run_plan_parser = subparsers.add_parser("make-run-plan")
-    run_plan_parser.add_argument("source")
-    run_plan_parser.add_argument("--plan")
-    run_plan_parser.add_argument("--output")
-    subparsers.add_parser("discover-automation")
-    subparsers.add_parser("sync-annotations")
-    subparsers.add_parser("list-specs")
-    subparsers.add_parser("migrate-state")
-    validate_parser = subparsers.add_parser("validate-automation")
-    validate_parser.add_argument("source", nargs="?", default=str(CURRENT))
+    candidate_parser = subparsers.add_parser("register-candidate")
+    candidate_parser.add_argument("--case-id", required=True)
+    candidate_parser.add_argument("--test-title", required=True)
+    candidate_parser.add_argument("--file", required=True)
+    candidate_parser.add_argument("--audit", required=True)
+    candidate_parser.add_argument("--exploration-evidence", required=True)
+    invalidate_parser = subparsers.add_parser("invalidate-automation")
+    invalidate_parser.add_argument("--case-id", action="append", required=True)
+    invalidate_parser.add_argument("--reason", required=True)
+    failure_parser = subparsers.add_parser("record-exploration-failure")
+    failure_parser.add_argument("--case-id", required=True)
+    failure_parser.add_argument("--failure-category", required=True,
+                                choices=sorted(VALID_FAILURE_CATEGORIES))
+    failure_parser.add_argument("--reason", required=True)
+    failure_parser.add_argument("--cleanup-status", required=True,
+                                choices=sorted(VALID_CLEANUP_STATUSES))
+    failure_parser.add_argument("--evidence", action="append", required=True)
+    failure_parser.add_argument("--run-id")
+
+    for name in ["scope", "make-run-plan"]:
+        scope_parser = subparsers.add_parser(name)
+        scope_parser.add_argument("source", nargs="?", default=str(CURRENT))
+        scope_parser.add_argument("--plan")
+        scope_parser.add_argument("--case-id", action="append")
+        scope_parser.add_argument("--module", action="append")
+        scope_parser.add_argument("--promotion", action="store_true")
+        if name == "make-run-plan":
+            scope_parser.add_argument("--output")
+    validate_parser = subparsers.add_parser("validate-state")
+    validate_parser.add_argument("--full", action="store_true")
 
     args = parser.parse_args()
-    if args.command == "bootstrap":
-        bootstrap(args.source, args.version)
+    if args.command == "reset-state":
+        reset_state()
+    elif args.command == "sync-report":
+        sync_report()
     elif args.command == "prepare":
-        version = args.version or Path(args.source).stem
-        prepare(args.source, version, args.output)
+        prepare(args.source, args.output)
     elif args.command == "apply":
         apply_plan(args.plan)
-    elif args.command == "register-automation":
-        register_automation(args.test_title, args.file, args.case_id, args.audit)
-    elif args.command == "invalidate-automation":
-        invalidate_automation(args.case_id, args.reason)
-    elif args.command == "scope":
-        resolve_scope(args.source, plan_path=args.plan)
     elif args.command == "export-contract":
         export_contracts(args.case_id, args.output_dir)
     elif args.command == "make-audit-template":
         make_audit_template(args.case_id, args.test_title, args.file, args.output)
+    elif args.command == "register-candidate":
+        register_candidate(args.case_id, args.test_title, args.file, args.audit,
+                           args.exploration_evidence)
+    elif args.command == "invalidate-automation":
+        invalidate_automation(args.case_id, args.reason)
+    elif args.command == "record-exploration-failure":
+        record_exploration_failure(args.case_id, args.failure_category, args.reason,
+                                   args.cleanup_status, args.evidence, args.run_id)
+    elif args.command == "scope":
+        resolve_scope(args.source, args.plan, args.case_id, args.module, args.promotion)
     elif args.command == "make-run-plan":
-        make_run_plan(args.source, args.plan, args.output)
-    elif args.command == "discover-automation":
-        discover_automation()
-    elif args.command == "sync-annotations":
-        sync_annotations()
-    elif args.command == "validate-automation":
-        validate_automation(args.source)
-    elif args.command == "migrate-state":
-        migrate_state()
-    else:
-        list_specs()
+        make_run_plan(args.source, args.plan, args.output, args.case_id, args.module,
+                      args.promotion)
+    elif args.command == "validate-state":
+        validate_state(args.full)
 
 
 if __name__ == "__main__":

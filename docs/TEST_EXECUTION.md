@@ -1,185 +1,228 @@
-# 测试执行说明
+# 当前快照测试流程
 
-用户只需要提供测试点文件或版本，并说明“执行这个版本的测试用例”。Agent负责生成CSV、合并版本、审核自动化、探索页面、执行、失败分类、数据清理和报告生成。执行前必须同时读取 `docs/TEST_DATA_GUIDE.md`，按其中的账号、角色、业务数据依赖和清理规则准备测试环境。
+本项目不维护历史用例版本。`cases/current.csv`是当前全部有效用例，`reports/execution_report.csv`是它的一对一执行视图，`tests/ui/specs/`只保存最近正式通过的独立CASE脚本。
 
-测试点`.mm`是业务输入源；`cases/current.csv`是经过版本合并后的当前全量有效用例库。后续迭代`.mm`只描述本次变化，不要求重复历史测试点。
+强制规则以根目录`AGENTS.md`为准；本文提供实际操作顺序。
 
-## 1. V1.0基线
+## 1. 当前状态初始化
 
-从第一版测试点生成CSV：
+仅在明确需要清空旧结果并从current重新开始时执行：
+
+```powershell
+python scripts/testflow.py reset-state
+```
+
+该命令保留current中的业务用例和CASE-ID，删除旧执行结论与自动化登记，为每条用例生成内容哈希，并把执行报告初始化为“未执行、未自动化”。
+
+平时只同步报告：
+
+```powershell
+python scripts/testflow.py sync-report
+python scripts/testflow.py validate-state
+```
+
+## 2. 从FreeMind生成增量CSV
 
 ```powershell
 .\venv\Scripts\python.exe .\freemind_to_cases_AI.py `
   --input 'inputs\freemind\VLA数据任务平台-V1.0.mm' `
-  --output 'cases\iterations\VLA数据任务平台-V1.0.csv' `
-  --version 'V1.0'
+  --output 'cases\iterations\VLA数据任务平台-V1.0.csv'
 ```
 
-如果`cases/case-registry.json`不存在，初始化基线：
+`.mm`和迭代CSV只是输入，不是当前全量真源。转换器会校验同一模块下的重复用例标题，并以“场景N”做最小调整；Agent仍需检查标题是否准确表达差异。生成后必须通过变更计划合并。
+
+## 3. 审核并应用增量
 
 ```powershell
-.\venv\Scripts\python.exe .\scripts\testflow.py bootstrap `
-  'cases\iterations\VLA数据任务平台-V1.0.csv' --version 'V1.0'
+python scripts/testflow.py prepare `
+  'cases\iterations\本次迭代.csv' `
+  --output 'cases\changes\本次变更.json'
 ```
 
-初始化后，`cases/current.csv`就是V1.0全量有效用例。Agent必须逐条审核CSV与Playwright实现，修复或重写不完整自动化，再执行完整回归：
+Agent审核每个item：
+
+| 动作 | 处理结果 |
+| --- | --- |
+| `add` | 分配新ID，结果未执行，无脚本 |
+| `unchanged` | 保留ID、结果和有效脚本 |
+| `modify` | 删除旧ID和旧脚本，分配新ID，结果未执行 |
+| `delete` | 从current、报告、映射、契约、审计和脚本中删除 |
+| `review` | 尚未判断，禁止apply |
+
+修改不是revision升级。新旧业务内容不能共用ID。迭代CSV中缺失的当前用例不会删除。
+
+审核完成后清空`uncertain`，将`status`改为`reviewed`：
 
 ```powershell
-.\run-ui-tests.ps1 -SourceCsv 'cases\current.csv' -Full
+python scripts/testflow.py apply 'cases\changes\本次变更.json'
 ```
 
-## 2. V2.0及后续增量
+应用会校验输入CSV和current基线哈希，并自动同步执行报告。
 
-后续`.mm`只包含本次迭代测试点。先生成对应版本CSV：
+## 4. 选择执行范围
+
+查看特定CASE-ID：
 
 ```powershell
-.\venv\Scripts\python.exe .\freemind_to_cases_AI.py `
-  --input 'inputs\freemind\VLA数据任务平台-V2.0.mm' `
-  --output 'cases\iterations\VLA数据任务平台-V2.0.csv' `
-  --version 'V2.0'
+python scripts/testflow.py scope cases/current.csv --case-id CASE-000001
 ```
 
-然后生成变更计划：
+查看模块：
 
 ```powershell
-.\venv\Scripts\python.exe .\scripts\testflow.py prepare `
-  'cases\iterations\VLA数据任务平台-V2.0.csv' --version 'V2.0'
+python scripts/testflow.py scope cases/current.csv --module 用户管理
 ```
 
-Agent审核计划中的新增、修改、替代、明确退役、不确定项和受影响回归用例。迭代CSV中未出现的历史用例继续有效。计划状态改为`reviewed`后必须应用：
+查看已经apply的增量范围及受影响回归：
 
 ```powershell
-.\venv\Scripts\python.exe .\scripts\testflow.py apply `
-  'cases\changes\<V2.0变更计划>.merge-plan.json'
+python scripts/testflow.py scope `
+  cases/iterations/本次迭代.csv --plan cases/changes/本次变更.json
 ```
 
-应用后，`cases/current.csv`自动成为V1.0与V2.0合并后的最新全量有效用例库。再解析本次范围：
+没有脚本或只有候选脚本时，普通回归范围会显示不可执行。Agent必须先按CSV直接探索页面。
+
+## 5. 首次探索失败
+
+直接探索过程中，只要页面行为、环境、数据或需求不满足，就执行以下处理：
+
+1. 完成失败归因。
+2. 记录失败分类、错误、执行时间和运行ID。
+3. 保留截图、录像、Trace和错误上下文。
+4. 记录并验证清理状态。
+5. 把执行报告中的CASE写为未通过。
+6. 不创建`tests/ui/specs/<CASE-ID>.spec.js`。
+7. 不创建正式或候选自动化登记。
+
+使用以下命令写入当前报告，`--evidence`可以重复：
 
 ```powershell
-.\venv\Scripts\python.exe .\scripts\testflow.py scope `
-  'cases\iterations\VLA数据任务平台-V2.0.csv' `
-  --plan 'cases\changes\<V2.0变更计划>.merge-plan.json'
+python scripts/testflow.py record-exploration-failure `
+  --case-id CASE-000001 `
+  --failure-category PRODUCT_DEFECT `
+  --reason '页面最终状态与当前用例预期不一致' `
+  --cleanup-status not-applicable `
+  --evidence 'reports/evidence/<runId>/CASE-000001/error-context.md'
 ```
 
-正式范围包含V2.0输入用例以及变更计划列出的受影响历史回归用例。只有用户明确要求全量回归时，才执行整个`cases/current.csv`。
+产品修复或环境恢复后，再从直接探索开始。
 
-## 3. 自动化可信规则
+## 6. 首次探索通过
 
-每个有效`CASE-ID`必须拥有一个独立Playwright测试、独立结果和独立失败证据。共享页面操作可以封装为辅助函数，但禁止：
+探索通过后仍不能直接把执行结果写为通过。必须生成并晋级脚本：
 
-执行顺序必须遵循“先执行、后自动化沉淀”的原则：
-
-- 当前没有脚本与CASE-ID对应时，这是该用例的首次执行。必须根据CSV的前置条件、步骤和预期直接探索页面并执行；执行结果明确后，再创建Playwright脚本、登记CASE-ID映射，并复跑脚本确认结果。没有脚本不能作为跳过理由。
-- 当前已有脚本与CASE-ID对应时，也必须先执行该用例，再将CSV与实际页面、脚本步骤、测试数据和断言逐项对照。发现不匹配、覆盖不足或脚本缺陷时，必须更新脚本后重新执行，并以最新正式结果替换历史结果；不得直接复用历史通过状态。
-
-- 一个测试关联多个CASE-ID。
-- 将同一测试体机械复制为多个CASE-ID结果。
-- 仅因标题相似或历史通过就复用自动化。
-- 对零行结果执行循环断言并视为通过。
-- 只验证弹框、按钮或接口调用，没有验证列表、详情或最终业务状态。
-
-已有映射在每次相关迭代中都要对照CSV的前置条件、步骤和预期进行语义审核。覆盖不足时先失效旧映射：
+1. 创建`tests/ui/specs/<CASE-ID>.spec.js`，文件内只有一个测试。
+2. 测试使用`testInfo.annotations.push({ type: 'case', description: '<CASE-ID>' })`关联唯一CASE，测试标题同时包含CASE-ID以区分同名业务用例。
+3. 脚本必须动态报告清理结果。
+4. 导出当前执行契约。
+5. 生成覆盖审计模板。
+6. 为每个`P*`、`S*`、`A*`填写具体实现和实际证据。
+7. 登记候选脚本并提供直接探索证据。
+8. 生成promotion运行计划。
+9. 通过`run-ui-tests.ps1`正式复跑。
 
 ```powershell
-.\venv\Scripts\python.exe .\scripts\testflow.py invalidate-automation `
-  --case-id 'CASE-000001' --reason '未验证保存后的最终列表结果'
-```
+python scripts/testflow.py export-contract --case-id CASE-000001
 
-修复后重新登记，一个测试只能登记一个CASE-ID：
+python scripts/testflow.py make-audit-template `
+  --case-id CASE-000001 `
+  --test-title '任务管理 › 示例用例' `
+  --file tests/ui/specs/CASE-000001.spec.js
 
-```powershell
-.\venv\Scripts\python.exe .\scripts\testflow.py export-contract `
-  --case-id 'CASE-000001'
+python scripts/testflow.py register-candidate `
+  --case-id CASE-000001 `
+  --test-title '任务管理 › 示例用例' `
+  --file tests/ui/specs/CASE-000001.spec.js `
+  --audit cases/audits/CASE-000001.json `
+  --exploration-evidence '直接探索已完成全部步骤并验证最终列表状态'
 
-.\venv\Scripts\python.exe .\scripts\testflow.py make-audit-template `
-  --case-id 'CASE-000001' `
-  --test-title '用户管理 › 查询用户' `
-  --file 'tests/ui/specs/users.spec.js' `
-  --output 'cases/audits/CASE-000001.json'
-
-# 逐项填写审计文件中的implementation和evidence后才能登记。
-.\venv\Scripts\python.exe .\scripts\testflow.py register-automation `
-  --test-title '用户管理 › 查询用户' `
-  --file 'tests/ui/specs/users.spec.js' `
-  --case-id 'CASE-000001' `
-  --audit 'cases/audits/CASE-000001.json'
-```
-
-登记时会绑定当前`CASE-ID + revision + contractHash + implementationHash`。用例内容、执行契约或脚本文件发生变化后，旧映射自动视为失效，必须重新审核和登记。
-登记同时绑定覆盖审计文件哈希；审计内容被修改后自动失效。审计不得使用“按当前CASE契约执行”“正式执行时对应断言通过”等模板化描述，必须记录具体脚本位置、操作、断言和实际证据。
-
-### 3.1 执行契约与覆盖审计
-
-执行契约由CSV中的前置条件、步骤和预期生成，分别使用`P*`、`S*`和`A*`编号。覆盖审计必须为每个条目填写：
-
-- `implementation`：Playwright中的具体实现位置或操作说明。
-- `evidence`：证明该条目实际执行或验证的断言、响应、附件或最终状态。
-
-缺少任一条目、存在重复条目或审计文件绑定旧revision时，不得把自动化登记为`active`。
-
-### 3.2 精确运行计划
-
-正式增量批次必须先生成精确CASE-ID运行计划：
-
-```powershell
-.\venv\Scripts\python.exe .\scripts\testflow.py make-run-plan `
-  'cases/iterations/VLA数据任务平台-V2.0.csv' `
-  --plan 'cases/changes/<V2.0变更计划>.merge-plan.json' `
-  --output 'cases/runs/V2.0.json'
+python scripts/testflow.py make-run-plan cases/current.csv `
+  --case-id CASE-000001 --promotion `
+  --output cases/runs/CASE-000001-promotion.json
 
 .\run-ui-tests.ps1 `
-  -SourceCsv 'cases/iterations/VLA数据任务平台-V2.0.csv' `
-  -RunPlan 'cases/runs/V2.0.json' `
-  -Password '<测试账号密码>'
+  -SourceCsv cases/current.csv `
+  -RunPlan cases/runs/CASE-000001-promotion.json `
+  -Promotion -Password '<密码>'
 ```
 
-运行计划固定本批CASE-ID、测试标题、脚本文件、用例revision、契约哈希、脚本哈希和输入CSV的SHA-256。使用增量变更计划时，变更计划必须已经`apply`且来源CSV一致；输入重复CASE-ID或重复叶子测试标题会被拒绝。若执行了计划外用例、漏执行计划用例，或计划生成后脚本、审计、用例或输入CSV发生变化，Reporter和报告合并器都会拒绝回写。正式脚本使用独占锁，同一时间只能运行一个批次。
+promotion通过后自动写为“通过、已自动化”。promotion失败后自动写未通过，并删除候选脚本、契约和审计。
 
-`-TestFiles`不再用于正式结果批次。探索页面时可以直接运行Playwright，但探索结果只有在完成覆盖审计、重新登记并通过`-RunPlan`复跑后，才能成为可信历史结果。
+## 7. 正式回归
 
-## 4. 判定、失败分类和清理
-
-输入限制按控件实际值和最终生效值判断。非法字符被过滤、超长内容被截断、即时提示、失焦提示或提交被阻止均可通过；只有非法实际值最终成功生效时才失败。
-
-正式结果使用以下主分类：
-
-- `DATA_PRECONDITION_MISSING`：前置数据不存在。
-- `DATA_SETUP_FAILED`：测试数据无法创建或准备。
-- `ENVIRONMENT_BLOCKED`：服务、网络、登录、浏览器或环境不可用。
-- `PRODUCT_DEFECT`：系统最终行为违反明确预期。
-- `TEST_IMPLEMENTATION_DEFECT`：脚本步骤、数据或断言不正确。
-- `UNKNOWN`：普通断言差异或页面变化尚未完成人工/LLM归因，不得直接按脚本缺陷自愈。
-- `CASE_DESCRIPTION_AMBIGUOUS`：用例描述无法唯一判断。
-- `REQUIREMENT_CONFLICT`：用例、需求与产品规则冲突。
-- `CLEANUP_FAILED`：功能结果已明确，但测试数据未清理。
-
-功能状态与清理状态分开记录。正式测试必须在本次运行附件中报告`passed`、`not-applicable`或`retained-by-design`清理状态；仅写静态注解的`passed`不再可信，`not_reported`和非法状态禁止回写，`failed`会保留业务执行结果但使正式批次失败。普通失败必须完成归因后才能结束批次，`UNKNOWN`不能直接回写为可信历史。测试创建的数据必须使用运行ID/CASE-ID唯一前缀，创建后立即登记，并在`finally`或`afterEach`中逆序清理。被引用数据应先解除引用、换绑到安全基准数据或恢复原状态，再删除。系统明确禁止删除的基准数据可以保留，但必须记录`retained-by-design`及原因。清理后必须再次查询确认。
-
-计划内用例不得使用`skip`跳过。环境、数据或需求问题必须执行到明确失败分类并写入本批结果。Playwright重试只保留最后一次尝试，不能将同一CASE-ID的多个尝试重复回写。
-
-## 5. 报告
-
-所有正式执行必须通过`run-ui-tests.ps1`。脚本会先清空`reports/latest`，确保本批原始结果不复用旧文件。普通失败不会阻止后续用例执行。完整回归使用`-Full`时也会先为`cases/current.csv`生成精确运行计划。
-
-- `reports/latest/playwright-report/index.html`：本批可视化报告。
-- `reports/execution_report.csv`：唯一 CSV 报告，包含当前全量有效用例及其最近可信状态（未执行、通过或未通过）。最后执行结果只有该CASE-ID重新执行时才更新；用例revision、脚本或审计失效只更新“自动化状态”，不得抹掉历史通过/失败。
-- `reports/latest/test-results/`：本批失败截图、录像、Trace和错误上下文。
-- `reports/history/evidence/<runId>/`：持久化历史证据；下一批清空`reports/latest`前，已合并结果的附件必须已经归档到这里。
-- `reports/latest/run-manifest.json`：本批输入和执行清单。
-- `reports/history/case-results.json`：按稳定CASE-ID保存的最近可信历史。
-
-探测脚本和清理脚本是辅助工具，不得进入正式回归。正式批次结束前必须保证范围内每条用例均为通过、产品缺陷、环境阻塞、需求不明确或其他明确分类，且清理状态已记录。
-
-## 6. 执行性能
-
-- 正式批次启动时通过页面登录一次并生成临时 `storageState`，普通用例复用该登录态。验证登录、登出、禁用、删除会话等用例仍按用例步骤建立独立会话。
-- 模块脚本优先直接进入模块URL；路由不可用时回退到菜单导航。公共模块初始化不得在同一用例中重复执行。
-- 默认使用2个worker。用户管理、角色管理等共享会话或共享数据敏感脚本自动降为单worker；确定数据完全隔离后才提高并行度。
-- 探索执行与正式回归分开。探测脚本不进入正式运行计划，正式回归不重复已完成的探索动作。
-- 上一正式批次存在失败时，可以使用 `-FailedOnly` 生成只包含失败CASE-ID的新运行计划并正式复跑：
+按CASE-ID：
 
 ```powershell
-.\run-ui-tests.ps1 -SourceCsv '<本批CSV>' -RunPlan '<上一批运行计划>' -FailedOnly -Password '<密码>'
+.\run-ui-tests.ps1 -CaseId CASE-000001 -Password '<密码>'
 ```
 
-- 测试数据准备和清理必须继续通过页面操作完成，不得直接调用业务API。允许复用登录态、直达页面和并行执行，但不能绕过页面来制造或删除业务数据。
+按模块：
+
+```powershell
+.\run-ui-tests.ps1 -Module 用户管理 -Password '<密码>'
+```
+
+完整回归：
+
+```powershell
+.\run-ui-tests.ps1 -Full -Password '<密码>'
+```
+
+完整回归只能包含当前通过且拥有有效脚本的用例。如果current中有任何未执行、未通过或没有有效脚本的用例，`validate-state --full`会阻止执行。
+
+正式脚本回归失败后，报告合并器会：
+
+- 把当前CASE写为未通过。
+- 保存本批失败证据。
+- 删除automation-registry中的正式映射。
+- 删除该CASE独立脚本、契约和审计。
+- 要求产品修复后重新走直接探索和promotion流程。
+
+## 8. 增量正式批次
+
+增量运行计划必须绑定已经apply的计划：
+
+```powershell
+python scripts/testflow.py make-run-plan `
+  cases/iterations/本次迭代.csv `
+  --plan cases/changes/本次变更.json `
+  --output cases/runs/本次批次.json
+
+.\run-ui-tests.ps1 `
+  -SourceCsv cases/iterations/本次迭代.csv `
+  -RunPlan cases/runs/本次批次.json `
+  -Password '<密码>'
+```
+
+运行计划绑定输入CSV和current的SHA-256。输入、current、脚本或审计任一变化都必须重新生成计划。
+
+## 9. 报告状态
+
+`reports/execution_report.csv`主状态：
+
+| 执行结果 | 自动化状态 | 含义 |
+| --- | --- | --- |
+| 未执行 | 未自动化 | 当前CASE尚未完成脚本晋级复跑 |
+| 未通过 | 未自动化 | 当前CASE最近执行失败，仅保留报告证据 |
+| 通过 | 已自动化 | 当前CASE存在唯一、审计完整且最近复跑通过的脚本 |
+
+不允许出现“通过但未自动化”或“未通过但仍有正式脚本”。`validate-state`会拒绝这种状态。
+
+## 10. 批次异常处理
+
+- 普通失败继续执行其他计划用例。
+- 缺少某个计划CASE结果时拒绝整批合并。
+- skip、重复CASE-ID、计划外结果或缺失清理状态时拒绝合并。
+- current、脚本、契约或审计在计划生成后变化时拒绝合并。
+- Playwright失败但结果完整且分类有效时，允许更新未通过结果并删除失败脚本。
+- 进程中断且没有结果时，不更新为通过；修复环境后重新执行。
+- 每批执行前清空`reports/latest`，失败证据归档到`reports/evidence/<runId>/<CASE-ID>/`。
+
+## 11. 结束检查
+
+```powershell
+python scripts/testflow.py sync-report
+python scripts/testflow.py validate-state
+```
+
+检查通过后再向用户报告：执行范围、通过/失败/未执行数量、失败分类、删除的失败脚本、清理状态和证据路径。

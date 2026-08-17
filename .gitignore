@@ -13,8 +13,16 @@ node_modules/
 /test-history/
 /reports/*
 !/reports/README.md
+!/reports/execution_report.csv
+!/reports/execution_summary.json
+/reports/evidence/
+/reports/latest/
 /cases/runs/*
 !/cases/runs/.gitkeep
-/cases/contracts/*
-!/cases/contracts/.gitkeep
+/cases/candidates/*
+!/cases/candidates/.gitkeep
+/cases/changes/*
+!/cases/changes/.gitkeep
+/cases/iterations/*
+!/cases/iterations/.gitkeep
 

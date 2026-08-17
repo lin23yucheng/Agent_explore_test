@@ -1,25 +1,228 @@
-# 测试执行协议
+# 当前快照测试执行协议
 
-当用户要求执行某个CSV文件时，将用户指定的CSV作为本次测试输入，并完整负责整个测试流程。用户不需要说明该文件是首次基线还是后续迭代。
+本项目只维护当前实际有效的测试用例、当前执行状态和最近正式通过的自动化脚本。不维护用例版本链，不使用历史revision、retired、superseded或历史通过结果推断当前结果。
 
-当用户要求执行某个FreeMind `.mm`测试点文件或某个版本时，先运行`freemind_to_cases_AI.py`生成`cases/iterations/<版本>.csv`，再按同一协议处理。第一版生成全量基线；后续版本的`.mm`只包含本次迭代测试点，必须与`cases/current.csv`中的历史有效用例合并，不得把迭代文件当成新的全量基线。
+用户要求执行CSV、FreeMind `.mm`、特定模块、特定CASE-ID或全部用例时，Agent完整负责生成、合并、探索、自动化、执行、失败归因、数据清理和报告更新。
 
-1. 读取本文件、`docs/TEST_EXECUTION.md`、用例注册表、自动化注册表、历史变更计划、测试报告和现有Playwright脚本。
-2. 如果用例注册表不存在，将用户指定的CSV初始化为第一版基线；否则先执行`python scripts/testflow.py prepare <csv>`，再修改测试脚本。
-3. 后续版本CSV都是增量迭代用例。绝不能因为某条历史用例没有出现在本次CSV中，就将其退役。
-4. 根据CSV的业务含义、当前有效用例和已有脚本审核变更计划。在计划中记录新增、修改、替代、明确退役、受影响的回归用例和不确定项。存在歧义时保留历史用例，并在最终结果中说明。
-5. 审核完成后执行`python scripts/testflow.py apply <plan>`应用计划，不得跳过计划校验。
-6. 执行`python scripts/testflow.py scope <csv>`解析稳定用例ID、可复用脚本、已失效自动化和未自动化用例。自动化映射存在或历史结果为通过，不代表脚本可以直接复用；必须将CSV中的前置条件、主要步骤和核心预期与Playwright实现逐条对照。发现输入数据不对应、关键步骤缺失、断言可能空跑、只验证弹窗未关闭但未验证最终结果等覆盖不足时，先执行`python scripts/testflow.py invalidate-automation --case-id <id> --reason <原因>`使旧结果失效，再探索页面并重写。对新增、修改、失效或未自动化用例探索实际页面，然后创建或更新可复用的Playwright脚本及其用例映射。
-   - 如果某个CASE-ID当前没有对应的Playwright脚本，视为首次执行：必须先按用例前置条件、步骤和预期直接探索并执行该用例，确认结果后再创建脚本、登记映射并复跑验证；不得因为没有脚本而跳过。
-   - 如果某个CASE-ID已有脚本，仍必须先按当前CSV逐条核对并执行现有用例；发现步骤、数据或断言不匹配时，先修正脚本，再重新执行并用最新结果更新脚本、映射和报告；不得仅复用历史通过结果。
-   - 登记自动化前必须使用`export-contract`和`make-audit-template`生成当前revision的执行契约与覆盖审计，并为每个`P*`、`S*`、`A*`条目填写具体实现和证据。`register-automation`必须传入`--audit`，不得用空泛描述代替逐项覆盖。审计绑定文件哈希，文件变化后必须重新登记。
-7. 执行输入CSV的所有用例和受影响的历史回归用例。普通失败不能中断剩余批次。持续执行，直到范围内每条用例都有明确结果：通过、产品缺陷、环境阻塞或需求不明确。
-8. 自动化脚本缺陷必须修复并复跑。不得为了让测试通过而降低断言、删除有效检查或迎合错误的产品行为。
-9. 用例描述默认表达业务目标，不应擅自把某一种前端实现方式当成唯一预期。长度、字符集、数值范围等输入限制都必须按最终生效值判定：输入后先读取控件的实际值，再验证提交和列表或详情中的最终值。不支持的字符无法输入或被自动过滤、超长内容被截断、输入或失焦时报错、提交时校验并阻止保存，都可以判定为通过。例如原始输入`Robot.123`，控件实际值为`Robot123`并成功保存时，说明点号已被过滤，应判定通过。只有超限或非法的实际值最终成功提交并生效时才判定失败。仅当用例明确要求具体交互方式、提示文案或触发时机时，才按该细节断言。
-10. 功能被明确修改或删除时，可以退役旧用例和映射。只有当Playwright测试不再覆盖任何有效用例时，才能将该测试退役；同时检查共享辅助代码是否影响其他用例。
-11. 保留失败错误、截图、录像和Trace。结束前更新可复用脚本、用例注册表、自动化注册表、当前有效用例、执行历史和测试报告。
-12. 只有缺少凭据、环境不可访问、操作存在实质风险或预期结果确实无法判断时才能暂停。常规探索、失败处理和重试不需要用户逐步指导。
+## 1. 必读文件
 
-一个Playwright测试只能关联一个CASE-ID，但一对一映射只是可信结果的必要条件，不是充分条件。不得因为标题相似、操作路径部分重合或已有测试曾经通过，就直接登记为有效或回写通过。正式增量批次必须先执行`python scripts/testflow.py make-run-plan <csv> --plan <plan> --output <run-plan>`，再通过`run-ui-tests.ps1 -RunPlan <run-plan>`执行；不得使用`-TestFiles`按文件代替CASE-ID范围。完整回归使用`-Full`时也必须生成精确运行计划。运行计划绑定输入CSV路径和SHA-256，变更计划必须已经apply；重复CASE-ID或重复叶子测试标题会被拒绝。正式批次使用独占锁。禁止复用上一批`reports/latest/playwright-results.json`生成新报告。每次正式执行前都会清空`reports/latest`，本批未实际执行的用例不得显示为本批通过。
+开始任何测试资产变更或正式执行前，必须读取并对照：
 
-探测脚本和清理脚本属于辅助工具，不属于正式回归测试。除非任务明确需要，否则完整回归不得包含`*.probe.spec.js`或`cleanup*.spec.js`。
+- `AGENTS.md`
+- `docs/TEST_EXECUTION.md`
+- `docs/TEST_DATA_GUIDE.md`
+- `cases/current.csv`
+- `reports/execution_report.csv`（不存在时先运行`python scripts/testflow.py sync-report`）
+- `cases/automation-registry.json`（不存在视为空）
+- 本次范围内的契约、审计、候选脚本和正式脚本
+
+## 2. 唯一真源和一致性
+
+`cases/current.csv`是当前全部有效用例的唯一真源。`reports/execution_report.csv`必须拥有完全相同的CASE-ID、顺序和业务字段，只额外包含执行信息。
+
+每次合并后、生成运行计划前和结束任务前，都必须运行：
+
+```powershell
+python scripts/testflow.py sync-report
+python scripts/testflow.py validate-state
+```
+
+同步规则：
+
+- current中没有、报告中存在的ID，从报告删除。
+- current中存在、报告中没有的ID，以“未执行、未自动化”加入报告。
+- 相同ID的业务字段必须以current为准。
+- 相同ID但用例内容哈希变化属于非法手工修改，必须阻止执行并通过变更计划生成新ID。
+- 局部执行只更新本批CASE-ID，其他当前用例结果保持不变。
+
+## 3. FreeMind和增量合并
+
+收到`.mm`时，先用`freemind_to_cases_AI.py`生成`cases/iterations/<名称>.csv`。第一份当前用例可以直接初始化；以后所有迭代CSV都只描述本次变化，未出现的历史当前用例继续有效。
+
+后续迭代必须执行：
+
+```powershell
+python scripts/testflow.py prepare <iteration.csv> --output <merge-plan.json>
+```
+
+Agent逐条审核计划，并明确设置：
+
+- `add`：新增业务用例，分配新CASE-ID。
+- `unchanged`：业务目标、前置条件、步骤和预期未变，保留CASE-ID和当前结果。
+- `modify`：业务内容发生实质变化，删除旧ID并分配新ID；新ID为未执行且无脚本。
+- `delete`：只有用户或需求明确要求删除时使用，必须填写原因。
+
+高相似候选不能自动决定。计划存在`review`或`uncertain`时禁止应用。迭代CSV缺少某条当前用例永远不能解释为删除。
+
+审核后把计划`status`改为`reviewed`，再执行：
+
+```powershell
+python scripts/testflow.py apply <merge-plan.json>
+```
+
+`apply`必须校验输入CSV哈希和current基线哈希。修改和删除会同时移除旧报告行、自动化映射、候选、契约、审计和独立脚本。
+
+## 4. CASE-ID规则
+
+- 当前CASE-ID必须唯一。
+- 同一模块内的用例标题必须唯一；FreeMind转换后若出现重复名称，必须按具体场景微调标题后才能prepare。
+- 已分配ID永久不复用。
+- 新增用例获得新ID。
+- 标题、模块、前置条件、步骤或预期发生业务变化时，按modify处理并获得新ID。
+- 关键词、优先级、用例类型或适用阶段等管理字段变化可以保留原ID。
+- 禁止绕过变更计划直接修改current中相同ID的执行内容。
+
+## 5. 首次探索和脚本晋级
+
+没有正式脚本的用例必须先直接探索页面，不得因为无脚本而跳过，也不得先凭空编写脚本并把它当成通过结果。
+
+首次流程严格为：
+
+1. 按CSV前置条件、步骤和预期直接探索页面。
+2. 读取控件实际值，验证提交后的列表、详情或最终业务状态。
+3. 探索失败时写入未通过结果、分类、截图、录像、Trace和清理状态；不得创建正式脚本。
+4. 探索通过后，为该CASE-ID创建独立文件`tests/ui/specs/<CASE-ID>.spec.js`。
+5. 一个脚本文件只能包含一个正式测试并关联一个CASE-ID；测试标题必须包含CASE-ID以区分同名业务用例。
+6. 生成当前执行契约和覆盖审计，逐项填写每个`P*`、`S*`和`A*`的具体实现与证据。
+7. 使用`register-candidate`登记探索通过的候选脚本，必须提供探索证据。
+8. 生成`--promotion`运行计划并正式复跑。
+9. 候选脚本复跑通过后，报告合并器自动把它晋级为正式自动化。
+10. 候选复跑失败时，删除候选映射、契约、审计和脚本，只保留失败报告与证据。
+
+直接探索失败必须立即写入当前执行报告，`--evidence`可以重复：
+
+```powershell
+python scripts/testflow.py record-exploration-failure `
+  --case-id CASE-000001 `
+  --failure-category PRODUCT_DEFECT `
+  --reason '<具体实际行为与当前预期的差异>' `
+  --cleanup-status not-applicable `
+  --evidence '<截图、录像、Trace或错误上下文路径>'
+```
+
+示例：
+
+```powershell
+python scripts/testflow.py export-contract --case-id CASE-000001
+python scripts/testflow.py make-audit-template `
+  --case-id CASE-000001 `
+  --test-title '模块 › 用例标题' `
+  --file tests/ui/specs/CASE-000001.spec.js
+
+# 填写审计后登记候选
+python scripts/testflow.py register-candidate `
+  --case-id CASE-000001 `
+  --test-title '模块 › 用例标题' `
+  --file tests/ui/specs/CASE-000001.spec.js `
+  --audit cases/audits/CASE-000001.json `
+  --exploration-evidence '<本次直接探索的具体结果或证据路径>'
+
+python scripts/testflow.py make-run-plan cases/current.csv `
+  --case-id CASE-000001 --promotion `
+  --output cases/runs/CASE-000001-promotion.json
+
+.\run-ui-tests.ps1 -SourceCsv cases/current.csv `
+  -RunPlan cases/runs/CASE-000001-promotion.json -Promotion
+```
+
+## 6. 已有正式脚本
+
+已有映射不代表可以盲目复用。执行相关用例前，必须逐条核对当前CSV的前置条件、数据、步骤和预期与脚本实现、契约及审计一致。
+
+以下任一情况必须先运行`invalidate-automation`，该命令会解除映射并删除独立脚本：
+
+- 用例内容和脚本不对应。
+- 缺少关键步骤或最终断言。
+- 输入数据不符合当前用例。
+- 存在零行循环断言或可能空跑。
+- 只验证按钮、弹窗或接口，没有验证最终业务状态。
+- 脚本、契约或审计哈希发生变化。
+
+```powershell
+python scripts/testflow.py invalidate-automation `
+  --case-id CASE-000001 --reason '<具体覆盖不足原因>'
+```
+
+失效后必须重新直接探索，不能在旧脚本上降低断言以迎合产品行为。
+
+## 7. 失败脚本规则
+
+正式自动化只保存当前最近一次正式通过的用例脚本。
+
+- 首次探索失败：不创建脚本。
+- 候选晋级复跑失败：删除候选脚本。
+- 已有正式脚本本次回归失败：执行报告写未通过，立即解除正式映射并删除该CASE的独立脚本。
+- 产品修复后必须重新直接探索、生成候选并完成晋级复跑。
+- 失败的错误、截图、录像、Trace和错误上下文保存在报告证据目录，不以正式可执行脚本作为历史资产。
+
+## 8. 精确运行计划
+
+正式批次只能通过精确CASE-ID运行计划执行。禁止使用测试文件代替CASE-ID范围。
+
+增量CSV必须绑定已经apply的变更计划：
+
+```powershell
+python scripts/testflow.py make-run-plan <iteration.csv> `
+  --plan <applied-plan.json> --output <run-plan.json>
+```
+
+按CASE-ID或模块执行当前快照：
+
+```powershell
+.\run-ui-tests.ps1 -CaseId CASE-000001
+.\run-ui-tests.ps1 -Module 用户管理
+```
+
+完整回归：
+
+```powershell
+.\run-ui-tests.ps1 -Full
+```
+
+完整回归要求current中的每条用例均为通过且拥有当前有效自动化。未执行、失败、候选或脚本失效都会阻止完整回归，不能用skip绕过。
+
+运行计划绑定输入CSV哈希、current快照哈希、CASE-ID、契约、脚本和审计哈希。任何内容在计划生成后变化都必须拒绝执行或回写。
+
+## 9. 判定、失败分类和清理
+
+输入限制按控件实际值和最终生效值判断。字符被过滤、超长内容被截断、即时提示、失焦提示或提交被阻止均可满足业务目标；只有非法实际值最终成功生效才失败，除非用例明确要求具体交互或文案。
+
+正式失败分类：
+
+- `DATA_PRECONDITION_MISSING`
+- `DATA_SETUP_FAILED`
+- `ENVIRONMENT_BLOCKED`
+- `PRODUCT_DEFECT`
+- `TEST_IMPLEMENTATION_DEFECT`
+- `CASE_DESCRIPTION_AMBIGUOUS`
+- `REQUIREMENT_CONFLICT`
+- `CLEANUP_FAILED`
+
+普通断言差异不能未经分析直接标为脚本缺陷。无法归因的失败不能作为可信正式结果结束任务。
+
+功能结果和清理状态分开记录。正式用例必须动态报告`passed`、`not-applicable`或`retained-by-design`。清理失败最终按未通过处理，并删除正式或候选脚本。
+
+测试数据必须使用运行ID和CASE-ID唯一前缀，创建后登记，在`finally`中逆序清理，清理后再次查询确认。不得删除管理员、系统基准数据或其他批次数据。
+
+## 10. 批次异常
+
+- 普通用例失败不能中断后续用例。
+- 正式范围内每个CASE-ID必须有且只有一个结果。
+- 禁止skip、计划外结果、重复CASE-ID和重复叶子测试标题。
+- 运行中断后，没有结果的用例不得写成通过。
+- 能确认环境故障时标记`ENVIRONMENT_BLOCKED`；无法确认执行状态时批次保持不完整并重新执行。
+- 每次正式运行先清空`reports/latest`，禁止复用上一批原始结果。
+- 正式运行使用独占锁，禁止并发批次覆盖报告。
+
+## 11. 结束条件
+
+结束任务前必须保证：
+
+- current与执行报告一一对应。
+- 本批每条用例都有明确结果。
+- 通过用例拥有唯一、当前有效、审计完整的正式脚本。
+- 未通过或未执行用例没有正式自动化映射。
+- 失败证据和清理结果已保存。
+- `python scripts/testflow.py validate-state`通过。
+
+只有缺少凭据、环境不可访问、操作有实质风险或用例预期确实无法判断时才能暂停。

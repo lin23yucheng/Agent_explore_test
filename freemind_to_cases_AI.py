@@ -107,7 +107,6 @@ module_summaries 必须包含下方【模块路径】中的每个原始键。没
 
 cases_format = {
     "源测试点ID": "",
-    "迭代版本": "",
     "所属模块": "",
     "用例标题": "",
     "前置条件": "",
@@ -992,8 +991,48 @@ def _restore_failed_cases(csv_file, breakpoint_file):
     return len(failed_titles)
 
 
+def ensure_unique_case_titles(csv_file):
+    """微调同模块下的重复标题，避免后续CASE和Playwright标题发生歧义。"""
+    if not os.path.exists(csv_file):
+        return 0
+
+    with open(csv_file, "r", newline="", encoding="utf-8-sig") as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+        fields = reader.fieldnames or EXPORT_FIELDS
+
+    seen_counts = {}
+    used = set()
+    adjusted = 0
+    for row in rows:
+        module = str(row.get("所属模块", "")).strip()
+        original = str(row.get("用例标题", "")).strip()
+        base_key = (module, original)
+        seen_counts[base_key] = seen_counts.get(base_key, 0) + 1
+        candidate = original
+        if (module, candidate) in used:
+            number = seen_counts[base_key]
+            candidate = f"{original}（场景{number}）"
+            while (module, candidate) in used:
+                number += 1
+                candidate = f"{original}（场景{number}）"
+            row["用例标题"] = candidate
+            adjusted += 1
+        used.add((module, candidate))
+
+    if adjusted:
+        temporary = f"{csv_file}.unique-titles.tmp"
+        with open(temporary, "w", newline="", encoding="utf-8-sig") as f:
+            writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows(rows)
+        os.replace(temporary, csv_file)
+        logger.warning("检测到同模块重复用例标题，已微调 %s 条", adjusted)
+    return adjusted
+
+
 # ===== 主处理函数（修复断点文件处理逻辑） =====
-def freemind_to_cases(freemind_file, csv_file, iteration_version=""):
+def freemind_to_cases(freemind_file, csv_file):
     try:
         tree = ET.parse(freemind_file)
     except IOError:
@@ -1129,7 +1168,6 @@ def freemind_to_cases(freemind_file, csv_file, iteration_version=""):
                 for generated_case in generated_cases:
                     temp = copy.deepcopy(cases_format)
                     temp["源测试点ID"] = case_points[i]["source_node_id"]
-                    temp["迭代版本"] = iteration_version
                     temp["用例标题"] = ensure_module_prefix(
                         generated_case["case_title"], data, generated_case.get("module_name", "")
                     )
@@ -1160,6 +1198,7 @@ def freemind_to_cases(freemind_file, csv_file, iteration_version=""):
                 time.sleep(1.5)  # 避免速率限制
 
         except KeyboardInterrupt:
+            ensure_unique_case_titles(csv_file)
             print(f"\n⚠️ 程序被手动中断，已生成{i + 1}条测试用例到 {csv_file}")
             return
         except Exception as e:
@@ -1173,7 +1212,8 @@ def freemind_to_cases(freemind_file, csv_file, iteration_version=""):
         else:
             os.remove(breakpoint_file)
 
-    print(f"\n✅ 全部完成，共生成{total}条测试用例")
+    adjusted_titles = ensure_unique_case_titles(csv_file)
+    print(f"\n✅ 全部完成，共生成{total}条测试用例，微调重复标题{adjusted_titles}条")
 
 
 # ===== 程序入口 =====
@@ -1181,12 +1221,10 @@ if __name__ == "__main__":
     parser = ChineseArgumentParser(description="根据FreeMind测试点文件生成迭代测试用例。")
     parser.add_argument("--input", default=f"./inputs/freemind/{FREEMIND_FILE}")
     parser.add_argument("--output")
-    parser.add_argument("--version")
     args = parser.parse_args()
 
     input_path = args.input
     input_stem = os.path.splitext(os.path.basename(input_path))[0]
-    iteration_version = args.version or input_stem
     output_suffix = "_full_cases" if enable_llm_generate_full_case else ""
     output_path = args.output or f"./cases/iterations/{input_stem}{output_suffix}.csv"
 
@@ -1203,4 +1241,4 @@ if __name__ == "__main__":
                   f"用例生成: {workflow_models['generation_model']}")
         except ValueError as e:
             print(f"⚠️ {e}；完整用例生成可能失败")
-    freemind_to_cases(input_path, output_path, iteration_version=iteration_version)
+    freemind_to_cases(input_path, output_path)
