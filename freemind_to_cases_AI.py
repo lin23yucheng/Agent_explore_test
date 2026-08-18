@@ -39,6 +39,7 @@ LLM_PROJECT_SUMMARY_TIMEOUT_SECONDS = int(os.getenv("LLM_PROJECT_SUMMARY_TIMEOUT
 PROJECT_SUMMARY_CACHE_VERSION = 2
 # 仅用于日志预警，不会截断任何思维导图测试点上下文。
 LLM_CONTEXT_WARNING_CHARS = int(os.getenv("LLM_CONTEXT_WARNING_CHARS", "150000"))
+TESTER_NAMES_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config", "tester-names.json")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
@@ -81,7 +82,7 @@ FULL_CASE_SYSTEM_PROMPT = """你是专业测试工程师，严格遵守约束：
 4. 区分正向、边界、异常场景；测试数据贴合测试点约束；
 5. 如果单个测试点可以拆分多条独立场景，在 cases 数组中输出多条用例；
 6. 语言简洁，适配导入测试管理平台。
-   module_name 必须从当前焦点测试点的层级路径中选择真正的业务模块名称。模块可能位于第二层、第三层或更深层，不能固定按层级位置判断；根节点、具体功能、动作、字段或测试条件不是模块。括号中的封伟、林禹成、中婷、徐锴、黄楠是测试人员标记，不是模块名称，应忽略。case_title 必须以 module_name 开头，格式为“模块名称 - 业务测试目标”。同一业务目标下可以连续完成的操作应合并为一条用例，只有前置条件、数据或预期结果彼此独立时才拆分多条用例。
+   module_name 必须从当前焦点测试点的层级路径中选择真正的业务模块名称。模块可能位于第二层、第三层或更深层，不能固定按层级位置判断；根节点、具体功能、动作、字段或测试条件不是模块。括号中的 {{tester_names}} 是测试人员标记，不是模块名称，应忽略。case_title 必须以 module_name 开头，格式为“模块名称 - 业务测试目标”。同一业务目标下可以连续完成的操作应合并为一条用例，只有前置条件、数据或预期结果彼此独立时才拆分多条用例。
 7. 每条用例必须给出 priority，且只能是字符串 \"1\"、\"2\"、\"3\" 或 \"4\"。结合当前焦点测试点、所在模块和已明确的全图上下文判断：
    - 1：核心主链路阻断、明显安全风险、数据丢失/错误或系统不可用风险；
    - 2：重要或高频功能、主要异常处理与关键业务规则；
@@ -122,7 +123,39 @@ cases_format = {
 FULL_CASE_FIELDS = ["case_title", "module_name", "precondition", "operation_steps", "expected_result"]
 VALID_PRIORITIES = {"1", "2", "3", "4"}
 DEFAULT_PRIORITY = "2"
-TESTER_NAMES = {"封伟", "林禹成", "中婷", "徐锴", "黄楠"}
+
+
+def load_tester_names():
+    """Load test-point author names that must not become business modules or case titles."""
+    try:
+        with open(TESTER_NAMES_FILE, "r", encoding="utf-8") as handle:
+            parsed = json.load(handle)
+    except FileNotFoundError:
+        logger.warning("未找到测试人员名单文件：%s；不执行署名过滤", TESTER_NAMES_FILE)
+        return frozenset()
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"测试人员名单文件无效：{TESTER_NAMES_FILE}：{exc}") from exc
+
+    names = parsed.get("testerNames", []) if isinstance(parsed, dict) else parsed
+    if not isinstance(names, list) or any(not isinstance(name, str) for name in names):
+        raise ValueError(f"测试人员名单必须是字符串数组：{TESTER_NAMES_FILE}")
+    return frozenset(name.strip() for name in names if name.strip())
+
+
+TESTER_NAMES = load_tester_names()
+
+
+def clean_tester_annotation(value):
+    """Remove only configured parenthesized authors or standalone author nodes."""
+    text = str(value or "").strip()
+    if not text or not TESTER_NAMES:
+        return text
+    if text in TESTER_NAMES:
+        return ""
+    alternatives = "|".join(re.escape(name) for name in sorted(TESTER_NAMES, key=len, reverse=True))
+    return re.sub(rf"\s*[（(]\s*(?:{alternatives})\s*[）)]", "", text).strip()
+
+
 # 导出列仅保留原始字段，避免与 LLM 内部字段形成重复列。
 EXPORT_FIELDS = list(cases_format.keys())
 
@@ -540,17 +573,11 @@ def get_summary_module_key(case_title):
 
 def ensure_module_prefix(case_title, source_path, module_name=""):
     """确保标题使用模型识别且来自原始路径的业务模块名称。"""
-    def clean_tester_annotation(value):
-        text = str(value or "").strip()
-        for name in TESTER_NAMES:
-            text = re.sub(rf"\s*[（(]{re.escape(name)}[）)]", "", text)
-        return text.strip()
-
     title = clean_tester_annotation(case_title)
     source_parts = [
         clean_tester_annotation(part)
         for part in re.split(r"\s*[-－]\s*", source_path)
-        if part.strip()
+        if clean_tester_annotation(part)
     ]
     valid_modules = source_parts[1:-1] if len(source_parts) >= 3 else source_parts[1:2]
     valid_modules = [part for part in valid_modules if not re.fullmatch(r"[Vv]?\d+(?:\.\d+)+", part)]
@@ -718,7 +745,8 @@ def llm_generate_complete_case(full_test_point_str, model=None):
     payload = {
         "model": model or config["model"],
         "messages": [{"role": "system", "content": FULL_CASE_SYSTEM_PROMPT.replace(
-            "{{full_test_point_text}}", full_test_point_str)}],
+            "{{full_test_point_text}}", full_test_point_str).replace(
+            "{{tester_names}}", "、".join(sorted(TESTER_NAMES)) or "（名单为空）")}],
         "temperature": 0,
         "max_tokens": LLM_FULL_CASE_MAX_TOKENS,
     }
@@ -1171,17 +1199,18 @@ def freemind_to_cases(freemind_file, csv_file):
                     temp["用例标题"] = ensure_module_prefix(
                         generated_case["case_title"], data, generated_case.get("module_name", "")
                     )
-                    source_parts = [part.strip() for part in re.split(r"\s*[-－]\s*", data) if part.strip()]
+                    source_parts = [
+                        clean_tester_annotation(part)
+                        for part in re.split(r"\s*[-－]\s*", data)
+                        if clean_tester_annotation(part)
+                    ]
                     valid_modules = source_parts[1:-1] if len(source_parts) >= 3 else source_parts[1:2]
                     valid_modules = [
-                        re.sub(r"\s*[（(](封伟|林禹成|中婷|徐锴|黄楠)[）)]", "", part).strip()
+                        clean_tester_annotation(part)
                         for part in valid_modules
                         if not re.fullmatch(r"[Vv]?\d+(?:\.\d+)+", part)
                     ]
-                    generated_module = re.sub(
-                        r"\s*[（(](封伟|林禹成|中婷|徐锴|黄楠)[）)]", "",
-                        str(generated_case.get("module_name", ""))
-                    ).strip()
+                    generated_module = clean_tester_annotation(generated_case.get("module_name", ""))
                     temp["所属模块"] = generated_module if generated_module in valid_modules else (valid_modules[0] if valid_modules else module)
                     temp["优先级"] = normalise_priority(generated_case.get("priority"))
                     temp["前置条件"] = generated_case["precondition"]
