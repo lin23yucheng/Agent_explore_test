@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000447",
+  "caseContentHash": "a824f9a4e88edc7176f9a8c56f7147927232e660d3b9d3710c2eab6419aa1592",
+  "title": "标签管理 - 编辑标签名称回显且可修改",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "存在一个已创建的标签，状态为启用，未被任何任务使用"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，找到目标标签，点击“编辑”按钮。"
+    },
+    {
+      "id": "S2",
+      "text": "在编辑弹窗中查看标签名称输入框。"
+    },
+    {
+      "id": "S3",
+      "text": "修改标签名称为“新标签123”。"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”保存。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "弹出编辑弹窗，标签名称输入框回显原标签名称。"
+    },
+    {
+      "id": "A2",
+      "text": "标签名称输入框可编辑，内容为原标签名称。"
+    },
+    {
+      "id": "A3",
+      "text": "输入框内容变为“新标签123”。"
+    },
+    {
+      "id": "A4",
+      "text": "保存成功，列表页显示更新后的标签名称“新标签123”。"
+    }
+  ],
+  "contractHash": "6b8e28c485e92c6578bd415f4baddbb177210b1dd1453ee5b235de0066196926",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000408",
+  "caseContentHash": "e47c4ff8bdfc9ac9322197ec90a6da61aa4a8fa8612881c84d21e11d69eaeef6",
+  "contractHash": "610ba8be014c592cc039d2c7a08bbe6db3c441000f10b05aeac853eb67155a79",
+  "testTitle": "标签管理 - 验证标签名称为空时创建失败 [CASE-000408]",
+  "file": "tests/ui/specs/CASE-000408.spec.js",
+  "contractFile": "cases/contracts/CASE-000408.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "UI-DIALOG-002",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限的用户",
+      "implementation": "tests/ui/specs/CASE-000408.spec.js: 名称为空、分类选择质量后提交，核对必填错误和列表未新增；对应契约项P1：已登录系统且具有标签管理权限的用户",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/validation-cancel/CASE-000408.png"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理页面，点击“新建标签”按钮。",
+      "implementation": "tests/ui/specs/CASE-000408.spec.js: 名称为空、分类选择质量后提交，核对必填错误和列表未新增；对应契约项S1：进入标签管理页面，点击“新建标签”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/validation-cancel/CASE-000408.png"
+    },
+    {
+      "id": "S2",
+      "text": "不输入任何字符，保持标签名称输入框为空。",
+      "implementation": "tests/ui/specs/CASE-000408.spec.js: 名称为空、分类选择质量后提交，核对必填错误和列表未新增；对应契约项S2：不输入任何字符，保持标签名称输入框为空。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/validation-cancel/CASE-000408.png"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“质量”。",
+      "implementation": "tests/ui/specs/CASE-000408.spec.js: 名称为空、分类选择质量后提交，核对必填错误和列表未新增；对应契约项S3：选择分类为“质量”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/validation-cancel/CASE-000408.png"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”提交。",
+      "implementation": "tests/ui/specs/CASE-000408.spec.js: 名称为空、分类选择质量后提交，核对必填错误和列表未新增；对应契约项S4：点击“确定”提交。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/validation-cancel/CASE-000408.png"
+    },
+    {
+      "id": "A1",
+      "text": "弹出新建标签对话框。",
+      "implementation": "tests/ui/specs/CASE-000408.spec.js: 名称为空、分类选择质量后提交，核对必填错误和列表未新增；对应契约项A1：弹出新建标签对话框。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/validation-cancel/CASE-000408.png"
+    },
+    {
+      "id": "A2",
+      "text": "输入框为空。",
+      "implementation": "tests/ui/specs/CASE-000408.spec.js: 名称为空、分类选择质量后提交，核对必填错误和列表未新增；对应契约项A2：输入框为空。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/validation-cancel/CASE-000408.png"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择成功。",
+      "implementation": "tests/ui/specs/CASE-000408.spec.js: 名称为空、分类选择质量后提交，核对必填错误和列表未新增；对应契约项A3：分类选择成功。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/validation-cancel/CASE-000408.png"
+    },
+    {
+      "id": "A4",
+      "text": "系统提示“标签名称长度必须在1到32之间”，创建失败。",
+      "implementation": "tests/ui/specs/CASE-000408.spec.js: 名称为空、分类选择质量后提交，核对必填错误和列表未新增；对应契约项A4：系统提示“标签名称长度必须在1到32之间”，创建失败。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/validation-cancel/CASE-000408.png"
+    }
+  ]
+}

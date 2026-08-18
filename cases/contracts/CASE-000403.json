@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000403",
+  "caseContentHash": "f2870bf17f1da79da7cc43d431f742d328f476192e2ee56e05e66bff731416d8",
+  "title": "标签管理 - 查询无匹配结果",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；系统中不存在名称包含“不存在”的标签"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理页面"
+    },
+    {
+      "id": "S2",
+      "text": "在查询输入框中输入“不存在”"
+    },
+    {
+      "id": "S3",
+      "text": "点击查询按钮"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "标签管理页面正常显示标签列表"
+    },
+    {
+      "id": "A2",
+      "text": "查询输入框显示“不存在”"
+    },
+    {
+      "id": "A3",
+      "text": "列表显示无数据，提示无匹配结果"
+    }
+  ],
+  "contractHash": "11fb2766b456ca8465954d25beb66f1d1d8ed46fda3833614b37b4d22d294ca6",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

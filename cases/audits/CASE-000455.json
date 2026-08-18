@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000455",
+  "caseContentHash": "42e3d0baa5786ceb9f46f3b97e31986d31f8936c0942c615dc9db14654f4eae6",
+  "contractHash": "b0d1b1a99295c6bf45becfbbaf37183c1641dc2de7da572162874d87d224e8f1",
+  "testTitle": "标签管理 - 删除标签二次确认时取消删除 [CASE-000455]",
+  "file": "tests/ui/specs/CASE-000455.spec.js",
+  "contractFile": "cases/contracts/CASE-000455.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "UI-DIALOG-002",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；存在一个未被任何任务使用的标签，名称为「标签名称」；标签列表页已打开。",
+      "implementation": "tests/ui/specs/CASE-000455.spec.js: 创建 标签名称，点击删除，核对确认文案后取消，断言弹窗关闭且标签仍存在，最后清理；对应契约项P1：已登录系统且具有标签管理权限；存在一个未被任何任务使用的标签，名称为「标签名称」；标签列表页已打开。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000455.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "在标签列表页找到名称为「标签名称」的标签行；",
+      "implementation": "tests/ui/specs/CASE-000455.spec.js: 创建 标签名称，点击删除，核对确认文案后取消，断言弹窗关闭且标签仍存在，最后清理；对应契约项S1：在标签列表页找到名称为「标签名称」的标签行；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000455.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "点击该行操作列中的“删除”按钮；",
+      "implementation": "tests/ui/specs/CASE-000455.spec.js: 创建 标签名称，点击删除，核对确认文案后取消，断言弹窗关闭且标签仍存在，最后清理；对应契约项S2：点击该行操作列中的“删除”按钮；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000455.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "在弹出的二次确认对话框中，点击“取消”按钮或关闭对话框。",
+      "implementation": "tests/ui/specs/CASE-000455.spec.js: 创建 标签名称，点击删除，核对确认文案后取消，断言弹窗关闭且标签仍存在，最后清理；对应契约项S3：在弹出的二次确认对话框中，点击“取消”按钮或关闭对话框。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000455.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "标签行显示删除按钮；",
+      "implementation": "tests/ui/specs/CASE-000455.spec.js: 创建 标签名称，点击删除，核对确认文案后取消，断言弹窗关闭且标签仍存在，最后清理；对应契约项A1：标签行显示删除按钮；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000455.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "弹出二次确认对话框，提示“确定删除标签「标签名称」吗？”；",
+      "implementation": "tests/ui/specs/CASE-000455.spec.js: 创建 标签名称，点击删除，核对确认文案后取消，断言弹窗关闭且标签仍存在，最后清理；对应契约项A2：弹出二次确认对话框，提示“确定删除标签「标签名称」吗？”；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000455.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "对话框关闭，标签未被删除，列表仍显示该标签。",
+      "implementation": "tests/ui/specs/CASE-000455.spec.js: 创建 标签名称，点击删除，核对确认文案后取消，断言弹窗关闭且标签仍存在，最后清理；对应契约项A3：对话框关闭，标签未被删除，列表仍显示该标签。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000455.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    }
+  ]
+}

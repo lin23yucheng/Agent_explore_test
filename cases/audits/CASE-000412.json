@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000412",
+  "caseContentHash": "30c32ea154af78535c438a40d3a6ef606d882aee60662072caaae01ae687393a",
+  "contractHash": "876ddf8fb40d83aa4c9f95680b2ea520355c8967a2d5539b5d13f73ce9fef6bd",
+  "testTitle": "标签管理 - 验证标签名称包含空格时提示错误 [CASE-000412]",
+  "file": "tests/ui/specs/CASE-000412.spec.js",
+  "contractFile": "cases/contracts/CASE-000412.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限的用户",
+      "implementation": "tests/ui/specs/CASE-000412.spec.js: 输入包含空格的 标签 123 并提交，断言显示仅支持中英文字母数字且列表无该名称；对应契约项P1：已登录系统且具有标签管理权限的用户",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000412.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理页面，点击“新建标签”按钮。",
+      "implementation": "tests/ui/specs/CASE-000412.spec.js: 输入包含空格的 标签 123 并提交，断言显示仅支持中英文字母数字且列表无该名称；对应契约项S1：进入标签管理页面，点击“新建标签”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000412.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入“标签 123”。",
+      "implementation": "tests/ui/specs/CASE-000412.spec.js: 输入包含空格的 标签 123 并提交，断言显示仅支持中英文字母数字且列表无该名称；对应契约项S2：在标签名称输入框中输入“标签 123”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000412.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "点击“确定”或“保存”按钮。",
+      "implementation": "tests/ui/specs/CASE-000412.spec.js: 输入包含空格的 标签 123 并提交，断言显示仅支持中英文字母数字且列表无该名称；对应契约项S3：点击“确定”或“保存”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000412.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "弹出新建标签对话框。",
+      "implementation": "tests/ui/specs/CASE-000412.spec.js: 输入包含空格的 标签 123 并提交，断言显示仅支持中英文字母数字且列表无该名称；对应契约项A1：弹出新建标签对话框。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000412.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "输入成功，但系统提示“标签名称仅支持中英文字母、数字”。",
+      "implementation": "tests/ui/specs/CASE-000412.spec.js: 输入包含空格的 标签 123 并提交，断言显示仅支持中英文字母数字且列表无该名称；对应契约项A2：输入成功，但系统提示“标签名称仅支持中英文字母、数字”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000412.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "标签创建失败，无法保存。",
+      "implementation": "tests/ui/specs/CASE-000412.spec.js: 输入包含空格的 标签 123 并提交，断言显示仅支持中英文字母数字且列表无该名称；对应契约项A3：标签创建失败，无法保存。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000412.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    }
+  ]
+}

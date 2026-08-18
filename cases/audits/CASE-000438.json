@@ -1,0 +1,45 @@
+{
+    "schemaVersion":  1,
+    "caseId":  "CASE-000438",
+    "caseContentHash":  "72a59b5a63d87136d98a45cd49edae51d350728ba9ad8a6cbee035c7c184ca93",
+    "contractHash":  "f1ded1dd80eaa0ccede70cb8ba0380a277232675d7525da3bdcd61474cb2b61d",
+    "testTitle":  "标签管理 - 列表页更新时间显示格式验证 [CASE-000438]",
+    "file":  "tests/ui/specs/CASE-000438.spec.js",
+    "contractFile":  "cases/contracts/CASE-000438.json",
+    "knownPitfallsReviewed":  true,
+    "knownPitfallIds":  [
+                            "AUTOMATION-MAPPING-006"
+                        ],
+    "coverage":  [
+                     {
+                         "id":  "P1",
+                         "text":  "系统已登录，存在至少一条标签数据，且该标签的更新时间已记录",
+                         "implementation":  "tests/ui/specs/CASE-000438.spec.js: 读取全部更新时间列，逐项断言YYYY-MM-DD HH:mm格式；对应契约项P1：系统已登录，存在至少一条标签数据，且该标签的更新时间已记录",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000438.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S1",
+                         "text":  "进入标签管理列表页",
+                         "implementation":  "tests/ui/specs/CASE-000438.spec.js: 读取全部更新时间列，逐项断言YYYY-MM-DD HH:mm格式；对应契约项S1：进入标签管理列表页",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000438.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S2",
+                         "text":  "查看列表中每条标签的“更新时间”列",
+                         "implementation":  "tests/ui/specs/CASE-000438.spec.js: 读取全部更新时间列，逐项断言YYYY-MM-DD HH:mm格式；对应契约项S2：查看列表中每条标签的“更新时间”列",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000438.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A1",
+                         "text":  "标签管理列表页正常展示标签列表",
+                         "implementation":  "tests/ui/specs/CASE-000438.spec.js: 读取全部更新时间列，逐项断言YYYY-MM-DD HH:mm格式；对应契约项A1：标签管理列表页正常展示标签列表",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000438.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A2",
+                         "text":  "每条标签的“更新时间”列均以“年月日 时分”格式显示，例如“2025-01-01 12:30”",
+                         "implementation":  "tests/ui/specs/CASE-000438.spec.js: 读取全部更新时间列，逐项断言YYYY-MM-DD HH:mm格式；对应契约项A2：每条标签的“更新时间”列均以“年月日 时分”格式显示，例如“2025-01-01 12:30”",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000438.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     }
+                 ]
+}

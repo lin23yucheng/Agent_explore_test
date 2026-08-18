@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000411",
+  "caseContentHash": "3b61cf4d29b3eea581ad8a68c480abc28fe703df244ee7ea8f7b09adbcc211dd",
+  "title": "标签管理 - 验证标签名称包含非法字符时提示错误",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限的用户"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理页面，点击“新建标签”按钮。"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入“标签@#”。"
+    },
+    {
+      "id": "S3",
+      "text": "点击“确定”或“保存”按钮。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "弹出新建标签对话框。"
+    },
+    {
+      "id": "A2",
+      "text": "输入成功，但系统提示“标签名称仅支持中英文字母、数字”。"
+    },
+    {
+      "id": "A3",
+      "text": "标签创建失败，无法保存。"
+    }
+  ],
+  "contractHash": "faa21eb4f36212b5ec5c51099e581a585efcafc8891b51a363e57c4db4191ea2",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

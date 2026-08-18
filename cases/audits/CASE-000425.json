@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000425",
+  "caseContentHash": "657d61a1141190ca4df4a97b4fa6a730c99c405fa5d075ce91a3d7b78bcd156f",
+  "contractHash": "a3220e6a51cdda1b2362a48742cf8dd9b0d0a9f18188a2e29d3d7cc759ebd501",
+  "testTitle": "标签管理 - 新增标签时名称长度边界为32时创建成功 [CASE-000425]",
+  "file": "tests/ui/specs/CASE-000425.spec.js",
+  "contractFile": "cases/contracts/CASE-000425.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录VLA数据任务平台且具有标签管理权限；标签管理列表页已打开",
+      "implementation": "tests/ui/specs/CASE-000425.spec.js: 输入实际 32 字符 AI+30个5，选择其他，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项P1：已登录VLA数据任务平台且具有标签管理权限；标签管理列表页已打开",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000425.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "点击“新增标签”按钮",
+      "implementation": "tests/ui/specs/CASE-000425.spec.js: 输入实际 32 字符 AI+30个5，选择其他，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项S1：点击“新增标签”按钮",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000425.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "在“标签名称”输入框中输入32个字符（如32个英文字母“a”）",
+      "implementation": "tests/ui/specs/CASE-000425.spec.js: 输入实际 32 字符 AI+30个5，选择其他，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项S2：在“标签名称”输入框中输入32个字符（如32个英文字母“a”）",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000425.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“质量”",
+      "implementation": "tests/ui/specs/CASE-000425.spec.js: 输入实际 32 字符 AI+30个5，选择其他，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项S3：选择分类为“质量”",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000425.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”提交",
+      "implementation": "tests/ui/specs/CASE-000425.spec.js: 输入实际 32 字符 AI+30个5，选择其他，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项S4：点击“确定”提交",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000425.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "新增弹窗正常打开",
+      "implementation": "tests/ui/specs/CASE-000425.spec.js: 输入实际 32 字符 AI+30个5，选择其他，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项A1：新增弹窗正常打开",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000425.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "输入32个字符正常显示",
+      "implementation": "tests/ui/specs/CASE-000425.spec.js: 输入实际 32 字符 AI+30个5，选择其他，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项A2：输入32个字符正常显示",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000425.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择正常",
+      "implementation": "tests/ui/specs/CASE-000425.spec.js: 输入实际 32 字符 AI+30个5，选择其他，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项A3：分类选择正常",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000425.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A4",
+      "text": "标签创建成功，列表页显示名称为32个“a”的标签",
+      "implementation": "tests/ui/specs/CASE-000425.spec.js: 输入实际 32 字符 AI+30个5，选择其他，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项A4：标签创建成功，列表页显示名称为32个“a”的标签",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000425.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    }
+  ]
+}

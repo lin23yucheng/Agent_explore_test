@@ -1,0 +1,70 @@
+{
+    "schemaVersion":  1,
+    "caseId":  "CASE-000398",
+    "caseContentHash":  "d52101830baf90cf401071594e9e4f5acca7e4584a31636950fd85f403b00ecc",
+    "contractHash":  "5e75003a269dd25b7e154c6eab37c53364492e60e325197c3f47457be42f082a",
+    "testTitle":  "标签管理 - 按禁用状态查询仅显示禁用标签 [CASE-000398]",
+    "file":  "tests/ui/specs/CASE-000398.spec.js",
+    "contractFile":  "cases/contracts/CASE-000398.json",
+    "knownPitfallsReviewed":  true,
+    "knownPitfallIds":  [
+                            "UI-COMBOBOX-001",
+                            "AUTOMATION-MAPPING-006"
+                        ],
+    "coverage":  [
+                     {
+                         "id":  "P1",
+                         "text":  "已登录系统且具有标签管理权限；系统中存在至少一个状态为“启用”的标签和一个状态为“禁用”的标签",
+                         "implementation":  "tests/ui/specs/CASE-000398.spec.js: 展开状态自定义下拉并核对启用/禁用选项，选择禁用后查询，逐行断言状态均为禁用；对应契约项P1：已登录系统且具有标签管理权限；系统中存在至少一个状态为“启用”的标签和一个状态为“禁用”的标签",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000398.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S1",
+                         "text":  "进入标签管理页面",
+                         "implementation":  "tests/ui/specs/CASE-000398.spec.js: 展开状态自定义下拉并核对启用/禁用选项，选择禁用后查询，逐行断言状态均为禁用；对应契约项S1：进入标签管理页面",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000398.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S2",
+                         "text":  "点击状态筛选下拉框",
+                         "implementation":  "tests/ui/specs/CASE-000398.spec.js: 展开状态自定义下拉并核对启用/禁用选项，选择禁用后查询，逐行断言状态均为禁用；对应契约项S2：点击状态筛选下拉框",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000398.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S3",
+                         "text":  "选择“禁用”选项",
+                         "implementation":  "tests/ui/specs/CASE-000398.spec.js: 展开状态自定义下拉并核对启用/禁用选项，选择禁用后查询，逐行断言状态均为禁用；对应契约项S3：选择“禁用”选项",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000398.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S4",
+                         "text":  "点击查询按钮",
+                         "implementation":  "tests/ui/specs/CASE-000398.spec.js: 展开状态自定义下拉并核对启用/禁用选项，选择禁用后查询，逐行断言状态均为禁用；对应契约项S4：点击查询按钮",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000398.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A1",
+                         "text":  "标签管理页面正常显示标签列表",
+                         "implementation":  "tests/ui/specs/CASE-000398.spec.js: 展开状态自定义下拉并核对启用/禁用选项，选择禁用后查询，逐行断言状态均为禁用；对应契约项A1：标签管理页面正常显示标签列表",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000398.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A2",
+                         "text":  "下拉框展开，显示“启用”和“禁用”选项",
+                         "implementation":  "tests/ui/specs/CASE-000398.spec.js: 展开状态自定义下拉并核对启用/禁用选项，选择禁用后查询，逐行断言状态均为禁用；对应契约项A2：下拉框展开，显示“启用”和“禁用”选项",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000398.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A3",
+                         "text":  "下拉框选中“禁用”",
+                         "implementation":  "tests/ui/specs/CASE-000398.spec.js: 展开状态自定义下拉并核对启用/禁用选项，选择禁用后查询，逐行断言状态均为禁用；对应契约项A3：下拉框选中“禁用”",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000398.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A4",
+                         "text":  "列表仅显示状态为“禁用”的标签，不显示“启用”标签",
+                         "implementation":  "tests/ui/specs/CASE-000398.spec.js: 展开状态自定义下拉并核对启用/禁用选项，选择禁用后查询，逐行断言状态均为禁用；对应契约项A4：列表仅显示状态为“禁用”的标签，不显示“启用”标签",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000398.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     }
+                 ]
+}

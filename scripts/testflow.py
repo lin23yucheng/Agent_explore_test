@@ -910,6 +910,8 @@ def make_audit_template(case_id, test_title, spec_file, output=None):
         "testTitle": test_title,
         "file": spec_file.replace("\\", "/"),
         "contractFile": str(contract_path.relative_to(ROOT)).replace("\\", "/"),
+        "knownPitfallsReviewed": False,
+        "knownPitfallIds": [],
         "coverage": coverage,
     }
     write_json_atomic(output, payload)
@@ -930,6 +932,17 @@ def validate_audit(audit_path, case, spec_file, test_title):
         raise SystemExit("覆盖审计绑定的测试标题不一致")
     if audit.get("file", "").replace("\\", "/") != spec_file.replace("\\", "/"):
         raise SystemExit("覆盖审计绑定的脚本文件不一致")
+    if audit.get("knownPitfallsReviewed") is not True:
+        raise SystemExit("覆盖审计必须先完成已知坑清单复核：knownPitfallsReviewed=true")
+    pitfall_ids = audit.get("knownPitfallIds", [])
+    if not isinstance(pitfall_ids, list) or any(not isinstance(value, str) for value in pitfall_ids):
+        raise SystemExit("覆盖审计的knownPitfallIds必须是字符串数组")
+    known_path = ROOT / "cases" / "known-pitfalls.json"
+    known = load_json(known_path, {}) if known_path.is_file() else {"pitfalls": []}
+    known_ids = {item.get("id") for item in known.get("pitfalls", []) if isinstance(item, dict)}
+    unknown_pitfalls = sorted(set(pitfall_ids) - known_ids)
+    if unknown_pitfalls:
+        raise SystemExit("覆盖审计引用了不存在的已知坑ID: " + ", ".join(unknown_pitfalls))
     try:
         contract_path = safe_contract_path(audit.get("contractFile", ""))
     except SystemExit as error:
@@ -1363,6 +1376,69 @@ def apply_plan(plan_path):
                       "当前用例文件": str(CURRENT)}, ensure_ascii=False, indent=2))
 
 
+def validate_candidate_spec_binding(spec_path, case_id, test_title):
+    try:
+        source = spec_path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError) as error:
+        raise SystemExit(f"候选脚本无法读取: {spec_path}: {error}") from error
+    if re.search(r"testInfo\s*\.\s*annotations\s*\.\s*push\s*\(", source):
+        raise SystemExit(
+            "候选脚本不能在测试运行时追加CASE annotation；"
+            "报告器在onBegin阶段校验，请使用test details的annotation字段或caseTest"
+        )
+
+    wrapper_ids = [
+        match.group("case_id")
+        for match in re.finditer(
+            r"\bcaseTest\s*\(\s*(['\"])(?P<case_id>CASE-\d{6})\1", source
+        )
+    ]
+    annotation_ids = []
+    for match in re.finditer(
+        r"(?<![\w$])annotation\s*:\s*(?:\[\s*)?\{(?P<body>[^{}]{0,500})\}",
+        source,
+        flags=re.DOTALL,
+    ):
+        body = match.group("body")
+        if not re.search(r"\btype\s*:\s*(['\"])case\1", body):
+            continue
+        description = re.search(
+            r"\bdescription\s*:\s*(['\"])(?P<case_id>CASE-\d{6})\1", body
+        )
+        if description:
+            annotation_ids.append(description.group("case_id"))
+
+    direct_tests = len(re.findall(r"(?<![\w.$])test\s*\(", source))
+    test_count = direct_tests + len(wrapper_ids)
+    if test_count != 1:
+        raise SystemExit(f"候选脚本必须且只能定义一个测试，实际发现{test_count}个")
+    bindings = wrapper_ids + annotation_ids
+    if bindings != [case_id]:
+        actual = ", ".join(bindings) if bindings else "无"
+        raise SystemExit(
+            f"候选脚本必须在测试定义阶段关联唯一CASE-ID {case_id}，实际关联: {actual}"
+        )
+    if test_title not in source:
+        raise SystemExit("候选脚本中的测试标题与登记标题不一致")
+
+
+def validate_candidate_spec_implementation(spec_path, case_id):
+    """Reject scripts that defer a CASE's behavior to a generic dispatcher."""
+    try:
+        source = spec_path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError) as error:
+        raise SystemExit(f"候选脚本无法读取: {spec_path}: {error}") from error
+
+    if re.search(r"\brun[A-Za-z0-9_]*Case\s*\(", source):
+        raise SystemExit(
+            f"候选脚本不能调用通用CASE分派器；{case_id}必须直接实现探索通过的页面步骤"
+        )
+    if re.search(r"\bcaseId\b|\bcase_id\b|\.slice\(\s*-\s*3\s*\)", source):
+        raise SystemExit(
+            f"候选脚本不能根据CASE-ID动态选择步骤；{case_id}必须是独立的具体实现"
+        )
+
+
 def register_candidate(case_id, test_title, spec_file, audit_path, exploration_evidence):
     case = find_case(case_id)
     if not case:
@@ -1377,6 +1453,8 @@ def register_candidate(case_id, test_title, spec_file, audit_path, exploration_e
         raise SystemExit(f"候选脚本不存在: {normalized_file}")
     if spec_path.name != f"{case_id}.spec.js":
         raise SystemExit(f"每个候选脚本必须使用独立文件 tests/ui/specs/{case_id}.spec.js")
+    validate_candidate_spec_binding(spec_path, case_id, test_title)
+    validate_candidate_spec_implementation(spec_path, case_id)
     audit_path, contract = validate_audit(audit_path, case, normalized_file, test_title)
     automation = load_automation()
     if case_id in automation.get("cases", {}):

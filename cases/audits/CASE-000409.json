@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000409",
+  "caseContentHash": "1f3c0940ac79290b5d8ec844cbb58829aa8592a32d9c19d9aa0cf299927f9b7d",
+  "contractHash": "ceeb67bedb6051fc2a5e21762a8e955e41e2e997f6479e446860f4b55ce6da54",
+  "testTitle": "标签管理 - 验证标签名称长度为33时创建失败 [CASE-000409]",
+  "file": "tests/ui/specs/CASE-000409.spec.js",
+  "contractFile": "cases/contracts/CASE-000409.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限的用户",
+      "implementation": "tests/ui/specs/CASE-000409.spec.js: 输入实测33字符 A409+29个9，选择质量并提交，断言输入保留33位、显示长度不能超过32位且列表无该名称；对应契约项P1：已登录系统且具有标签管理权限的用户",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000409.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理页面，点击“新建标签”按钮。",
+      "implementation": "tests/ui/specs/CASE-000409.spec.js: 输入实测33字符 A409+29个9，选择质量并提交，断言输入保留33位、显示长度不能超过32位且列表无该名称；对应契约项S1：进入标签管理页面，点击“新建标签”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000409.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入长度为33的合法字符（如“abcdefghijklmnopqrstuvwxyz1234567”）。",
+      "implementation": "tests/ui/specs/CASE-000409.spec.js: 输入实测33字符 A409+29个9，选择质量并提交，断言输入保留33位、显示长度不能超过32位且列表无该名称；对应契约项S2：在标签名称输入框中输入长度为33的合法字符（如“abcdefghijklmnopqrstuvwxyz1234567”）。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000409.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“质量”。",
+      "implementation": "tests/ui/specs/CASE-000409.spec.js: 输入实测33字符 A409+29个9，选择质量并提交，断言输入保留33位、显示长度不能超过32位且列表无该名称；对应契约项S3：选择分类为“质量”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000409.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”提交。",
+      "implementation": "tests/ui/specs/CASE-000409.spec.js: 输入实测33字符 A409+29个9，选择质量并提交，断言输入保留33位、显示长度不能超过32位且列表无该名称；对应契约项S4：点击“确定”提交。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000409.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "弹出新建标签对话框。",
+      "implementation": "tests/ui/specs/CASE-000409.spec.js: 输入实测33字符 A409+29个9，选择质量并提交，断言输入保留33位、显示长度不能超过32位且列表无该名称；对应契约项A1：弹出新建标签对话框。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000409.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "输入成功，但可能被限制或提示长度错误。",
+      "implementation": "tests/ui/specs/CASE-000409.spec.js: 输入实测33字符 A409+29个9，选择质量并提交，断言输入保留33位、显示长度不能超过32位且列表无该名称；对应契约项A2：输入成功，但可能被限制或提示长度错误。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000409.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择成功。",
+      "implementation": "tests/ui/specs/CASE-000409.spec.js: 输入实测33字符 A409+29个9，选择质量并提交，断言输入保留33位、显示长度不能超过32位且列表无该名称；对应契约项A3：分类选择成功。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000409.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A4",
+      "text": "系统提示“标签名称长度必须在1到32之间”，创建失败。",
+      "implementation": "tests/ui/specs/CASE-000409.spec.js: 输入实测33字符 A409+29个9，选择质量并提交，断言输入保留33位、显示长度不能超过32位且列表无该名称；对应契约项A4：系统提示“标签名称长度必须在1到32之间”，创建失败。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000409.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    }
+  ]
+}

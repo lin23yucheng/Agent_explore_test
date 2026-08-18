@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000453",
+  "caseContentHash": "50ed36f83906dda4cdb68f270faeb659719663ec9b16247e3e9dbefef1b8afd7",
+  "contractHash": "83b5130309376623f4502a540f2ab9c63d9b5f55228b6ae15574a6feff6af5cd",
+  "testTitle": "标签管理 - 禁用已被任务使用的标签时提示不允许禁用 [CASE-000453]",
+  "file": "tests/ui/specs/CASE-000453.spec.js",
+  "contractFile": "cases/contracts/CASE-000453.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "UI-DIALOG-002",
+    "UI-MULTISELECT-003",
+    "DATA-REFERENCE-004",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "存在一个标签，且该标签已被至少一个任务引用（即任务创建时选择了该标签）",
+      "implementation": "独立脚本创建专属启用标签和引用任务，任务表单按实探顺序选择数据分类、标签和天机机器人，并在finally中先删除任务再删除标签。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000453.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，找到该已被任务使用的标签；",
+      "implementation": "脚本进入标签列表，以专属标签名称定位唯一行并断言该标签存在。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000453.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "点击该标签对应的【禁用】按钮；",
+      "implementation": "在专属标签行点击名称精确匹配的禁用按钮，遵循实探确认的无确认框直执行路径。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000453.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "观察页面提示。",
+      "implementation": "点击后等待350毫秒，再读取当前可见的Element Plus消息。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000453.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "列表页正常显示该标签；",
+      "implementation": "目标标签名称精确匹配且列表中只有一行，证明列表正常显示。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000453.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "系统弹出提示或显示错误信息；",
+      "implementation": "断言当前可见消息包含标签已被任务使用、不允许禁用的实际错误信息。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000453.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "提示内容为：“标签已被任务使用，不允许禁用”，且该标签状态未被禁用，仍保持启用状态。",
+      "implementation": "禁用前后均读取标签行第三列，最终断言状态保持启用。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000453.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    }
+  ]
+}

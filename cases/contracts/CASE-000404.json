@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000404",
+  "caseContentHash": "3fcf56c5adf0de28a332c5116e60ff4e4114f5946a2734cbe2b224c1d0060d9d",
+  "title": "标签管理 - 查询条件为空显示全部",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；系统中存在多个标签记录"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理页面"
+    },
+    {
+      "id": "S2",
+      "text": "不输入任何查询条件"
+    },
+    {
+      "id": "S3",
+      "text": "点击查询按钮"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "标签管理页面正常显示标签列表"
+    },
+    {
+      "id": "A2",
+      "text": "查询输入框为空"
+    },
+    {
+      "id": "A3",
+      "text": "列表显示全部标签记录，按创建时间倒序排列"
+    }
+  ],
+  "contractHash": "9a6d5dd9b6cfe0c1f42f028748c5b3108c9edae4f55f9e61257688207d7ef5f0",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

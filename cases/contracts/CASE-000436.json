@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000436",
+  "caseContentHash": "a6dc4e969b7a589546ff1d6b095d1928e6c805ce89150f225839d869b6538328",
+  "title": "标签管理 - 列表页创建时间显示年月日时分",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "系统已登录，存在至少一条标签记录，且该标签的创建时间已知（例如2025-01-15 09:30:45）"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页"
+    },
+    {
+      "id": "S2",
+      "text": "查看列表中每条标签记录的创建时间字段"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "标签管理列表页正常显示"
+    },
+    {
+      "id": "A2",
+      "text": "创建时间字段显示格式为“年月日 时分”，例如“2025-01-15 09:30”，不包含秒数"
+    }
+  ],
+  "contractHash": "934f8e00b8cb6b450c437a0246f8ea4ec259210b3183521a3f5e37bb4ce8fa9c",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "A1",
+      "A2"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

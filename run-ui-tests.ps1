@@ -336,7 +336,7 @@ try {
         $listedTitles = @($preflightOutput | ForEach-Object {
             $listedMatch = [regex]::Match(
                 [string]$_,
-                '\.spec\.js:\d+:\d+\s+›\s+(?<title>.+)$'
+                '\.js:\d+:\d+\s+›\s+(?<title>.+)$'
             )
             if ($listedMatch.Success) { $listedMatch.Groups['title'].Value.Trim() }
         })
@@ -366,7 +366,7 @@ try {
         $env:CASE_RESULTS_FILE = $script:batchResultsFile
         $env:ALLOWED_CASE_IDS = ($allowedCaseIds -join ',')
         $expectedBindingsFile = Join-Path 'cases\runs' ("expected-bindings-$runId.json")
-        @($expectedBindings) | ConvertTo-Json -Depth 8 |
+        ConvertTo-Json -InputObject @($expectedBindings) -Depth 8 |
             Set-Content -LiteralPath $expectedBindingsFile -Encoding utf8
         $env:EXPECTED_CASE_BINDINGS_FILE = (Resolve-Path -LiteralPath $expectedBindingsFile).Path
         $env:EXPECTED_CASE_BINDINGS = ''

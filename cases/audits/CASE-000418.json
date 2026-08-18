@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000418",
+  "caseContentHash": "53d128b63a6ffdca9a64af76bdfeb8e31e6d954835750063289a411648c1f409",
+  "contractHash": "206dc12e71cf500f7e655f3ad777a6674f17ce2754bf8e3d69d453b7fb7a31cd",
+  "testTitle": "标签管理 - 新建标签弹框点击取消关闭且不保存 [CASE-000418]",
+  "file": "tests/ui/specs/CASE-000418.spec.js",
+  "contractFile": "cases/contracts/CASE-000418.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录VLA数据任务平台且具有标签管理权限；已进入标签管理页面",
+      "implementation": "tests/ui/specs/CASE-000418.spec.js: 输入 AI取消418，通过 Element Plus 下拉选择质量后取消，断言弹窗关闭且列表未新增；对应契约项P1：已登录VLA数据任务平台且具有标签管理权限；已进入标签管理页面",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000418.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "点击“新建标签”按钮，打开新建标签弹框",
+      "implementation": "tests/ui/specs/CASE-000418.spec.js: 输入 AI取消418，通过 Element Plus 下拉选择质量后取消，断言弹窗关闭且列表未新增；对应契约项S1：点击“新建标签”按钮，打开新建标签弹框",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000418.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "在弹框中输入标签名称（如“测试标签”）并选择分类（如“质量”）",
+      "implementation": "tests/ui/specs/CASE-000418.spec.js: 输入 AI取消418，通过 Element Plus 下拉选择质量后取消，断言弹窗关闭且列表未新增；对应契约项S2：在弹框中输入标签名称（如“测试标签”）并选择分类（如“质量”）",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000418.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "点击“取消”按钮",
+      "implementation": "tests/ui/specs/CASE-000418.spec.js: 输入 AI取消418，通过 Element Plus 下拉选择质量后取消，断言弹窗关闭且列表未新增；对应契约项S3：点击“取消”按钮",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000418.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "新建标签弹框正常打开，显示标签名称输入框和分类选择框",
+      "implementation": "tests/ui/specs/CASE-000418.spec.js: 输入 AI取消418，通过 Element Plus 下拉选择质量后取消，断言弹窗关闭且列表未新增；对应契约项A1：新建标签弹框正常打开，显示标签名称输入框和分类选择框",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000418.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "输入和选择操作正常完成",
+      "implementation": "tests/ui/specs/CASE-000418.spec.js: 输入 AI取消418，通过 Element Plus 下拉选择质量后取消，断言弹窗关闭且列表未新增；对应契约项A2：输入和选择操作正常完成",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000418.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "弹框关闭，页面不新增任何标签，列表数据无变化",
+      "implementation": "tests/ui/specs/CASE-000418.spec.js: 输入 AI取消418，通过 Element Plus 下拉选择质量后取消，断言弹窗关闭且列表未新增；对应契约项A3：弹框关闭，页面不新增任何标签，列表数据无变化",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000418.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    }
+  ]
+}

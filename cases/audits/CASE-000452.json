@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000452",
+  "caseContentHash": "56f53694c100b6e8a0f6b7eae47f73957e0a08a8620653b71c59775df882cfe4",
+  "contractHash": "6ea961cbefe3fddeca8ee26ccf8ef002a1584000cee8066d9f945ca9fc3944e2",
+  "testTitle": "标签管理 - 已被任务使用的标签编辑时提示不允许修改 [CASE-000452]",
+  "file": "tests/ui/specs/CASE-000452.spec.js",
+  "contractFile": "cases/contracts/CASE-000452.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "UI-DIALOG-002",
+    "UI-MULTISELECT-003",
+    "DATA-REFERENCE-004",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "存在一个标签（如：标签A），该标签已被至少一个任务引用；当前用户具有标签管理编辑权限；已登录系统并进入标签管理列表页。",
+      "implementation": "独立脚本创建专属启用标签和引用任务，按实探操作三个自定义下拉并显式关闭标签多选，finally先删任务再删原名或新名标签。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000452.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "在标签管理列表页中，找到已被任务使用的标签A；",
+      "implementation": "进入标签列表，以专属标签名称定位唯一行并断言行存在、状态为启用。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000452.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "点击标签A所在行的“编辑”按钮；",
+      "implementation": "在目标行点击编辑按钮并等待编辑对话框可见。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000452.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "在编辑弹窗中，尝试修改标签名称或分类；",
+      "implementation": "读取编辑弹窗首个文本框的原名，将其填为本CASE专属新名称并断言输入值已变化。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000452.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”或“保存”按钮。",
+      "implementation": "点击弹窗保存按钮并按实探等待350毫秒后读取实际消息。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000452.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "列表页正常显示标签A，且其状态为启用或禁用；",
+      "implementation": "目标标签行存在且状态列为启用，满足列表正常显示要求。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000452.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "系统弹出编辑弹窗，显示标签A的当前信息；",
+      "implementation": "编辑弹窗可见，名称文本框精确回显专属原标签名。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000452.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "编辑弹窗中可修改字段，但保存时被拦截；",
+      "implementation": "名称输入框可填入专属新名称，但点击保存后编辑弹窗仍保持可见。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000452.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "A4",
+      "text": "系统提示“标签已被任务使用，不允许修改”，且标签A的信息未被修改。",
+      "implementation": "断言可见消息包含标签已被任务使用、不允许修改，且列表原名仍存在、新名不存在。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000452.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    }
+  ]
+}

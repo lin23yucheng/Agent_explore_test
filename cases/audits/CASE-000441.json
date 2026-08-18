@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000441",
+  "caseContentHash": "1b2848ab8ab340edc96f3e407654019608199a0e273e90a940df93ccc87792c0",
+  "contractHash": "9963c1991a07f48764923544f0527780d4e9126d0e10eaae294627411da5e28e",
+  "testTitle": "标签管理 - 刚创建标签时创建时间与更新时间一致 [CASE-000441]",
+  "file": "tests/ui/specs/CASE-000441.spec.js",
+  "contractFile": "cases/contracts/CASE-000441.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "UI-DIALOG-002",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "用户已登录且具有标签管理权限",
+      "implementation": "tests/ui/specs/CASE-000441.spec.js: 创建 AI441时间标签，断言创建成功、列表创建时间与更新时间格式有效且完全相同，最后清理；对应契约项P1：用户已登录且具有标签管理权限",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000441.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，点击“新建标签”按钮。",
+      "implementation": "tests/ui/specs/CASE-000441.spec.js: 创建 AI441时间标签，断言创建成功、列表创建时间与更新时间格式有效且完全相同，最后清理；对应契约项S1：进入标签管理列表页，点击“新建标签”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000441.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "填写标签名称（如“测试标签”）和分类（如“质量”），点击“确定”。",
+      "implementation": "tests/ui/specs/CASE-000441.spec.js: 创建 AI441时间标签，断言创建成功、列表创建时间与更新时间格式有效且完全相同，最后清理；对应契约项S2：填写标签名称（如“测试标签”）和分类（如“质量”），点击“确定”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000441.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "在列表页找到新创建的标签，查看其创建时间和更新时间。",
+      "implementation": "tests/ui/specs/CASE-000441.spec.js: 创建 AI441时间标签，断言创建成功、列表创建时间与更新时间格式有效且完全相同，最后清理；对应契约项S3：在列表页找到新创建的标签，查看其创建时间和更新时间。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000441.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "弹出新建标签窗口。",
+      "implementation": "tests/ui/specs/CASE-000441.spec.js: 创建 AI441时间标签，断言创建成功、列表创建时间与更新时间格式有效且完全相同，最后清理；对应契约项A1：弹出新建标签窗口。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000441.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "创建成功，提示操作成功。",
+      "implementation": "tests/ui/specs/CASE-000441.spec.js: 创建 AI441时间标签，断言创建成功、列表创建时间与更新时间格式有效且完全相同，最后清理；对应契约项A2：创建成功，提示操作成功。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000441.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "新标签的创建时间和更新时间显示相同，且均为当前时间。",
+      "implementation": "tests/ui/specs/CASE-000441.spec.js: 创建 AI441时间标签，断言创建成功、列表创建时间与更新时间格式有效且完全相同，最后清理；对应契约项A3：新标签的创建时间和更新时间显示相同，且均为当前时间。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000441.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    }
+  ]
+}

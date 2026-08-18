@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000429",
+  "caseContentHash": "d1751898a9442d54eef87a0395d40225e4422fc05ffb16cae548bb8ab7d30fd3",
+  "title": "标签管理 - 新增标签时名称重复被拒绝",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录VLA数据任务平台且具有标签管理权限；标签管理列表页已打开；已存在名称为“测试标签”的标签"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "点击“新增标签”按钮"
+    },
+    {
+      "id": "S2",
+      "text": "在“标签名称”输入框中输入已存在的名称“测试标签”"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“质量”"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”提交"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "新增弹窗正常打开"
+    },
+    {
+      "id": "A2",
+      "text": "输入内容正常显示"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择正常"
+    },
+    {
+      "id": "A4",
+      "text": "提交时提示标签名称已存在，标签创建失败"
+    }
+  ],
+  "contractHash": "9c2c52948282d60fb7db566c2272a2c82c12cdc1e9172b8e03b0cea62f60a12c",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

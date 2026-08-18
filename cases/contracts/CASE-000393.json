@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000393",
+  "caseContentHash": "733c45f5700b1ead3cfa2463d7b8631071cd1af56876a499b5f9f8a160266784",
+  "title": "标签管理 - 按质量分类查询标签列表",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "系统已登录且具有标签管理权限；已存在至少一条分类为“质量”的标签和至少一条分类为“其他”的标签"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理页面"
+    },
+    {
+      "id": "S2",
+      "text": "点击标签分类下拉框"
+    },
+    {
+      "id": "S3",
+      "text": "选择“质量”选项"
+    },
+    {
+      "id": "S4",
+      "text": "点击查询按钮"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "标签管理页面正常显示"
+    },
+    {
+      "id": "A2",
+      "text": "下拉框展开，包含“质量”和“其他”两个选项"
+    },
+    {
+      "id": "A3",
+      "text": "下拉框选中“质量”"
+    },
+    {
+      "id": "A4",
+      "text": "列表仅显示分类为“质量”的标签记录，不显示“其他”分类的标签"
+    }
+  ],
+  "contractHash": "9d72409b92ea12ea30970ac21ea6230008a7fd13afd599c382995b884cec194a",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

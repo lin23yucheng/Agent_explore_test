@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000422",
+  "caseContentHash": "499f6dec2bcd975193120de384e5a0a4680986102b44dfa4e3bac83904dfe220",
+  "title": "标签管理 - 新建标签时名称唯一性校验提示标签名已存在",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；已存在一个名称为“测试标签”的标签"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理页面，点击“新建标签”按钮；"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入“测试标签”；"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“质量”；"
+    },
+    {
+      "id": "S4",
+      "text": "点击“保存”按钮。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "弹出新建标签表单；"
+    },
+    {
+      "id": "A2",
+      "text": "输入成功；"
+    },
+    {
+      "id": "A3",
+      "text": "选择成功；"
+    },
+    {
+      "id": "A4",
+      "text": "系统提示“标签名已存在”，标签创建失败。"
+    }
+  ],
+  "contractHash": "39b90d4e48f5cc043102e4656ec9cc51dee16b5b207fa5979fb09fa7a5522c3c",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000428",
+  "caseContentHash": "0f9a45135587cef818e5bb2c3403ec025e959a407489c6325367708d0aaad6ec",
+  "contractHash": "44264ac65a9d7ce682005b1f4e36157a4f2f5681df169b0801cab8f4fff8d2c2",
+  "testTitle": "标签管理 - 新增标签时名称包含非法字符被拒绝 [CASE-000428]",
+  "file": "tests/ui/specs/CASE-000428.spec.js",
+  "contractFile": "cases/contracts/CASE-000428.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录VLA数据任务平台且具有标签管理权限；标签管理列表页已打开",
+      "implementation": "tests/ui/specs/CASE-000428.spec.js: 输入 标签@#、选择质量并提交，断言格式错误文案且列表无该名称；对应契约项P1：已登录VLA数据任务平台且具有标签管理权限；标签管理列表页已打开",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000428.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "点击“新增标签”按钮",
+      "implementation": "tests/ui/specs/CASE-000428.spec.js: 输入 标签@#、选择质量并提交，断言格式错误文案且列表无该名称；对应契约项S1：点击“新增标签”按钮",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000428.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "在“标签名称”输入框中输入包含特殊字符的名称，如“标签@#”",
+      "implementation": "tests/ui/specs/CASE-000428.spec.js: 输入 标签@#、选择质量并提交，断言格式错误文案且列表无该名称；对应契约项S2：在“标签名称”输入框中输入包含特殊字符的名称，如“标签@#”",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000428.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“质量”",
+      "implementation": "tests/ui/specs/CASE-000428.spec.js: 输入 标签@#、选择质量并提交，断言格式错误文案且列表无该名称；对应契约项S3：选择分类为“质量”",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000428.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”提交",
+      "implementation": "tests/ui/specs/CASE-000428.spec.js: 输入 标签@#、选择质量并提交，断言格式错误文案且列表无该名称；对应契约项S4：点击“确定”提交",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000428.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "新增弹窗正常打开",
+      "implementation": "tests/ui/specs/CASE-000428.spec.js: 输入 标签@#、选择质量并提交，断言格式错误文案且列表无该名称；对应契约项A1：新增弹窗正常打开",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000428.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "输入内容正常显示",
+      "implementation": "tests/ui/specs/CASE-000428.spec.js: 输入 标签@#、选择质量并提交，断言格式错误文案且列表无该名称；对应契约项A2：输入内容正常显示",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000428.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择正常",
+      "implementation": "tests/ui/specs/CASE-000428.spec.js: 输入 标签@#、选择质量并提交，断言格式错误文案且列表无该名称；对应契约项A3：分类选择正常",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000428.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A4",
+      "text": "提交时提示标签名称仅支持中英文数字，标签创建失败",
+      "implementation": "tests/ui/specs/CASE-000428.spec.js: 输入 标签@#、选择质量并提交，断言格式错误文案且列表无该名称；对应契约项A4：提交时提示标签名称仅支持中英文数字，标签创建失败",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000428.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    }
+  ]
+}

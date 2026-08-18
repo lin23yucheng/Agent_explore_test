@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000433",
+  "caseContentHash": "e10445187458bfc763b1f2a1e4f1fee60e135bff84f8ab91090034745b80e51e",
+  "title": "标签管理 - 启用状态标签在列表中的展示",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "存在至少一个状态为“启用”的标签，且当前用户具有标签管理模块的查看权限"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页"
+    },
+    {
+      "id": "S2",
+      "text": "查看列表中各标签的状态列"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "列表页正常加载，显示标签列表"
+    },
+    {
+      "id": "A2",
+      "text": "状态为“启用”的标签在状态列显示“启用”标识，且展示正确"
+    }
+  ],
+  "contractHash": "99328ac7adf7172031d9abbd9bd81e1701fdbde07459d2f7ede1380a34406f2b",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "A1",
+      "A2"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000426",
+  "caseContentHash": "14a65ddc766d872a56a20290c1b85555fd0d24109b17ceacfacec5668cd4ca05",
+  "contractHash": "8b8fefb03d97ba8f6480529b6bf99523588c07d8e9cbf63da3908c50f48daf42",
+  "testTitle": "标签管理 - 新增标签时名称超过32个字符被拒绝 [CASE-000426]",
+  "file": "tests/ui/specs/CASE-000426.spec.js",
+  "contractFile": "cases/contracts/CASE-000426.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录VLA数据任务平台且具有标签管理权限；标签管理列表页已打开",
+      "implementation": "tests/ui/specs/CASE-000426.spec.js: 输入实测33字符 A426+29个6，选择质量并提交，断言显示长度不能超过32位且列表无该名称；对应契约项P1：已登录VLA数据任务平台且具有标签管理权限；标签管理列表页已打开",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000426.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "点击“新增标签”按钮",
+      "implementation": "tests/ui/specs/CASE-000426.spec.js: 输入实测33字符 A426+29个6，选择质量并提交，断言显示长度不能超过32位且列表无该名称；对应契约项S1：点击“新增标签”按钮",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000426.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "在“标签名称”输入框中输入33个字符（如33个英文字母“a”）",
+      "implementation": "tests/ui/specs/CASE-000426.spec.js: 输入实测33字符 A426+29个6，选择质量并提交，断言显示长度不能超过32位且列表无该名称；对应契约项S2：在“标签名称”输入框中输入33个字符（如33个英文字母“a”）",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000426.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“质量”",
+      "implementation": "tests/ui/specs/CASE-000426.spec.js: 输入实测33字符 A426+29个6，选择质量并提交，断言显示长度不能超过32位且列表无该名称；对应契约项S3：选择分类为“质量”",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000426.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”提交",
+      "implementation": "tests/ui/specs/CASE-000426.spec.js: 输入实测33字符 A426+29个6，选择质量并提交，断言显示长度不能超过32位且列表无该名称；对应契约项S4：点击“确定”提交",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000426.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "新增弹窗正常打开",
+      "implementation": "tests/ui/specs/CASE-000426.spec.js: 输入实测33字符 A426+29个6，选择质量并提交，断言显示长度不能超过32位且列表无该名称；对应契约项A1：新增弹窗正常打开",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000426.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "输入33个字符后，输入框可能限制输入或显示错误提示",
+      "implementation": "tests/ui/specs/CASE-000426.spec.js: 输入实测33字符 A426+29个6，选择质量并提交，断言显示长度不能超过32位且列表无该名称；对应契约项A2：输入33个字符后，输入框可能限制输入或显示错误提示",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000426.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择正常",
+      "implementation": "tests/ui/specs/CASE-000426.spec.js: 输入实测33字符 A426+29个6，选择质量并提交，断言显示长度不能超过32位且列表无该名称；对应契约项A3：分类选择正常",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000426.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A4",
+      "text": "提交时提示标签名称长度不能超过32个字符，标签创建失败",
+      "implementation": "tests/ui/specs/CASE-000426.spec.js: 输入实测33字符 A426+29个6，选择质量并提交，断言显示长度不能超过32位且列表无该名称；对应契约项A4：提交时提示标签名称长度不能超过32个字符，标签创建失败",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000426.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    }
+  ]
+}

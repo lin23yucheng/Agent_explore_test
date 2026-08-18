@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000417",
+  "caseContentHash": "ccbc728d52269cbbc50db24bf977a5c1b273846a3ed8f4084473cf9fe09d4bde",
+  "contractHash": "91bcfc9def3adf3a21fb32b4e105dacb7c47dde6b6179e5705ae94780965a33c",
+  "testTitle": "标签管理 - 新建标签时选择质量分类成功 [CASE-000417]",
+  "file": "tests/ui/specs/CASE-000417.spec.js",
+  "contractFile": "cases/contracts/CASE-000417.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；标签管理页面可访问；不存在同名标签",
+      "implementation": "tests/ui/specs/CASE-000417.spec.js: 输入 AI417质量标签，通过 Element Plus 下拉选择质量，提交后核对列表分类和启用状态，并在 finally 删除后反查；对应契约项P1：已登录系统且具有标签管理权限；标签管理页面可访问；不存在同名标签",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000417.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理页面，点击“新建标签”按钮；",
+      "implementation": "tests/ui/specs/CASE-000417.spec.js: 输入 AI417质量标签，通过 Element Plus 下拉选择质量，提交后核对列表分类和启用状态，并在 finally 删除后反查；对应契约项S1：进入标签管理页面，点击“新建标签”按钮；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000417.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入“质量标签”；",
+      "implementation": "tests/ui/specs/CASE-000417.spec.js: 输入 AI417质量标签，通过 Element Plus 下拉选择质量，提交后核对列表分类和启用状态，并在 finally 删除后反查；对应契约项S2：在标签名称输入框中输入“质量标签”；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000417.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "在标签分类下拉框中选择“质量”；",
+      "implementation": "tests/ui/specs/CASE-000417.spec.js: 输入 AI417质量标签，通过 Element Plus 下拉选择质量，提交后核对列表分类和启用状态，并在 finally 删除后反查；对应契约项S3：在标签分类下拉框中选择“质量”；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000417.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”或“保存”按钮。",
+      "implementation": "tests/ui/specs/CASE-000417.spec.js: 输入 AI417质量标签，通过 Element Plus 下拉选择质量，提交后核对列表分类和启用状态，并在 finally 删除后反查；对应契约项S4：点击“确定”或“保存”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000417.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "弹出新建标签对话框或进入新建标签页面；",
+      "implementation": "tests/ui/specs/CASE-000417.spec.js: 输入 AI417质量标签，通过 Element Plus 下拉选择质量，提交后核对列表分类和启用状态，并在 finally 删除后反查；对应契约项A1：弹出新建标签对话框或进入新建标签页面；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000417.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "标签名称输入成功；",
+      "implementation": "tests/ui/specs/CASE-000417.spec.js: 输入 AI417质量标签，通过 Element Plus 下拉选择质量，提交后核对列表分类和启用状态，并在 finally 删除后反查；对应契约项A2：标签名称输入成功；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000417.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择为“质量”；",
+      "implementation": "tests/ui/specs/CASE-000417.spec.js: 输入 AI417质量标签，通过 Element Plus 下拉选择质量，提交后核对列表分类和启用状态，并在 finally 删除后反查；对应契约项A3：分类选择为“质量”；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000417.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A4",
+      "text": "标签创建成功，列表中出现该标签，分类显示为“质量”。",
+      "implementation": "tests/ui/specs/CASE-000417.spec.js: 输入 AI417质量标签，通过 Element Plus 下拉选择质量，提交后核对列表分类和启用状态，并在 finally 删除后反查；对应契约项A4：标签创建成功，列表中出现该标签，分类显示为“质量”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000417.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000413",
+  "caseContentHash": "d4d47a6b47c0685f6520c18ea750c809af21bb4b729561963877dfef508d92f3",
+  "title": "标签管理 - 验证标签名称仅包含中文时创建成功",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限的用户"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理页面，点击“新建标签”按钮。"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入“质量标签”。"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“其他”。"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”或“保存”按钮。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "弹出新建标签对话框。"
+    },
+    {
+      "id": "A2",
+      "text": "输入成功，无错误提示。"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择成功。"
+    },
+    {
+      "id": "A4",
+      "text": "标签创建成功，列表中出现“质量标签”。"
+    }
+  ],
+  "contractHash": "ca5f28764cd7e0cad9b7b1eb18d0aa185ab819499b605423486f19432ac1c0b1",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

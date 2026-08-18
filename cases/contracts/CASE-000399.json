@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000399",
+  "caseContentHash": "4a2df654e11078b1187ceb9bbe3555e62e3ec707c800d03e265113acb2510234",
+  "title": "标签管理 - 禁用状态查询排除启用标签",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；系统中存在至少一个状态为“禁用”的标签和一个状态为“启用”的标签"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理页面"
+    },
+    {
+      "id": "S2",
+      "text": "点击状态筛选下拉框"
+    },
+    {
+      "id": "S3",
+      "text": "选择“禁用”选项"
+    },
+    {
+      "id": "S4",
+      "text": "点击查询按钮"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "标签管理页面正常显示"
+    },
+    {
+      "id": "A2",
+      "text": "下拉框展开，包含“启用”和“禁用”选项"
+    },
+    {
+      "id": "A3",
+      "text": "下拉框显示“禁用”"
+    },
+    {
+      "id": "A4",
+      "text": "列表仅显示状态为“禁用”的标签，不显示“启用”标签"
+    }
+  ],
+  "contractHash": "8d5cbca599db16b69420b97f9b31771e2e64b0dd784dd77fb1ec52a52e535dc2",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

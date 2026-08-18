@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000408",
+  "caseContentHash": "e47c4ff8bdfc9ac9322197ec90a6da61aa4a8fa8612881c84d21e11d69eaeef6",
+  "title": "标签管理 - 验证标签名称为空时创建失败",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限的用户"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理页面，点击“新建标签”按钮。"
+    },
+    {
+      "id": "S2",
+      "text": "不输入任何字符，保持标签名称输入框为空。"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“质量”。"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”提交。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "弹出新建标签对话框。"
+    },
+    {
+      "id": "A2",
+      "text": "输入框为空。"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择成功。"
+    },
+    {
+      "id": "A4",
+      "text": "系统提示“标签名称长度必须在1到32之间”，创建失败。"
+    }
+  ],
+  "contractHash": "610ba8be014c592cc039d2c7a08bbe6db3c441000f10b05aeac853eb67155a79",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

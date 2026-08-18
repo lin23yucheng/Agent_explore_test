@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000391",
+  "caseContentHash": "9015f4aa2931c53e1d6eab4077742121610e4f69f9d68c7e921550507e50b494",
+  "title": "标签管理 - 模糊搜索无匹配结果",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；已存在至少一个标签，如“质量标签A”"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理页面；"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入“不存在的标签”；"
+    },
+    {
+      "id": "S3",
+      "text": "点击查询或等待自动搜索。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "标签管理页面正常显示；"
+    },
+    {
+      "id": "A2",
+      "text": "输入框可输入且内容正确；"
+    },
+    {
+      "id": "A3",
+      "text": "列表显示无匹配结果，提示“暂无数据”或类似信息。"
+    }
+  ],
+  "contractHash": "2979ea85f0aed0361b5abafe218147ffab63c4adec64d40c2913a3369fbddecb",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000420",
+  "caseContentHash": "884a0e59a72f7ddd709a0d5c005888c7de7c1a1f5a29dd433b83efb95436b68b",
+  "title": "标签管理 - 新建标签时名称为空前端报红提示",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "用户已登录VLA数据任务平台且具有标签管理权限，进入标签管理页面"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "点击“新建标签”按钮，打开新建标签弹窗"
+    },
+    {
+      "id": "S2",
+      "text": "不输入标签名称，直接点击“保存”按钮"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "新建标签弹窗正常打开"
+    },
+    {
+      "id": "A2",
+      "text": "标签名称输入框前端报红提示，保存操作被阻止"
+    }
+  ],
+  "contractHash": "64f6b546c75ca0fbb9ff20be0584b78db2b880b647b7593629abed0b2d8ce1bf",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "A1",
+      "A2"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

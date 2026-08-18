@@ -1,0 +1,70 @@
+{
+    "schemaVersion":  1,
+    "caseId":  "CASE-000395",
+    "caseContentHash":  "b2273da8d94763ae619c27d24937cc5aea3ed60849b075cb42e564e436d046d9",
+    "contractHash":  "38a1bf5e5860995ef794aa9da78bfbb0df553c05ee67d217471baaf2e408f82e",
+    "testTitle":  "标签管理 - 按分类“其他”查询标签列表 [CASE-000395]",
+    "file":  "tests/ui/specs/CASE-000395.spec.js",
+    "contractFile":  "cases/contracts/CASE-000395.json",
+    "knownPitfallsReviewed":  true,
+    "knownPitfallIds":  [
+                            "UI-COMBOBOX-001",
+                            "AUTOMATION-MAPPING-006"
+                        ],
+    "coverage":  [
+                     {
+                         "id":  "P1",
+                         "text":  "系统已登录且具有标签管理权限；已存在至少一个分类为“其他”的标签和一个分类为“质量”的标签",
+                         "implementation":  "tests/ui/specs/CASE-000395.spec.js: 展开分类自定义下拉并核对质量/其他选项，选择其他后查询，逐行断言分类均为其他；对应契约项P1：系统已登录且具有标签管理权限；已存在至少一个分类为“其他”的标签和一个分类为“质量”的标签",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000395.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S1",
+                         "text":  "进入标签管理页面",
+                         "implementation":  "tests/ui/specs/CASE-000395.spec.js: 展开分类自定义下拉并核对质量/其他选项，选择其他后查询，逐行断言分类均为其他；对应契约项S1：进入标签管理页面",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000395.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S2",
+                         "text":  "点击标签分类下拉框",
+                         "implementation":  "tests/ui/specs/CASE-000395.spec.js: 展开分类自定义下拉并核对质量/其他选项，选择其他后查询，逐行断言分类均为其他；对应契约项S2：点击标签分类下拉框",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000395.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S3",
+                         "text":  "选择“其他”",
+                         "implementation":  "tests/ui/specs/CASE-000395.spec.js: 展开分类自定义下拉并核对质量/其他选项，选择其他后查询，逐行断言分类均为其他；对应契约项S3：选择“其他”",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000395.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S4",
+                         "text":  "点击查询按钮",
+                         "implementation":  "tests/ui/specs/CASE-000395.spec.js: 展开分类自定义下拉并核对质量/其他选项，选择其他后查询，逐行断言分类均为其他；对应契约项S4：点击查询按钮",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000395.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A1",
+                         "text":  "标签管理页面正常显示标签列表",
+                         "implementation":  "tests/ui/specs/CASE-000395.spec.js: 展开分类自定义下拉并核对质量/其他选项，选择其他后查询，逐行断言分类均为其他；对应契约项A1：标签管理页面正常显示标签列表",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000395.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A2",
+                         "text":  "下拉框展开，显示“质量”和“其他”两个选项",
+                         "implementation":  "tests/ui/specs/CASE-000395.spec.js: 展开分类自定义下拉并核对质量/其他选项，选择其他后查询，逐行断言分类均为其他；对应契约项A2：下拉框展开，显示“质量”和“其他”两个选项",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000395.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A3",
+                         "text":  "下拉框选中“其他”",
+                         "implementation":  "tests/ui/specs/CASE-000395.spec.js: 展开分类自定义下拉并核对质量/其他选项，选择其他后查询，逐行断言分类均为其他；对应契约项A3：下拉框选中“其他”",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000395.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A4",
+                         "text":  "列表仅显示分类为“其他”的标签，不显示“质量”分类的标签",
+                         "implementation":  "tests/ui/specs/CASE-000395.spec.js: 展开分类自定义下拉并核对质量/其他选项，选择其他后查询，逐行断言分类均为其他；对应契约项A4：列表仅显示分类为“其他”的标签，不显示“质量”分类的标签",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000395.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     }
+                 ]
+}

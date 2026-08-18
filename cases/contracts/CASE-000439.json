@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000439",
+  "caseContentHash": "75be1bc84647117a799ce6270220b02f43749af2ba6a00a2bcdf346d2d924a27",
+  "title": "标签管理 - 编辑标签后更新时间更新为当前时间",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "存在一个已创建的标签，记录其创建时间和更新时间（两者一致）"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，找到该标签并记录其创建时间和更新时间。"
+    },
+    {
+      "id": "S2",
+      "text": "点击该标签的“编辑”按钮，修改标签名称（如改为“新名称”）。"
+    },
+    {
+      "id": "S3",
+      "text": "保存修改。"
+    },
+    {
+      "id": "S4",
+      "text": "返回列表页，查看该标签的更新时间。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "标签列表中显示该标签的创建时间和更新时间，两者相同。"
+    },
+    {
+      "id": "A2",
+      "text": "弹出编辑窗口，可修改标签名称。"
+    },
+    {
+      "id": "A3",
+      "text": "保存成功，提示操作成功。"
+    },
+    {
+      "id": "A4",
+      "text": "该标签的更新时间更新为当前时间，且晚于创建时间。"
+    }
+  ],
+  "contractHash": "2998ae42530874163405ef78f14c8b8c1e89dd85da1a608adab4012bfbf85bf9",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000437",
+  "caseContentHash": "ed73605eb88d293c4565c7b0a9c7f62950d1cea8a91fec54210b362e1da4aaa5",
+  "title": "标签管理 - 新增标签后创建时间保持不变",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限，标签列表页存在至少一条已创建的标签"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，记录某条标签的创建时间；"
+    },
+    {
+      "id": "S2",
+      "text": "等待一段时间（如1分钟）后刷新列表页；"
+    },
+    {
+      "id": "S3",
+      "text": "再次查看该标签的创建时间。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "列表页显示该标签的创建时间；"
+    },
+    {
+      "id": "A2",
+      "text": "列表页刷新成功；"
+    },
+    {
+      "id": "A3",
+      "text": "该标签的创建时间与刷新前记录的时间一致，未发生变化。"
+    }
+  ],
+  "contractHash": "92a4a70ff7b0db410a877f2e6af2d97e9e287bbfaf476464ea4022b158ee9a3f",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

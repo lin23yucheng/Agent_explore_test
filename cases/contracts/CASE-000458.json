@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000458",
+  "caseContentHash": "0557ac02318ad0b8b74e20cb95aa6d1a1210759850e67d26fc3ca4349f2beffc",
+  "title": "标签管理 - 验证列表按创建时间倒序排列",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "系统中存在至少3个标签，且创建时间各不相同（例如：标签A最早创建，标签B次之，标签C最新）"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页"
+    },
+    {
+      "id": "S2",
+      "text": "观察列表中标签的排列顺序"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "标签列表正常显示"
+    },
+    {
+      "id": "A2",
+      "text": "标签按照创建时间从最新到最旧排列，即标签C排在最前，标签A排在最后"
+    }
+  ],
+  "contractHash": "f8ddabaff369c405fd1cd28387962fcd0e03ea5124c8d4712bef2a82865f00dc",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "A1",
+      "A2"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

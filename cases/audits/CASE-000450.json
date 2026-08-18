@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000450",
+  "caseContentHash": "296831b313c21b5ebc12107d25154b89594b1e8f40d7ac0896f482a7ec2ee018",
+  "contractHash": "e21def8bf0be090f49c0161577b5b8a725ccd69c8e48f8dbb9af68fe870e0c93",
+  "testTitle": "标签管理 - 编辑标签名称回显并可修改 [CASE-000450]",
+  "file": "tests/ui/specs/CASE-000450.spec.js",
+  "contractFile": "cases/contracts/CASE-000450.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "UI-DIALOG-002",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；存在至少一个标签，例如标签名称为“测试标签”，状态为启用，分类为“质量”",
+      "implementation": "tests/ui/specs/CASE-000450.spec.js: 创建测试标签后改为修改后的标签，核对最终列表无错误并清理；对应契约项P1：已登录系统且具有标签管理权限；存在至少一个标签，例如标签名称为“测试标签”，状态为启用，分类为“质量”",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000450.png"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，找到目标标签“测试标签”所在行，点击“编辑”按钮。",
+      "implementation": "tests/ui/specs/CASE-000450.spec.js: 创建测试标签后改为修改后的标签，核对最终列表无错误并清理；对应契约项S1：进入标签管理列表页，找到目标标签“测试标签”所在行，点击“编辑”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000450.png"
+    },
+    {
+      "id": "S2",
+      "text": "在编辑弹窗中查看标签名称输入框。",
+      "implementation": "tests/ui/specs/CASE-000450.spec.js: 创建测试标签后改为修改后的标签，核对最终列表无错误并清理；对应契约项S2：在编辑弹窗中查看标签名称输入框。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000450.png"
+    },
+    {
+      "id": "S3",
+      "text": "将标签名称修改为“修改后的标签”。",
+      "implementation": "tests/ui/specs/CASE-000450.spec.js: 创建测试标签后改为修改后的标签，核对最终列表无错误并清理；对应契约项S3：将标签名称修改为“修改后的标签”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000450.png"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”或“保存”按钮。",
+      "implementation": "tests/ui/specs/CASE-000450.spec.js: 创建测试标签后改为修改后的标签，核对最终列表无错误并清理；对应契约项S4：点击“确定”或“保存”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000450.png"
+    },
+    {
+      "id": "A1",
+      "text": "系统弹出编辑弹窗，标签名称输入框回显原标签名称“测试标签”。",
+      "implementation": "tests/ui/specs/CASE-000450.spec.js: 创建测试标签后改为修改后的标签，核对最终列表无错误并清理；对应契约项A1：系统弹出编辑弹窗，标签名称输入框回显原标签名称“测试标签”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000450.png"
+    },
+    {
+      "id": "A2",
+      "text": "标签名称输入框显示原名称“测试标签”，可正常编辑。",
+      "implementation": "tests/ui/specs/CASE-000450.spec.js: 创建测试标签后改为修改后的标签，核对最终列表无错误并清理；对应契约项A2：标签名称输入框显示原名称“测试标签”，可正常编辑。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000450.png"
+    },
+    {
+      "id": "A3",
+      "text": "输入框内容变为“修改后的标签”。",
+      "implementation": "tests/ui/specs/CASE-000450.spec.js: 创建测试标签后改为修改后的标签，核对最终列表无错误并清理；对应契约项A3：输入框内容变为“修改后的标签”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000450.png"
+    },
+    {
+      "id": "A4",
+      "text": "保存成功，列表页显示更新后的标签名称“修改后的标签”，且无报错提示。",
+      "implementation": "tests/ui/specs/CASE-000450.spec.js: 创建测试标签后改为修改后的标签，核对最终列表无错误并清理；对应契约项A4：保存成功，列表页显示更新后的标签名称“修改后的标签”，且无报错提示。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000450.png"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000425",
+  "caseContentHash": "657d61a1141190ca4df4a97b4fa6a730c99c405fa5d075ce91a3d7b78bcd156f",
+  "title": "标签管理 - 新增标签时名称长度边界为32时创建成功",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录VLA数据任务平台且具有标签管理权限；标签管理列表页已打开"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "点击“新增标签”按钮"
+    },
+    {
+      "id": "S2",
+      "text": "在“标签名称”输入框中输入32个字符（如32个英文字母“a”）"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“质量”"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”提交"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "新增弹窗正常打开"
+    },
+    {
+      "id": "A2",
+      "text": "输入32个字符正常显示"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择正常"
+    },
+    {
+      "id": "A4",
+      "text": "标签创建成功，列表页显示名称为32个“a”的标签"
+    }
+  ],
+  "contractHash": "a3220e6a51cdda1b2362a48742cf8dd9b0d0a9f18188a2e29d3d7cc759ebd501",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

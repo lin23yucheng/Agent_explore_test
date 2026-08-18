@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000456",
+  "caseContentHash": "65736010d39adab323056726a4ec722695fb0f3d24f9cad6564f1ee29c1f2065",
+  "title": "标签管理 - 删除已被任务使用的标签时提示不允许删除",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "存在一个标签（如：标签A），且该标签已被至少一个任务引用；用户已登录并进入标签管理列表页"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "在标签管理列表页中找到已被任务使用的标签A；"
+    },
+    {
+      "id": "S2",
+      "text": "点击标签A对应的“删除”按钮；"
+    },
+    {
+      "id": "S3",
+      "text": "观察系统提示。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "标签A显示在列表中；"
+    },
+    {
+      "id": "A2",
+      "text": "系统弹出删除确认框或直接触发删除操作；"
+    },
+    {
+      "id": "A3",
+      "text": "系统提示“标签已被任务使用，不允许删除”，且标签A未被删除。"
+    }
+  ],
+  "contractHash": "101bf06f20445f38fe9b648525f9eef69bed54daca990a58cb054475b1bc639d",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

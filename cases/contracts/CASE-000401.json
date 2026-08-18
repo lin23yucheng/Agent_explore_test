@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000401",
+  "caseContentHash": "3f07f93e558bc3268a7cd304b6fb2921daf2e1d7eb56e035ab84a80173cf31f1",
+  "title": "标签管理 - 按标签名称模糊匹配查询",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；系统中存在名称包含相同关键字的标签以及名称不包含该关键字的标签"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理页面"
+    },
+    {
+      "id": "S2",
+      "text": "在查询输入框中输入标签名称关键字"
+    },
+    {
+      "id": "S3",
+      "text": "点击查询按钮"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "标签管理页面正常显示标签列表"
+    },
+    {
+      "id": "A2",
+      "text": "查询输入框显示输入的关键字"
+    },
+    {
+      "id": "A3",
+      "text": "列表展示所有名称包含该关键字的标签记录，不包含该关键字的标签不显示"
+    }
+  ],
+  "contractHash": "742f67d374e05f882282c2c23b870f9d8ad86a54d1614bf4c70c4c5da9421ef9",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000447",
+  "caseContentHash": "a824f9a4e88edc7176f9a8c56f7147927232e660d3b9d3710c2eab6419aa1592",
+  "contractHash": "6b8e28c485e92c6578bd415f4baddbb177210b1dd1453ee5b235de0066196926",
+  "testTitle": "标签管理 - 编辑标签名称回显且可修改 [CASE-000447]",
+  "file": "tests/ui/specs/CASE-000447.spec.js",
+  "contractFile": "cases/contracts/CASE-000447.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "UI-DIALOG-002",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "存在一个已创建的标签，状态为启用，未被任何任务使用",
+      "implementation": "tests/ui/specs/CASE-000447.spec.js: 创建 AI447原标签，核对编辑回显后改为 新标签123，断言原名消失和新名出现，最后清理；对应契约项P1：存在一个已创建的标签，状态为启用，未被任何任务使用",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000447.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，找到目标标签，点击“编辑”按钮。",
+      "implementation": "tests/ui/specs/CASE-000447.spec.js: 创建 AI447原标签，核对编辑回显后改为 新标签123，断言原名消失和新名出现，最后清理；对应契约项S1：进入标签管理列表页，找到目标标签，点击“编辑”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000447.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "在编辑弹窗中查看标签名称输入框。",
+      "implementation": "tests/ui/specs/CASE-000447.spec.js: 创建 AI447原标签，核对编辑回显后改为 新标签123，断言原名消失和新名出现，最后清理；对应契约项S2：在编辑弹窗中查看标签名称输入框。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000447.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "修改标签名称为“新标签123”。",
+      "implementation": "tests/ui/specs/CASE-000447.spec.js: 创建 AI447原标签，核对编辑回显后改为 新标签123，断言原名消失和新名出现，最后清理；对应契约项S3：修改标签名称为“新标签123”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000447.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”保存。",
+      "implementation": "tests/ui/specs/CASE-000447.spec.js: 创建 AI447原标签，核对编辑回显后改为 新标签123，断言原名消失和新名出现，最后清理；对应契约项S4：点击“确定”保存。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000447.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "弹出编辑弹窗，标签名称输入框回显原标签名称。",
+      "implementation": "tests/ui/specs/CASE-000447.spec.js: 创建 AI447原标签，核对编辑回显后改为 新标签123，断言原名消失和新名出现，最后清理；对应契约项A1：弹出编辑弹窗，标签名称输入框回显原标签名称。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000447.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "标签名称输入框可编辑，内容为原标签名称。",
+      "implementation": "tests/ui/specs/CASE-000447.spec.js: 创建 AI447原标签，核对编辑回显后改为 新标签123，断言原名消失和新名出现，最后清理；对应契约项A2：标签名称输入框可编辑，内容为原标签名称。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000447.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "输入框内容变为“新标签123”。",
+      "implementation": "tests/ui/specs/CASE-000447.spec.js: 创建 AI447原标签，核对编辑回显后改为 新标签123，断言原名消失和新名出现，最后清理；对应契约项A3：输入框内容变为“新标签123”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000447.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    },
+    {
+      "id": "A4",
+      "text": "保存成功，列表页显示更新后的标签名称“新标签123”。",
+      "implementation": "tests/ui/specs/CASE-000447.spec.js: 创建 AI447原标签，核对编辑回显后改为 新标签123，断言原名消失和新名出现，最后清理；对应契约项A4：保存成功，列表页显示更新后的标签名称“新标签123”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/CASE-000447.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/mutations/mutation-results.json"
+    }
+  ]
+}

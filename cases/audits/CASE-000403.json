@@ -1,0 +1,57 @@
+{
+    "schemaVersion":  1,
+    "caseId":  "CASE-000403",
+    "caseContentHash":  "f2870bf17f1da79da7cc43d431f742d328f476192e2ee56e05e66bff731416d8",
+    "contractHash":  "11fb2766b456ca8465954d25beb66f1d1d8ed46fda3833614b37b4d22d294ca6",
+    "testTitle":  "标签管理 - 查询无匹配结果 [CASE-000403]",
+    "file":  "tests/ui/specs/CASE-000403.spec.js",
+    "contractFile":  "cases/contracts/CASE-000403.json",
+    "knownPitfallsReviewed":  true,
+    "knownPitfallIds":  [
+                            "AUTOMATION-MAPPING-006"
+                        ],
+    "coverage":  [
+                     {
+                         "id":  "P1",
+                         "text":  "已登录系统且具有标签管理权限；系统中不存在名称包含“不存在”的标签",
+                         "implementation":  "tests/ui/specs/CASE-000403.spec.js: 输入\u0027不存在\u0027并查询，断言输入值、零数据行和无匹配提示；对应契约项P1：已登录系统且具有标签管理权限；系统中不存在名称包含“不存在”的标签",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000403.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S1",
+                         "text":  "进入标签管理页面",
+                         "implementation":  "tests/ui/specs/CASE-000403.spec.js: 输入\u0027不存在\u0027并查询，断言输入值、零数据行和无匹配提示；对应契约项S1：进入标签管理页面",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000403.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S2",
+                         "text":  "在查询输入框中输入“不存在”",
+                         "implementation":  "tests/ui/specs/CASE-000403.spec.js: 输入\u0027不存在\u0027并查询，断言输入值、零数据行和无匹配提示；对应契约项S2：在查询输入框中输入“不存在”",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000403.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S3",
+                         "text":  "点击查询按钮",
+                         "implementation":  "tests/ui/specs/CASE-000403.spec.js: 输入\u0027不存在\u0027并查询，断言输入值、零数据行和无匹配提示；对应契约项S3：点击查询按钮",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000403.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A1",
+                         "text":  "标签管理页面正常显示标签列表",
+                         "implementation":  "tests/ui/specs/CASE-000403.spec.js: 输入\u0027不存在\u0027并查询，断言输入值、零数据行和无匹配提示；对应契约项A1：标签管理页面正常显示标签列表",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000403.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A2",
+                         "text":  "查询输入框显示“不存在”",
+                         "implementation":  "tests/ui/specs/CASE-000403.spec.js: 输入\u0027不存在\u0027并查询，断言输入值、零数据行和无匹配提示；对应契约项A2：查询输入框显示“不存在”",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000403.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A3",
+                         "text":  "列表显示无数据，提示无匹配结果",
+                         "implementation":  "tests/ui/specs/CASE-000403.spec.js: 输入\u0027不存在\u0027并查询，断言输入值、零数据行和无匹配提示；对应契约项A3：列表显示无数据，提示无匹配结果",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000403.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     }
+                 ]
+}

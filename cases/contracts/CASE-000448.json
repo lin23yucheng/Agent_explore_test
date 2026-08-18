@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000448",
+  "caseContentHash": "d633ace153e056336dc164bc558975dfe92cc4b9cb07b057f23f2d2636e2e16d",
+  "title": "标签管理 - 编辑标签名称支持中英文字母和数字",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "存在一个已创建的标签，未被任何任务使用"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，点击目标标签的“编辑”按钮。"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入“标签ABC123”。"
+    },
+    {
+      "id": "S3",
+      "text": "点击“确定”保存。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "编辑弹窗打开，标签名称输入框可编辑。"
+    },
+    {
+      "id": "A2",
+      "text": "输入内容“标签ABC123”被接受。"
+    },
+    {
+      "id": "A3",
+      "text": "保存成功，列表页显示标签名称“标签ABC123”。"
+    }
+  ],
+  "contractHash": "313505327fc371f1de27e0471d1ba06d2203f0cd8c4d122b4de3bd5690e139e7",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

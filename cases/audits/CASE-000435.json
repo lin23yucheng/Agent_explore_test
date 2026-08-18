@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000435",
+  "caseContentHash": "d19f7da0e181e187120ac830202a80adbfab84e242314ec15e90ec7e3fc77398",
+  "contractHash": "df8e38f1549d4bd68d0e385976ca6ff0254d5c9882cdb11310abea29fab9ecda",
+  "testTitle": "标签管理 - 禁用已被任务使用的标签失败 [CASE-000435]",
+  "file": "tests/ui/specs/CASE-000435.spec.js",
+  "contractFile": "cases/contracts/CASE-000435.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "UI-DIALOG-002",
+    "UI-MULTISELECT-003",
+    "DATA-REFERENCE-004",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "存在一个已被任务引用的标签，且该标签当前状态为启用",
+      "implementation": "独立脚本创建专属启用标签和引用任务，按真实任务表单顺序选择三个自定义下拉；清理时等待专属任务行出现，先永久删除任务再删除标签。",
+      "evidence": "reports/rechecks/CASE-000435/specs-CASE-000435-标签管理---禁用已被任务使用的标签失败-CASE-000435-/test-finished-1.png；reports/rechecks/CASE-000435/specs-CASE-000435-标签管理---禁用已被任务使用的标签失败-CASE-000435-/trace.zip"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，找到已被任务使用的标签；",
+      "implementation": "进入标签列表，以本运行和CASE专属名称定位唯一标签行。",
+      "evidence": "reports/rechecks/CASE-000435/specs-CASE-000435-标签管理---禁用已被任务使用的标签失败-CASE-000435-/test-finished-1.png；reports/rechecks/CASE-000435/specs-CASE-000435-标签管理---禁用已被任务使用的标签失败-CASE-000435-/trace.zip"
+    },
+    {
+      "id": "S2",
+      "text": "点击该标签的“禁用”按钮；",
+      "implementation": "在专属标签行点击精确名称为禁用的按钮，遵循实探确认的无确认框路径。",
+      "evidence": "reports/rechecks/CASE-000435/specs-CASE-000435-标签管理---禁用已被任务使用的标签失败-CASE-000435-/test-finished-1.png；reports/rechecks/CASE-000435/specs-CASE-000435-标签管理---禁用已被任务使用的标签失败-CASE-000435-/trace.zip"
+    },
+    {
+      "id": "S3",
+      "text": "观察系统提示。",
+      "implementation": "点击后等待350毫秒，再读取当前可见的Element Plus消息。",
+      "evidence": "reports/rechecks/CASE-000435/specs-CASE-000435-标签管理---禁用已被任务使用的标签失败-CASE-000435-/test-finished-1.png；reports/rechecks/CASE-000435/specs-CASE-000435-标签管理---禁用已被任务使用的标签失败-CASE-000435-/trace.zip"
+    },
+    {
+      "id": "A1",
+      "text": "列表页显示该标签状态为“启用”；",
+      "implementation": "禁用前读取标签行第三列并断言状态文本为启用。",
+      "evidence": "reports/rechecks/CASE-000435/specs-CASE-000435-标签管理---禁用已被任务使用的标签失败-CASE-000435-/test-finished-1.png；reports/rechecks/CASE-000435/specs-CASE-000435-标签管理---禁用已被任务使用的标签失败-CASE-000435-/trace.zip"
+    },
+    {
+      "id": "A2",
+      "text": "系统提示该标签已被任务使用，无法禁用；",
+      "implementation": "断言可见消息包含标签已被任务使用、不允许禁用的实际提示。",
+      "evidence": "reports/rechecks/CASE-000435/specs-CASE-000435-标签管理---禁用已被任务使用的标签失败-CASE-000435-/test-finished-1.png；reports/rechecks/CASE-000435/specs-CASE-000435-标签管理---禁用已被任务使用的标签失败-CASE-000435-/trace.zip"
+    },
+    {
+      "id": "A3",
+      "text": "标签状态仍为“启用”，禁用操作未生效。",
+      "implementation": "提示出现后重新读取同一标签行状态，断言仍为启用；定向复核同时验证任务和标签均已逆序清理。",
+      "evidence": "reports/rechecks/CASE-000435/specs-CASE-000435-标签管理---禁用已被任务使用的标签失败-CASE-000435-/test-finished-1.png；reports/rechecks/CASE-000435/specs-CASE-000435-标签管理---禁用已被任务使用的标签失败-CASE-000435-/trace.zip"
+    }
+  ]
+}

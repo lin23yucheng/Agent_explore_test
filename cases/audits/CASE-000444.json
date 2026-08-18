@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000444",
+  "caseContentHash": "1dea8e89202c8240f550da6fcf1bb1ab9d54b51ef3c6caa5f3ca058df3048c75",
+  "contractHash": "b2d520963ac718aa8612f898f24c279cbce2994248d9e2086c986e7fafa3e995",
+  "testTitle": "标签管理 - 编辑标签名称为32个字符的边界值 [CASE-000444]",
+  "file": "tests/ui/specs/CASE-000444.spec.js",
+  "contractFile": "cases/contracts/CASE-000444.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "UI-DIALOG-002",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；存在一个已创建的标签，名称为“测试标签”，状态为启用；该标签未被任何任务使用。",
+      "implementation": "tests/ui/specs/CASE-000444.spec.js: 创建测试标签后改为32字符边界值，核对最终列表并清理；对应契约项P1：已登录系统且具有标签管理权限；存在一个已创建的标签，名称为“测试标签”，状态为启用；该标签未被任何任务使用。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000444.png"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，找到目标标签“测试标签”。",
+      "implementation": "tests/ui/specs/CASE-000444.spec.js: 创建测试标签后改为32字符边界值，核对最终列表并清理；对应契约项S1：进入标签管理列表页，找到目标标签“测试标签”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000444.png"
+    },
+    {
+      "id": "S2",
+      "text": "点击该标签所在行的“编辑”按钮。",
+      "implementation": "tests/ui/specs/CASE-000444.spec.js: 创建测试标签后改为32字符边界值，核对最终列表并清理；对应契约项S2：点击该标签所在行的“编辑”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000444.png"
+    },
+    {
+      "id": "S3",
+      "text": "在编辑弹窗中，将标签名称修改为“12345678901234567890123456789012”。",
+      "implementation": "tests/ui/specs/CASE-000444.spec.js: 创建测试标签后改为32字符边界值，核对最终列表并清理；对应契约项S3：在编辑弹窗中，将标签名称修改为“12345678901234567890123456789012”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000444.png"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”或“保存”按钮。",
+      "implementation": "tests/ui/specs/CASE-000444.spec.js: 创建测试标签后改为32字符边界值，核对最终列表并清理；对应契约项S4：点击“确定”或“保存”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000444.png"
+    },
+    {
+      "id": "A1",
+      "text": "标签管理列表页正常显示，目标标签可见。",
+      "implementation": "tests/ui/specs/CASE-000444.spec.js: 创建测试标签后改为32字符边界值，核对最终列表并清理；对应契约项A1：标签管理列表页正常显示，目标标签可见。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000444.png"
+    },
+    {
+      "id": "A2",
+      "text": "弹出编辑弹窗，标签名称输入框可编辑。",
+      "implementation": "tests/ui/specs/CASE-000444.spec.js: 创建测试标签后改为32字符边界值，核对最终列表并清理；对应契约项A2：弹出编辑弹窗，标签名称输入框可编辑。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000444.png"
+    },
+    {
+      "id": "A3",
+      "text": "输入框内容变为“12345678901234567890123456789012”。",
+      "implementation": "tests/ui/specs/CASE-000444.spec.js: 创建测试标签后改为32字符边界值，核对最终列表并清理；对应契约项A3：输入框内容变为“12345678901234567890123456789012”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000444.png"
+    },
+    {
+      "id": "A4",
+      "text": "保存成功，列表页显示更新后的标签名称“12345678901234567890123456789012”。",
+      "implementation": "tests/ui/specs/CASE-000444.spec.js: 创建测试标签后改为32字符边界值，核对最终列表并清理；对应契约项A4：保存成功，列表页显示更新后的标签名称“12345678901234567890123456789012”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/mutations/CASE-000444.png"
+    }
+  ]
+}

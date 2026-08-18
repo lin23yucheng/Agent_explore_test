@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000414",
+  "caseContentHash": "f6656ceb8cd20501dc65955b6d906d6f5be774ec084a0c733a736f25628af58e",
+  "contractHash": "dfaaa22e59061b7472c2640935320d19e002dcf9851f9985eb206ae00146e4bf",
+  "testTitle": "标签管理 - 验证标签名称仅包含英文字母时创建成功 [CASE-000414]",
+  "file": "tests/ui/specs/CASE-000414.spec.js",
+  "contractFile": "cases/contracts/CASE-000414.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限的用户",
+      "implementation": "tests/ui/specs/CASE-000414.spec.js: 输入纯英文 AICASEFOURONEFOUR，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项P1：已登录系统且具有标签管理权限的用户",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000414.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理页面，点击“新建标签”按钮。",
+      "implementation": "tests/ui/specs/CASE-000414.spec.js: 输入纯英文 AICASEFOURONEFOUR，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项S1：进入标签管理页面，点击“新建标签”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000414.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入“Quality”。",
+      "implementation": "tests/ui/specs/CASE-000414.spec.js: 输入纯英文 AICASEFOURONEFOUR，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项S2：在标签名称输入框中输入“Quality”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000414.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“质量”。",
+      "implementation": "tests/ui/specs/CASE-000414.spec.js: 输入纯英文 AICASEFOURONEFOUR，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项S3：选择分类为“质量”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000414.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”或“保存”按钮。",
+      "implementation": "tests/ui/specs/CASE-000414.spec.js: 输入纯英文 AICASEFOURONEFOUR，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项S4：点击“确定”或“保存”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000414.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "弹出新建标签对话框。",
+      "implementation": "tests/ui/specs/CASE-000414.spec.js: 输入纯英文 AICASEFOURONEFOUR，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项A1：弹出新建标签对话框。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000414.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "输入成功，无错误提示。",
+      "implementation": "tests/ui/specs/CASE-000414.spec.js: 输入纯英文 AICASEFOURONEFOUR，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项A2：输入成功，无错误提示。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000414.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择成功。",
+      "implementation": "tests/ui/specs/CASE-000414.spec.js: 输入纯英文 AICASEFOURONEFOUR，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项A3：分类选择成功。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000414.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A4",
+      "text": "标签创建成功，列表中出现“Quality”。",
+      "implementation": "tests/ui/specs/CASE-000414.spec.js: 输入纯英文 AICASEFOURONEFOUR，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项A4：标签创建成功，列表中出现“Quality”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000414.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    }
+  ]
+}

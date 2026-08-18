@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000435",
+  "caseContentHash": "d19f7da0e181e187120ac830202a80adbfab84e242314ec15e90ec7e3fc77398",
+  "title": "标签管理 - 禁用已被任务使用的标签失败",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "存在一个已被任务引用的标签，且该标签当前状态为启用"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，找到已被任务使用的标签；"
+    },
+    {
+      "id": "S2",
+      "text": "点击该标签的“禁用”按钮；"
+    },
+    {
+      "id": "S3",
+      "text": "观察系统提示。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "列表页显示该标签状态为“启用”；"
+    },
+    {
+      "id": "A2",
+      "text": "系统提示该标签已被任务使用，无法禁用；"
+    },
+    {
+      "id": "A3",
+      "text": "标签状态仍为“启用”，禁用操作未生效。"
+    }
+  ],
+  "contractHash": "df8e38f1549d4bd68d0e385976ca6ff0254d5c9882cdb11310abea29fab9ecda",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

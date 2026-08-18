@@ -148,7 +148,7 @@ python scripts/testflow.py checkpoint-exploration `
 探索通过后仍不能直接把执行结果写为通过。必须生成并晋级脚本：
 
 1. 创建`tests/ui/specs/<CASE-ID>.spec.js`，文件内只有一个测试。
-2. 测试使用`testInfo.annotations.push({ type: 'case', description: '<CASE-ID>' })`关联唯一CASE，测试标题同时包含CASE-ID以区分同名业务用例。
+2. 测试必须在定义阶段使用Playwright test details的`annotation`字段关联唯一CASE，推荐使用`tests/ui/helpers/case-test.js`中的`caseTest`；禁止在测试函数内调用`testInfo.annotations.push`，因为正式报告器在测试执行前的`onBegin`阶段校验绑定。测试标题同时包含CASE-ID以区分同名业务用例。
 3. 脚本必须动态报告清理结果。
 4. 导出当前执行契约。
 5. 生成覆盖审计模板。
@@ -156,6 +156,27 @@ python scripts/testflow.py checkpoint-exploration `
 7. 登记候选脚本并提供直接探索证据。
 8. 生成promotion运行计划。
 9. 通过`run-ui-tests.ps1`正式复跑。
+
+推荐脚本形式：
+
+```javascript
+const { caseTest } = require('../helpers/case-test');
+
+caseTest(
+  'CASE-000001',
+  '任务管理 › 示例用例 [CASE-000001]',
+  async ({ page }) => {
+    // 按契约执行步骤和最终断言。
+  },
+  'not-applicable',
+);
+```
+
+`register-candidate`会在写入候选前静态校验脚本中的测试数量、定义期CASE绑定和登记标题。校验失败不会删除探索检查点，可以直接修正脚本后重新登记，不需要重复页面探索。
+
+同一模块的多条只读用例如果验证同一个页面和同一稳定数据快照，应使用一个浏览器会话完成共享导航、数据读取和证据采集。仍需逐CASE完成检查点和契约项，且共享证据必须覆盖每条CASE的实际断言。
+
+首次进入目标页面时先读取实际可访问结构和控件状态，包括表格数量、表头、数据行、弹窗字段和按钮，再确定稳定定位器并一次性读取本范围所需值。不要在观察DOM前假设第一个`table`、固定`tbody`或控件实现。
 
 登记候选前，先把探索检查点更新为`passed-awaiting-automation`。所有契约项都必须通过重复的`--completed-item`写入，并提供可信清理状态：
 
@@ -195,6 +216,12 @@ python scripts/testflow.py make-run-plan cases/current.csv `
 已有运行计划时可以省略`-SourceCsv`，执行器会读取计划绑定的输入CSV并重新校验路径和SHA-256；如果显式传入`-SourceCsv`，它必须与运行计划完全一致。
 
 promotion通过后自动写为“通过、已自动化”。promotion失败后自动写未通过，并删除候选脚本、契约和审计。
+
+候选脚本不得把多个CASE压缩成只按CASE-ID分支的空泛执行器。每个CASE必须按当前契约逐项实现探索过的控件操作和最终状态断言；自定义下拉、弹窗和确认分支必须使用探索确认过的DOM交互。共享helper只能复用稳定导航和定位逻辑，不能用统一的原生`selectOption`假设替代自定义combobox操作。失败后修复helper或脚本必须重新直接探索受影响CASE，再重新登记候选。
+
+脚本生成前必须读取`cases/known-pitfalls.json`。覆盖审计必须标记`knownPitfallsReviewed=true`并列出适用坑ID；新增坑必须同步写入该清单、`AGENTS.md`和本文，不能只留在对话记录中。
+
+若失败证据已明确归因为`TEST_IMPLEMENTATION_DEFECT`，且页面版本、契约、前置数据和探索证据均未变化，只做失败CASE受影响步骤的定向复核；不要机械重跑整个模块。产品行为、前置数据或需求变化时，才重新完整探索该CASE。
 
 ## 7. 正式回归
 

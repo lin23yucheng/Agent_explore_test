@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000436",
+  "caseContentHash": "a6dc4e969b7a589546ff1d6b095d1928e6c805ce89150f225839d869b6538328",
+  "contractHash": "934f8e00b8cb6b450c437a0246f8ea4ec259210b3183521a3f5e37bb4ce8fa9c",
+  "testTitle": "标签管理 - 列表页创建时间显示年月日时分 [CASE-000436]",
+  "file": "tests/ui/specs/CASE-000436.spec.js",
+  "contractFile": "cases/contracts/CASE-000436.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "系统已登录，存在至少一条标签记录，且该标签的创建时间已知（例如2025-01-15 09:30:45）",
+      "implementation": "tests/ui/specs/CASE-000436.spec.js: 打开列表并逐行读取创建时间，使用YYYY-MM-DD HH:mm正则核对无秒数；对应契约项P1：系统已登录，存在至少一条标签记录，且该标签的创建时间已知（例如2025-01-15 09:30:45）",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-03/readonly/CASE-000436.png；reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-03/readonly/CASE-000436-targeted.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页",
+      "implementation": "tests/ui/specs/CASE-000436.spec.js: 打开列表并逐行读取创建时间，使用YYYY-MM-DD HH:mm正则核对无秒数；对应契约项S1：进入标签管理列表页",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-03/readonly/CASE-000436.png；reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-03/readonly/CASE-000436-targeted.json"
+    },
+    {
+      "id": "S2",
+      "text": "查看列表中每条标签记录的创建时间字段",
+      "implementation": "tests/ui/specs/CASE-000436.spec.js: 打开列表并逐行读取创建时间，使用YYYY-MM-DD HH:mm正则核对无秒数；对应契约项S2：查看列表中每条标签记录的创建时间字段",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-03/readonly/CASE-000436.png；reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-03/readonly/CASE-000436-targeted.json"
+    },
+    {
+      "id": "A1",
+      "text": "标签管理列表页正常显示",
+      "implementation": "tests/ui/specs/CASE-000436.spec.js: 打开列表并逐行读取创建时间，使用YYYY-MM-DD HH:mm正则核对无秒数；对应契约项A1：标签管理列表页正常显示",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-03/readonly/CASE-000436.png；reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-03/readonly/CASE-000436-targeted.json"
+    },
+    {
+      "id": "A2",
+      "text": "创建时间字段显示格式为“年月日 时分”，例如“2025-01-15 09:30”，不包含秒数",
+      "implementation": "tests/ui/specs/CASE-000436.spec.js: 打开列表并逐行读取创建时间，使用YYYY-MM-DD HH:mm正则核对无秒数；对应契约项A2：创建时间字段显示格式为“年月日 时分”，例如“2025-01-15 09:30”，不包含秒数",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-03/readonly/CASE-000436.png；reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-03/readonly/CASE-000436-targeted.json"
+    }
+  ]
+}

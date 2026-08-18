@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000441",
+  "caseContentHash": "1b2848ab8ab340edc96f3e407654019608199a0e273e90a940df93ccc87792c0",
+  "title": "标签管理 - 刚创建标签时创建时间与更新时间一致",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "用户已登录且具有标签管理权限"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，点击“新建标签”按钮。"
+    },
+    {
+      "id": "S2",
+      "text": "填写标签名称（如“测试标签”）和分类（如“质量”），点击“确定”。"
+    },
+    {
+      "id": "S3",
+      "text": "在列表页找到新创建的标签，查看其创建时间和更新时间。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "弹出新建标签窗口。"
+    },
+    {
+      "id": "A2",
+      "text": "创建成功，提示操作成功。"
+    },
+    {
+      "id": "A3",
+      "text": "新标签的创建时间和更新时间显示相同，且均为当前时间。"
+    }
+  ],
+  "contractHash": "9963c1991a07f48764923544f0527780d4e9126d0e10eaae294627411da5e28e",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

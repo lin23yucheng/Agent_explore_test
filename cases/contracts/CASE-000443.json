@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000443",
+  "caseContentHash": "532d0500cb243f68e248017f0381bef34637329e3a607ecfa77fc76abc55b69b",
+  "title": "标签管理 - 编辑标签名称为1个字符的边界值",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；存在一个已创建的标签，名称为“测试标签”，状态为启用；该标签未被任何任务使用。"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，找到目标标签“测试标签”。"
+    },
+    {
+      "id": "S2",
+      "text": "点击该标签所在行的“编辑”按钮。"
+    },
+    {
+      "id": "S3",
+      "text": "在编辑弹窗中，将标签名称修改为“A”。"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”或“保存”按钮。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "标签管理列表页正常显示，目标标签可见。"
+    },
+    {
+      "id": "A2",
+      "text": "弹出编辑弹窗，标签名称输入框可编辑。"
+    },
+    {
+      "id": "A3",
+      "text": "输入框内容变为“A”。"
+    },
+    {
+      "id": "A4",
+      "text": "保存成功，列表页显示更新后的标签名称“A”。"
+    }
+  ],
+  "contractHash": "1c0a2ba5b0722cc64352e660ff6229a3d6e0341229f9d97c02a23141f8d13e6e",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

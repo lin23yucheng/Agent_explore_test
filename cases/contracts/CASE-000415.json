@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000415",
+  "caseContentHash": "066b625120d05e64c10d23653576dbdc2fb31b2706eb2629605873c90bf951be",
+  "title": "标签管理 - 验证标签名称仅包含数字时创建成功",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限的用户"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理页面，点击“新建标签”按钮。"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入“123”。"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“其他”。"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”或“保存”按钮。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "弹出新建标签对话框。"
+    },
+    {
+      "id": "A2",
+      "text": "输入成功，无错误提示。"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择成功。"
+    },
+    {
+      "id": "A4",
+      "text": "标签创建成功，列表中出现“123”。"
+    }
+  ],
+  "contractHash": "7390de93f05102ea37fd1bd0d345adc7989c9bb0293b7753698948c4c0eb4035",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

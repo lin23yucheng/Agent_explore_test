@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000424",
+  "caseContentHash": "2067cc4aeeacc2e4a8cd7a4e2b947c54699a3f66a2256adda3bae5a2115abeb0",
+  "title": "标签管理 - 新增标签时名称长度边界为1时创建成功",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录VLA数据任务平台且具有标签管理权限；标签管理列表页已打开"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "点击“新增标签”按钮"
+    },
+    {
+      "id": "S2",
+      "text": "在“标签名称”输入框中输入单个中文字符“标”"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“其他”"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”提交"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "新增弹窗正常打开"
+    },
+    {
+      "id": "A2",
+      "text": "输入单个字符正常显示"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择正常"
+    },
+    {
+      "id": "A4",
+      "text": "标签创建成功，列表页显示名称为“标”的标签"
+    }
+  ],
+  "contractHash": "35b98462956683c0e1b5f66c0101f4fb4a9e57bf0243f36337799238849df0a0",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

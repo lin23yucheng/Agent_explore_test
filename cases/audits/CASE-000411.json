@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000411",
+  "caseContentHash": "3b61cf4d29b3eea581ad8a68c480abc28fe703df244ee7ea8f7b09adbcc211dd",
+  "contractHash": "faa21eb4f36212b5ec5c51099e581a585efcafc8891b51a363e57c4db4191ea2",
+  "testTitle": "标签管理 - 验证标签名称包含非法字符时提示错误 [CASE-000411]",
+  "file": "tests/ui/specs/CASE-000411.spec.js",
+  "contractFile": "cases/contracts/CASE-000411.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限的用户",
+      "implementation": "tests/ui/specs/CASE-000411.spec.js: 输入 标签@# 并提交，断言实际值不被改写、显示仅支持中英文字母数字且列表无该名称；对应契约项P1：已登录系统且具有标签管理权限的用户",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000411.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理页面，点击“新建标签”按钮。",
+      "implementation": "tests/ui/specs/CASE-000411.spec.js: 输入 标签@# 并提交，断言实际值不被改写、显示仅支持中英文字母数字且列表无该名称；对应契约项S1：进入标签管理页面，点击“新建标签”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000411.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入“标签@#”。",
+      "implementation": "tests/ui/specs/CASE-000411.spec.js: 输入 标签@# 并提交，断言实际值不被改写、显示仅支持中英文字母数字且列表无该名称；对应契约项S2：在标签名称输入框中输入“标签@#”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000411.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "点击“确定”或“保存”按钮。",
+      "implementation": "tests/ui/specs/CASE-000411.spec.js: 输入 标签@# 并提交，断言实际值不被改写、显示仅支持中英文字母数字且列表无该名称；对应契约项S3：点击“确定”或“保存”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000411.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "弹出新建标签对话框。",
+      "implementation": "tests/ui/specs/CASE-000411.spec.js: 输入 标签@# 并提交，断言实际值不被改写、显示仅支持中英文字母数字且列表无该名称；对应契约项A1：弹出新建标签对话框。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000411.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "输入成功，但系统提示“标签名称仅支持中英文字母、数字”。",
+      "implementation": "tests/ui/specs/CASE-000411.spec.js: 输入 标签@# 并提交，断言实际值不被改写、显示仅支持中英文字母数字且列表无该名称；对应契约项A2：输入成功，但系统提示“标签名称仅支持中英文字母、数字”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000411.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "标签创建失败，无法保存。",
+      "implementation": "tests/ui/specs/CASE-000411.spec.js: 输入 标签@# 并提交，断言实际值不被改写、显示仅支持中英文字母数字且列表无该名称；对应契约项A3：标签创建失败，无法保存。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/CASE-000411.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/validation-cancel/validation-cancel-results.json"
+    }
+  ]
+}

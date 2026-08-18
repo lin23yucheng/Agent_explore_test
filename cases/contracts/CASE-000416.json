@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000416",
+  "caseContentHash": "d5a3dbd75da3f1ee6afd79aedab672bacde744188bb1764b6d5531ede4323261",
+  "title": "标签管理 - 新建标签时标签分类默认选中其他",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录VLA数据任务平台且具有标签管理权限；标签管理页面已打开，进入新建标签弹窗或页面"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "点击“新建标签”按钮，打开新建标签表单；"
+    },
+    {
+      "id": "S2",
+      "text": "查看“标签分类”字段的默认选中项；"
+    },
+    {
+      "id": "S3",
+      "text": "输入标签名称（如“测试标签”）；"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”或“保存”按钮提交。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "新建标签表单成功打开；"
+    },
+    {
+      "id": "A2",
+      "text": "“标签分类”字段默认选中“其他”；"
+    },
+    {
+      "id": "A3",
+      "text": "标签名称输入成功；"
+    },
+    {
+      "id": "A4",
+      "text": "标签创建成功，列表中出现该标签，分类显示为“其他”。"
+    }
+  ],
+  "contractHash": "8cc79146893da2817c50b9c2d6fdf5f602a2410d1ae7a979610aa7e262e332da",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

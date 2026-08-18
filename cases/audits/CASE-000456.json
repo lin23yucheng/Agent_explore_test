@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000456",
+  "caseContentHash": "65736010d39adab323056726a4ec722695fb0f3d24f9cad6564f1ee29c1f2065",
+  "contractHash": "101bf06f20445f38fe9b648525f9eef69bed54daca990a58cb054475b1bc639d",
+  "testTitle": "标签管理 - 删除已被任务使用的标签时提示不允许删除 [CASE-000456]",
+  "file": "tests/ui/specs/CASE-000456.spec.js",
+  "contractFile": "cases/contracts/CASE-000456.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "UI-DIALOG-002",
+    "UI-MULTISELECT-003",
+    "DATA-REFERENCE-004",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "存在一个标签（如：标签A），且该标签已被至少一个任务引用；用户已登录并进入标签管理列表页",
+      "implementation": "独立脚本创建专属标签与引用任务，任务表单按真实自定义下拉交互完成，finally严格先删任务再删标签并反查。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000456.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "在标签管理列表页中找到已被任务使用的标签A；",
+      "implementation": "进入标签列表并按专属标签名称定位唯一行。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000456.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "点击标签A对应的“删除”按钮；",
+      "implementation": "在目标标签行点击名称精确匹配的删除按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000456.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "观察系统提示。",
+      "implementation": "先核对删除确认框包含专属标签名，点击确定后等待350毫秒并读取可见消息。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000456.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "标签A显示在列表中；",
+      "implementation": "操作前断言目标标签在列表中恰好存在一行。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000456.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "系统弹出删除确认框或直接触发删除操作；",
+      "implementation": "断言删除确认对话框显示确定删除该专属标签的完整关键文案。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000456.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "系统提示“标签已被任务使用，不允许删除”，且标签A未被删除。",
+      "implementation": "确定后断言可见消息包含标签已被任务使用、不允许删除，且目标标签仍存在一行。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/CASE-000456.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/references/reference-results.json"
+    }
+  ]
+}

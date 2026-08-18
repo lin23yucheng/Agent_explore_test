@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000431",
+  "caseContentHash": "b12cd8fa61582dcf9edc370062cdbbbdf424e20a95896689d4d7a85141320ec5",
+  "title": "标签管理 - 新增标签时选择分类为其他",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；标签管理列表页已打开"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "点击“新增标签”按钮"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框输入“测试标签B”"
+    },
+    {
+      "id": "S3",
+      "text": "在标签分类下拉框中选择“其他”"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”按钮"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "弹出新增标签对话框"
+    },
+    {
+      "id": "A2",
+      "text": "标签名称输入成功"
+    },
+    {
+      "id": "A3",
+      "text": "分类下拉框显示“其他”且被选中"
+    },
+    {
+      "id": "A4",
+      "text": "新增成功，列表中出现该标签，分类显示为“其他”"
+    }
+  ],
+  "contractHash": "e789d4faf75e8efed991045c553c1fef259caf955537c19f23a7c02d594cdf59",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

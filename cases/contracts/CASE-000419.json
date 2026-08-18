@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000419",
+  "caseContentHash": "bab6f55fe3cb61540cb1bb10f7bc0c03c8f4d4f55f638fa203a8c0946fec211e",
+  "title": "标签管理 - 新建标签弹框点击取消不保存已填数据",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录VLA数据任务平台且具有标签管理权限；已进入标签管理页面"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "点击“新建标签”按钮，打开新建标签弹框"
+    },
+    {
+      "id": "S2",
+      "text": "在弹框中输入标签名称“临时标签”并选择分类“其他”"
+    },
+    {
+      "id": "S3",
+      "text": "点击“取消”按钮"
+    },
+    {
+      "id": "S4",
+      "text": "再次点击“新建标签”按钮，打开新建标签弹框"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "新建标签弹框正常打开"
+    },
+    {
+      "id": "A2",
+      "text": "输入和选择操作正常完成"
+    },
+    {
+      "id": "A3",
+      "text": "弹框关闭，未保存任何数据"
+    },
+    {
+      "id": "A4",
+      "text": "再次打开的新建标签弹框为空白状态，不显示上次输入的内容"
+    }
+  ],
+  "contractHash": "2ed3f40680f3e0be09648e2f34ec98bf4944b6857a15f0fc9c06d2f01be747d6",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

@@ -1,0 +1,57 @@
+{
+    "schemaVersion":  1,
+    "caseId":  "CASE-000437",
+    "caseContentHash":  "ed73605eb88d293c4565c7b0a9c7f62950d1cea8a91fec54210b362e1da4aaa5",
+    "contractHash":  "92a4a70ff7b0db410a877f2e6af2d97e9e287bbfaf476464ea4022b158ee9a3f",
+    "testTitle":  "标签管理 - 新增标签后创建时间保持不变 [CASE-000437]",
+    "file":  "tests/ui/specs/CASE-000437.spec.js",
+    "contractFile":  "cases/contracts/CASE-000437.json",
+    "knownPitfallsReviewed":  true,
+    "knownPitfallIds":  [
+                            "AUTOMATION-MAPPING-006"
+                        ],
+    "coverage":  [
+                     {
+                         "id":  "P1",
+                         "text":  "已登录系统且具有标签管理权限，标签列表页存在至少一条已创建的标签",
+                         "implementation":  "tests/ui/specs/CASE-000437.spec.js: 记录首行标签名称和创建时间，刷新页面后按名称重新定位并断言创建时间不变；对应契约项P1：已登录系统且具有标签管理权限，标签列表页存在至少一条已创建的标签",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000437.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S1",
+                         "text":  "进入标签管理列表页，记录某条标签的创建时间；",
+                         "implementation":  "tests/ui/specs/CASE-000437.spec.js: 记录首行标签名称和创建时间，刷新页面后按名称重新定位并断言创建时间不变；对应契约项S1：进入标签管理列表页，记录某条标签的创建时间；",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000437.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S2",
+                         "text":  "等待一段时间（如1分钟）后刷新列表页；",
+                         "implementation":  "tests/ui/specs/CASE-000437.spec.js: 记录首行标签名称和创建时间，刷新页面后按名称重新定位并断言创建时间不变；对应契约项S2：等待一段时间（如1分钟）后刷新列表页；",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000437.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S3",
+                         "text":  "再次查看该标签的创建时间。",
+                         "implementation":  "tests/ui/specs/CASE-000437.spec.js: 记录首行标签名称和创建时间，刷新页面后按名称重新定位并断言创建时间不变；对应契约项S3：再次查看该标签的创建时间。",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000437.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A1",
+                         "text":  "列表页显示该标签的创建时间；",
+                         "implementation":  "tests/ui/specs/CASE-000437.spec.js: 记录首行标签名称和创建时间，刷新页面后按名称重新定位并断言创建时间不变；对应契约项A1：列表页显示该标签的创建时间；",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000437.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A2",
+                         "text":  "列表页刷新成功；",
+                         "implementation":  "tests/ui/specs/CASE-000437.spec.js: 记录首行标签名称和创建时间，刷新页面后按名称重新定位并断言创建时间不变；对应契约项A2：列表页刷新成功；",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000437.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A3",
+                         "text":  "该标签的创建时间与刷新前记录的时间一致，未发生变化。",
+                         "implementation":  "tests/ui/specs/CASE-000437.spec.js: 记录首行标签名称和创建时间，刷新页面后按名称重新定位并断言创建时间不变；对应契约项A3：该标签的创建时间与刷新前记录的时间一致，未发生变化。",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000437.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     }
+                 ]
+}

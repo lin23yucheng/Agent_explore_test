@@ -49,5 +49,7 @@
       "implementation": "expectRole asserts the required role-name cell in the unique matching row.",
       "evidence": "reports/evidence/EXPLORATION-20260817-ROLE-MANAGEMENT/role-management-page.json"
     }
-  ]
+  ],
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": []
 }

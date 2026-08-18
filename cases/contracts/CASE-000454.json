@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000454",
+  "caseContentHash": "041df10c320a8918bd83766788c6d7de1ecc19173ddb1f24f6b5904c5fed12f9",
+  "title": "标签管理 - 删除标签二次确认后成功删除",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；存在一个未被任何任务使用的标签，名称为「标签名称」；标签列表页已打开。"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "在标签列表页找到名称为「标签名称」的标签行；"
+    },
+    {
+      "id": "S2",
+      "text": "点击该行操作列中的“删除”按钮；"
+    },
+    {
+      "id": "S3",
+      "text": "在弹出的二次确认对话框中，点击“确定”按钮。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "标签行显示删除按钮；"
+    },
+    {
+      "id": "A2",
+      "text": "弹出二次确认对话框，提示“确定删除标签「标签名称」吗？”；"
+    },
+    {
+      "id": "A3",
+      "text": "标签被删除，列表不再显示该标签，并出现删除成功的提示。"
+    }
+  ],
+  "contractHash": "e326500d89ae91f605c9901db08dcd14f6b397398418eae2a05f5db3eb9fe8f8",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

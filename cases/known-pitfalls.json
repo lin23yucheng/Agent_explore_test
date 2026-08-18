@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-08-18T09:45:00+09:00",
+  "pitfalls": [
+    {"id":"UI-COMBOBOX-001","scope":"标签管理","symptom":"Element UI 自定义 combobox 不是原生 select，selectOption 会失败或超时","requiredCheck":"读取 tagName 和 role；自定义控件 click 后从可见 option/listbox 选择","source":"reports/evidence/EXPLORATION-20260817-TAGS/tags-readonly.json"},
+    {"id":"UI-DIALOG-002","scope":"标签管理","symptom":"删除有确定确认，禁用无确认框直接执行","requiredCheck":"分别实现删除确认和禁用直执行，并断言最终列表状态","source":"reports/evidence/EXPLORATION-20260817-TAGS/mutations/CASE-000454.png"},
+    {"id":"UI-MULTISELECT-003","scope":"任务引用标签","symptom":"任务创建的标签多选下拉不会自动关闭","requiredCheck":"选择后显式按 Escape 关闭并验证已选标签","source":"reports/evidence/EXPLORATION-20260817-TAGS/references/tasks-and-api.json"},
+    {"id":"DATA-REFERENCE-004","scope":"任务引用标签","symptom":"被任务引用的标签必须先构造独享任务关系","requiredCheck":"不能用普通标签代替引用前置；先删任务再删标签并反查","source":"reports/evidence/EXPLORATION-20260817-TAGS/references/tasks-and-api.json"},
+    {"id":"ASSERT-TOAST-005","scope":"标签管理","symptom":"成功提示后弹窗关闭动画尚未结束会误判","requiredCheck":"等待最终列表或详情状态，不能只断言 toast 或弹窗关闭","source":"reports/evidence/EXPLORATION-20260817-TAGS/create/CASE-000406.png"},
+    {"id":"AUTOMATION-MAPPING-006","scope":"所有模块","symptom":"通用 CASE 分发器会遗漏具体步骤、输入和最终断言","requiredCheck":"逐项映射契约 P/S/A，共享 helper 只封装稳定导航和定位","source":"reports/execution_report.csv"}
+  ]
+}

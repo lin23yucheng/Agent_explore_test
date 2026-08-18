@@ -1,0 +1,57 @@
+{
+    "schemaVersion":  1,
+    "caseId":  "CASE-000390",
+    "caseContentHash":  "678df07e6bf4455b244cd0920cd663e3b19ca55a5e26b4aaa92a457a5f753d4d",
+    "contractHash":  "34787278f67eccbaa1eb19850c8d0232e7bea0e749d3ace0dcb21b812b732a93",
+    "testTitle":  "标签管理 - 按标签名称模糊搜索 [CASE-000390]",
+    "file":  "tests/ui/specs/CASE-000390.spec.js",
+    "contractFile":  "cases/contracts/CASE-000390.json",
+    "knownPitfallsReviewed":  true,
+    "knownPitfallIds":  [
+                            "AUTOMATION-MAPPING-006"
+                        ],
+    "coverage":  [
+                     {
+                         "id":  "P1",
+                         "text":  "已登录系统且具有标签管理权限；已存在至少两个标签，如“质量标签A”和“其他标签B”",
+                         "implementation":  "tests/ui/specs/CASE-000390.spec.js: 打开标签页，输入\u0027质量\u0027并查询，断言输入值、所有名称包含关键字且\u0027训练\u0027被排除；对应契约项P1：已登录系统且具有标签管理权限；已存在至少两个标签，如“质量标签A”和“其他标签B”",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000390.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S1",
+                         "text":  "进入标签管理页面；",
+                         "implementation":  "tests/ui/specs/CASE-000390.spec.js: 打开标签页，输入\u0027质量\u0027并查询，断言输入值、所有名称包含关键字且\u0027训练\u0027被排除；对应契约项S1：进入标签管理页面；",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000390.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S2",
+                         "text":  "在标签名称输入框中输入“质量”；",
+                         "implementation":  "tests/ui/specs/CASE-000390.spec.js: 打开标签页，输入\u0027质量\u0027并查询，断言输入值、所有名称包含关键字且\u0027训练\u0027被排除；对应契约项S2：在标签名称输入框中输入“质量”；",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000390.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "S3",
+                         "text":  "点击查询或等待自动搜索。",
+                         "implementation":  "tests/ui/specs/CASE-000390.spec.js: 打开标签页，输入\u0027质量\u0027并查询，断言输入值、所有名称包含关键字且\u0027训练\u0027被排除；对应契约项S3：点击查询或等待自动搜索。",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000390.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A1",
+                         "text":  "标签管理页面正常显示；",
+                         "implementation":  "tests/ui/specs/CASE-000390.spec.js: 打开标签页，输入\u0027质量\u0027并查询，断言输入值、所有名称包含关键字且\u0027训练\u0027被排除；对应契约项A1：标签管理页面正常显示；",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000390.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A2",
+                         "text":  "输入框可输入且内容正确；",
+                         "implementation":  "tests/ui/specs/CASE-000390.spec.js: 打开标签页，输入\u0027质量\u0027并查询，断言输入值、所有名称包含关键字且\u0027训练\u0027被排除；对应契约项A2：输入框可输入且内容正确；",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000390.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     },
+                     {
+                         "id":  "A3",
+                         "text":  "列表显示所有名称包含“质量”的标签，如“质量标签A”，不显示“其他标签B”。",
+                         "implementation":  "tests/ui/specs/CASE-000390.spec.js: 打开标签页，输入\u0027质量\u0027并查询，断言输入值、所有名称包含关键字且\u0027训练\u0027被排除；对应契约项A3：列表显示所有名称包含“质量”的标签，如“质量标签A”，不显示“其他标签B”。",
+                         "evidence":  "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/CASE-000390.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/readonly/"
+                     }
+                 ]
+}

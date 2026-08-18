@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000426",
+  "caseContentHash": "14a65ddc766d872a56a20290c1b85555fd0d24109b17ceacfacec5668cd4ca05",
+  "title": "标签管理 - 新增标签时名称超过32个字符被拒绝",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录VLA数据任务平台且具有标签管理权限；标签管理列表页已打开"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "点击“新增标签”按钮"
+    },
+    {
+      "id": "S2",
+      "text": "在“标签名称”输入框中输入33个字符（如33个英文字母“a”）"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“质量”"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”提交"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "新增弹窗正常打开"
+    },
+    {
+      "id": "A2",
+      "text": "输入33个字符后，输入框可能限制输入或显示错误提示"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择正常"
+    },
+    {
+      "id": "A4",
+      "text": "提交时提示标签名称长度不能超过32个字符，标签创建失败"
+    }
+  ],
+  "contractHash": "8b8fefb03d97ba8f6480529b6bf99523588c07d8e9cbf63da3908c50f48daf42",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

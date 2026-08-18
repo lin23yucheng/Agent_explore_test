@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000438",
+  "caseContentHash": "72a59b5a63d87136d98a45cd49edae51d350728ba9ad8a6cbee035c7c184ca93",
+  "title": "标签管理 - 列表页更新时间显示格式验证",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "系统已登录，存在至少一条标签数据，且该标签的更新时间已记录"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页"
+    },
+    {
+      "id": "S2",
+      "text": "查看列表中每条标签的“更新时间”列"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "标签管理列表页正常展示标签列表"
+    },
+    {
+      "id": "A2",
+      "text": "每条标签的“更新时间”列均以“年月日 时分”格式显示，例如“2025-01-01 12:30”"
+    }
+  ],
+  "contractHash": "f1ded1dd80eaa0ccede70cb8ba0380a277232675d7525da3bdcd61474cb2b61d",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "A1",
+      "A2"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

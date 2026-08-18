@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000412",
+  "caseContentHash": "30c32ea154af78535c438a40d3a6ef606d882aee60662072caaae01ae687393a",
+  "title": "标签管理 - 验证标签名称包含空格时提示错误",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限的用户"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理页面，点击“新建标签”按钮。"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入“标签 123”。"
+    },
+    {
+      "id": "S3",
+      "text": "点击“确定”或“保存”按钮。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "弹出新建标签对话框。"
+    },
+    {
+      "id": "A2",
+      "text": "输入成功，但系统提示“标签名称仅支持中英文字母、数字”。"
+    },
+    {
+      "id": "A3",
+      "text": "标签创建失败，无法保存。"
+    }
+  ],
+  "contractHash": "876ddf8fb40d83aa4c9f95680b2ea520355c8967a2d5539b5d13f73ce9fef6bd",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

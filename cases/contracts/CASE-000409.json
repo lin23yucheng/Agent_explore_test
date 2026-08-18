@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000409",
+  "caseContentHash": "1f3c0940ac79290b5d8ec844cbb58829aa8592a32d9c19d9aa0cf299927f9b7d",
+  "title": "标签管理 - 验证标签名称长度为33时创建失败",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限的用户"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理页面，点击“新建标签”按钮。"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入长度为33的合法字符（如“abcdefghijklmnopqrstuvwxyz1234567”）。"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“质量”。"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”提交。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "弹出新建标签对话框。"
+    },
+    {
+      "id": "A2",
+      "text": "输入成功，但可能被限制或提示长度错误。"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择成功。"
+    },
+    {
+      "id": "A4",
+      "text": "系统提示“标签名称长度必须在1到32之间”，创建失败。"
+    }
+  ],
+  "contractHash": "ceeb67bedb6051fc2a5e21762a8e955e41e2e997f6479e446860f4b55ce6da54",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

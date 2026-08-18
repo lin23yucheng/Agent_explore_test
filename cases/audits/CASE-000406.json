@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000406",
+  "caseContentHash": "6f64795d603ea4021cab766016aa27d7c955bac5df1d7099fdd478254555ae3a",
+  "contractHash": "91dc5e043447e3f6328bf34474761ee7746634ed747520680fc97d1a09adb42b",
+  "testTitle": "标签管理 - 验证标签名称长度为1时创建成功 [CASE-000406]",
+  "file": "tests/ui/specs/CASE-000406.spec.js",
+  "contractFile": "cases/contracts/CASE-000406.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限的用户",
+      "implementation": "tests/ui/specs/CASE-000406.spec.js: 输入单字符 Z，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项P1：已登录系统且具有标签管理权限的用户",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000406.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理页面，点击“新建标签”按钮。",
+      "implementation": "tests/ui/specs/CASE-000406.spec.js: 输入单字符 Z，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项S1：进入标签管理页面，点击“新建标签”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000406.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入长度为1的合法字符（如“a”）。",
+      "implementation": "tests/ui/specs/CASE-000406.spec.js: 输入单字符 Z，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项S2：在标签名称输入框中输入长度为1的合法字符（如“a”）。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000406.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“质量”。",
+      "implementation": "tests/ui/specs/CASE-000406.spec.js: 输入单字符 Z，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项S3：选择分类为“质量”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000406.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”提交。",
+      "implementation": "tests/ui/specs/CASE-000406.spec.js: 输入单字符 Z，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项S4：点击“确定”提交。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000406.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "弹出新建标签对话框。",
+      "implementation": "tests/ui/specs/CASE-000406.spec.js: 输入单字符 Z，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项A1：弹出新建标签对话框。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000406.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "输入成功，无长度错误提示。",
+      "implementation": "tests/ui/specs/CASE-000406.spec.js: 输入单字符 Z，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项A2：输入成功，无长度错误提示。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000406.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择成功。",
+      "implementation": "tests/ui/specs/CASE-000406.spec.js: 输入单字符 Z，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项A3：分类选择成功。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000406.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    },
+    {
+      "id": "A4",
+      "text": "标签创建成功，列表中出现该标签，名称显示为“a”。",
+      "implementation": "tests/ui/specs/CASE-000406.spec.js: 输入单字符 Z，选择质量，提交后核对名称、分类和启用状态，并在 finally 删除后反查；对应契约项A4：标签创建成功，列表中出现该标签，名称显示为“a”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/CASE-000406.png；reports/evidence/EXPLORATION-20260818-TAGS-STRICT-01/create-success/create-success-results.json"
+    }
+  ]
+}

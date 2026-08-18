@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000402",
+  "caseContentHash": "c1feb1e71b0b433d1ce5be9eb9c943c227ddb52bebf2a6a78bc14fe9e004cd86",
+  "title": "标签管理 - 按标签名称模糊查询",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；系统中存在标签名称“质量标签”和“质量检查”"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理页面"
+    },
+    {
+      "id": "S2",
+      "text": "在查询输入框中输入“质量”"
+    },
+    {
+      "id": "S3",
+      "text": "点击查询按钮"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "标签管理页面正常显示标签列表"
+    },
+    {
+      "id": "A2",
+      "text": "查询输入框显示“质量”"
+    },
+    {
+      "id": "A3",
+      "text": "列表显示所有名称包含“质量”的标签记录，如“质量标签”和“质量检查”"
+    }
+  ],
+  "contractHash": "cafe45932c368e32d74f2b63c68a5c37a8f2220a22cba370c50d8076cdf52588",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

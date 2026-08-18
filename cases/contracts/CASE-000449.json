@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000449",
+  "caseContentHash": "e242f39e215d48592beab377089abc3ee57e026575860f61090a5139e637de7f",
+  "title": "标签管理 - 编辑标签名称输入特殊字符被拒绝",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "存在一个已创建的标签，未被任何任务使用"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，点击目标标签的“编辑”按钮。"
+    },
+    {
+      "id": "S2",
+      "text": "在标签名称输入框中输入“标签@#”。"
+    },
+    {
+      "id": "S3",
+      "text": "尝试保存。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "编辑弹窗打开，标签名称输入框可编辑。"
+    },
+    {
+      "id": "A2",
+      "text": "输入内容“标签@#”被拒绝或提示格式错误。"
+    },
+    {
+      "id": "A3",
+      "text": "保存被阻止，提示标签名称仅支持中英文字母、数字，标签名称未修改。"
+    }
+  ],
+  "contractHash": "9f46bcf86297b5fcb99bf309dc0bbc5951d2b5b409b06fff2ab8c4ba47678fb6",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

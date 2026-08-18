@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000405",
+  "caseContentHash": "cdb9b9f7078a59a0a92f25b18498445eeb6a427485efe542722c8cd4b9e8241c",
+  "contractHash": "f92353660087979655a7d168aa385248466f4139b73345871f0e1455b052d7cd",
+  "testTitle": "标签管理 - 重置后回到默认为空并查询 [CASE-000405]",
+  "file": "tests/ui/specs/CASE-000405.spec.js",
+  "contractFile": "cases/contracts/CASE-000405.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统并进入标签管理页面，存在至少一条标签数据，且当前列表已通过搜索条件（如名称或分类）过滤出部分结果",
+      "implementation": "tests/ui/specs/CASE-000405.spec.js: 按质量过滤、重置为空并按训练再次查询，核对每个最终列表；对应契约项P1：已登录系统并进入标签管理页面，存在至少一条标签数据，且当前列表已通过搜索条件（如名称或分类）过滤出部分结果",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/readonly/CASE-000405.png"
+    },
+    {
+      "id": "S1",
+      "text": "在标签管理页面的搜索框中输入关键词或选择分类，点击“查询”按钮，确认列表显示过滤后的结果；",
+      "implementation": "tests/ui/specs/CASE-000405.spec.js: 按质量过滤、重置为空并按训练再次查询，核对每个最终列表；对应契约项S1：在标签管理页面的搜索框中输入关键词或选择分类，点击“查询”按钮，确认列表显示过滤后的结果；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/readonly/CASE-000405.png"
+    },
+    {
+      "id": "S2",
+      "text": "点击“重置”按钮；",
+      "implementation": "tests/ui/specs/CASE-000405.spec.js: 按质量过滤、重置为空并按训练再次查询，核对每个最终列表；对应契约项S2：点击“重置”按钮；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/readonly/CASE-000405.png"
+    },
+    {
+      "id": "S3",
+      "text": "在搜索框中输入新的关键词或选择新的分类，点击“查询”按钮。",
+      "implementation": "tests/ui/specs/CASE-000405.spec.js: 按质量过滤、重置为空并按训练再次查询，核对每个最终列表；对应契约项S3：在搜索框中输入新的关键词或选择新的分类，点击“查询”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/readonly/CASE-000405.png"
+    },
+    {
+      "id": "A1",
+      "text": "列表显示符合搜索条件的标签数据；",
+      "implementation": "tests/ui/specs/CASE-000405.spec.js: 按质量过滤、重置为空并按训练再次查询，核对每个最终列表；对应契约项A1：列表显示符合搜索条件的标签数据；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/readonly/CASE-000405.png"
+    },
+    {
+      "id": "A2",
+      "text": "搜索框内容被清空，分类选择恢复为默认（如“全部”），列表显示所有标签数据，回到默认为空状态；",
+      "implementation": "tests/ui/specs/CASE-000405.spec.js: 按质量过滤、重置为空并按训练再次查询，核对每个最终列表；对应契约项A2：搜索框内容被清空，分类选择恢复为默认（如“全部”），列表显示所有标签数据，回到默认为空状态；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/readonly/CASE-000405.png"
+    },
+    {
+      "id": "A3",
+      "text": "列表显示符合新查询条件的标签数据。",
+      "implementation": "tests/ui/specs/CASE-000405.spec.js: 按质量过滤、重置为空并按训练再次查询，核对每个最终列表；对应契约项A3：列表显示符合新查询条件的标签数据。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-FAILED-RERUN-02/readonly/CASE-000405.png"
+    }
+  ]
+}

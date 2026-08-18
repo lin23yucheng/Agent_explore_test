@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000423",
+  "caseContentHash": "ccaa0551638b1f8b75c204b401aa19670b809b6494140b85d55397aa757b5fa1",
+  "title": "标签管理 - 新增标签时填写合法名称成功创建",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "已登录VLA数据任务平台且具有标签管理权限；标签管理列表页已打开"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "点击“新增标签”按钮，打开新增弹窗"
+    },
+    {
+      "id": "S2",
+      "text": "在“标签名称”输入框中输入合法的中英文数字组合，如“测试标签123”"
+    },
+    {
+      "id": "S3",
+      "text": "选择分类为“质量”"
+    },
+    {
+      "id": "S4",
+      "text": "点击“确定”提交"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "新增弹窗正常打开，标签名称输入框可编辑"
+    },
+    {
+      "id": "A2",
+      "text": "输入内容正常显示，无格式错误提示"
+    },
+    {
+      "id": "A3",
+      "text": "分类选择正常"
+    },
+    {
+      "id": "A4",
+      "text": "标签创建成功，列表页出现新标签，名称与输入一致，状态为启用，创建时间显示当前时间"
+    }
+  ],
+  "contractHash": "027e049e4b49d3609f63d0a2c73eef973b45cd8143332edf54eb574b050e2ef5",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}

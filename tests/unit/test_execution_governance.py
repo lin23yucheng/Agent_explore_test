@@ -97,6 +97,8 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
             "testTitle": test_title,
             "file": spec_file,
             "contractFile": str(contract_path.relative_to(self.root)).replace("\\", "/"),
+            "knownPitfallsReviewed": True,
+            "knownPitfallIds": [],
             "coverage": coverage,
         })
         return audit_path
@@ -106,7 +108,10 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
         spec_file = f"tests/ui/specs/{case_id}.spec.js"
         title = f"用户管理 › 创建用户 [{case_id}]"
         spec_path = self.root / spec_file
-        spec_path.write_text("const testBody = 'current case implementation';\n", encoding="utf-8")
+        spec_path.write_text(
+            f"test('{title}', {{ annotation: {{ type: 'case', description: '{case_id}' }} }}, async () => {{}});\n",
+            encoding="utf-8",
+        )
         audit = self.make_complete_audit(self.case, title, spec_file)
         coverage_ids = self.flow.execution_contract(self.case)["completionGate"]["requiredCoverageIds"]
         with redirect_stdout(io.StringIO()):
@@ -280,6 +285,59 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
             self.flow.register_candidate("CASE-000001", "用户管理 › 创建用户",
                                          spec_file, audit, "直接探索通过")
 
+    def test_candidate_rejects_plural_annotations_before_checkpoint_is_removed(self):
+        case_id = self.case["用例ID"]
+        spec_file = f"tests/ui/specs/{case_id}.spec.js"
+        title = f"用户管理 › 创建用户 [{case_id}]"
+        (self.root / spec_file).write_text(
+            f"test('{title}', {{ annotations: [{{ type: 'case', description: '{case_id}' }}] }}, async () => {{}});\n",
+            encoding="utf-8",
+        )
+        audit = self.make_complete_audit(self.case, title, spec_file)
+        coverage_ids = self.flow.execution_contract(self.case)["completionGate"]["requiredCoverageIds"]
+        with redirect_stdout(io.StringIO()):
+            self.flow.checkpoint_exploration(
+                case_id, "passed-awaiting-automation", completed_items=coverage_ids,
+                evidence=["直接探索已验证最终列表"], cleanup_status="not-applicable",
+            )
+        checkpoint = self.flow.exploration_checkpoint_path(case_id)
+        with self.assertRaisesRegex(SystemExit, "测试定义阶段关联唯一CASE-ID"):
+            self.flow.register_candidate(case_id, title, spec_file, audit, "直接探索通过")
+        self.assertTrue(checkpoint.exists())
+        self.assertFalse((self.flow.CANDIDATES_ROOT / f"{case_id}.json").exists())
+
+    def test_candidate_rejects_runtime_case_annotation(self):
+        spec = self.flow.SPECS_ROOT / "CASE-000001.spec.js"
+        title = "用户管理 › 创建用户 [CASE-000001]"
+        spec.write_text(
+            f"test('{title}', async ({{}}, testInfo) => {{ testInfo.annotations.push({{ type: 'case', description: 'CASE-000001' }}); }});\n",
+            encoding="utf-8",
+        )
+        with self.assertRaisesRegex(SystemExit, "不能在测试运行时追加"):
+            self.flow.validate_candidate_spec_binding(spec, "CASE-000001", title)
+
+    def test_candidate_rejects_generic_case_dispatcher(self):
+        case_id = self.case["用例ID"]
+        spec_file = f"tests/ui/specs/{case_id}.spec.js"
+        title = f"用户管理 › 创建用户 [{case_id}]"
+        (self.root / spec_file).write_text(
+            "const { caseTest } = require('../helpers/case-test');\n"
+            "const { runTagCase } = require('../helpers/tags');\n"
+            f"caseTest('{case_id}', '{title}', async ({{ page }}) => {{\n"
+            f"  await runTagCase(page, '{case_id}');\n"
+            "}, 'not-applicable');\n",
+            encoding="utf-8",
+        )
+        audit = self.make_complete_audit(self.case, title, spec_file)
+        coverage_ids = self.flow.execution_contract(self.case)["completionGate"]["requiredCoverageIds"]
+        with redirect_stdout(io.StringIO()):
+            self.flow.checkpoint_exploration(
+                case_id, "passed-awaiting-automation", completed_items=coverage_ids,
+                evidence=["直接探索已验证最终列表"], cleanup_status="not-applicable",
+            )
+        with self.assertRaisesRegex(SystemExit, "通用CASE分派器"):
+            self.flow.register_candidate(case_id, title, spec_file, audit, "直接探索通过")
+
     def test_promotion_pass_creates_active_automation_and_pass_result(self):
         title, spec_file, _ = self.register_candidate()
         plan = self.promotion_plan()
@@ -369,7 +427,10 @@ class CurrentSnapshotGovernanceTests(unittest.TestCase):
         spec_file = f"tests/ui/specs/{case_id}.spec.js"
         title = f"用户管理 › 创建用户 [{case_id}]"
         spec_path = self.root / spec_file
-        spec_path.write_text("const testBody = 'custom assets';\n", encoding="utf-8")
+        spec_path.write_text(
+            f"test('{title}', {{ annotation: {{ type: 'case', description: '{case_id}' }} }}, async () => {{}});\n",
+            encoding="utf-8",
+        )
         audit_path = self.flow.AUDITS_ROOT / "custom" / "coverage.json"
         contract_path = self.flow.CONTRACTS_ROOT / "custom" / "contract.json"
         audit = self.make_complete_audit(
