@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000538",
+  "caseContentHash": "83dc23384bcd4e2a772c57d9ccdfdbd9c8c77af6c00c9cc43325554deab347f3",
+  "contractHash": "1c3faa9feae45f95e1ee7a62f5be03a98058630c37a6b9ecf1f1bc04db878620",
+  "testTitle": "标签管理 - 编辑标签名称唯一性校验提示 [CASE-000538]",
+  "file": "tests/ui/specs/CASE-000538.spec.js",
+  "contractFile": "cases/contracts/CASE-000538.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "UI-DIALOG-002",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "已登录系统且具有标签管理权限；存在两个标签，标签A名称为“标签A”，标签B名称为“标签B”；当前编辑标签A",
+      "implementation": "tests/ui/specs/CASE-000538.spec.js: 创建标签A和标签B，编辑标签A为标签B，断言重复提示、输入框无is-error、保存被阻止且两条原记录保留，并在finally中清理；对应契约项P1：已登录系统且具有标签管理权限；存在两个标签，标签A名称为“标签A”，标签B名称为“标签B”；当前编辑标签A",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/CASE-000538.png；reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/new-cases-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，找到标签A所在行，点击“编辑”按钮。",
+      "implementation": "tests/ui/specs/CASE-000538.spec.js: 创建标签A和标签B，编辑标签A为标签B，断言重复提示、输入框无is-error、保存被阻止且两条原记录保留，并在finally中清理；对应契约项S1：进入标签管理列表页，找到标签A所在行，点击“编辑”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/CASE-000538.png；reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/new-cases-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "在编辑弹窗中，将标签名称输入框内容修改为“标签B”（与已有标签B重名）。",
+      "implementation": "tests/ui/specs/CASE-000538.spec.js: 创建标签A和标签B，编辑标签A为标签B，断言重复提示、输入框无is-error、保存被阻止且两条原记录保留，并在finally中清理；对应契约项S2：在编辑弹窗中，将标签名称输入框内容修改为“标签B”（与已有标签B重名）。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/CASE-000538.png；reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/new-cases-results.json"
+    },
+    {
+      "id": "S3",
+      "text": "点击“确定”或“保存”按钮。",
+      "implementation": "tests/ui/specs/CASE-000538.spec.js: 创建标签A和标签B，编辑标签A为标签B，断言重复提示、输入框无is-error、保存被阻止且两条原记录保留，并在finally中清理；对应契约项S3：点击“确定”或“保存”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/CASE-000538.png；reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/new-cases-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "编辑弹窗打开，标签名称输入框回显“标签A”。",
+      "implementation": "tests/ui/specs/CASE-000538.spec.js: 创建标签A和标签B，编辑标签A为标签B，断言重复提示、输入框无is-error、保存被阻止且两条原记录保留，并在finally中清理；对应契约项A1：编辑弹窗打开，标签名称输入框回显“标签A”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/CASE-000538.png；reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/new-cases-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "输入框内容变为“标签B”。",
+      "implementation": "tests/ui/specs/CASE-000538.spec.js: 创建标签A和标签B，编辑标签A为标签B，断言重复提示、输入框无is-error、保存被阻止且两条原记录保留，并在finally中清理；对应契约项A2：输入框内容变为“标签B”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/CASE-000538.png；reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/new-cases-results.json"
+    },
+    {
+      "id": "A3",
+      "text": "系统提示“标签名已存在”，输入框不报红，保存操作被阻止，标签A名称仍为“标签A”。",
+      "implementation": "tests/ui/specs/CASE-000538.spec.js: 创建标签A和标签B，编辑标签A为标签B，断言重复提示、输入框无is-error、保存被阻止且两条原记录保留，并在finally中清理；对应契约项A3：系统提示“标签名已存在”，输入框不报红，保存操作被阻止，标签A名称仍为“标签A”。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/CASE-000538.png；reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/new-cases-results.json"
+    }
+  ]
+}

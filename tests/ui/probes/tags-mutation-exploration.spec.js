@@ -113,8 +113,12 @@ async function exploreDisable(page, result, evidence, config) {
       expect(result.details.updateTime > creationTime).toBeTruthy();
     }
     await capture(page, evidence);
-    expect(dialogVisible, '当前用例明确要求禁用确认弹窗').toBeTruthy();
-    expect(messages.join(' ')).toMatch(/禁用成功|操作成功/);
+    if (config.expectDialog === false) {
+      expect(dialogVisible, '当前用例明确要求禁用直接生效且无确认弹窗').toBeFalsy();
+    } else {
+      expect(dialogVisible, '当前用例明确要求禁用确认弹窗').toBeTruthy();
+    }
+    expect(messages.join(' ')).toMatch(/禁用成功|操作成功|已禁用/);
   } finally {
     await cleanupNames(page, result, [name]);
   }
@@ -204,7 +208,7 @@ async function exploreInvalidEdit(page, result, evidence, config) {
   }
 }
 
-async function exploreDuplicateEdit(page, result, evidence) {
+async function exploreDuplicateEdit(page, result, evidence, config) {
   const first = await createTrackedTag(page, result, '标签A');
   const second = await createTrackedTag(page, result, '标签B');
   try {
@@ -228,8 +232,13 @@ async function exploreDuplicateEdit(page, result, evidence) {
     };
     expect(result.details.dialogVisible).toBeTruthy();
     expect([...result.details.messages, ...result.details.errors].join(' ')).toContain('标签名已存在');
-    expect(result.details.formItemClass).toContain('is-error');
-    expect(result.details.errors.length).toBeGreaterThan(0);
+    if (config.expectRed === false) {
+      expect(result.details.formItemClass).not.toContain('is-error');
+      expect(result.details.errors).toHaveLength(0);
+    } else {
+      expect(result.details.formItemClass).toContain('is-error');
+      expect(result.details.errors.length).toBeGreaterThan(0);
+    }
     expect(result.details.firstCount).toBe(1);
     expect(result.details.secondCount).toBe(1);
     await capture(page, evidence);
@@ -289,7 +298,7 @@ async function exploreCase(page, results, config) {
     if (config.kind === 'create-times') await exploreCreateTimes(page, result, evidence);
     if (config.kind === 'valid-edit') await exploreValidEdit(page, result, evidence, config);
     if (config.kind === 'invalid-edit') await exploreInvalidEdit(page, result, evidence, config);
-    if (config.kind === 'duplicate-edit') await exploreDuplicateEdit(page, result, evidence);
+    if (config.kind === 'duplicate-edit') await exploreDuplicateEdit(page, result, evidence, config);
     if (config.kind === 'delete') await exploreDelete(page, result, evidence, config.cancelDelete);
     await capture(page, evidence);
     const args = [
@@ -334,6 +343,8 @@ test('标签管理编辑禁用删除CASE直接探索', async ({ page }) => {
     { caseId: 'CASE-000451', kind: 'duplicate-edit' },
     { caseId: 'CASE-000454', kind: 'delete', cancelDelete: false },
     { caseId: 'CASE-000455', kind: 'delete', cancelDelete: true },
+    { caseId: 'CASE-000537', kind: 'disable', name: 'AI537禁用标签', expectDialog: false },
+    { caseId: 'CASE-000538', kind: 'duplicate-edit', expectRed: false },
   ];
   const requestedCaseIds = new Set(
     (process.env.EXPLORATION_CASES || process.env.TAG_EXPLORATION_CASE_ID || '')

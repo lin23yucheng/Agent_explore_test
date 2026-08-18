@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-18T15:14:47+08:00",
+  "updatedAt": "2026-08-18T15:44:54+08:00",
   "cases": {
     "CASE-000381": {
       "schemaVersion": 1,
@@ -1036,6 +1036,36 @@
       "exploredAt": "2026-08-18T15:13:56+08:00",
       "lastPassedAt": "2026-08-18T07:14:39.363Z",
       "lastRunId": "20260818T071427877Z"
+    },
+    "CASE-000537": {
+      "schemaVersion": 1,
+      "status": "active",
+      "caseId": "CASE-000537",
+      "caseContentHash": "bf2a5876871f9943b86ed2d1f453da8d30dc24dbbb3e3aac9426154c9bf72a7c",
+      "contractHash": "32ad088209ba2e99c6d28a79bb8d51d5e197b56797b629d021d8b043eb1f2e6d",
+      "testTitle": "标签管理 - 禁用标签后直接生效 [CASE-000537]",
+      "file": "tests/ui/specs/CASE-000537.spec.js",
+      "implementationHash": "77de5fa04ad9fb1e7e09ee8cf416d605810519393e6dc900b7202e3a99998d4d",
+      "auditFile": "cases/audits/CASE-000537.json",
+      "auditHash": "93925f04daa5318e0c7966c1b9c15d45f2a0754c966195c39b9df969a374e3cc",
+      "exploredAt": "2026-08-18T15:42:56+08:00",
+      "lastPassedAt": "2026-08-18T07:44:24.510Z",
+      "lastRunId": "20260818T074416632Z"
+    },
+    "CASE-000538": {
+      "schemaVersion": 1,
+      "status": "active",
+      "caseId": "CASE-000538",
+      "caseContentHash": "83dc23384bcd4e2a772c57d9ccdfdbd9c8c77af6c00c9cc43325554deab347f3",
+      "contractHash": "1c3faa9feae45f95e1ee7a62f5be03a98058630c37a6b9ecf1f1bc04db878620",
+      "testTitle": "标签管理 - 编辑标签名称唯一性校验提示 [CASE-000538]",
+      "file": "tests/ui/specs/CASE-000538.spec.js",
+      "implementationHash": "42e9329c7d9b1756ae28cd1483d3e78b2f5d2a9294f5a174799d5c54f1ff7543",
+      "auditFile": "cases/audits/CASE-000538.json",
+      "auditHash": "1e63d9549ea4f3cefa1bd94a2f787e7668dd44bb951c55925e3ef769fba60547",
+      "exploredAt": "2026-08-18T15:42:57+08:00",
+      "lastPassedAt": "2026-08-18T07:44:24.510Z",
+      "lastRunId": "20260818T074416632Z"
     }
   }
 }

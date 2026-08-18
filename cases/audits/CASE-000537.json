@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000537",
+  "caseContentHash": "bf2a5876871f9943b86ed2d1f453da8d30dc24dbbb3e3aac9426154c9bf72a7c",
+  "contractHash": "32ad088209ba2e99c6d28a79bb8d51d5e197b56797b629d021d8b043eb1f2e6d",
+  "testTitle": "标签管理 - 禁用标签后直接生效 [CASE-000537]",
+  "file": "tests/ui/specs/CASE-000537.spec.js",
+  "contractFile": "cases/contracts/CASE-000537.json",
+  "knownPitfallsReviewed": true,
+  "knownPitfallIds": [
+    "UI-COMBOBOX-001",
+    "UI-DIALOG-002",
+    "ASSERT-TOAST-005",
+    "AUTOMATION-MAPPING-006"
+  ],
+  "coverage": [
+    {
+      "id": "P1",
+      "text": "存在至少一个状态为启用的标签，且该标签未被任何任务使用",
+      "implementation": "tests/ui/specs/CASE-000537.spec.js: 创建独享启用标签，点击禁用后断言无对话框、状态直接变为禁用、出现“标签已禁用”提示，并在finally中删除反查；对应契约项P1：存在至少一个状态为启用的标签，且该标签未被任何任务使用",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/CASE-000537.png；reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/new-cases-results.json"
+    },
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，找到目标启用状态的标签；",
+      "implementation": "tests/ui/specs/CASE-000537.spec.js: 创建独享启用标签，点击禁用后断言无对话框、状态直接变为禁用、出现“标签已禁用”提示，并在finally中删除反查；对应契约项S1：进入标签管理列表页，找到目标启用状态的标签；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/CASE-000537.png；reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/new-cases-results.json"
+    },
+    {
+      "id": "S2",
+      "text": "点击该标签的“禁用”按钮。",
+      "implementation": "tests/ui/specs/CASE-000537.spec.js: 创建独享启用标签，点击禁用后断言无对话框、状态直接变为禁用、出现“标签已禁用”提示，并在finally中删除反查；对应契约项S2：点击该标签的“禁用”按钮。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/CASE-000537.png；reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/new-cases-results.json"
+    },
+    {
+      "id": "A1",
+      "text": "列表页显示该标签状态为“启用”；",
+      "implementation": "tests/ui/specs/CASE-000537.spec.js: 创建独享启用标签，点击禁用后断言无对话框、状态直接变为禁用、出现“标签已禁用”提示，并在finally中删除反查；对应契约项A1：列表页显示该标签状态为“启用”；",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/CASE-000537.png；reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/new-cases-results.json"
+    },
+    {
+      "id": "A2",
+      "text": "系统不弹出二次确认提示，标签直接变为“禁用”，列表页状态列显示“禁用”，并出现操作成功提示。",
+      "implementation": "tests/ui/specs/CASE-000537.spec.js: 创建独享启用标签，点击禁用后断言无对话框、状态直接变为禁用、出现“标签已禁用”提示，并在finally中删除反查；对应契约项A2：系统不弹出二次确认提示，标签直接变为“禁用”，列表页状态列显示“禁用”，并出现操作成功提示。",
+      "evidence": "reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/CASE-000537.png；reports/evidence/EXPLORATION-20260818-TAGS-NEW-CASES-01/mutations/new-cases-results.json"
+    }
+  ]
+}

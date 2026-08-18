@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-000537",
+  "caseContentHash": "bf2a5876871f9943b86ed2d1f453da8d30dc24dbbb3e3aac9426154c9bf72a7c",
+  "title": "标签管理 - 禁用标签后直接生效",
+  "preconditions": [
+    {
+      "id": "P1",
+      "text": "存在至少一个状态为启用的标签，且该标签未被任何任务使用"
+    }
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "text": "进入标签管理列表页，找到目标启用状态的标签；"
+    },
+    {
+      "id": "S2",
+      "text": "点击该标签的“禁用”按钮。"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "A1",
+      "text": "列表页显示该标签状态为“启用”；"
+    },
+    {
+      "id": "A2",
+      "text": "系统不弹出二次确认提示，标签直接变为“禁用”，列表页状态列显示“禁用”，并出现操作成功提示。"
+    }
+  ],
+  "contractHash": "32ad088209ba2e99c6d28a79bb8d51d5e197b56797b629d021d8b043eb1f2e6d",
+  "completionGate": {
+    "requiredCoverageIds": [
+      "P1",
+      "S1",
+      "S2",
+      "A1",
+      "A2"
+    ],
+    "passRequiresCompleteCoverage": true
+  }
+}
