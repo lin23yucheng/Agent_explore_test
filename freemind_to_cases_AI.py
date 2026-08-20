@@ -17,7 +17,7 @@ load_dotenv()  # 加载环境变量
 
 # ===== LLM 配置 =====
 INCLUDE_PARENT = False  # 仅提取叶子节点
-FREEMIND_FILE = "VLA数据任务平台-V1.0.mm"
+FREEMIND_FILE = "VLA数据任务平台-V1.2.mm"
 DEFAULT_PROVIDER = "deepseek"
 SUPPORTED_PROVIDERS = {"deepseek", "zhipu", "github", "openai_compatible"}
 
@@ -34,12 +34,15 @@ LLM_TIMEOUT_SECONDS = int(os.getenv("LLM_TIMEOUT_SECONDS", "90"))
 LLM_CONNECT_TIMEOUT_SECONDS = int(os.getenv("LLM_CONNECT_TIMEOUT_SECONDS", "10"))
 LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "3"))
 LLM_FULL_CASE_MAX_TOKENS = int(os.getenv("LLM_FULL_CASE_MAX_TOKENS", "4000"))
-LLM_PROJECT_SUMMARY_MAX_TOKENS = int(os.getenv("LLM_PROJECT_SUMMARY_MAX_TOKENS", "8000"))
+LLM_PROJECT_SUMMARY_MAX_TOKENS = int(os.getenv("LLM_PROJECT_SUMMARY_MAX_TOKENS", "24000"))
 LLM_PROJECT_SUMMARY_TIMEOUT_SECONDS = int(os.getenv("LLM_PROJECT_SUMMARY_TIMEOUT_SECONDS", "180"))
-PROJECT_SUMMARY_CACHE_VERSION = 2
+PROJECT_SUMMARY_CACHE_VERSION = 6
 # 仅用于日志预警，不会截断任何思维导图测试点上下文。
 LLM_CONTEXT_WARNING_CHARS = int(os.getenv("LLM_CONTEXT_WARNING_CHARS", "150000"))
 TESTER_NAMES_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config", "tester-names.json")
+BUSINESS_MODULES_FILE = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "config", "business-modules.json"
+)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
@@ -82,7 +85,7 @@ FULL_CASE_SYSTEM_PROMPT = """你是专业测试工程师，严格遵守约束：
 4. 区分正向、边界、异常场景；测试数据贴合测试点约束；
 5. 如果单个测试点可以拆分多条独立场景，在 cases 数组中输出多条用例；
 6. 语言简洁，适配导入测试管理平台。
-   module_name 必须从当前焦点测试点的层级路径中选择真正的业务模块名称。模块可能位于第二层、第三层或更深层，不能固定按层级位置判断；根节点、具体功能、动作、字段或测试条件不是模块。括号中的 {{tester_names}} 是测试人员标记，不是模块名称，应忽略。case_title 必须以 module_name 开头，格式为“模块名称 - 业务测试目标”。同一业务目标下可以连续完成的操作应合并为一条用例，只有前置条件、数据或预期结果彼此独立时才拆分多条用例。
+   module_name 必须从当前焦点测试点的层级路径中选择，且只能是【业务模块清单】中的名称：{{business_modules}}。根节点、业务分组、具体功能、动作、字段或测试条件不是模块。括号中的 {{tester_names}} 是测试人员标记，不是模块名称，应忽略。case_title 必须以 module_name 开头，格式为“模块名称 - 业务测试目标”。同一业务目标下可以连续完成的操作应合并为一条用例，只有前置条件、数据或预期结果彼此独立时才拆分多条用例。
 7. 每条用例必须给出 priority，且只能是字符串 \"1\"、\"2\"、\"3\" 或 \"4\"。结合当前焦点测试点、所在模块和已明确的全图上下文判断：
    - 1：核心主链路阻断、明显安全风险、数据丢失/错误或系统不可用风险；
    - 2：重要或高频功能、主要异常处理与关键业务规则；
@@ -93,6 +96,10 @@ FULL_CASE_SYSTEM_PROMPT = """你是专业测试工程师，严格遵守约束：
 
 PROJECT_SUMMARY_SYSTEM_PROMPT = """你是资深测试分析师。仅基于提供的思维导图叶子测试点，提炼可供后续测试用例生成使用的业务上下文。
 不得补充、推断或臆测任何未在原文明确出现的业务规则。不要生成测试用例。
+摘要将直接作为后续逐条生成测试用例的业务依据，必须在原文信息范围内尽量完整，不得为了简短而遗漏会影响测试设计的明确规则。
+project_summary 不超过 3500 个中文字符，完整提炼全局术语、角色与权限、主业务流程、状态流转、跨模块依赖、公共数据规则、引用关系和全局副作用。
+每个 module_summaries 值不超过 1200 个中文字符，按原文覆盖该模块明确出现的：功能范围、角色权限、前置条件、字段与控件、默认值、必填与唯一性、格式与数值边界、状态及可执行动作、正向/异常分支、提示或阻止方式、提交后的最终业务状态、统计口径、文件/存储规则、与其他模块的输入输出关系、删除/禁用/清理影响。原文未涉及的维度不要补写。
+涉及具体数字、枚举值、状态名、角色名、格式、路径、文件类型和错误条件时必须原样保留。不同规则使用分号分隔，避免空泛概括。不要输出思考过程、解释或测试用例。
 仅返回以下合法 JSON 对象：
 {
   "project_summary": "全局术语、角色、跨模块关联及明确约束的精炼摘要；没有则为空字符串",
@@ -101,6 +108,7 @@ PROJECT_SUMMARY_SYSTEM_PROMPT = """你是资深测试分析师。仅基于提供
   }
 }
 module_summaries 必须包含下方【模块路径】中的每个原始键。没有明确上下文时填写“无额外模块约束”，不得省略键或创造新键。
+【模块路径】中的键来自项目配置，是权威业务模块名称；思维导图中的“总览、任务执行、数据产出、平台治理”等仅是分组，不得作为模块键。没有匹配明确业务模块的测试点统一归入配置的“其他”模块。
 【模块路径】
 {{module_paths}}
 【整份思维导图叶子测试点】
@@ -143,6 +151,35 @@ def load_tester_names():
 
 
 TESTER_NAMES = load_tester_names()
+
+
+def load_business_module_config():
+    """读取项目确认的业务模块与未匹配测试点的兜底模块。"""
+    try:
+        with open(BUSINESS_MODULES_FILE, "r", encoding="utf-8") as handle:
+            parsed = json.load(handle)
+    except FileNotFoundError as exc:
+        raise ValueError(f"未找到业务模块配置：{BUSINESS_MODULES_FILE}") from exc
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"业务模块配置无效：{BUSINESS_MODULES_FILE}：{exc}") from exc
+
+    names = parsed.get("moduleNames", []) if isinstance(parsed, dict) else []
+    if (not isinstance(names, list) or not names
+            or any(not isinstance(name, str) or not name.strip() for name in names)):
+        raise ValueError(f"业务模块配置 moduleNames 必须是非空字符串数组：{BUSINESS_MODULES_FILE}")
+    normalised = [name.strip() for name in names]
+    if len(set(normalised)) != len(normalised):
+        raise ValueError(f"业务模块配置中存在重复名称：{BUSINESS_MODULES_FILE}")
+    fallback = str(parsed.get("fallbackModule", "")).strip()
+    if not fallback:
+        raise ValueError(f"业务模块配置 fallbackModule 必须是非空字符串：{BUSINESS_MODULES_FILE}")
+    if fallback in normalised:
+        raise ValueError(f"兜底模块不能与 moduleNames 重复：{BUSINESS_MODULES_FILE}")
+    return tuple(normalised), fallback
+
+
+BUSINESS_MODULES, FALLBACK_BUSINESS_MODULE = load_business_module_config()
+BUSINESS_MODULE_OPTIONS = BUSINESS_MODULES + (FALLBACK_BUSINESS_MODULE,)
 
 
 def clean_tester_annotation(value):
@@ -559,28 +596,40 @@ def build_project_test_point_context(case_titles):
     )
 
 
+def split_hierarchy_path(value):
+    """按生成器插入的层级分隔符拆分，保留节点名称内部的半角连字符。"""
+    return [
+        part.strip()
+        for part in re.split(r"\s+-\s+|\s*－\s*", str(value or ""))
+        if part.strip()
+    ]
+
+
+def is_leaf_topic_node(node):
+    """FreeMind 叶子允许包含 font、icon 等元数据，但不能包含子主题 node。"""
+    return not any(child.tag.rsplit("}", 1)[-1] == "node" for child in node)
+
+
 def build_module_paths(case_titles):
-    """提取顶层业务模块，避免将每个叶子父路径误当成独立模块。"""
-    return sorted({get_summary_module_key(case_title) for case_title in case_titles}
-                  - {""})
+    """按配置顺序返回实际出现的明确模块及兜底模块。"""
+    discovered = {get_summary_module_key(case_title) for case_title in case_titles}
+    return [module for module in BUSINESS_MODULE_OPTIONS if module in discovered]
 
 
 def get_summary_module_key(case_title):
-    """从“根节点 - 顶层业务模块 - ...”路径中取得顶层业务模块名称。"""
-    parts = [part.strip() for part in re.split(r'\s*[-－]\s*', case_title) if part.strip()]
-    return parts[1] if len(parts) >= 2 else ""
+    """从层级路径匹配权威业务模块，未匹配时统一归入兜底模块。"""
+    parts = [clean_tester_annotation(part) for part in split_hierarchy_path(case_title)]
+    parts = [part for part in parts if part]
+    return next((part for part in parts[1:] if part in BUSINESS_MODULES), FALLBACK_BUSINESS_MODULE)
 
 
 def ensure_module_prefix(case_title, source_path, module_name=""):
     """确保标题使用模型识别且来自原始路径的业务模块名称。"""
     title = clean_tester_annotation(case_title)
-    source_parts = [
-        clean_tester_annotation(part)
-        for part in re.split(r"\s*[-－]\s*", source_path)
-        if clean_tester_annotation(part)
-    ]
-    valid_modules = source_parts[1:-1] if len(source_parts) >= 3 else source_parts[1:2]
-    valid_modules = [part for part in valid_modules if not re.fullmatch(r"[Vv]?\d+(?:\.\d+)+", part)]
+    source_parts = [clean_tester_annotation(part) for part in split_hierarchy_path(source_path)
+                    if clean_tester_annotation(part)]
+    matched_module = get_summary_module_key(source_path)
+    valid_modules = [matched_module] if matched_module else []
     module_name = clean_tester_annotation(module_name)
     if module_name not in valid_modules:
         module_name = valid_modules[0] if valid_modules else ""
@@ -588,7 +637,7 @@ def ensure_module_prefix(case_title, source_path, module_name=""):
         return title
 
     # 版本号属于发布元数据，不属于业务模块；清理模型可能带出的版本前缀。
-    title_parts = [part.strip() for part in re.split(r"\s*[-－]\s*", title) if part.strip()]
+    title_parts = split_hierarchy_path(title)
     # 只保留一个模块前缀，清理模型重复复述模块的情况。
     while len(title_parts) >= 2 and title_parts[0] == module_name and title_parts[1] == module_name:
         title_parts.pop(1)
@@ -598,7 +647,7 @@ def ensure_module_prefix(case_title, source_path, module_name=""):
     title = " - ".join(title_parts) if title_parts else title
 
     # 已有模块前缀时保留模型生成的其余标题；否则用稳定分隔符补齐。
-    title_parts = [part.strip() for part in re.split(r"\s*[-－]\s*", title) if part.strip()]
+    title_parts = split_hierarchy_path(title)
     if title_parts and title_parts[0] == module_name:
         return " - ".join(title_parts)
     return f"{module_name} - {title}"
@@ -644,6 +693,7 @@ def llm_generate_project_summary(project_test_point_context, module_paths, model
         "messages": [{"role": "system", "content": prompt}],
         "temperature": 0,
         "max_tokens": LLM_PROJECT_SUMMARY_MAX_TOKENS,
+        "response_format": {"type": "json_object"},
     }
 
     last_failure_reason = "未知错误"
@@ -689,7 +739,8 @@ def load_or_generate_project_summary(csv_file, project_test_point_context, modul
                 cached = json.load(f)
             if (cached.get("cache_version") == PROJECT_SUMMARY_CACHE_VERSION
                     and cached.get("source_hash") == source_hash
-                    and cached.get("model") == model):
+                    and cached.get("model") == model
+                    and cached.get("module_paths") == module_paths):
                 summary = _normalise_project_summary(cached.get("summary", {}), module_paths)
                 if summary:
                     logger.info("已复用项目摘要缓存：%s", cache_file)
@@ -703,7 +754,7 @@ def load_or_generate_project_summary(csv_file, project_test_point_context, modul
 
     with open(cache_file, "w", encoding="utf-8") as f:
         json.dump({"cache_version": PROJECT_SUMMARY_CACHE_VERSION, "source_hash": source_hash,
-                   "model": model, "summary": summary}, f,
+                   "model": model, "module_paths": module_paths, "summary": summary}, f,
                   ensure_ascii=False, indent=2)
     return summary
 
@@ -746,7 +797,8 @@ def llm_generate_complete_case(full_test_point_str, model=None):
         "model": model or config["model"],
         "messages": [{"role": "system", "content": FULL_CASE_SYSTEM_PROMPT.replace(
             "{{full_test_point_text}}", full_test_point_str).replace(
-            "{{tester_names}}", "、".join(sorted(TESTER_NAMES)) or "（名单为空）")}],
+            "{{tester_names}}", "、".join(sorted(TESTER_NAMES)) or "（名单为空）").replace(
+            "{{business_modules}}", "、".join(BUSINESS_MODULE_OPTIONS))}],
         "temperature": 0,
         "max_tokens": LLM_FULL_CASE_MAX_TOKENS,
     }
@@ -926,8 +978,7 @@ def parse_case_title(data):
         # print(f"原始标题: {data}")
 
         # 1. 处理全角/半角分隔符（- 和 －），并保留前后空格
-        separator_pattern = r'\s*[-－]\s*'  # 匹配半角'-'和全角'－'，及前后空格
-        parts = [part.strip() for part in re.split(separator_pattern, data) if part.strip()]
+        parts = split_hierarchy_path(data)
 
         # print(f"分割后的层级列表: {parts}")  # 新增调试日志，查看分割是否正确
 
@@ -1076,7 +1127,7 @@ def freemind_to_cases(freemind_file, csv_file):
         if topic:
             full_topic = f"{parent_text} - {topic}" if parent_text else topic
             # 仅当该节点没有子节点（即叶子节点）时，才添加到用例标题列表
-            if len(node) == 0:  # 检查节点是否有子节点，无则为叶子节点
+            if is_leaf_topic_node(node):
                 source_node_id = node.attrib.get("ID") or hashlib.sha256(
                     full_topic.strip().encode("utf-8")
                 ).hexdigest()[:32]
@@ -1092,7 +1143,7 @@ def freemind_to_cases(freemind_file, csv_file):
     # 过滤没有业务层级的根节点；半角和全角横线都视为层级分隔符。
     case_points = [
         point for point in case_points
-        if len([part for part in re.split(r"\s*[-－]\s*", point["path"]) if part.strip()]) >= 2
+        if len(split_hierarchy_path(point["path"])) >= 2
     ]
     case_titles = [point["path"] for point in case_points]
 
@@ -1137,12 +1188,14 @@ def freemind_to_cases(freemind_file, csv_file):
             )
             generation_model = workflow_models["generation_model"]
             if project_summary_data:
-                logger.info("将使用项目/模块摘要生成用例：推理模型 %s，生成模型 %s",
-                            workflow_models["reasoning_model"], generation_model)
+                logger.info("将使用项目/模块摘要生成用例：推理模型 %s，生成模型 %s，模块范围 %s 个",
+                            workflow_models["reasoning_model"], generation_model, len(module_paths))
             else:
-                logger.warning("项目摘要不可用，将携带完整思维导图生成用例：模型 %s", generation_model)
+                raise RuntimeError(
+                    "项目摘要生成失败，已停止用例生成；为保证测试用例质量，不使用完整思维导图上下文降级生成"
+                )
         except (ValueError, OSError) as exc:
-            logger.warning("无法初始化双阶段模型，将使用默认生成配置：%s", exc)
+            raise RuntimeError(f"无法初始化双阶段模型，已停止用例生成：{exc}") from exc
 
     has_failures = False
 
@@ -1199,17 +1252,10 @@ def freemind_to_cases(freemind_file, csv_file):
                     temp["用例标题"] = ensure_module_prefix(
                         generated_case["case_title"], data, generated_case.get("module_name", "")
                     )
-                    source_parts = [
-                        clean_tester_annotation(part)
-                        for part in re.split(r"\s*[-－]\s*", data)
-                        if clean_tester_annotation(part)
-                    ]
-                    valid_modules = source_parts[1:-1] if len(source_parts) >= 3 else source_parts[1:2]
-                    valid_modules = [
-                        clean_tester_annotation(part)
-                        for part in valid_modules
-                        if not re.fullmatch(r"[Vv]?\d+(?:\.\d+)+", part)
-                    ]
+                    source_parts = [clean_tester_annotation(part) for part in split_hierarchy_path(data)
+                                    if clean_tester_annotation(part)]
+                    matched_module = get_summary_module_key(data)
+                    valid_modules = [matched_module] if matched_module else []
                     generated_module = clean_tester_annotation(generated_case.get("module_name", ""))
                     temp["所属模块"] = generated_module if generated_module in valid_modules else (valid_modules[0] if valid_modules else module)
                     temp["优先级"] = normalise_priority(generated_case.get("priority"))
