@@ -1,4 +1,4 @@
-# AI FreeMind Test Workflow
+# Agent Explore Test
 
 把FreeMind测试点转换成当前有效用例快照，由Agent先直接探索页面，再将探索通过的用例生成独立Playwright候选脚本。候选脚本只有在正式复跑通过后才进入回归；任何失败都会撤销映射并删除该CASE脚本，只保留报告与证据。
 

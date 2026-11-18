@@ -1,5 +1,5 @@
 {
-  "name": "ai-freemind-to-cases",
+  "name": "agent_explore_test",
   "private": true,
   "scripts": {
     "test:ui": "playwright test",
