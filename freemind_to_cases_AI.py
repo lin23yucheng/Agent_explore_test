@@ -17,7 +17,7 @@ load_dotenv()  # 加载环境变量
 
 # ===== LLM 配置 =====
 INCLUDE_PARENT = False  # 仅提取叶子节点
-FREEMIND_FILE = "VLA数据任务平台-V1.2.mm"
+FREEMIND_FILE = "具身智能数据平台V1.0测试点.mm"
 DEFAULT_PROVIDER = "deepseek"
 SUPPORTED_PROVIDERS = {"deepseek", "zhipu", "github", "openai_compatible"}
 
@@ -72,7 +72,7 @@ FULL_CASE_SYSTEM_PROMPT = """你是专业测试工程师，严格遵守约束：
 {
   \"cases\": [
     {
-      \"case_title\": \"精炼标准用例标题\",
+      \"case_title\": \"精炼标准用例名称\",
       \"module_name\": \"从当前测试点层级中识别出的业务模块名称\",
       \"precondition\": \"预置/前置条件\",
       \"operation_steps\": \"分步清晰的操作步骤\",
@@ -117,7 +117,7 @@ module_summaries 必须包含下方【模块路径】中的每个原始键。没
 cases_format = {
     "源测试点ID": "",
     "所属模块": "",
-    "用例标题": "",
+    "用例名称": "",
     "前置条件": "",
     "步骤": "1.\n2.\n3.\n",
     "预期": "",
@@ -323,7 +323,7 @@ def _build_payload(title, provider, model, system_prompt):
         "model": model,
         "messages": [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": f"用例标题：{title}"}
+            {"role": "user", "content": f"用例名称：{title}"}
         ],
         "temperature": 0.1,
         "max_tokens": 500
@@ -859,7 +859,7 @@ def llm_optimize_case_title(full_test_point_str, fallback_title):
         return fallback_title
 
     prompt = (
-        "仅基于【测试点原文】改写一个精炼的测试用例标题，不得增加任何业务含义。"
+        "仅基于【测试点原文】改写一个精炼的测试用例名称，不得增加任何业务含义。"
         "仅返回 JSON：{\"case_title\": \"...\"}。\n"
         f"【测试点原文】：{full_test_point_str}"
     )
@@ -889,7 +889,7 @@ def generate_test_case_details(title):
     config = get_llm_config()
 
     system_prompt = """
-    你是专业的软件测试工程师，请根据用例标题严格按照以下JSON格式生成测试用例：
+    你是专业的软件测试工程师，请根据用例名称严格按照以下JSON格式生成测试用例：
     {
         "前置条件": "系统已启动，用户已登录",
         "步骤": "1. 打开功能页面\\n2. 输入测试数据\\n3. 点击提交按钮",
@@ -1037,16 +1037,16 @@ def _restore_failed_cases(csv_file, breakpoint_file):
 
     failed_prefix = "[LLM生成失败] "
     failed_titles = {
-        row.get("用例标题", "")[len(failed_prefix):].strip()
+        row.get("用例名称", "")[len(failed_prefix):].strip()
         for row in rows
-        if row.get("用例标题", "").startswith(failed_prefix)
+        if row.get("用例名称", "").startswith(failed_prefix)
     }
     if not failed_titles:
         return 0
 
     remaining_rows = [
         row for row in rows
-        if not row.get("用例标题", "").startswith(failed_prefix)
+        if not row.get("用例名称", "").startswith(failed_prefix)
     ]
     with open(csv_file, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(f, fieldnames=EXPORT_FIELDS, extrasaction="ignore")
@@ -1085,7 +1085,7 @@ def ensure_unique_case_titles(csv_file):
     adjusted = 0
     for row in rows:
         module = str(row.get("所属模块", "")).strip()
-        original = str(row.get("用例标题", "")).strip()
+        original = str(row.get("用例名称", "")).strip()
         base_key = (module, original)
         seen_counts[base_key] = seen_counts.get(base_key, 0) + 1
         candidate = original
@@ -1095,7 +1095,7 @@ def ensure_unique_case_titles(csv_file):
             while (module, candidate) in used:
                 number += 1
                 candidate = f"{original}（场景{number}）"
-            row["用例标题"] = candidate
+            row["用例名称"] = candidate
             adjusted += 1
         used.add((module, candidate))
 
@@ -1106,7 +1106,7 @@ def ensure_unique_case_titles(csv_file):
             writer.writeheader()
             writer.writerows(rows)
         os.replace(temporary, csv_file)
-        logger.warning("检测到同模块重复用例标题，已微调 %s 条", adjusted)
+        logger.warning("检测到同模块重复用例名称，已微调 %s 条", adjusted)
     return adjusted
 
 
@@ -1121,12 +1121,12 @@ def freemind_to_cases(freemind_file, csv_file):
     root = tree.getroot()
     case_points = []
 
-    # 仅在最后一个层次（叶子节点）创建用例标题
+    # 仅在最后一个层次（叶子节点）创建用例名称
     def parse_node(node, parent_text=None):
         topic = node.attrib.get("TEXT")
         if topic:
             full_topic = f"{parent_text} - {topic}" if parent_text else topic
-            # 仅当该节点没有子节点（即叶子节点）时，才添加到用例标题列表
+            # 仅当该节点没有子节点（即叶子节点）时，才添加到用例名称列表
             if is_leaf_topic_node(node):
                 source_node_id = node.attrib.get("ID") or hashlib.sha256(
                     full_topic.strip().encode("utf-8")
@@ -1249,7 +1249,7 @@ def freemind_to_cases(freemind_file, csv_file):
                 for generated_case in generated_cases:
                     temp = copy.deepcopy(cases_format)
                     temp["源测试点ID"] = case_points[i]["source_node_id"]
-                    temp["用例标题"] = ensure_module_prefix(
+                    temp["用例名称"] = ensure_module_prefix(
                         generated_case["case_title"], data, generated_case.get("module_name", "")
                     )
                     source_parts = [clean_tester_annotation(part) for part in split_hierarchy_path(data)
